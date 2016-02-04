@@ -1,0 +1,89 @@
+<!-- MAIN CONTENT -->
+<div id="content">
+
+	<div class="row">
+		<big-breadcrumbs items="['Рабочий стол']" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+		<!--<div smart-include="/assets/admin/app/layout/partials/sub-header.tpl.html"></div>-->
+	</div>
+	<!-- widget grid -->
+	<section id="widget-grid" widget-grid>
+
+		<!-- row -->
+		<div class="row">
+            <article class="col-sm-6">
+                <div jarvis-widget data-widget-color="blueDark" data-widget-colorbutton="false" data-widget-deletebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false" data-widget-sortable="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Последние открытые заказы</h2>
+                    </header>
+                    <div>
+                        <div class="widget-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Номер</th>
+                                            <th>Сумма</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="order in data.customerOrders">
+                                            <td>{{order.number}}</td>
+                                            <td>{{order.total | currency}}</td>
+                                            <td class="center-item-text">
+                                                <a class="btn btn-xs btn-info" ng-href="#/customer_orders/{{ order.id }}">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                                <a class="btn btn-xs btn-default" ng-href="#/customer_orders/{{ order.id }}/edit" ng-disabled="!order.can_edit">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="col-sm-6">
+                <div jarvis-widget data-widget-color="blueDark" data-widget-colorbutton="false" data-widget-deletebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-togglebutton="false" data-widget-sortable="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Последние списания товаров</h2>
+                    </header>
+                    <div>
+                        <div class="widget-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Номер</th>
+                                        <th>Сумма</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="order in data.dispatchOrders">
+                                        <td>{{order.number}}</td>
+                                        <td>{{order.total | currency}}</td>
+                                        <td class="center-item-text">
+                                            <a class="btn btn-xs btn-info" ng-href="#/dispatch_orders/{{ order.id }}">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+	</section>
+	<!-- end widget grid -->
+
+</div>
+<!-- END MAIN CONTENT -->

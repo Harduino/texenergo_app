@@ -1,0 +1,422 @@
+#logo{
+    margin-top: 8px;
+}
+.table.table-bordered>tbody td{
+    vertical-align: middle;
+}
+.pager{
+    cursor: pointer;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+.pager>li>.page-indicator:hover{
+    background-color: #ffffff;
+    color: #3276b1;
+    cursor: default;
+}
+.well-white{
+    background-color: #ffffff;
+}
+.prod-review-title{
+    padding-left: 12px; margin-bottom: 0; margin-top: 12px;
+}
+.category-list{
+    margin: 10px 0 0 0;
+}
+.category-item{
+    line-height: 1.4em;
+    margin: 0 0 8px;
+    cursor: pointer;
+}
+.category-item.pdf-item{
+    margin-top: 10px;
+}
+.category-item>a{
+    color: #4c4f53;
+    position: relative;
+    top: -2px;
+}
+.category-item>a:hover{
+    color: #3276b1;
+}
+.prod-review-info-section{
+    margin-top: 20px;
+}
+.prod-review-info-section>.item{
+    max-width: 400px;
+}
+.same-product-item{
+    display: block;
+    margin: 3px 0;
+    padding: 10px;
+    border: 1px dotted #ddd;
+    background: rgba(0,0,0,.02);
+    text-align: left;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    cursor: pointer;
+}
+.same-product-item:hover{
+    background: rgba(0,0,0,.08);
+}
+.product-thumb{
+    padding-left: 0;
+}
+.product-thumb>img{
+    max-width: 100%;
+}
+.product-thumb>button{
+    width: 100%;
+    white-space: normal;
+}
+.product-mif-c{
+    padding-right: 0;
+}
+.no-warp{
+    white-space: nowrap;
+}
+.scroll-up-btn{
+    position: fixed;
+    top: 84%;
+    right: 6px;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    color: #4c4f53;
+    background-color: white;
+    border: 1px solid #4c4f53;
+    border-radius: 3px;
+    opacity: 0.3;
+    -webkit-transition: opacity 0.5s;
+    -moz-transition: opacity 0.5s;
+    -ms-transition: opacity 0.5s;
+    -o-transition: opacity 0.5s;
+    transition: opacity 0.5s;
+}
+.scroll-up-btn:hover{
+    opacity: 1;
+}
+.not-selectable{
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+.center-item-text{
+    text-align: center;
+}
+.display-flex{
+    display: inline-flex;
+    display: -webkit-flex;
+    display: flex;
+}
+form-nav-buttons .btn>.fa{
+    margin-right: 4px;
+}
+form-nav-buttons{
+    margin-bottom: 10px;
+}
+form-nav-buttons[data-template='table']{
+    display: flex;
+    display: -webkit-flex;
+    display: inline-flex;
+    margin-bottom: 0;
+}
+form-nav-buttons[data-template='table']>div{
+    width:28px;
+    height: 28px;
+    line-height: 24px;
+}
+form-nav-buttons[data-template='table'] .btn>.fa{
+    margin-right: 0;
+}
+.un-float{
+    clear: both;
+    display: block;
+}
+.table-margined-top{
+    margin-top: 50px;
+}
+.easy-pie-chart{
+    display: inline-block;
+    height: 50px;
+    width: 50px;
+}
+.easy-pie-chart canvas {
+    position: absolute;
+}
+.easy-pie-chart .percent {
+    line-height: 50px;
+    width: 50px;
+    top: 0;
+    margin: 0;
+}
+.easy-pie-chart .percent:after {
+    content: '%';
+    margin-left: 2px;
+    font-size: .8em;
+}
+.easy-pie-title{
+    overflow: visible;
+}
+.font-bold{
+    font-weight: bold;
+}
+.btn[disabled]{
+    opacity: 0.4;
+}
+.table-input{
+    min-width: 60px;
+}
+.append-product-row>td{
+    vertical-align: top!important;
+}
+.search-item img{
+    width: 60px;
+    border: 1px solid #fff;
+    outline: 1px solid #bfbfbf;
+    min-width: 60px;
+    max-width: 60px;
+}
+.search-item .ui-select-choices-row-inner{
+    display: table;
+    width: 100%;
+}
+.search-item .search-tr{
+    display: table-row;
+    height: 56px;
+}
+.search-item .search-td{
+    display: table-cell;
+    text-align: left;
+    vertical-align: middle;
+    padding: 8px 10px;
+    float: none!important;
+}
+.a-row-add{
+    transition:0.5s linear all;
+}
+.a-row-add.ng-enter{
+    background-color: #cde0c4;
+    opacity: 0;
+}
+.a-row-add.ng-enter-active{
+    opacity: 1;
+}
+.a-row-add.ng-leave{
+    background-color: #c26565;
+    opacity: 1;
+}
+.a-row-add.ng-leave-active{
+    opacity: 0;
+}
+.right{
+    float: right!important;
+}
+.form-control{
+    min-height: 32px;
+    height: auto;
+}
+.ui-select-status>span{
+    white-space: normal;
+}
+.td-ui-select{
+    min-width: 132px;
+    width: 100%;
+}
+textarea{
+    resize: none;
+}
+.notifications-pane .notification.seen {opacity: 0.5}
+a.dz-download{
+    background-image: -webkit-linear-gradient(top, #38c56f 0, #389154 100%);
+    border-radius: 2px;
+    border: 1px solid #3276b1;
+    display: block;
+    padding: 4px 5px;
+    text-align: center;
+    color: #fff;
+    margin-top: 26px;
+    margin-bottom: -15px;
+}
+a.dz-download:last-child{
+    margin-bottom: 0;
+}
+.dz-default.dz-message{
+    text-align: center;
+}
+.file-worker-modal>.modal-dialog{
+    width: 800px;
+}
+.dz-filename-input{
+    height: 100%!important;
+    position: relative;
+    z-index: 1;
+}
+.btn.dz-files-upload-button, .btn.dz-files-upload-button:active{
+    position: absolute;
+    margin-left: 100%;
+    left: -156px;
+    top: -16px;
+}
+.dropzone .dz-preview .dz-details{
+    width: 120px;
+    height: 120px;
+    background: transparent;
+}
+.dropzone .dz-preview:hover .dz-details{
+    background: rgba(255, 255, 255, 0.9);
+}
+.dropzone .dz-image{
+    position: absolute;
+}
+.dropzone .dz-preview .dz-progress{
+    z-index: 2;
+}
+.text-info{
+    color: #ff0000!important;
+}
+.full-width{
+    width: 100%;
+}
+form input.ng-invalid.ng-touched, form input.ng-invalid.ng-untouched{
+    border-color: #a90329!important;
+}
+.p-novalid-msg{
+    margin: 6px 10px 0 0;
+    float: right;
+}
+textarea.form-control.form-description{
+    height: 100px;
+}
+.ribbon-preloader{
+    float: right;
+    margin-top: 5px;
+    color: #E4E4E4;
+}
+#ribbon{
+    display: inline-block;
+    width: 100%;
+}
+@media screen and (max-width: 679px) {
+
+    .ribbon-preloader{
+        color: #333;
+    }
+}
+.table-bordered tr{
+    background-color: #ffffff;
+}
+[data-dz-name]{
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+a[data-toggle="tab"]{
+    cursor: pointer;
+}
+#extr-page-header-space{
+    line-height: 45px;
+}
+.login-back{
+    background: url("/assets/img_2370.jpg");
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+    filter: blur(5px);
+}
+.txt-logo-orange{
+    color: rgb(241, 125, 27);
+}
+.flipper {
+    margin:0 auto;
+    position:relative;
+    -moz-perspective: 800px;
+    -webkit-perspective: 800px;
+    perspective: 800px;
+}
+.front, .back {
+    width:100%;
+    height: 316px;
+    position:absolute;
+    top:0;
+    left:0;
+
+    -moz-transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+
+    -moz-backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    -moz-transition:0.8s;
+    -webkit-transition:0.8s;
+    transition:0.8s;
+}
+.front {
+    z-index:100;
+}
+.back{
+    z-index:1;
+    opacity:0;
+
+    -moz-transform:rotateY(180deg);
+    -webkit-transform:rotateY(180deg);
+    transform:rotateY(180deg);
+}
+.flipper.flipped .front{
+    opacity:0;
+    -moz-transform:rotateY(-180deg);
+    -webkit-transform:rotateY(-180deg);
+    transform:rotateY(-180deg);
+}
+.flipper.flipped .back{
+    opacity:1;
+
+    -moz-transform:rotateY(0deg);
+    -webkit-transform:rotateY(0deg);
+    transform:rotateY(0deg);
+}
+@keyframes shake {
+    10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%, 60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}
+.shake{
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+}
+.auth-ftr-info{
+    width: 50%;
+    float: left;
+    margin-top: 7px;
+}
+.auth-err-st{
+    border-color: red;
+}
+.auth-restore-st{
+    position: absolute;
+}

@@ -1,0 +1,96 @@
+<div class="login-back"></div>
+<header id="header"  class="animated fadeInDown" >
+
+    <div id="logo-group">
+        <span id="logo"> <img src="/assets/smart_admin/project/texenergo_logo.png" alt="Texenergo"> </span>
+    </div>
+
+    <span id="extr-page-header-space"> <span class="hidden-mobile hiddex-xs">Нет аккаунта?</span> <a
+           href="/users/sign_up" class="btn btn-danger">Зарегистрироваться</a> </span>
+
+</header>
+<div id="main" role="main"  class="animated fadeInDown" style="overflow: hidden;">
+    <div id="content" class="container">
+        <div class="row">
+            <div class="txt-logo-orange col-xs-12 col-sm-12 col-md-7 col-lg-8 hidden-xs hidden-sm">
+                <!--<h1 class="login-header-big semi-bold">Панель администрирования Texenergo</h1>-->
+                <!--<h2>Для продолжения войдите в учетную запись</h2>-->
+            </div>
+            <div class="flipper col-xs-12 col-sm-12 col-md-5 col-lg-4" ng-class="{flipped: forgotPass, shake: authError}">
+                <form id="login-form" class="front smart-form client-form well no-padding"  data-smart-validate-form ng-class="{'auth-err-st': authError}">
+                    <header>
+                        Вход при помощи аккаунта
+                    </header>
+                    <fieldset>
+                        <section>
+                            <label class="label">E-mail</label>
+                            <label class="input"> <i class="icon-append fa fa-user"></i>
+                                <input type="email" name="email"
+                                       ng-model="loginData.user.email"
+                                       data-smart-validate-input
+                                       data-required
+                                       data-email
+                                       placeholder="Введите e-mail">
+                                <b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i>
+                                    Введите e-mail адрес</b></label>
+                        </section>
+                        <section>
+                            <label class="label">Пароль</label>
+                            <label class="input"> <i class="icon-append fa fa-lock"></i>
+                               <input type="password" name="password"
+                                      ng-model="loginData.user.password"
+                                      data-smart-validate-input
+                                      data-required
+                                      data-minlength="3"
+                                      data-maxnlength="20"
+                                      data-message="Введите пароль">
+                                <b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i>
+                                    Введите пароль</b> </label>
+                            <div class="note">
+                                <a ng-click="flipForm(true)">Забыли пароль?</a>
+                            </div>
+                        </section>
+                    </fieldset>
+                    <footer>
+                        <div ng-show="authError" class="auth-ftr-info txt-color-red">
+                            Неверный адрес эл. почты или пароль.
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-click="submit()">
+                            Войти
+                        </button>
+                    </footer>
+                </form>
+                <form class="back smart-form client-form well no-padding" data-smart-validate-form>
+                    <header>
+                        Забыли пароль?
+                    </header>
+                    <fieldset style="padding: 51px 14px;">
+                        <section>
+                            <label class="label">E-mail</label>
+                            <label class="input"> <i class="icon-append fa fa-user"></i>
+                                <input type="email" name="email"
+                                       ng-model="restoreData.user.email"
+                                       data-smart-validate-input
+                                       data-required
+                                       data-email
+                                       placeholder="Введите e-mail">
+                                <b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i>
+                                    Введите e-mail адрес</b></label>
+                            <div class="note">
+                                <a ng-click="flipForm(false)">Есть аккаунт?</a>
+                            </div>
+                        </section>
+                        <div ng-show="passRestored" class="auth-restore-st text-success">
+                            На ваш адрес отправлен e-mail с дальнейшими инсрукциями.
+                        </div>
+                    </fieldset>
+                    <footer>
+                        <button type="submit" class="btn btn-primary" ng-click="restorePass()">
+                            Выслать пароль
+                        </button>
+                    </footer>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,72 @@
+<div id="content">
+    <div class="row">
+        <big-breadcrumbs items="[visual.titles]" data-icon="edit" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+    </div>
+    <div class="well well-white">
+        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">{{visual.titles + ' '+data.partner.name}}</h2>
+        <form-nav-buttons options="visual.navButtsOptions" data-role="visual.roles" class="btn-group margin-top-10"></form-nav-buttons>
+        <hr>
+        <section id="widget-grid" widget-grid>
+            <div class="row">
+                <article class="col-md-12">
+                    <div id="edit_partner_1" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false">
+                        <header>
+                            <h2>Фактическая информация</h2>
+                        </header>
+                        <div class="widget-body">
+                            <div class="well well-clean well-white">
+                                <div class="form-group">
+                                    <label class="control-label input-group-addon">Префикс</label>
+                                    <div class="form-control">{{data.partner.prefix}}</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label input-group-addon">Наименование</label>
+                                    <input class="form-control" ng-model="data.partner.name" type="text" placeholder="Наименование">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label input-group-addon">Адрес доставки</label>
+                                    <input class="form-control" ng-model="data.partner.delivery_address" type="text" placeholder="Адрес доставки">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label input-group-addon">Телефон</label>
+                                    <input class="form-control" ng-model="data.partner.phone" type="text" placeholder="Телефон">
+                                </div>
+                                <button class="btn btn-info" ng-click="savePartner()">Сохранить</button>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            <div class="row">
+                <article class="col-md-12">
+                    <div id="edit_partner_2" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false">
+                        <header>
+                            <h2>Официальная информация</h2>
+                        </header>
+                        <div class="widget-body">
+                            <div class="well well-clean well-white">
+                                <div class="form-group">
+                                    <label class="control-label input-group-addon">ИНН</label>
+                                    <div class="form-control">{{data.partner.inn}}</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label input-group-addon">КПП</label>
+                                    <div class="form-control">{{data.partner.kpp}}</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label input-group-addon">Официальное наименование</label>
+                                    <input class="form-control" ng-model="data.partner.legal_name" type="text" placeholder="Официальное наименование">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label input-group-addon">Адрес официальный</label>
+                                    <input class="form-control" ng-model="data.partner.legal_address" type="text" placeholder="Адрес официальный">
+                                </div>
+                                <button class="btn btn-info" ng-click="savePartner()">Сохранить</button>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </div>
+</div>

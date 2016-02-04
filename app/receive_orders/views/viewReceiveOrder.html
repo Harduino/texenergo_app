@@ -1,0 +1,79 @@
+<div id="content">
+    <div class="well well-white">
+        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">{{visual.titles + receiveOrder.number}}</h2>
+        <form-nav-buttons options="visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
+        <hr>
+        <div class="row margin-top-10">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Номер накладной:
+            </p>
+            <p class="col-md-9">{{receiveOrder.number}}</p>
+        </div>
+        <div class="row margin-top-10">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Номер счёт-фактуры:
+            </p>
+            <p class="col-md-9">{{receiveOrder.vat_code}}</p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Дата:
+            </p>
+            <p class="col-md-9">{{receiveOrder.date | date:'dd MMMM yy'}}</p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Партнёр:
+            </p>
+            <p class="col-md-9">
+                <a ng-href="/admin/#/partners/{{receiveOrder.partner.id}}">{{receiveOrder.partner.name}}</a>
+            </p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Статус:
+            </p>
+            <p class="col-md-9">{{receiveOrder.status}}</p>
+        </div>
+    </div>
+    
+    <div class="well well-white">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th/>
+                    <th>Наименование</th>
+                    <th>ГТД/Страна</th>
+                    <th>Кол-во</th>
+                    <th>Заказ</th>
+                    <th>Итого</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in receiveOrder.product_order_contents">
+                    <td>{{ $index + 1 }}</td>
+                    <td>
+                        <a ng-href="#/products/{{ item.product.id }}">
+                            {{ item.product.name }} ({{ item.product.article }})
+                        </a>
+                    </td>
+                    <td>
+                        <span ng-if="item.gtd">{{ item.gtd }}/{{ item.country }}</span>
+                    </td>
+                    <td>{{ item.quantity }}</td>
+                    <td>
+                        <a href="/admin/#/supplier_orders/{{item.supplier_order.id}}">
+                            {{ item.supplier_order.number }}
+                        </a>
+                    </td>
+                    <td class="text-right">{{ item.total | currency }}</td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="text-right">Итого:</td>
+                    <td>{{ receiveOrder.total | currency }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <file-worker data-trigger="visual.showFileModal" data-config="fileModalOptions"></file-worker>
+</div>

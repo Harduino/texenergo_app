@@ -1,0 +1,30 @@
+<div id="content">
+    <div class="row">
+        <big-breadcrumbs items="['Производители']" data-icon="book" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+    </div>
+    <div class="well">
+        <form-nav-buttons options="visual.navButtsOptions" class="btn-group"></form-nav-buttons>
+        <hr>
+        <orders-filter data-search-query="data.searchQuery" data-to-state="app.manufacturers"></orders-filter>
+        <table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"  infinite-scroll-distance="2" te-lazy-helper data-list="data.manufacturersList"
+               data-search-query="data.searchQuery" data-server-api-method="getManufacturers">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Наименование</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="row in data.manufacturersList">
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{row.name}}</td>
+                    <td class="center-item-text">
+                        <form-nav-buttons data-role="row" class="btn-group" data-options="visual.navTableButts" subdata="{data:row, index:$index}" data-template="table" content-class="btn btn-xs"></form-nav-buttons>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <te-scroll-top></te-scroll-top>
+    </div>
+</div>

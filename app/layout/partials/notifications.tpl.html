@@ -1,0 +1,26 @@
+<div class="notifications-pane" click-out='hide()'>
+  <span class="activity-dropdown" id="activity" ng-click="toggle()">
+    <i class="fa fa-user"></i>
+    <b class="badge ng-binding ng-cloak" ng-bind="notifications.length"></b>
+  </span>
+  <div class="ajax-dropdown" style='display: block' ng-hide='hidden'>
+    <div class="ajax-notifications custom-scroll">
+      <ul class="notification-body">
+        <li ng-repeat="notification in notifications" ng-click="markAsSeen(notification)" class="notification" ng-class="{seen: notification.seen, type: notification.type}" ng-class="notification.level">
+          <span class="padding-10">
+            <em class="badge padding-5 no-border-radius bg-color-blueLight pull-left margin-right-5">
+              <i class="fa fa-fw fa-2x" ng-class="[!notification.seen ? 'fa-' + notification.level : '', {'fa-trash-o': notification.seen}]" ng-attr-title="{{notification.level}}" ng-click="markAsDeleted(notification)"></i>
+            </em>
+            <span>
+              <span ng-bind-html="notification.message"></span>
+              <br>
+              <span clas="pull-right font-xs text-muted">
+                <abbr class="timeago" ng-title="notification.created_at" ng-bind="notification.created_at"></abbr>
+              </span>
+            </span>
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

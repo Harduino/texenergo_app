@@ -1,0 +1,79 @@
+<div id="content">
+    <div class="row">
+        <big-breadcrumbs items="visual.titles" data-icon="group" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+    </div>
+    <div class="well">
+        <form-nav-buttons options="visual.navButtsOptions" class="btn-group"></form-nav-buttons>
+        <hr>
+        <orders-filter data-search-query="data.searchQuery" data-to-state="app.contacts"></orders-filter>
+        <table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"  infinite-scroll-distance="2" te-lazy-helper data-list="data.contactsList" data-search-query="data.searchQuery" data-server-api-method="getContacts">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Email</th>
+                    <th>Имя</th>
+                    <th>Фамилия</th>
+                    <th>Партнер</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="row in data.contactsList">
+                    <td>{{$index +1}}</td>
+                    <td>{{row.email}}</td>
+                    <td>{{row.first_name}}</td>
+                    <td>{{row.last_name}}</td>
+                    <td>{{row.partner.name}}</td>
+                    <td class="center-item-text">
+                        <form-nav-buttons data-role="row" class="btn-group" data-options="visual.navTableButts" subdata="row" data-template="table" content-class="btn btn-xs"></form-nav-buttons>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <te-scroll-top></te-scroll-top>
+    </div>
+<!--    В зависимости от прав показывать форму создания нового-->
+    <div class="modal fade" id="createNewContactModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">Создать нового пользователя</h4>
+                </div>
+                <div class="modal-body">
+                    <section class="form-group">
+                        <label class="control-label">Имя</label>
+                        <input type="text" ng-model="newContact.first_name" class="input-sm form-control">
+                    </section>
+                    <section class="form-group">
+                        <label class="control-label">Фамилия</label>
+                        <input type="text" ng-model="newContact.last_name" class="input-sm form-control">
+                    </section>
+                    <section class="form-group">
+                        <label class="control-label">Email</label>
+                        <input type="text" ng-model="newContact.email" class="input-sm form-control">
+                    </section>
+                    <section class="form-group">
+                        <label class="control-label">Партнер</label>
+                        <ui-select  ui-select-infinity="partnerSelectConfig" ng-model="newContact.partner" theme="select2" class="td-ui-select">
+                            <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
+                            <ui-select-choices repeat="partner in data.partnersList | filter:$select.search">
+                                <div ng-bind-html="partner.name | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </section>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Отмена
+                    </button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="createContact()">
+                        Сохранить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

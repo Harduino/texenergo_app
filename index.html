@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+    <head>
+
+        <meta charset="utf-8">
+        <title> Texenergo App</title>
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <!--<% if Rails.env.production? %>
+        <link rel="stylesheet" media="screen" href="http://cdn.texenergo.com/stylesheets/admin/app-styles.css">
+        <% else %>-->
+        <link rel="stylesheet" media="screen" href="/public/assets/stylesheets/admin/app-styles.css">
+
+        <!-- #FAVICONS -->
+        <link rel="shortcut icon" href="/assets/favicon.gif" type="image/x-icon">
+
+        <!-- #GOOGLE FONT -->
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+
+        <!-- #APP SCREEN / ICONS -->
+        <!-- Specifying a Webpage Icon for Web Clip
+        Ref: https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
+        <link rel="apple-touch-icon" href="/assets/smart_admin/splash/sptouch-icon-iphone.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="/assets/smart_admin/splash/touch-icon-ipad.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="/assets/smart_admin/splash/touch-icon-iphone-retina.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/assets/smart_admin/splash/touch-icon-ipad-retina.png">
+    </head>
+
+    <body ng-app="app" data-smart-device-detect
+          data-smart-fast-click
+          data-smart-layout
+          data-smart-page-title="Texenergo" class="fixed-header">
+
+        <div data-ui-view="root"  data-autoscroll="false"></div>
+
+        <!--[if lt IE 7]>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!--[if lt IE 9]>
+        <script src="/assets/admin/plugin/es5-shim/es5-shim.js"></script>
+        <script src="/assets/admin/plugin/json3/lib/json3.min.js"></script>
+        <![endif]-->
+
+        <!--<% if Rails.env.production? %>
+        <script src="http://cdn.texenergo.com/javascripts/admin/libs-min.js"></script>
+        <script src="http://cdn.texenergo.com/javascripts/tinymce/tinymce.min.js"></script>
+        <script src="http://cdn.texenergo.com/javascripts/admin/app-modules-min.js"></script>
+        <script src="http://cdn.texenergo.com/javascripts/admin/app.js"></script>
+        <% else %>-->
+
+        <script src="/public/assets/javascripts/libs.js"></script>
+        <!-- Долго жмет его, поэтому отдельным запрсом-->
+        <script src="/assets/plugin/tinymce/tinymce.min.js"></script>
+        <script src="/public/assets/javascripts/app-modules.js"></script>
+    </body>
+</html>

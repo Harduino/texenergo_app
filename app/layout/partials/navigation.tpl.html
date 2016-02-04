@@ -1,0 +1,104 @@
+<aside id="left-panel" ng-controller="LayoutNavigationCtrl">
+
+    <!-- User info -->
+    <div login-info></div>
+    <!-- end user info -->
+
+    <nav>
+        <!-- NOTE: Notice the gaps after each icon usage <i></i>..
+        Please note that these links work a bit different than
+        traditional href="" links. See documentation for details.
+        -->
+
+        <ul data-smart-menu>
+            <li data-ui-sref-active="active">
+                <a data-ui-sref="app.dashboard" title="Рабочий стол"><i class="fa fa-lg fa-fw fa-home"></i> <span
+                        class="menu-item-parent">Рабочий стол</span></a>
+            </li>
+            <li data-menu-collapse ng-show="index.Catalogue || index.Manufacturer || index.PdfCatalogue">
+                <a href="#"><i class="fa fa-lg fa-fw fa-briefcase"></i> <span class="menu-item-parent">Каталог</span></a>
+                <ul>
+                    <li data-ui-sref-active="active" ng-if="index.Catalogue">
+                        <a data-ui-sref="app.catalogues" ng-bind="index.Catalogue.indexTitle"></a>
+                    </li>
+                    <li data-ui-sref-active="active" ng-if="index.Manufacturer">
+                        <a data-ui-sref="app.manufacturers" ng-bind="index.Manufacturer.indexTitle"></a>
+                    </li>
+                    <li data-ui-sref-active="active" ng-if="index.PdfCatalogue">
+                        <a data-ui-sref="app.pdf_catalogues" ng-bind="index.PdfCatalogue.indexTitle"></a>
+                    </li>
+                </ul>
+            </li>
+            <li data-menu-collapse ng-show="index.CustomerOrder || index.SupplierOrder">
+                <a href="#"><i class="fa fa-lg fa-fw fa-book"></i> <span class="menu-item-parent">Заказы</span></a>
+                <ul>
+                    <li data-ui-sref-active="active" ng-if="index.CustomerOrder">
+                        <a data-ui-sref="app.customer_orders" ng-bind="index.CustomerOrder.indexTitle"></a>
+                    </li>
+                    <li data-ui-sref-active="active" ng-if="index.SupplierOrder">
+                        <a data-ui-sref="app.supplier_orders" ng-bind="index.SupplierOrder.indexTitle"></a>
+                    </li>
+                </ul>
+            </li>
+            <li data-menu-collapse ng-show="index.DispatchOrder || index.ReceiveOrder">
+                <a href="#"><i class="fa fa-lg fa-fw fa-road"></i> <span class="menu-item-parent">Движения</span></a>
+                <ul>
+                    <li data-ui-sref-active="active" ng-if="index.ReceiveOrder">
+                        <a data-ui-sref="app.receive_orders" ng-bind="index.ReceiveOrder.indexTitle"></a>
+                    </li>
+                    <li data-ui-sref-active="active" ng-if="index.DispatchOrder">
+                        <a data-ui-sref="app.dispatch_orders" ng-bind="index.DispatchOrder.indexTitle"></a>
+                    </li>
+                </ul>
+            </li>
+            <li data-menu-collapse ng-show="index.IncomingTransfer || index.OutgoingTransfer">
+                <a href="#">
+                    <i class="fa fa-lg fa-fw fa-rub"></i>
+                    <span class="menu-item-parent">Денежные средства</span>
+                </a>
+                <ul>
+                    <li data-ui-sref-active="active" ng-if="index.IncomingTransfer">
+                        <a data-ui-sref="app.incoming_transfers" ng-bind="index.IncomingTransfer.indexTitle"></a>
+                    </li>
+                    <li data-ui-sref-active="active" ng-if="index.OutgoingTransfer">
+                        <a data-ui-sref="app.outgoing_transfers" ng-bind="index.OutgoingTransfer.indexTitle"></a>
+                    </li>
+                </ul>
+            </li>
+            <li data-menu-collapse ng-show="index.Contact || index.Partner">
+                <a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">Пользователи</span></a>
+                <ul>
+                    <li data-ui-sref-active="active" ng-if="index.Partner">
+                        <a data-ui-sref="app.partners">
+                            <i class="fa fa-lg fa-fw fa-male"></i> <span class="menu-item-parent" ng-bind="index.Partner.indexTitle"></span>
+                        </a>
+                    </li>
+                    <li data-ui-sref-active="active" ng-if="index.Contact">
+                        <a data-ui-sref="app.contacts">
+                            <i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent" ng-bind="index.Contact.indexTitle"></span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li data-menu-collapse ng-show="index.Article || index.Page || index.News">
+                <a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">Информ центр</span></a>
+                <ul>
+                    <li data-ui-sref-active="active" ng-if="index.Article">
+                        <a data-ui-sref="app.articles" ng-bind="index.Article.indexTitle"></a>
+                    </li>
+                    <li data-ui-sref-active="active" ng-if="index.News">
+                        <a data-ui-sref="app.news" ng-bind="index.News.indexTitle"></a>
+                    </li>
+                    <li data-ui-sref-active="active" ng-if="index.Page">
+                        <a data-ui-sref="app.pages" ng-bind="index.Page.indexTitle"></a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+  <span class="minifyme" data-action="minifyMenu" minify-menu>
+    <i class="fa fa-arrow-circle-left hit"></i>
+  </span>
+
+</aside>

@@ -1,0 +1,105 @@
+<div id="content">
+    <div class="row">
+        <big-breadcrumbs items="['Редактирование товара']" data-icon="edit" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+    </div>
+    <div class="well well-white">
+        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">Редактировать: {{data.product.name}}</h2>
+        <form-nav-buttons options="visual.navButtsOptions" data-role="visual.roles" class="btn-group margin-top-10"></form-nav-buttons>
+        <hr>
+        <section id="widget-grid" widget-grid>
+            <div class="row">
+                <article class="col-md-12">
+                    <div id="edit_product_1" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false">
+                        <header>
+                            <h2>Информация по товару</h2>
+                        </header>
+                        <form class="widget-body" name="productEdit">
+                            <div class="well well-white">
+                                <div class="col-md-12 no-padding">
+                                    <div class="col-sm-12 col-md-3 product-thumb">
+                                        <img class="thumbnail no-padding" ng-src="{{data.product.image_url}}" img-error="/assets/smart_admin/no_image.png">
+                                        <button class="btn btn-info" ng-click="visual.showFileModal()">Загрузить изображение</button>
+                                    </div>
+                                    <div class="col-sm-12 col-md-9 product-mif-c">
+                                        <div class="form-group">
+                                            <label class="control-label input-group-addon">Название</label>
+                                            <input class="form-control" ng-model="data.product.name" name="productName" type="text" placeholder="Название" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label input-group-addon">Артикул</label>
+                                            <input class="form-control" ng-model="data.product.article" type="text" placeholder="Артикул">
+                                        </div>
+                                        <section class="form-group">
+                                            <label class="control-label">Производитель</label>
+                                            <ui-select  ui-select-infinity="mSelectConfig" ng-model="data.product.manufacturer" theme="select2" class="td-ui-select">
+                                                <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
+                                                <ui-select-choices repeat="m in data.manufacturers | filter:$select.search">
+                                                    <div ng-bind-html="m.name | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </section>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-12 no-padding margin-top-10">
+                                    <section class="form-group">
+                                        <label class="control-label input-group-addon">Категории</label>
+                                        <ui-select multiple ui-select-infinity="cselectConfig" ng-model="data.product.catalogues" theme="select2" class="full-width">
+                                            <ui-select-match placeholder="Добавьте категории">{{$item.name}}</ui-select-match>
+                                            <ui-select-choices repeat="c in data.catalogues | filter:$select.search">
+                                                <div ng-bind-html="c.name | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </section>
+                                    <section class="form-group">
+                                        <label class="control-label input-group-addon">Описание</label>
+                                        <textarea ui-tinymce="tinymceOptions" ng-model="data.product.description"></textarea>
+                                    </section>
+                                    <section class="form-group smart-form">
+                                        <label class="control-label input-group-addon">Тип</label>
+                                        <label class="select">
+                                            <select class="input-sm" ng-model="data.product.type.selected">
+                                                <option ng-repeat="t in data.product.type.options" ng-selected="data.product.type.selected===t" ng-attr-value="{{t}}">{{t}}</option>
+                                            </select>
+                                            <i></i>
+                                        </label>
+                                    </section>
+                                    <section class="form-group smart-form margin-top-10">
+                                        <label class="control-label input-group-addon">Единица измерения</label>
+                                        <label class="select">
+                                            <select class="input-sm" ng-model="data.product.unit.selected">
+                                                <option ng-repeat="u in data.product.unit.options" ng-selected="data.product.unit.selected===u" ng-attr-value="{{u}}">{{u}}</option>
+                                            </select>
+                                            <i></i>
+                                        </label>
+                                    </section>
+                                    <section class="form-group smart-form margin-top-10">
+                                        <label class="control-label input-group-addon">Процент НДС</label>
+                                        <label class="select">
+                                            <select class="input-sm" ng-model="data.product.vat_rate.selected">
+                                                <option ng-repeat="v in data.product.vat_rate.options" ng-selected="data.product.vat_rate.selected===v" ng-attr-value="{{v}}">{{v}}</option>
+                                            </select>
+                                            <i></i>
+                                        </label>
+                                    </section>
+                                    <section class="form-group margin-top-10">
+                                        <label class="control-label input-group-addon">Вес <small>кг</small></label>
+                                        <input type="text" class="input-sm form-control" ng-model="data.product.weight" model-filter="{min:0, number:true}" filter-name="te_number" placeholder="Вес">
+                                    </section>
+                                </div>
+                                <div class="btn-group full-width">
+                                    <button class="btn btn-info right" ng-click="saveProduct()" ng-disabled="productEdit.$error.required">Сохранить</button>
+                                    <div class="txt-color-red p-novalid-msg" ng-show="productEdit.$error.required">
+                                        <i class="fa-fw fa fa-warning"></i>
+                                        Не все обязательные поля заполнены!
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </div>
+    <file-worker data-trigger="visual.showFileModal" data-config="fileModalOptions"></file-worker>
+</div>

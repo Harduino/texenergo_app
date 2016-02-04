@@ -1,0 +1,67 @@
+/**
+ * Created by Egor Lobanov on 17.11.15.
+ * Модуль страницы "Партнер"
+ */
+(function (){
+
+    "use strict";
+
+    var module = angular.module('app.partners', ['ui.router']);
+
+    module.config(function ($stateProvider) {
+        $stateProvider.state('app.partners', {
+            url: '/partners?q',
+            data:{
+                title: 'Партнёры',
+                access:{
+                    action:'index',
+                    params:'Partner'
+                }
+            },
+            params:{
+              q:''
+            },
+            views:{
+                "content@app": {
+                    controller: 'PartnersCtrl',
+                    templateUrl: '/assets/admin/app/partners/views/partners.html'
+                }
+            }
+        }).state('app.partners.view', {
+            url: '/:id',
+            data:{
+                access:{
+                    action:'show',
+                    params:'Partner'
+                }
+            },
+            views:{
+                "content@app":{
+                    controller: 'ViewPartnerCtrl',
+                    templateUrl: '/assets/admin/app/partners/views/showPartner.html'
+                }
+            }
+        }).state('app.partners.view.edit', {
+            url: '/edit',
+            data:{
+                title:'Редактирование партнёра',
+                access:{
+                    action:'edit',
+                    params:'Partner'
+                }
+            },
+            views:{
+                "content@app":{
+                    controller: 'EditPartnerCtrl',
+                    templateUrl: '/assets/admin/app/partners/views/editPartner.html'
+                }
+            }
+        });
+    });
+
+    module.filter('innKpp', function(){
+       return function(inn, kpi){
+           return inn && kpi ? inn.toString() + "/" + kpi.toString() : '';
+       }
+    });
+}());

@@ -1,0 +1,71 @@
+<div id="content">
+    <div class="well well-white">
+        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">{{visual.titles + contact.email }}</h2>
+        <form-nav-buttons options="visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
+        <hr>
+        <div class="row margin-top-10">
+            <p class="col-xs-12 col-md-3 font-bold">Последний раз зашёл:</p>
+            <p class="col-md-9">{{ contact.last_sign_in_at | date:'dd MMMM yy' }}</p>
+        </div>
+        <div class="row margin-top-10">
+            <p class="col-xs-12 col-md-3 font-bold">Имя:</p>
+            <p class="col-md-9">{{ contact.first_name }}</p>
+        </div>
+        <div class="row margin-top-10">
+            <p class="col-xs-12 col-md-3 font-bold">Фамилия:</p>
+            <p class="col-md-9">{{ contact.last_name }}</p>
+        </div>
+        <div class="row margin-top-10">
+            <p class="col-xs-12 col-md-3 font-bold">Партнёр:</p>
+            <p class="col-md-9">
+                <a ng-href="#/partners/{{ contact.partner.id }}">
+                    {{ contact.partner.name }}
+                </a>
+            </p>
+        </div>
+        <div class="row margin-top-10">
+            <p class="col-xs-12 col-md-3 font-bold">Email:</p>
+            <p class="col-md-9">{{ contact.email }}</p>
+        </div>
+    </div>
+    <ul class="nav nav-tabs bordered" id="myTab1">
+        <li class="active"><a data-toggle="tab" href="#s1">Просмотренные товары</a></li>
+        <li><a data-toggle="tab" href="#s2">Поисковые запросы</a></li>
+    </ul>
+    <div class="tab-content padding-10" id="myTabContent1" style="background: white;">
+        <div class="tab-pane fade in active" id="s1">
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Товар</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat='item in contact.last_viewed_products'>
+                        <td>{{ item.created_at | date:'dd MMMM yy' }}</td>
+                        <td>{{ item.product.name }}, {{ item.product.article }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="s2">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Запрос</th>
+                        <th>Результатов</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in contact.last_search_queries">
+                        <td>{{ item.created_at | date:'dd MMMM yy' }}</td>
+                        <td>{{ item.query }}</td>
+                        <td>{{ item.products_found }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

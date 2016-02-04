@@ -1,0 +1,81 @@
+<div id="content">
+    <div class="row">
+        <big-breadcrumbs items="visual.titles" data-icon="book" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+    </div>
+    <div class="well">
+        <form-nav-buttons options="visual.navButtsOptions" class="btn-group"></form-nav-buttons>
+        <hr>
+        <orders-filter data-search-query="data.searchQuery" data-to-state="app.partners"></orders-filter>
+        <table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"  infinite-scroll-distance="2" te-lazy-helper data-list="data.partnersList" data-search-query="data.searchQuery" data-server-api-method="getPartners">
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Префикс</th>
+                    <th>Официальное наименование</th>
+                    <th>ИНН</th>
+                    <th>Отрасль</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="row in data.partnersList">
+                    <td>{{$index +1}}</td>
+                    <td>{{ row.prefix }}</td>
+                    <td>{{ row.legal_name }}</td>
+                    <td>{{ row.inn }}</td>
+                    <td>{{ row.industry }}</td>
+                    <td class="center-item-text">
+                        <form-nav-buttons data-role="row" class="btn-group" data-options="visual.navTableButts" subdata="row" data-template="table" content-class="btn btn-xs"></form-nav-buttons>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <te-scroll-top></te-scroll-top>
+    </div>
+    <div class="modal fade" id="createPartnerModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">Создать нового партнёра</h4>
+                </div>
+                <div class="modal-body smart-form">
+                    <section>
+                        <label class="label">ИНН</label>
+                        <label class="input">
+                            <input type="text" class="input-sm" ng-model="newPartnerData.inn">
+                        </label>
+                    </section>
+                    <section>
+                        <label class="label">Наименование</label>
+                        <label class="input">
+                            <input type="text" class="input-sm" ng-model="newPartnerData.name">
+                        </label>
+                    </section>
+                    <section>
+                        <label class="label">Адрес доставки</label>
+                        <label class="input">
+                            <input type="text" class="input-sm" ng-model="newPartnerData.delivery_address">
+                        </label>
+                    </section>
+                    <section>
+                        <label class="label">Телефон</label>
+                        <label class="input">
+                            <input type="text" class="input-sm" ng-model="newPartnerData.phone">
+                        </label>
+                    </section>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearPartner()">
+                        Отмена
+                    </button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addNewPartner()">
+                        Сохранить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
