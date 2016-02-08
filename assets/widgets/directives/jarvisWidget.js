@@ -17,6 +17,7 @@
     "use strict";
 
     angular.module('app.layout').directive('jarvisWidget', function($rootScope){
+        console.log('created widget directive');
         return {
             restrict: "A",
             compile: function(element, attributes){

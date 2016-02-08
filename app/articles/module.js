@@ -23,7 +23,7 @@
             views:{
                 "content@app": {
                     controller: 'ArticlesCtrl',
-                    templateUrl: '/assets/admin/app/articles/views/articles.html'
+                    templateUrl: '/app/articles/views/articles.html'
                 }
             }
         });

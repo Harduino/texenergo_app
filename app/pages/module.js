@@ -23,7 +23,7 @@
             views:{
                 "content@app": {
                     controller: 'PagesCtrl',
-                    templateUrl: '/assets/admin/app/pages/views/pages.html'
+                    templateUrl: '/app/pages/views/pages.html'
                 }
             }
         }).state('app.pages.view', {
@@ -37,7 +37,7 @@
             views:{
                 "content@app":{
                     controller: 'ViewPageCtrl',
-                    templateUrl: '/assets/admin/app/pages/views/viewPage.html'
+                    templateUrl: '/app/pages/views/viewPage.html'
                 }
             }
         }).state('app.pages.edit', {
@@ -55,7 +55,7 @@
             views:{
                 "content@app": {
                     controller: 'EditPageCtrl',
-                    templateUrl: '/assets/admin/app/pages/views/editPage.html'
+                    templateUrl: '/app/pages/views/editPage.html'
                 }
             }
         });

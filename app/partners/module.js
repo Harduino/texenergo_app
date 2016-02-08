@@ -24,7 +24,7 @@
             views:{
                 "content@app": {
                     controller: 'PartnersCtrl',
-                    templateUrl: '/assets/admin/app/partners/views/partners.html'
+                    templateUrl: '/app/partners/views/partners.html'
                 }
             }
         }).state('app.partners.view', {
@@ -38,7 +38,7 @@
             views:{
                 "content@app":{
                     controller: 'ViewPartnerCtrl',
-                    templateUrl: '/assets/admin/app/partners/views/showPartner.html'
+                    templateUrl: '/app/partners/views/showPartner.html'
                 }
             }
         }).state('app.partners.view.edit', {
@@ -53,7 +53,7 @@
             views:{
                 "content@app":{
                     controller: 'EditPartnerCtrl',
-                    templateUrl: '/assets/admin/app/partners/views/editPartner.html'
+                    templateUrl: '/app/partners/views/editPartner.html'
                 }
             }
         });

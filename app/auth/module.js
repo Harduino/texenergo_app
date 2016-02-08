@@ -14,7 +14,7 @@
             views: {
                 root: {
                     controller: 'loginCtrl',
-                    templateUrl: '/assets/admin/app/auth/views/login.html'
+                    templateUrl: '/app/auth/views/login.html'
                 }
             }
         });

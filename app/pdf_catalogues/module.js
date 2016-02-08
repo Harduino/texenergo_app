@@ -24,7 +24,7 @@
             views:{
                 "content@app": {
                     controller: 'PdfCataloguesCtrl',
-                    templateUrl: '/assets/admin/app/pdf_catalogues/views/pdf_catalogues.html'
+                    templateUrl: '/app/pdf_catalogues/views/pdf_catalogues.html'
                 }
             }
         }).state('app.pdf_catalogues.view', {
@@ -39,7 +39,7 @@
             views:{
                 "content@app":{
                     controller: 'ViewPdfCatalogueCtrl',
-                    templateUrl: '/assets/admin/app/pdf_catalogues/views/viewPdfCatalogue.html'
+                    templateUrl: '/app/pdf_catalogues/views/viewPdfCatalogue.html'
                 }
             }
         });

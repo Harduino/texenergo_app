@@ -24,7 +24,7 @@
             views:{
                 "content@app": {
                     controller: 'DispatchOrdersCtrl',
-                    templateUrl: '/assets/admin/app/dispatch_orders/views/dispatch_orders.html'
+                    templateUrl: '/app/dispatch_orders/views/dispatch_orders.html'
                 }
             }
         }).state('app.dispatch_orders.view', {
@@ -39,7 +39,7 @@
             views:{
                 "content@app":{
                     controller: 'ViewDispatchOrderCtrl',
-                    templateUrl: '/assets/admin/app/dispatch_orders/views/viewDispatchOrder.html'
+                    templateUrl: '/app/dispatch_orders/views/viewDispatchOrder.html'
                 }
             }
         });

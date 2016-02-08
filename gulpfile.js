@@ -2,7 +2,8 @@ var gulp = require('gulp'),
     csso = require('gulp-csso'),
     minify = require('gulp-minify'),
     concat = require('gulp-concat'),
-    ngAnnotate = require('gulp-ng-annotate');
+    ngAnnotate = require('gulp-ng-annotate'),
+    webserver = require('gulp-webserver');
 
 gulp.task('styles', function() {
     //css
@@ -45,9 +46,9 @@ gulp.task('libs', function(){
         'assets/plugin/ui-tinymce/tinymce.js',
 
 
-        'app/assets/javascripts/admin/plugin/cancan/export.js',
-        'app/assets/javascripts/admin/plugin/cable/cable.js',
-        'app/assets/javascripts/admin/plugin/cancan/export-angular.js'
+        'assets/plugin/cancan/export.js',
+        'assets/plugin/cable/cable.js',
+        'assets/plugin/cancan/export-angular.js'
     ])
         .on('error', console.warn)
         .pipe(concat('libs.js'))
@@ -66,13 +67,18 @@ gulp.task('app', function(){
         'app/layout/filters/filters.js',
         'app/layout/service/services.js',
         'app/layout/directives/*.js',
-        'widgets/directives/*.js',
-        'app/*/controllers/*.js',
-        'app/app.js'
+        'assets/widgets/directives/*.js',
+        'app/*/controllers/*.js'
     ])
         .on('error', console.warn)
         .pipe(concat('app-modules.js'))
         .pipe(ngAnnotate())
         .pipe(minify())
         .pipe(gulp.dest('public/assets/javascripts/'));
+});
+gulp.task('server', function() {
+    gulp.src('')
+        .pipe(webserver({
+            fallback: 'index.html'
+        }));
 });

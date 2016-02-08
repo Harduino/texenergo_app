@@ -24,7 +24,7 @@
             views:{
                 "content@app": {
                     controller: 'ReceiveOrdersCtrl',
-                    templateUrl: '/assets/admin/app/receive_orders/views/receive_orders.html'
+                    templateUrl: '/app/receive_orders/views/receive_orders.html'
                 }
             }
         }).state('app.receive_orders.view', {
@@ -39,7 +39,7 @@
             views:{
                 "content@app":{
                     controller: 'ViewReceiveOrderCtrl',
-                    templateUrl: '/assets/admin/app/receive_orders/views/viewReceiveOrder.html'
+                    templateUrl: '/app/receive_orders/views/viewReceiveOrder.html'
                 }
             }
         }).state('app.receive_orders.view.edit', {
@@ -54,7 +54,7 @@
             views:{
                 "content@app":{
                     controller: 'EditReceiveOrderCtrl',
-                    templateUrl: '/assets/admin/app/receive_orders/views/editReceiveOrder.html'
+                    templateUrl: '/app/receive_orders/views/editReceiveOrder.html'
                 }
             }
         });

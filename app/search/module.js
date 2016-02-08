@@ -21,7 +21,7 @@
             views:{
                 "content@app": {
                     controller: 'TopSearchCtrl',
-                    templateUrl: '/assets/admin/app/search/views/search.html'
+                    templateUrl: '/app/search/views/search.html'
                 }
             }
         });

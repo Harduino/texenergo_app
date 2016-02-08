@@ -10,7 +10,7 @@
                 abstract: true,
                 views: {
                     root: {
-                        templateUrl: '/assets/admin/app/layout/layout.tpl.html'
+                        templateUrl: '/app/layout/layout.tpl.html'
                     }
                 }
             });

@@ -10,7 +10,7 @@
                 views: {
                     "content@app": {
                         controller: 'DashboardCtrl',
-                        templateUrl: '/assets/admin/app/dashboard/views/dashboard.html'
+                        templateUrl: '/app/dashboard/views/dashboard.html'
                     }
                 },
                 data:{

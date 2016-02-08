@@ -25,7 +25,7 @@
             views:{
                 "content@app": {
                     controller: 'IncomingTransfersCtrl',
-                    templateUrl: '/assets/admin/app/incoming_transfers/views/transfers.html'
+                    templateUrl: '/app/incoming_transfers/views/transfers.html'
                 }
             }
         }).state('app.incoming_transfers.view', {
@@ -40,7 +40,7 @@
             views:{
                 "content@app":{
                     controller: 'ViewIncomingTransferCtrl',
-                    templateUrl: '/assets/admin/app/incoming_transfers/views/viewIncomingTransfer.html'
+                    templateUrl: '/app/incoming_transfers/views/viewIncomingTransfer.html'
                 }
             }
         }).state('app.incoming_transfers.view.edit', {
@@ -55,7 +55,7 @@
             views:{
                 "content@app":{
                     controller: 'EditIncomingTransferCtrl',
-                    templateUrl: '/assets/admin/app/incoming_transfers/views/editIncomingTransfer.html'
+                    templateUrl: '/app/incoming_transfers/views/editIncomingTransfer.html'
                 }
             }
         });

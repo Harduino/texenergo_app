@@ -24,7 +24,7 @@
             views:{
                 "content@app": {
                     controller: 'CataloguesCtrl',
-                    templateUrl: '/assets/admin/app/catalogues/views/catalogues.html'
+                    templateUrl: '/app/catalogues/views/catalogues.html'
                 }
             }
         }).state('app.catalogues.view', {
@@ -38,7 +38,7 @@
             views:{
                 "content@app":{
                     controller: 'ViewCatalogueCtrl',
-                    templateUrl: '/assets/admin/app/catalogues/views/viewCatalogue.html'
+                    templateUrl: '/app/catalogues/views/viewCatalogue.html'
                 }
             }
         }).state('app.catalogues.view.edit', {
@@ -53,7 +53,7 @@
             views:{
                 "content@app":{
                     controller: 'EditCatalogueCtrl',
-                    templateUrl: '/assets/admin/app/catalogues/views/editCatalogue.html'
+                    templateUrl: '/app/catalogues/views/editCatalogue.html'
                 }
             }
         });

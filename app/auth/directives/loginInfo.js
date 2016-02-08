@@ -5,7 +5,7 @@
 
         return {
             restrict: 'A',
-            templateUrl: '/assets/admin/app/auth/directives/login-info.tpl.html',
+            templateUrl: '/app/auth/directives/login-info.tpl.html',
             link: function(scope){
                 User.initialized.then(function(){
                     scope.user = User;

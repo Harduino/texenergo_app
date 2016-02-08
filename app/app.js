@@ -32,7 +32,7 @@ appConfig.skins = [
 
 
 
-appConfig.sound_path = "/assets/admin/app/sound/";
+appConfig.sound_path = "/app/sound/";
 appConfig.sound_on = true;
 
 (function (angular) {

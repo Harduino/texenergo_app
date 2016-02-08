@@ -25,7 +25,7 @@
             views:{
                 "content@app": {
                     controller: 'CustomerOrdersCtrl',
-                    templateUrl: '/assets/admin/app/customer_orders/views/customerOrders.html'
+                    templateUrl: '/app/customer_orders/views/customerOrders.html'
                 }
             }
         }).state('app.customer_orders.view', {
@@ -40,7 +40,7 @@
             views:{
                 "content@app":{
                     controller: 'ViewCustomerOrderCtrl',
-                    templateUrl: '/assets/admin/app/customer_orders/views/viewCustomerOrder.html'
+                    templateUrl: '/app/customer_orders/views/viewCustomerOrder.html'
                 }
             }
         }).state('app.customer_orders.view.edit', {
@@ -55,7 +55,7 @@
             views:{
                 "content@app":{
                     controller: 'EditCustomerOrder',
-                    templateUrl: '/assets/admin/app/customer_orders/views/editCustomerOrder.html'
+                    templateUrl: '/app/customer_orders/views/editCustomerOrder.html'
                 }
             }
         }).state('app.customer_orders.view.logs', {
@@ -70,7 +70,7 @@
             views:{
                 "content@app":{
                     controller: 'LogsCustomerOrderCtrl',
-                    templateUrl: '/assets/admin/app/customer_orders/views/logsCustomerOrder.html'
+                    templateUrl: '/app/customer_orders/views/logsCustomerOrder.html'
                 }
             }
         });

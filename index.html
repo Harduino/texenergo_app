@@ -11,7 +11,7 @@
         <!--<% if Rails.env.production? %>
         <link rel="stylesheet" media="screen" href="http://cdn.texenergo.com/stylesheets/admin/app-styles.css">
         <% else %>-->
-        <link rel="stylesheet" media="screen" href="/public/assets/stylesheets/admin/app-styles.css">
+        <link rel="stylesheet" media="screen" href="/public/assets/stylesheets/app-styles.css">
 
         <!-- #FAVICONS -->
         <link rel="shortcut icon" href="/assets/favicon.gif" type="image/x-icon">
@@ -40,8 +40,8 @@
         <![endif]-->
 
         <!--[if lt IE 9]>
-        <script src="/assets/admin/plugin/es5-shim/es5-shim.js"></script>
-        <script src="/assets/admin/plugin/json3/lib/json3.min.js"></script>
+        <script src="/assets/plugin/es5-shim/es5-shim.js"></script>
+        <script src="/assets/plugin/json3/lib/json3.min.js"></script>
         <![endif]-->
 
         <!--<% if Rails.env.production? %>
@@ -55,5 +55,6 @@
         <!-- Долго жмет его, поэтому отдельным запрсом-->
         <script src="/assets/plugin/tinymce/tinymce.min.js"></script>
         <script src="/public/assets/javascripts/app-modules.js"></script>
+        <script src="app/app.js"></script>
     </body>
 </html>

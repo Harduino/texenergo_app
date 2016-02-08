@@ -23,7 +23,7 @@
             views:{
                 "content@app":{
                     controller: 'ProductCtrl',
-                    templateUrl: '/assets/admin/app/products/views/show_product.html'
+                    templateUrl: '/app/products/views/show_product.html'
                 }
             }
         }).state('app.product.edit', {
@@ -41,7 +41,7 @@
             views:{
                 "content@app":{
                     controller: 'EditProductCtrl',
-                    templateUrl: '/assets/admin/app/products/views/edit_product.html'
+                    templateUrl: '/app/products/views/edit_product.html'
                 }
             }
         }).state('app.product.partner_logs', {
@@ -59,7 +59,7 @@
             views:{
                 "content@app":{
                     controller: 'PartnerLogsProductCtrl',
-                    templateUrl: '/assets/admin/app/products/views/partner_logs.html'
+                    templateUrl: '/app/products/views/partner_logs.html'
                 }
             }
         }).state('app.product.supplier_infos', {
@@ -77,7 +77,7 @@
             views:{
                 "content@app":{
                     controller: 'SupplierInfosProductCtrl',
-                    templateUrl: '/assets/admin/app/products/views/supplier_infos.html'
+                    templateUrl: '/app/products/views/supplier_infos.html'
                 }
             }
         });

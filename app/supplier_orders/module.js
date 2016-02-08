@@ -24,7 +24,7 @@
             views:{
                 "content@app": {
                     controller: 'SupplierOrdersCtrl',
-                    templateUrl: '/assets/admin/app/supplier_orders/views/supplierOrders.html'
+                    templateUrl: '/app/supplier_orders/views/supplierOrders.html'
                 }
             }
         }).state('app.supplier_orders.view', {
@@ -39,7 +39,7 @@
             views:{
                 "content@app":{
                     controller: 'ViewSupplierOrderCtrl',
-                    templateUrl: '/assets/admin/app/supplier_orders/views/viewSupplierOrder.html'
+                    templateUrl: '/app/supplier_orders/views/viewSupplierOrder.html'
                 }
             }
         }).state('app.supplier_orders.view.edit', {
@@ -54,7 +54,7 @@
             views:{
                 "content@app":{
                     controller: 'EditSupplierOrderCtrl',
-                    templateUrl: '/assets/admin/app/supplier_orders/views/editSupplierOrder.html'
+                    templateUrl: '/app/supplier_orders/views/editSupplierOrder.html'
                 }
             }
         });

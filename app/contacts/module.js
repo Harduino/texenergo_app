@@ -21,7 +21,7 @@
             views:{
                 "content@app": {
                     controller: 'ContactsCtrl',
-                    templateUrl: '/assets/admin/app/contacts/views/contacts.html'
+                    templateUrl: '/app/contacts/views/contacts.html'
                 }
             }
         }).state('app.contacts.view', {
@@ -36,7 +36,7 @@
             views:{
                 "content@app":{
                     controller: 'ViewContactCtrl',
-                    templateUrl: '/assets/admin/app/contacts/views/viewContact.html'
+                    templateUrl: '/app/contacts/views/viewContact.html'
                 }
             }
         }).state('app.contacts.view.edit', {
@@ -51,7 +51,7 @@
             views:{
                 "content@app":{
                     controller: 'EditContactCtrl',
-                    templateUrl: '/assets/admin/app/contacts/views/editContact.html'
+                    templateUrl: '/app/contacts/views/editContact.html'
                 }
             }
         });

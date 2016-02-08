@@ -24,7 +24,7 @@
             views:{
                 "content@app": {
                     controller: 'ManufacturersCtrl',
-                    templateUrl: '/assets/admin/app/manufacturers/views/manufacturers.html'
+                    templateUrl: '/app/manufacturers/views/manufacturers.html'
                 }
             }
         }).state('app.manufacturers.view', {
@@ -39,7 +39,7 @@
             views:{
                 "content@app":{
                     controller: 'ViewManufacturerCtrl',
-                    templateUrl: '/assets/admin/app/manufacturers/views/viewManufacturer.html'
+                    templateUrl: '/app/manufacturers/views/viewManufacturer.html'
                 }
             }
         }).state('app.manufacturers.view.edit', {
@@ -54,7 +54,7 @@
             views:{
                 "content@app":{
                     controller: 'EditManufacturerCtrl',
-                    templateUrl: '/assets/admin/app/manufacturers/views/editManufacturer.html'
+                    templateUrl: '/app/manufacturers/views/editManufacturer.html'
                 }
             }
         });
