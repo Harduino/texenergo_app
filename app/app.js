@@ -12,7 +12,7 @@
 window.appConfig = {};
 
 appConfig.menu_speed = 200;
-
+appConfig.serverUrl = 'http://localhost:3000';
 
 appConfig.smartSkin = "smart-style-0";
 
@@ -104,7 +104,8 @@ appConfig.sound_on = true;
 
             return {
                 request: function(config){
-                    config.url = encodeURI(config.url);
+                    var url = encodeURI(config.url);
+                    config.url = config.method == 'GET' && url.indexOf('html')>-1 ? url : appConfig.serverUrl + url;
                     setInload(true);
                     return config;
                 },

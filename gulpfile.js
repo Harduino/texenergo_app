@@ -68,7 +68,8 @@ gulp.task('app', function(){
         'app/layout/service/services.js',
         'app/layout/directives/*.js',
         'assets/widgets/directives/*.js',
-        'app/*/controllers/*.js'
+        'app/*/controllers/*.js',
+        'app/app.js'
     ])
         .on('error', console.warn)
         .pipe(concat('app-modules.js'))

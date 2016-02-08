@@ -49,28 +49,6 @@
         }]);
 }());
 /**
- * Created by Egor Lobanov on 29.01.16.
- * Module for login page.
- */
-(function(){
-
-    'use strict';
-
-    var module = angular.module('login', ['ui.router']);
-
-    module.config(['$stateProvider', function($stateProvider){
-        $stateProvider.state('login', {
-            url: '/sign_in',
-            views: {
-                root: {
-                    controller: 'loginCtrl',
-                    templateUrl: '/app/auth/views/login.html'
-                }
-            }
-        });
-    }]);
-}());
-/**
  * Created by Mikhail Arzhaev on 24.12.15.
  */
 
@@ -96,6 +74,28 @@
                 "content@app": {
                     controller: 'ArticlesCtrl',
                     templateUrl: '/app/articles/views/articles.html'
+                }
+            }
+        });
+    }]);
+}());
+/**
+ * Created by Egor Lobanov on 29.01.16.
+ * Module for login page.
+ */
+(function(){
+
+    'use strict';
+
+    var module = angular.module('login', ['ui.router']);
+
+    module.config(['$stateProvider', function($stateProvider){
+        $stateProvider.state('login', {
+            url: '/sign_in',
+            views: {
+                root: {
+                    controller: 'loginCtrl',
+                    templateUrl: '/app/auth/views/login.html'
                 }
             }
         });
@@ -3431,6 +3431,48 @@
     }]);
 }());
 /**
+ * Created by Egor Lobanov on 31.01.16.
+ * Controller of Sign in page
+ */
+(function(){
+    angular.module('login').controller('loginCtrl', ['$scope', 'serverApi', '$state', 'funcFactory', function(sc, serverApi, $state, funcFactory){
+        sc.loginData = {
+            user: {email:  '', password: ''}
+        };
+        sc.restoreData = {
+            user: {email: ''}
+        };
+        sc.forgotPass = false;
+        sc.authError=false;
+        sc.passRestored = false;
+
+        sc.flipForm = function(flip){
+            sc.forgotPass = flip;
+            sc.authError = false;
+            sc.passRestored = false;
+        };
+
+        sc.restorePass = function(){
+            serverApi.resetPassword(sc.restoreData, function(result){
+                sc.authError = false;
+                sc.passRestored = true;
+            }, function(error){
+                funcFactory.showNotification('Не удалось восстановить пароль', 'Пользователь не существует!');
+            });
+        };
+
+        sc.submit = function(){
+            sc.authError = false;
+            serverApi.signIn(sc.loginData, function(result){
+                window.authorized = result.data.id;
+                $state.go('app.dashboard');
+            }, function(error){
+                sc.authError = true;
+            });
+        };
+    }]);
+}());
+/**
  * Created by Egor Lobanov on 07.11.15.
  */
 (function(){
@@ -3564,48 +3606,6 @@
         function editCatalogue(){
             $state.go('app.catalogues.view.edit',$stateParams);
         }
-    }]);
-}());
-/**
- * Created by Egor Lobanov on 31.01.16.
- * Controller of Sign in page
- */
-(function(){
-    angular.module('login').controller('loginCtrl', ['$scope', 'serverApi', '$state', 'funcFactory', function(sc, serverApi, $state, funcFactory){
-        sc.loginData = {
-            user: {email:  '', password: ''}
-        };
-        sc.restoreData = {
-            user: {email: ''}
-        };
-        sc.forgotPass = false;
-        sc.authError=false;
-        sc.passRestored = false;
-
-        sc.flipForm = function(flip){
-            sc.forgotPass = flip;
-            sc.authError = false;
-            sc.passRestored = false;
-        };
-
-        sc.restorePass = function(){
-            serverApi.resetPassword(sc.restoreData, function(result){
-                sc.authError = false;
-                sc.passRestored = true;
-            }, function(error){
-                funcFactory.showNotification('Не удалось восстановить пароль', 'Пользователь не существует!');
-            });
-        };
-
-        sc.submit = function(){
-            sc.authError = false;
-            serverApi.signIn(sc.loginData, function(result){
-                window.authorized = result.data.id;
-                $state.go('app.dashboard');
-            }, function(error){
-                sc.authError = true;
-            });
-        };
     }]);
 }());
 /**
@@ -4329,141 +4329,6 @@
 }());
 
 /**
- * Created by Egor Lobanov on 08.11.15.
- */
-(function(){
-
-    'use strict';
-
-    angular.module('app.dispatch_orders').controller('DispatchOrdersCtrl', ['$scope', '$state', '$stateParams', 'serverApi', function($scope, $state, $stateParams, serverApi){
-        var sc = $scope;
-
-        sc.visual = {
-            navButtsOptions:[
-            ],
-            navTableButts:[{type:'view', callback:viewOrder}, {type:'table_edit'}, {type:'remove'}],
-            titles:[window.gon.index.DispatchOrder.indexTitle]
-        };
-
-        sc.data = {
-            ordersList:[],
-            searchQuery:$stateParams.q
-        };
-
-        function viewOrder(id){
-            $state.go('app.dispatch_orders.view', {id:id});
-        }
-    }]);
-}());
-
-/**
- * Created by Mikhail Arzhaev 26.11.15
- */
-(function(){
-
-    "use strict";
-
-    angular.module('app.dispatch_orders').controller('ViewDispatchOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', function($scope, $state, $stateParams, serverApi, funcFactory){
-        var _pattern = /\/?#/;
-
-        var sc = $scope;
-        sc.dispatchOrder = {};
-        sc.visual = {
-            navButtsOptions:[
-                { type: 'back', callback: returnBack },
-                { type: 'files', callback:showFileModal},
-                { type: 'upd_form_pdf', callback: openDispatchOrderPdf },
-                { type: 'label_pdf', callback: openLabelPdf },
-                { type: 'packing_list_pdf', callback: openPackingListPdf },
-                { type:'confirm_order', callback: updateStatusDispatchOrder}
-            ],
-            chartOptions: {
-                barColor:'rgb(103,135,155)',
-                scaleColor:false,
-                lineWidth:5,
-                lineCap:'circle',
-                size:50
-            },
-            showFileModal: angular.noop,
-            titles: window.gon.index.DispatchOrder.objectTitle + ': #'
-        };
-
-        sc.amontPercent = 0;
-        sc.dispatchedPercent = 0;
-
-        serverApi.getDispatchOrderDetails($stateParams.id, function(result){
-            console.log(result.data);
-
-            var dispatchOrder = sc.dispatchOrder = result.data;
-            sc.amontPercent = funcFactory.getPercent(dispatchOrder.paid_amount, dispatchOrder.total);
-            sc.dispatchedPercent = funcFactory.getPercent(dispatchOrder.dispatched_amount, dispatchOrder.total);
-
-            sc.fileModalOptions={
-                url:'/api/dispatch_orders/'+ dispatchOrder.id +'/documents',
-                r_get: serverApi.getDocuments,
-                r_delete: serverApi.deleteFile,
-                view: 'dispatch_orders',
-                id: dispatchOrder.id
-            };
-        });
-
-        function returnBack(){
-            $state.go('app.dispatch_orders',{});
-        }
-        
-        function openDispatchOrderPdf(){
-            var pdfUrl = location.href.replace(_pattern,"")+".pdf";
-            window.open(pdfUrl, '_blank');
-        }
-        
-        function openLabelPdf(){
-            var pdfUrl = location.href.replace(_pattern,"")+"/label.pdf";
-            window.open(pdfUrl, '_blank');
-        }
-        
-        function openPackingListPdf(){
-            var pdfUrl = location.href.replace(_pattern,"")+"/packing_list.pdf";
-            window.open(pdfUrl, '_blank');
-        }
-        
-        function showFileModal(){
-            sc.visual.showFileModal();
-        }
-        
-        sc.saveChosenPerson = function(){
-            var data = {
-                dispatch_order:{
-                    person_id: sc.dispatchOrder.chosenPersonId
-                }
-            };
-            serverApi.updateDispatchOrder(sc.dispatchOrder.id, data, function(result){
-                if(!result.data.errors){
-                    sc.dispatchOrder = result.data;
-                    funcFactory.showNotification("Успешно", 'Человек выбран.',true);
-                } else {
-                    funcFactory.showNotification('Ошибка при выборе человека', result.data.errors);
-                }
-            });
-        };
-
-        function updateStatusDispatchOrder(subdata, item) {
-            var data = {
-                dispatch_order:{
-                    event: item.event
-                }
-            };
-            serverApi.updateStatusDispatchOrder($stateParams.id, data, function(result){
-                if(result.status == 200 && !result.data.errors) {
-                    funcFactory.showNotification("Успешно", 'Удалось ' + item.name.toLowerCase() + ' заказ', true);
-                    sc.dispatchOrder = result.data;
-                } else {
-                    funcFactory.showNotification("Не удалось " + item.name.toLowerCase() + ' заказ', result.data.errors);
-                }
-            });
-        }
-    }]);
-}());
-/**
  * Created by Egor Lobanov on 02.12.15.
  */
 (function(){
@@ -4722,6 +4587,141 @@
     }]);
 }());
 /**
+ * Created by Egor Lobanov on 08.11.15.
+ */
+(function(){
+
+    'use strict';
+
+    angular.module('app.dispatch_orders').controller('DispatchOrdersCtrl', ['$scope', '$state', '$stateParams', 'serverApi', function($scope, $state, $stateParams, serverApi){
+        var sc = $scope;
+
+        sc.visual = {
+            navButtsOptions:[
+            ],
+            navTableButts:[{type:'view', callback:viewOrder}, {type:'table_edit'}, {type:'remove'}],
+            titles:[window.gon.index.DispatchOrder.indexTitle]
+        };
+
+        sc.data = {
+            ordersList:[],
+            searchQuery:$stateParams.q
+        };
+
+        function viewOrder(id){
+            $state.go('app.dispatch_orders.view', {id:id});
+        }
+    }]);
+}());
+
+/**
+ * Created by Mikhail Arzhaev 26.11.15
+ */
+(function(){
+
+    "use strict";
+
+    angular.module('app.dispatch_orders').controller('ViewDispatchOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', function($scope, $state, $stateParams, serverApi, funcFactory){
+        var _pattern = /\/?#/;
+
+        var sc = $scope;
+        sc.dispatchOrder = {};
+        sc.visual = {
+            navButtsOptions:[
+                { type: 'back', callback: returnBack },
+                { type: 'files', callback:showFileModal},
+                { type: 'upd_form_pdf', callback: openDispatchOrderPdf },
+                { type: 'label_pdf', callback: openLabelPdf },
+                { type: 'packing_list_pdf', callback: openPackingListPdf },
+                { type:'confirm_order', callback: updateStatusDispatchOrder}
+            ],
+            chartOptions: {
+                barColor:'rgb(103,135,155)',
+                scaleColor:false,
+                lineWidth:5,
+                lineCap:'circle',
+                size:50
+            },
+            showFileModal: angular.noop,
+            titles: window.gon.index.DispatchOrder.objectTitle + ': #'
+        };
+
+        sc.amontPercent = 0;
+        sc.dispatchedPercent = 0;
+
+        serverApi.getDispatchOrderDetails($stateParams.id, function(result){
+            console.log(result.data);
+
+            var dispatchOrder = sc.dispatchOrder = result.data;
+            sc.amontPercent = funcFactory.getPercent(dispatchOrder.paid_amount, dispatchOrder.total);
+            sc.dispatchedPercent = funcFactory.getPercent(dispatchOrder.dispatched_amount, dispatchOrder.total);
+
+            sc.fileModalOptions={
+                url:'/api/dispatch_orders/'+ dispatchOrder.id +'/documents',
+                r_get: serverApi.getDocuments,
+                r_delete: serverApi.deleteFile,
+                view: 'dispatch_orders',
+                id: dispatchOrder.id
+            };
+        });
+
+        function returnBack(){
+            $state.go('app.dispatch_orders',{});
+        }
+        
+        function openDispatchOrderPdf(){
+            var pdfUrl = location.href.replace(_pattern,"")+".pdf";
+            window.open(pdfUrl, '_blank');
+        }
+        
+        function openLabelPdf(){
+            var pdfUrl = location.href.replace(_pattern,"")+"/label.pdf";
+            window.open(pdfUrl, '_blank');
+        }
+        
+        function openPackingListPdf(){
+            var pdfUrl = location.href.replace(_pattern,"")+"/packing_list.pdf";
+            window.open(pdfUrl, '_blank');
+        }
+        
+        function showFileModal(){
+            sc.visual.showFileModal();
+        }
+        
+        sc.saveChosenPerson = function(){
+            var data = {
+                dispatch_order:{
+                    person_id: sc.dispatchOrder.chosenPersonId
+                }
+            };
+            serverApi.updateDispatchOrder(sc.dispatchOrder.id, data, function(result){
+                if(!result.data.errors){
+                    sc.dispatchOrder = result.data;
+                    funcFactory.showNotification("Успешно", 'Человек выбран.',true);
+                } else {
+                    funcFactory.showNotification('Ошибка при выборе человека', result.data.errors);
+                }
+            });
+        };
+
+        function updateStatusDispatchOrder(subdata, item) {
+            var data = {
+                dispatch_order:{
+                    event: item.event
+                }
+            };
+            serverApi.updateStatusDispatchOrder($stateParams.id, data, function(result){
+                if(result.status == 200 && !result.data.errors) {
+                    funcFactory.showNotification("Успешно", 'Удалось ' + item.name.toLowerCase() + ' заказ', true);
+                    sc.dispatchOrder = result.data;
+                } else {
+                    funcFactory.showNotification("Не удалось " + item.name.toLowerCase() + ' заказ', result.data.errors);
+                }
+            });
+        }
+    }]);
+}());
+/**
  * Created by Mikhail Arzhaev on 07.12.15.
  */
 (function(){
@@ -4906,94 +4906,6 @@
                     });
                 }
             });
-        }
-    }]);
-}());
-/**
- * Created by Mikhail Arzhaev on 24.12.15.
- */
-(function(){
-
-    'use strict';
-
-    angular.module('app.pages').controller('PagesCtrl', ['$scope', '$state', '$stateParams', 'serverApi', '$filter', 'funcFactory', function($scope, $state, $stateParams, serverApi, $filter, funcFactory){
-        
-        var sc = $scope;
-        
-        sc.visual = {
-            navButtsOptions:[{
-                type: 'new',
-                callback: function(){}
-            }],
-            navTableButts:[{type:'view', callback: viewPage}, {type:'table_edit', callback: editPage}, {type:'remove', callback: removePage}]
-        };
-        
-        sc.data = {
-            pagesList:[],
-            searchQuery:$stateParams.q
-        };
-
-        function viewPage(data){
-            console.log('page', data);
-            $state.go('app.pages.view', {id:data.id || data._id});
-        }
-        
-        function editPage(data){
-            $state.go('app.pages.view.edit', {id: (data.id || data._id)});
-        }
-
-        function removePage(data){
-            $.SmartMessageBox({
-                title: "Удалить страницу?",
-                content: "Вы действительно хотите удалить страницу " + data.title,
-                buttons: '[Нет][Да]'
-            }, function (ButtonPressed) {
-                if (ButtonPressed === "Да") {
-                    serverApi.deletePage(data.id, function(result){
-                        if(!result.data.errors){
-                            sc.data.pagesList.splice(data.index,1);
-                            funcFactory.showNotification('Страница ' + data.title + ' успешно удалена.', '', true);
-                        } else {
-                            funcFactory.showNotification('Не удалось удалить страницу ' + data.title, result.data.errors);
-                        }
-                    });
-                }
-            });
-        }
-    }]);
-}());
-/**
- * Created by Mikhail Arzhaev 24.12.2015
- */
-(function(){
-
-    "use strict";
-
-    angular.module('app.pages').controller('ViewPageCtrl', ['$scope', '$state', '$stateParams', 'serverApi', '$sce', function($scope, $state, $stateParams, serverApi, $sce){
-        var sc = $scope;
-        sc.page = {};
-        sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack},{type:'edit', callback:editPage}],
-            chartOptions: {
-                barColor:'rgb(103,135,155)',
-                scaleColor:false,
-                lineWidth:5,
-                lineCap:'circle',
-                size:50
-            }
-        };
-
-        serverApi.getPageDetails($stateParams.id, function(result){
-            sc.page = result.data;
-            sc.page.content = $sce.trustAsHtml(result.data.content);
-        });
-
-        function returnBack(){
-            $state.go('app.pages',{});
-        }
-        
-        function editPage(){
-            $state.go('app.pages.view.edit',$stateParams);
         }
     }]);
 }());
@@ -5190,6 +5102,173 @@
         }
         function showFileModal(){
             sc.visual.showFileModal();
+        }
+    }]);
+}());
+/**
+ * Created by Mikhail Arzhaev on 24.12.15.
+ */
+(function(){
+
+    'use strict';
+
+    angular.module('app.pages').controller('PagesCtrl', ['$scope', '$state', '$stateParams', 'serverApi', '$filter', 'funcFactory', function($scope, $state, $stateParams, serverApi, $filter, funcFactory){
+        
+        var sc = $scope;
+        
+        sc.visual = {
+            navButtsOptions:[{
+                type: 'new',
+                callback: function(){}
+            }],
+            navTableButts:[{type:'view', callback: viewPage}, {type:'table_edit', callback: editPage}, {type:'remove', callback: removePage}]
+        };
+        
+        sc.data = {
+            pagesList:[],
+            searchQuery:$stateParams.q
+        };
+
+        function viewPage(data){
+            console.log('page', data);
+            $state.go('app.pages.view', {id:data.id || data._id});
+        }
+        
+        function editPage(data){
+            $state.go('app.pages.view.edit', {id: (data.id || data._id)});
+        }
+
+        function removePage(data){
+            $.SmartMessageBox({
+                title: "Удалить страницу?",
+                content: "Вы действительно хотите удалить страницу " + data.title,
+                buttons: '[Нет][Да]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed === "Да") {
+                    serverApi.deletePage(data.id, function(result){
+                        if(!result.data.errors){
+                            sc.data.pagesList.splice(data.index,1);
+                            funcFactory.showNotification('Страница ' + data.title + ' успешно удалена.', '', true);
+                        } else {
+                            funcFactory.showNotification('Не удалось удалить страницу ' + data.title, result.data.errors);
+                        }
+                    });
+                }
+            });
+        }
+    }]);
+}());
+/**
+ * Created by Mikhail Arzhaev 24.12.2015
+ */
+(function(){
+
+    "use strict";
+
+    angular.module('app.pages').controller('ViewPageCtrl', ['$scope', '$state', '$stateParams', 'serverApi', '$sce', function($scope, $state, $stateParams, serverApi, $sce){
+        var sc = $scope;
+        sc.page = {};
+        sc.visual = {
+            navButtsOptions:[{type:'back', callback:returnBack},{type:'edit', callback:editPage}],
+            chartOptions: {
+                barColor:'rgb(103,135,155)',
+                scaleColor:false,
+                lineWidth:5,
+                lineCap:'circle',
+                size:50
+            }
+        };
+
+        serverApi.getPageDetails($stateParams.id, function(result){
+            sc.page = result.data;
+            sc.page.content = $sce.trustAsHtml(result.data.content);
+        });
+
+        function returnBack(){
+            $state.go('app.pages',{});
+        }
+        
+        function editPage(){
+            $state.go('app.pages.view.edit',$stateParams);
+        }
+    }]);
+}());
+/**
+ * Created by Mikhail Arzhaev on 20.11.15.
+ */
+(function(){
+
+    'use strict';
+
+    angular.module('app.pdf_catalogues').controller('PdfCataloguesCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory', function($scope, $state, $stateParams, serverApi, CanCan, funcFactory){
+        var sc = $scope;
+        sc.visual = {
+            navButtsOptions:[{
+                type: 'new',
+                callback: function(){}
+            }],
+            navTableButts:[{type:'view', callback:viewPdfCatalogue}, {type:'table_edit'}, {type:'remove', callback:removePdfCatalogue}],
+            role:{
+                can_edit: CanCan.can('edit', 'pdf_catalogues'),
+                can_destroy: CanCan.can('destroy', 'pdf_catalogues')
+            }
+        };
+
+        sc.data = {
+            pdfCataloguesList:[],
+            searchQuery:$stateParams.q
+        };
+
+        function viewPdfCatalogue(item){
+            $state.go('app.pdf_catalogues.view', {id:item.data.id || item.data._id});
+        }
+
+        function removePdfCatalogue(item){
+            var title = item.data.title;
+            $.SmartMessageBox({
+                title: "Удалить PDF каталог?",
+                content: "Вы действительно хотите удалить PDF каталог " + title,
+                buttons: '[Нет][Да]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed === "Да") {
+                    serverApi.deletePdfCatalogue(item.data.id, function(result){
+                         if(!result.data.errors){
+                             funcFactory.showNotification('Успешно', 'Каталог ' + title + ' удален!', true);
+                             sc.data.pdfCataloguesList.splice(item.index, 1);
+                         }else funcFactory.showNotification('Не удалось удалить PDF каталог', result.data.errors);
+                    });
+                }
+            });
+        }
+    }]);
+}());
+/**
+ * Created by Mikhail Arzhaev on 20.11.15.
+ */
+(function(){
+
+    "use strict";
+
+    angular.module('app.pdf_catalogues').controller('ViewPdfCatalogueCtrl', ['$scope', '$state', '$stateParams', 'serverApi', function($scope, $state, $stateParams, serverApi){
+        var sc = $scope;
+        sc.pdfCatalogue = {};
+        sc.visual = {
+            navButtsOptions:[{type:'back', callback:returnBack}],
+            chartOptions: {
+                barColor:'rgb(103,135,155)',
+                scaleColor:false,
+                lineWidth:5,
+                lineCap:'circle',
+                size:50
+            }
+        };
+
+        serverApi.getPdfCatalogueDetails($stateParams.id, function(result){
+            sc.pdfCatalogue = result.data;
+        });
+
+        function returnBack(){
+            $state.go('app.pdf_catalogues',{});
         }
     }]);
 }());
@@ -5394,85 +5473,6 @@
     }]);
 }());
 
-/**
- * Created by Mikhail Arzhaev on 20.11.15.
- */
-(function(){
-
-    'use strict';
-
-    angular.module('app.pdf_catalogues').controller('PdfCataloguesCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory', function($scope, $state, $stateParams, serverApi, CanCan, funcFactory){
-        var sc = $scope;
-        sc.visual = {
-            navButtsOptions:[{
-                type: 'new',
-                callback: function(){}
-            }],
-            navTableButts:[{type:'view', callback:viewPdfCatalogue}, {type:'table_edit'}, {type:'remove', callback:removePdfCatalogue}],
-            role:{
-                can_edit: CanCan.can('edit', 'pdf_catalogues'),
-                can_destroy: CanCan.can('destroy', 'pdf_catalogues')
-            }
-        };
-
-        sc.data = {
-            pdfCataloguesList:[],
-            searchQuery:$stateParams.q
-        };
-
-        function viewPdfCatalogue(item){
-            $state.go('app.pdf_catalogues.view', {id:item.data.id || item.data._id});
-        }
-
-        function removePdfCatalogue(item){
-            var title = item.data.title;
-            $.SmartMessageBox({
-                title: "Удалить PDF каталог?",
-                content: "Вы действительно хотите удалить PDF каталог " + title,
-                buttons: '[Нет][Да]'
-            }, function (ButtonPressed) {
-                if (ButtonPressed === "Да") {
-                    serverApi.deletePdfCatalogue(item.data.id, function(result){
-                         if(!result.data.errors){
-                             funcFactory.showNotification('Успешно', 'Каталог ' + title + ' удален!', true);
-                             sc.data.pdfCataloguesList.splice(item.index, 1);
-                         }else funcFactory.showNotification('Не удалось удалить PDF каталог', result.data.errors);
-                    });
-                }
-            });
-        }
-    }]);
-}());
-/**
- * Created by Mikhail Arzhaev on 20.11.15.
- */
-(function(){
-
-    "use strict";
-
-    angular.module('app.pdf_catalogues').controller('ViewPdfCatalogueCtrl', ['$scope', '$state', '$stateParams', 'serverApi', function($scope, $state, $stateParams, serverApi){
-        var sc = $scope;
-        sc.pdfCatalogue = {};
-        sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack}],
-            chartOptions: {
-                barColor:'rgb(103,135,155)',
-                scaleColor:false,
-                lineWidth:5,
-                lineCap:'circle',
-                size:50
-            }
-        };
-
-        serverApi.getPdfCatalogueDetails($stateParams.id, function(result){
-            sc.pdfCatalogue = result.data;
-        });
-
-        function returnBack(){
-            $state.go('app.pdf_catalogues',{});
-        }
-    }]);
-}());
 /**
  * Created by Mikhail Arzhaev on 07.12.15.
  */
@@ -6432,3 +6432,180 @@
         }
     }]);
 }());
+'use strict';
+
+/**
+ * @ngdoc overview
+ * @name app [smartadminApp]
+ * @description
+ * # app [smartadminApp]
+ *
+ * Main module of the application.
+ */
+
+window.appConfig = {};
+
+appConfig.menu_speed = 200;
+appConfig.serverUrl = 'http://localhost:3000';
+
+appConfig.smartSkin = "smart-style-0";
+
+appConfig.skins = [
+    {name: "smart-style-0",
+        logo: "styles/img/logo.png",
+        class: "btn btn-block btn-xs txt-color-white margin-right-5",
+        style: "background-color:#4E463F;",
+        label: "Smart Default"},
+
+    {name: "smart-style-1",
+        logo: "styles/img/logo-white.png",
+        class: "btn btn-block btn-xs txt-color-white",
+        style: "background:#3A4558;",
+        label: "Dark Elegance"}
+];
+
+
+
+appConfig.sound_path = "/app/sound/";
+appConfig.sound_on = true;
+
+(function (angular) {
+
+    $.sound_path = appConfig.sound_path;
+    $.sound_on = appConfig.sound_on;
+
+    var app = angular.module('app', [
+        'ngSanitize',
+        'ngAnimate',
+        'ui.router',
+        'ui.bootstrap',
+        'infinite-scroll',
+        'ui.select',
+        'ui.tinymce',
+        
+        // Permissions
+        'cancan.export',
+        // App
+        'app.layout',
+        'login',
+        'app.templates',
+        'app.search',
+        'app.dashboard',
+        'app.customer_orders',
+        'app.dispatch_orders',
+        'app.contacts',
+        'app.partners',
+        'app.supplier_orders',
+        'app.catalogues',
+        'app.manufacturers',
+        'app.pdf_catalogues',
+        'app.incoming_transfers',
+        'app.outgoing_transfers',
+        'app.receive_orders',
+        'app.products',
+        'app.articles',
+        'app.news',
+        'app.pages'
+    ]);
+
+    app.config(["$provide", "$httpProvider", function ($provide, $httpProvider) {
+        //CSRF
+        $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content');
+        // satisfy request.xhr? check on server-side
+        $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+        $httpProvider.defaults.headers.common['Accept'] = 'application/json;charset=utf-8';
+        $httpProvider.defaults.headers.common['Content-Type'] = 'application/json; charset=utf-8';
+
+
+        // Intercept http calls.
+        $provide.factory('ErrorHttpInterceptor', ['$q', '$rootScope', function ($q, $rootScope) {
+            var errorCounter = 0;
+            function notifyError(rejection){
+                console.log(rejection);
+                $.bigBox({
+                    title: rejection.status + ' ' + rejection.statusText,
+                    content: rejection.data,
+                    color: "#C46A69",
+                    icon: "fa fa-warning shake animated",
+                    number: ++errorCounter,
+                    timeout: 6000
+                });
+            }
+
+            function setInload(inLoad){
+                $rootScope.showRibbonLoader = inLoad;
+            }
+
+            return {
+                request: function(config){
+                    var url = encodeURI(config.url);
+                    config.url = config.method == 'GET' && url.indexOf('html')>-1 ? url : appConfig.serverUrl + url;
+                    setInload(true);
+                    return config;
+                },
+                response: function(response){
+                    setInload(false);
+                    return response;
+                },
+                // On request failure
+                requestError: function (rejection) {
+                    setInload(false);
+                    // show notification
+                    notifyError(rejection);
+
+                    // Return the promise rejection.
+                    return $q.reject(rejection);
+                }
+            };
+        }]);
+
+        // Add the interceptor to the $httpProvider.
+        $httpProvider.interceptors.push('ErrorHttpInterceptor');
+
+    }]);
+
+    app.run(['$rootScope', '$state', '$stateParams', 'CanCan', 'Abilities', function ($rootScope, $state, $stateParams, CanCan, Abilities) {
+        $rootScope.$state = $state;
+        $rootScope.$stateParams = $stateParams;
+
+        //check user id, if user not authorized redirect to sign_in page
+        var authorized = window.authorized = $('meta[name="user-id"]').attr('content');
+        if(!authorized) $state.transitionTo('login', null);
+
+        //scroll page top if page not search
+        $rootScope.$on('$stateChangeSuccess', function(){
+            if($state.current.name !== "app.search")angular.element('body').scrollTop(0);
+        });
+
+        //checking permissions of state while navigating
+        $rootScope.$on('$stateChangeStart',
+            function (event, toState, toParams, fromState, fromParams) {
+
+                if(!window.authorized && toState.name !== ''){
+                    event.preventDefault();
+                    return 0;
+                }
+
+                if(toState != 'login' && !window.gon) {
+                    event.preventDefault();
+                    Abilities.getGon(toState.name, toParams);
+                }
+
+                var access = (toState.data || {}).access;
+                if(access){
+                    var can = CanCan.can(access.action, access.params);
+//                    console.log('access',access, 'can', can);
+                    if(!can) {
+                        event.preventDefault();
+                        $state.transitionTo('app.dashboard', null, {reload:true});
+                    }
+                }
+            }
+        );
+    }]);
+
+    Array.prototype.swapItemByindex = function(currentIndex, newIndex){
+        var item = this.splice(currentIndex,1)[0];
+        this.splice(newIndex,0,item);
+    };
+}(window.angular));
