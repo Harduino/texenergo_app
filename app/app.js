@@ -42,6 +42,7 @@ appConfig.sound_on = true;
 
     var app = angular.module('app', [
         'ngSanitize',
+        'ngCookies',
         'ngAnimate',
         'ui.router',
         'ui.bootstrap',
@@ -131,12 +132,17 @@ appConfig.sound_on = true;
 
     });
 
-    app.run(['$rootScope', '$state', '$stateParams', 'CanCan', 'Abilities', function ($rootScope, $state, $stateParams, CanCan, Abilities) {
+    app.run(['$rootScope', '$state', '$stateParams', 'CanCan', 'Abilities', '$cookies', function ($rootScope, $state, $stateParams, CanCan, Abilities, $cookies) {
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
 
+        var getUserId = function(){
+            var c = $cookies.getAll();
+            return c.request_method !== "DELETE" ? c['user.id'] : null;
+        };
+
         //check user id, if user not authorized redirect to sign_in page
-        var authorized = window.authorized = $('meta[name="user-id"]').attr('content');
+        var authorized = window.authorized = getUserId();
         if(!authorized) $state.transitionTo('login', null);
 
         //scroll page top if page not search

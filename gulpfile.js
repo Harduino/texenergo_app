@@ -3,7 +3,7 @@ var gulp = require('gulp'),
     minify = require('gulp-minify'),
     concat = require('gulp-concat'),
     ngAnnotate = require('gulp-ng-annotate'),
-    webserver = require('gulp-webserver');
+    connect = require('gulp-connect');
 
 gulp.task('styles', function() {
     //css
@@ -34,6 +34,7 @@ gulp.task('libs', function(){
         'assets/plugin/angular-ui-router/release/angular-ui-router.min.js',
         'assets/plugin/angular-sanitize/angular-sanitize.min.js',
         'assets/plugin/angular-animate/angular-animate.min.js',
+        'assets/plugin/angular-cookies/angular-cookies.min.js',
         'assets/plugin/angular-bootstrap/ui-bootstrap-custom-tpls-0.14.3.min.js',
         'assets/plugin/ui-select/select.min.js',
         'assets/plugin/fastclick/lib/fastclick.js',
@@ -78,8 +79,10 @@ gulp.task('app', function(){
         .pipe(gulp.dest('public/assets/javascripts/'));
 });
 gulp.task('server', function() {
-    gulp.src('')
-        .pipe(webserver({
-            fallback: 'index.html'
-        }));
+    connect.server({
+        root: '',
+        livereload: true,
+        port: 8000
+    });
 });
+gulp.task('default', ['app', 'libs', 'styles']);

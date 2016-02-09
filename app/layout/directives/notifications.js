@@ -50,7 +50,7 @@
                 sc.toggle = function() { sc.hidden = !sc.hidden };
             },
             
-            templateUrl: '/assets/admin/app/layout/partials/notifications.tpl.html'
+            templateUrl: '/app/layout/partials/notifications.tpl.html'
         };
     }]);
 }());
