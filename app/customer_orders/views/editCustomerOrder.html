@@ -110,7 +110,7 @@
                                     <tr ng-repeat="item in data.order.customer_order_contents" class="order-items a-row-add" ng-keypress="updateProductOfOrder({data:item, index:$index}, null, $event)">
                                         <td class="hidden-xs">{{$index +1}}</td>
                                         <td>
-                                            <a ng-href="/admin/#/products/{{item.product.id}}">{{item.product.name}} </a>
+                                            <a ng-href="/#/products/{{item.product.id}}">{{item.product.name}} </a>
                                              <i ng-if="item.query_original" class="fa fa-question-circle" ng-attr-title="{{item.query_original}}"></i>
                                         </td>
                                         <td>{{item | price_net | currency}}</td>

@@ -58,7 +58,7 @@
                             </li>
                             <li class="dd-item" ng-repeat="catalogue in product.catalogues">
                                 <div class="dd-handle">
-                                    <a href="/admin/#/catalogues/{{ catalogue.id }}">{{ catalogue.name }}</a>
+                                    <a href="/#/catalogues/{{ catalogue.id }}">{{ catalogue.name }}</a>
                                 </div>
                             </li>
                         </ol>
@@ -74,7 +74,7 @@
                             </li>
                             <li class="dd-item" ng-repeat="pdf in product.pdf_catalogues">
                                 <div class="dd-handle">
-                                    <a href="/admin/#/pdf_catalogues/{{ pdf.id }}">{{ pdf.name || 'Без имени'}}</a>
+                                    <a href="/#/pdf_catalogues/{{ pdf.id }}">{{ pdf.name || 'Без имени'}}</a>
                                 </div>
                             </li>
                         </ol>
@@ -92,7 +92,7 @@
                                 <div class="dd-handle">
                                     <div class="row">
                                         <div class="col-md-8">
-                                            <a href="/admin/#/products/{{ similar.id }}">{{ similar.name }}</a>
+                                            <a href="/#/products/{{ similar.id }}">{{ similar.name }}</a>
                                         </div>
                                         <div class="col-md-2">
                                             {{ similar.article }}
@@ -125,7 +125,7 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="item in product.customer_orders">
-                        <td><a href="/admin/#/customer_orders/{{ item.id }}">{{ item.number }}</a></td>
+                        <td><a href="/#/customer_orders/{{ item.id }}">{{ item.number }}</a></td>
                         <td>{{ item.status }}</td>
                         <td>{{ item.quantity }}</td>
                     </tr>
@@ -145,7 +145,7 @@
                 <tbody>
                     <tr ng-repeat="item in product.product_orders">
                         <td>{{ item.date | date:'dd/MM/yy HH:mm' }}</td>
-                        <td><a href="/admin/#/{{ item.type=='DispatchOrder' ? 'dispatch_orders' : 'receive_orders' }}/{{ item.id }}">{{ item.number }}</a></td>
+                        <td><a href="/#/{{ item.type=='DispatchOrder' ? 'dispatch_orders' : 'receive_orders' }}/{{ item.id }}">{{ item.number }}</a></td>
                         <td>{{ item.status }}</td>
                         <td>{{ item.quantity }}</td>
                     </tr>

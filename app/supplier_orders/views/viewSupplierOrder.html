@@ -40,7 +40,7 @@
                 Партнер:
             </p>
             <p class="col-md-9">
-                <a ng-href="/admin/#/partners/{{order.partner.id}}">{{order.partner.name}}</a>
+                <a ng-href="/#/partners/{{order.partner.id}}">{{order.partner.name}}</a>
             </p>
         </div>
         <div class="row">
@@ -72,7 +72,7 @@
                     <tr ng-repeat='item in order.supplier_order_contents'>
                         <td class="hidden-xs">{{ $index + 1 }}</td>
                         <td>
-                            <a ng-href="/admin/#/products/{{ item.product.id }}">{{ item.product.name }}</a>
+                            <a ng-href="/#/products/{{ item.product.id }}">{{ item.product.name }}</a>
                         </td>
                         <td class="hidden-xs">{{ item.product.article}}</td>
                         <td class="hidden-xs">{{ item.price | currency}}</td>
@@ -105,7 +105,7 @@
                     <tr ng-repeat="item in order.received">
                         <td class="hidden-xs">{{ $index + 1 }}</td>
                         <td>
-                            <a ng-href="/admin/#/products/{{ item.product.id}}}">
+                            <a ng-href="/#/products/{{ item.product.id}}}">
                                 {{ item.product.name + ' '+ item.product.article }}
                             </a>
                         </td>
@@ -134,7 +134,7 @@
                         <td class="hidden-xs">{{ item.total | currency}}</td>
                         <td class="center">
                         <div class="btn-group">
-                        <a class="btn btn-xs btn-info" ng-href="/admin/#/receive_orders/{{item.id}}"><i class="fa fa-eye"></i></a>
+                        <a class="btn btn-xs btn-info" ng-href="/#/receive_orders/{{item.id}}"><i class="fa fa-eye"></i></a>
                         </div>
                         </td>
                     </tr>
@@ -160,7 +160,7 @@
                         <td class="hidden-xs">{{ item.total | currency}}</td>
                         <td class="center">
                             <div class="btn-group">
-                                <a class="btn btn-xs btn-info" ng-href="/admin/#/outgoing_transfers/{{ item.id }}"><i class="fa fa-eye"></i></a>
+                                <a class="btn btn-xs btn-info" ng-href="/#/outgoing_transfers/{{ item.id }}"><i class="fa fa-eye"></i></a>
                             </div>
                         </td>
                     </tr>
