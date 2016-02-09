@@ -14,9 +14,9 @@
                     }
                 }
             });
-        $urlRouterProvider.otherwise(function () {
-            return !window.authorized ? '' : '/dashboard';
-        });
+//        $urlRouterProvider.otherwise(function () {
+//            return !window.authorized ? '' : '/dashboard';
+//        });
 
     });
 

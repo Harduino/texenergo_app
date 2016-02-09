@@ -69,7 +69,7 @@
                     scope.dateDrop.maxDate = scope.newTransfer.date;
                 }
             },
-            templateUrl: '/assets/admin/app/layout/partials/transfer-builder.tplt.html'
+            templateUrl: '/app/layout/partials/transfer-builder.tplt.html'
         }
     }]);
 }());

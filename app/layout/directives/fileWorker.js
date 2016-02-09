@@ -211,7 +211,7 @@
                     }else done();
                 }
             },
-            templateUrl: '/assets/admin/app/layout/partials/fileWorker.html'
+            templateUrl: '/app/layout/partials/fileWorker.html'
         }
     }]);
 }());

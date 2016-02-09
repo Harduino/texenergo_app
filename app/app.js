@@ -132,7 +132,7 @@ appConfig.sound_on = true;
 
     });
 
-    app.run(['$rootScope', '$state', '$stateParams', 'CanCan', 'Abilities', '$cookies', function ($rootScope, $state, $stateParams, CanCan, Abilities, $cookies) {
+    app.run(['$rootScope', '$state', '$stateParams', 'CanCan', 'Abilities', '$cookies', '$location', function ($rootScope, $state, $stateParams, CanCan, Abilities, $cookies, $location) {
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
 
@@ -162,6 +162,7 @@ appConfig.sound_on = true;
                 if(toState != 'login' && !window.gon) {
                     event.preventDefault();
                     Abilities.getGon(toState.name, toParams);
+                    return 0;
                 }
 
                 var access = (toState.data || {}).access;
@@ -175,6 +176,7 @@ appConfig.sound_on = true;
                 }
             }
         );
+        authorized && $state.go('app.dashboard');
     }]);
 
     Array.prototype.swapItemByindex = function(currentIndex, newIndex){
