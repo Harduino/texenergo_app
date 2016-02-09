@@ -81,6 +81,7 @@ appConfig.sound_on = true;
         $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
         $httpProvider.defaults.headers.common['Accept'] = 'application/json;charset=utf-8';
         $httpProvider.defaults.headers.common['Content-Type'] = 'application/json; charset=utf-8';
+        $httpProvider.defaults.withCredentials = true;
 
 
         // Intercept http calls.
