@@ -471,3 +471,14 @@ a[data-toggle="tab"]{
 .auth-restore-st{
     position: absolute;
 }
+@media screen and (max-width: 520px) {
+    #extr-page-header-space .btn{
+        font-size: 74%;
+    }
+}
+#main.login-page{
+    overflow: hidden; margin-left: 0;
+}
+#content.login-page{
+    padding-top: 36px;
+}
