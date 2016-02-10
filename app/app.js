@@ -13,13 +13,9 @@ window.appConfig = {};
 
 appConfig.menu_speed = 200;
 
-if (window.location.host.match(/localhost|127\.0\.0\.1/) != null) {
-    appConfig.serverUrl = 'http://localhost:3000';
-} else {
-    appConfig.serverUrl = 'http://www.texenergo.com';
-}
+appConfig.serverUrl = 'http://' + (window.location.host.match(/localhost|127\.0\.0\.1/) == null ? 'www.texenergo.com' : 'localhost:3000');
 
-console.log(appConfig.serverUrl);
+//console.log(appConfig.serverUrl);
 
 appConfig.smartSkin = "smart-style-0";
 

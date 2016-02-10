@@ -36,7 +36,7 @@
                     $state.go('app.customer_orders.view.edit', {id: result.data.id});
                 } else {
                     funcFactory.showNotification('Не удалось создать заказ', result.data.errors);
-                };
+                }
             });
         };
 
@@ -78,7 +78,7 @@
                             funcFactory.showNotification('Заказ ' + item.data.number + ' успешно удален.', '', true);
                         } else {
                             funcFactory.showNotification('Не удалось удалить заказ ' + item.data.number, result.data.errors);
-                        };
+                        }
                     });
                 }
             });
