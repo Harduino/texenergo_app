@@ -89,7 +89,7 @@ appConfig.sound_on = true;
 
 
         // Intercept http calls.
-        $provide.factory('ErrorHttpInterceptor', ['$q', '$rootScope', function ($q, $rootScope) {
+        $provide.factory('ErrorHttpInterceptor', ['$q', '$rootScope', '$location', function ($q, $rootScope, $location) {
             var errorCounter = 0;
             function notifyError(rejection){
                 console.log(rejection);
@@ -125,6 +125,11 @@ appConfig.sound_on = true;
                     notifyError(rejection);
 
                     // Return the promise rejection.
+                    return $q.reject(rejection);
+                },
+                responseError: function (rejection) {
+                    var s =rejection.status;
+                    s === 403 || s === -1 && $location.path('sign_in');
                     return $q.reject(rejection);
                 }
             };
