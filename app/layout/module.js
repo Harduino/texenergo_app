@@ -14,10 +14,12 @@
                     }
                 }
             });
-//        $urlRouterProvider.otherwise(function (injector, location) {
-//            console.log(injector, location);
-//            return '';
-//        });
+        $urlRouterProvider
+            .when('', angular.noop)
+            .when('/', angular.noop)
+            .otherwise(function () {
+                return '/dashboard';
+        });
 
     });
 
