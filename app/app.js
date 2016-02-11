@@ -92,7 +92,6 @@ appConfig.sound_on = true;
         $provide.factory('ErrorHttpInterceptor', ['$q', '$rootScope', '$location', function ($q, $rootScope, $location) {
             var errorCounter = 0;
             function notifyError(rejection){
-                console.log(rejection);
                 $.bigBox({
                     title: rejection.status + ' ' + rejection.statusText,
                     content: rejection.data,
@@ -140,18 +139,9 @@ appConfig.sound_on = true;
 
     });
 
-    app.run(['$rootScope', '$state', '$stateParams', 'CanCan', 'Abilities', '$cookies', '$location', function ($rootScope, $state, $stateParams, CanCan, Abilities, $cookies, $location) {
+    app.run(['$rootScope', '$state', '$stateParams', 'CanCan', 'Abilities', '$location', function ($rootScope, $state, $stateParams, CanCan, Abilities, $location) {
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
-
-        var getUserId = function(){
-            var c = $cookies.getAll();
-            return c.request_method !== "DELETE" ? c['user.id'] : null;
-        };
-
-        //check user id, if user not authorized redirect to sign_in page
-        var authorized = window.authorized = getUserId();
-        if(!authorized) $state.transitionTo('login', null);
 
         //scroll page top if page not search
         $rootScope.$on('$stateChangeSuccess', function(){
@@ -162,12 +152,7 @@ appConfig.sound_on = true;
         $rootScope.$on('$stateChangeStart',
             function (event, toState, toParams, fromState, fromParams) {
 
-                if(!window.authorized && toState.name !== ''){
-                    event.preventDefault();
-                    return 0;
-                }
-
-                if(toState != 'login' && !window.gon) {
+                if(toState.name !== 'login' && !window.gon) {
                     event.preventDefault();
                     Abilities.getGon(toState.name, toParams);
                     return 0;
@@ -176,7 +161,6 @@ appConfig.sound_on = true;
                 var access = (toState.data || {}).access;
                 if(access){
                     var can = CanCan.can(access.action, access.params);
-//                    console.log('access',access, 'can', can);
                     if(!can) {
                         event.preventDefault();
                         $state.transitionTo('app.dashboard', null, {reload:true});
@@ -184,7 +168,8 @@ appConfig.sound_on = true;
                 }
             }
         );
-        authorized && $state.go('app.dashboard');
+
+        $location.$$path === '' &&  $state.go('app.dashboard');
     }]);
 
     Array.prototype.swapItemByindex = function(currentIndex, newIndex){

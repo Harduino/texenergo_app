@@ -14,8 +14,9 @@
                     }
                 }
             });
-//        $urlRouterProvider.otherwise(function () {
-//            return !window.authorized ? '' : '/dashboard';
+//        $urlRouterProvider.otherwise(function (injector, location) {
+//            console.log(injector, location);
+//            return '';
 //        });
 
     });

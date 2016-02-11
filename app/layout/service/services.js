@@ -389,7 +389,6 @@
                 dfd.resolve();
                 $state.go(s, p);
             });
-            getInfo = angular.noop;
         };
 
         function setUserInfo(){
