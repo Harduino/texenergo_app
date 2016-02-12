@@ -1,3 +1,6 @@
+/**
+ * Changed!
+ */
 (function () {
     "use strict";
 
@@ -77,7 +80,7 @@
             },
             ajaxnav: true
 
-        }
+        };
 
         var dispatchedWidgetIds = [];
         var setupWaiting = false;
@@ -140,6 +143,8 @@
             compile: function(element){
 
                 element.removeAttr('widget-grid data-widget-grid');
+
+                element.attr('id', element.attr('id') + $state.current.name.replace(/\./g, '_'));
 
                 var widgetIds = [];
 
