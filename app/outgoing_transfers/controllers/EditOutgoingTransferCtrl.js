@@ -59,6 +59,7 @@
                                 }
                             }, result.data));
                             funcFactory.showNotification('Успешно','Заказ ' + data.number + ' успешно добавлен', true);
+                            angular.element('#eot_order_select').data().$uiSelectController.open=true;
                         }else funcFactory.showNotification('Неудалось прикрепить заказ ' + data.number, result.data.errors);
                     });
                 };

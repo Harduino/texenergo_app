@@ -56,7 +56,7 @@
                             <h2>Содержимое заказа</h2>
                         </header>
                         <div class="widget-body">
-                            <ui-select ui-select-infinity="pSelectConfig" ng-model="data.selectedProduct" theme="select2" on-select="selectProductForAppend($item, $model)" ng-disabled="!visual.roles.can_edit" style="width: 100%;">
+                            <ui-select id="eco_prod_select" ui-select-infinity="pSelectConfig" ng-model="data.selectedProduct" theme="select2" on-select="selectProductForAppend($item, $model)" ng-disabled="!visual.roles.can_edit" style="width: 100%;">
                                 <ui-select-match placeholder="Введите товар для добавления...">{{$select.selected.name}}</ui-select-match>
                                 <ui-select-choices repeat="product in data.productsList | filter:$select.search" class="search-item">
                                     <div class="search-tr">

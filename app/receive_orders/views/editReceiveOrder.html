@@ -66,8 +66,8 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <ui-select  ui-select-infinity="productSelectConf" ng-model="data.productForAppend" theme="select2" class="td-ui-select" style="max-width: 310px;" on-select="onSelectProduct($item)">
-                                            <ui-select-match placeholder="Выберите заказ">{{$select.selected.product.name}}</ui-select-match>
+                                        <ui-select id="ero_prod_select"  ui-select-infinity="productSelectConf" ng-model="data.productForAppend" theme="select2" class="td-ui-select" style="max-width: 310px;" on-select="onSelectProduct($item)">
+                                            <ui-select-match>{{$select.selected.product.name}}</ui-select-match>
                                             <ui-select-choices repeat="order in ordersList">
                                                 <div ng-bind-html="order.product.name | highlight: $select.search"></div>
                                             </ui-select-choices>

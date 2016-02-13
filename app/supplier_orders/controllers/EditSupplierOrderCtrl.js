@@ -104,6 +104,7 @@
                         sc.data.selectedProduct = null;
                         sc.data.supplierOrder.supplier_order_contents.push(angular.extend(data, result.data));
                         funcFactory.showNotification('Успешно добавлен продукт', t.name, true);
+                        angular.element('#eso_prod_select').data().$uiSelectController.open=true;
                     } else {
                         funcFactory.showNotification('Не удалось добавить продукт', result.data.errors);
                     }

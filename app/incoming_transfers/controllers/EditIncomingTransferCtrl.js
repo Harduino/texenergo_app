@@ -91,6 +91,7 @@
                            sc.transfer.remaining_amount = result.data.money_transfer.remaining_amount;
                            sc.transfer.money_to_orders.push(result.data);
                            funcFactory.showNotification('Успешно', t + ' успешно добавлен', true);
+                           angular.element('#eit_order_select').data().$uiSelectController.open=true;
                        }else funcFactory.showNotification('Неудалось прикрепить ' + t, result.data.errors);
                     });
                 };

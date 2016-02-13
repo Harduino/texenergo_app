@@ -104,6 +104,7 @@
                     if(!result.data.errors){
                         sc.data.order.customer_order_contents.push(angular.extend(data, result.data));
                         funcFactory.showNotification('Успешно добавлен продукт', t.name, true);
+                        angular.element('#eco_prod_select').data().$uiSelectController.open=true;
                     } else {
                         funcFactory.showNotification('Не удалось добавить продукт', result.data.errors);
                     }

@@ -47,7 +47,7 @@
                                         <tbody>
                                         <tr>
                                             <td>
-                                                <ui-select  ui-select-infinity="orderSelectConf" ng-model="data.orderForAppend" theme="select2" class="td-ui-select">
+                                                <ui-select id="eot_order_select" ui-select-infinity="orderSelectConf" ng-model="data.orderForAppend" theme="select2" class="td-ui-select">
                                                     <ui-select-match placeholder="Выберите заказ">{{$select.selected.number}}</ui-select-match>
                                                     <ui-select-choices repeat="order in data.ordersList | filter:$select.search">
                                                         <div ng-bind-html="order.number | highlight: $select.search"></div>

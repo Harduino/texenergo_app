@@ -128,7 +128,7 @@ appConfig.sound_on = true;
                 },
                 responseError: function (rejection) {
                     var s =rejection.status;
-                    s === 403 || s === -1 && $location.path('sign_in');
+                    //s === 403 || s === -1 && $location.path('sign_in');
                     return $q.reject(rejection);
                 }
             };
