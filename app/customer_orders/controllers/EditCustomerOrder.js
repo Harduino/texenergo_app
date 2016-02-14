@@ -92,10 +92,12 @@
             var append = function(){
                 var t=sc.productForAppend,
                     data = angular.extend(t, {product: {name:t.name, id: t.id}}),
+                    selectCtrl = angular.element('#eco_prod_select').data().$uiSelectController,
                     post = {
                         product_id: t.id,
                         quantity: t.quantity,
-                        discount: t.discount
+                        discount: t.discount,
+                        //query_original: selectCtrl.search
                     };
                 sc.productForAppend = {};
                 sc.data.selectedProduct = null;
@@ -104,7 +106,8 @@
                     if(!result.data.errors){
                         sc.data.order.customer_order_contents.push(angular.extend(data, result.data));
                         funcFactory.showNotification('Успешно добавлен продукт', t.name, true);
-                        angular.element('#eco_prod_select').data().$uiSelectController.open=true;
+                        selectCtrl.open=true;
+                        selectCtrl.search = '';
                     } else {
                         funcFactory.showNotification('Не удалось добавить продукт', result.data.errors);
                     }

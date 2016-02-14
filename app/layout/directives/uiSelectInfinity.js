@@ -13,9 +13,10 @@
                 var config = {
                     startFrom:2,
                     startPage:1,
-                    scrollDistance:50,
+                    scrollDistance:30,
                     maxHeight: 200,
                     delay: 500,
+                    notShowLoadStatus: false,
                     dataMethod: angular.noop,
                     searchStatusTmpl: '<div class="ui-select-status">' +
                         '<span ng-if="searchStatus == \'before\'">Введите еще хотя бы {{config.startFrom}} символа</span>'+
@@ -26,6 +27,7 @@
 
                 var page,                   // current page for load
                     content,                // ui-select-choices-content
+                    list,                   // list of items
                     inLoad,                 // loading status
                     query,                  // search query
                     canceler,               // request canceler
@@ -58,6 +60,7 @@
 
                 defer.promise.then(function(){
                     content = element.find('.ui-select-choices-content').scroll(scroll);
+                    list = content.find('.ui-select-choices-group');
                 });
 
                 scope.$watch('$select.open', function(value){
@@ -68,9 +71,9 @@
                 });
 
                 function scroll(){
-                    if(!inLoad && ((config.maxHeight - content.scrollTop())<config.scrollDistance)){
+                    if(!inLoad && ((list.outerHeight() - content.scrollTop() - config.maxHeight)<config.scrollDistance)){
                         page++;
-                        load(true);
+                        load(config.notShowLoadStatus);
                     }
                 }
 
