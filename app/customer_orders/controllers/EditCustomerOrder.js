@@ -97,7 +97,7 @@
                         product_id: t.id,
                         quantity: t.quantity,
                         discount: t.discount,
-                        //query_original: selectCtrl.search
+                        query_original: selectCtrl.search
                     };
                 sc.productForAppend = {};
                 sc.data.selectedProduct = null;
