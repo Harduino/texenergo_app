@@ -58,7 +58,7 @@
             $http.get('/api/products/'+id +'.json').then(success, fail);
         };
         this.updateProduct = function(id, data, success, fail){
-            $http.patch('/api/products/' + id, data).then(success, fail);
+            $http.put('/api/products/' + id, data).then(success, fail);
         };
         this.getProductPartnerLogs = function(id, success, fail){
             $http.get('/api/products/'+id +'/partner_logs.json').then(success, fail);
