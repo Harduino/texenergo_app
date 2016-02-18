@@ -54,17 +54,17 @@
         }
         
         function openDispatchOrderPdf(){
-            var pdfUrl = location.href.replace(_pattern,"")+".pdf";
+            var pdfUrl = "http://www.texenergo.com/admin/dispatch_orders/" + sc.dispatchOrder.id + ".pdf";
             window.open(pdfUrl, '_blank');
         }
         
         function openLabelPdf(){
-            var pdfUrl = location.href.replace(_pattern,"")+"/label.pdf";
+            var pdfUrl = "http://www.texenergo.com/admin/dispatch_orders/" + sc.dispatchOrder.id + "/label.pdf";
             window.open(pdfUrl, '_blank');
         }
         
         function openPackingListPdf(){
-            var pdfUrl = location.href.replace(_pattern,"")+"/packing_list.pdf";
+            var pdfUrl = "http://www.texenergo.com/admin/dispatch_orders/" + sc.dispatchOrder.id + "/packing_list.pdf";
             window.open(pdfUrl, '_blank');
         }
         

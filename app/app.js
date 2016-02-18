@@ -127,8 +127,8 @@ appConfig.sound_on = true;
                     return $q.reject(rejection);
                 },
                 responseError: function (rejection) {
-                    var s =rejection.status;
-                    s == 403 || s == 401 && $location.path('sign_in');
+                    var s = rejection.status;
+                    (s == 403 || s == 401) && $location.path('sign_in');
                     return $q.reject(rejection);
                 }
             };
