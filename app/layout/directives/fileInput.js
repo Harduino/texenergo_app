@@ -9,9 +9,8 @@
                 return {
                     restrict: 'A',
                     link: function(scope, element, attrs) {
-
-                        var handler = $parse(attrs.fileInput)(scope),
-                            isModel = typeof handler !== 'function';
+                        var handler = $parse(attrs.fileInput)(scope);
+                        var isModel = typeof handler !== 'function';
 
                         element.bind('change', function(){
 

@@ -38,8 +38,9 @@
         });
 
         function setFileWorkerOptions(product){
+            var endpointDomain = 'http://' + (window.location.host.match(/localhost|127\.0\.0\.1/) == null ? 'www.texenergo.com' : 'localhost:3000');
             sc.fileModalOptions={
-                url:'/api/products/'+ product.id +'/image',
+                url: (endpointDomain + '/api/products/'+ product.id +'/image'),
                 files: [product.image],
                 r_delete: serverApi.deleteImage,
                 view: 'products',
