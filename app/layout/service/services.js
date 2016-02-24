@@ -111,6 +111,9 @@
         this.updateCommandCustomerOrder = function(id, data, success, fail){
             $http.put('/api/customer_orders/' + id + '/update_command', data).then(success, fail);
         };
+        this.getRelatedOrdersOfCustomer = function(id, success, fail){
+            $http.get('/api/customer_orders/' + id + '/trace').then(success, fail);
+        };
 
         // Supplier Orders
         this.getSupplierOrders = function(page, query, config, success, fail){

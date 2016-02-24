@@ -482,3 +482,12 @@ a[data-toggle="tab"]{
 #content.login-page{
     padding-top: 36px;
 }
+.link {
+    stroke: #000;
+    stroke-width: 1.5px;
+}
+
+.circle {
+    stroke: #000;
+    stroke-width: 1.5px;
+}

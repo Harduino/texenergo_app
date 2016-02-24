@@ -52,6 +52,7 @@ appConfig.sound_on = true;
         'infinite-scroll',
         'ui.select',
         'ui.tinymce',
+        'angular.d3',
         
         // Permissions
         'cancan.export',

@@ -29,6 +29,7 @@ gulp.task('libs', function(){
         'assets/plugin/jquery/dist/jquery.min.js',
         'assets/plugin/bootstrap/dist/js/bootstrap.min.js',
         'assets/plugin/jquery-ui/jquery-ui.min.js',
+        'assets/plugin/d3/d3.min.js',
         'assets/plugin/angular/angular.min.js',
         'assets/plugin/i18n/*.js',
         'assets/plugin/angular-ui-router/release/angular-ui-router.min.js',
@@ -36,6 +37,7 @@ gulp.task('libs', function(){
         'assets/plugin/angular-animate/angular-animate.min.js',
         'assets/plugin/angular-cookies/angular-cookies.min.js',
         'assets/plugin/angular-bootstrap/ui-bootstrap-custom-tpls-0.14.3.min.js',
+//        'assets/plugin/angular-d3/angular-d3.js',
         'assets/plugin/ui-select/select.min.js',
         'assets/plugin/fastclick/lib/fastclick.js',
         'assets/plugin/chartjs/chart.min.js',
@@ -70,6 +72,7 @@ gulp.task('app', function(){
         'app/layout/directives/*.js',
         'assets/widgets/directives/*.js',
         'app/*/controllers/*.js',
+        'assets/plugin/angular-d3/angular-d3.js',
         'app/app.js'
     ])
         .on('error', console.warn)

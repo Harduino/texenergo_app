@@ -21,6 +21,21 @@
             showFileModal: angular.noop,
             titles: window.gon.index.CustomerOrder.objectTitle + ': №'
         };
+        sc.data = {
+            networkData: null,
+            networkActions: [
+                {
+                    select: '.node',
+                    action: 'click',
+                    handler: function(e){
+                        switch (e.type){
+                            case "CustomerOrder" : $state.go('app.customer_orders.view', {id: e.id});
+                                break;
+                        }
+                    }
+                }
+            ]
+        };
 
         sc.amontPercent = 0;
         sc.dispatchedPercent = 0;
@@ -38,6 +53,10 @@
 
             calculateTotals(order);
             completeInitPage(order)
+        });
+
+        serverApi.getRelatedOrdersOfCustomer($stateParams.id, function(result){
+            sc.data.networkData = result.data;
         });
 
         function completeInitPage(order){
