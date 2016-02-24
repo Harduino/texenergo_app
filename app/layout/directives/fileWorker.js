@@ -138,7 +138,8 @@
                             init : d_init,
                             complete : d_complete,
                             sending : d_sending,
-                            accept: d_accept
+                            accept: d_accept,
+                            withCredentials: true
                         };
 
                         var dc = value.dropzoneConfig;
