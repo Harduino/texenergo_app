@@ -43,7 +43,7 @@
                             if(item !== null && typeof item === 'object'){
                                 var mockFile = { name: item.title, size: item.file_size, id:item.id};
                                 dropzone.emit("addedfile", mockFile);
-                                dropzone.emit("thumbnail", mockFile, '/uploads/'+ item.id + '/preview' + cutExtension(item.title).extension);
+                                dropzone.emit("thumbnail", mockFile, appConfig.serverUrl + '/uploads/'+ item.id + '/preview' + cutExtension(item.title).extension);
                                 return mockFile;
                             }
                         });
@@ -60,7 +60,7 @@
                     var titleSpan = template.find('span[data-dz-name]')[file.id ? 'show' : 'hide'](); // get name span and check display it or not
 
                     if(file.id){//if file uploaded
-                        var dLink = '/uploads/'+ file.id + '/original' + cutExtension(file.name).extension; // create download link
+                        var dLink = appConfig.serverUrl + '/uploads/'+ file.id + '/original' + cutExtension(file.name).extension; // create download link
                         var button =$('<a/>', {class:'dz-download', href:dLink, text:'Скачать', download:file.name});
                         template.find('.dz-filename-input').remove();
                         template.find('.dz-error-message').after(button);
@@ -131,7 +131,7 @@
                         _isConfigured = true;
 
                         var config = {
-                            url: value.url,
+                            url: appConfig.serverUrl + value.url,
                             addRemoveLinks: canDestroy,
                             autoProcessQueue:false,
                             acceptedFiles: '.jpg,.jpeg,.png,.gif,.txt,.doc,.docx,.odt,.xls,.xlsx,.ods,.csv,.ppt,.pptx,.odp',
