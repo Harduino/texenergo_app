@@ -110,11 +110,28 @@
         </div>
     </div>
     <ul class="nav nav-tabs bordered" id="myTab1">
-        <li class="active"><a data-toggle="tab" href="#s1">В заказах</a></li>
-        <li><a data-toggle="tab" href="#s2">В движениях</a></li>
+        <li class="active"><a data-toggle="tab" href="#s1">Свойства товара</a></li>
+        <li><a data-toggle="tab" href="#s2">В заказах</a></li>
+        <li><a data-toggle="tab" href="#s3">В движениях</a></li>
     </ul>
     <div class="well tab-content padding-10" id="myTabContent1">
-        <div class="tab-pane fade in active" id="s1" style="overflow-y: auto;"><h2>Заказы с этим товаром</h2>
+        <div class="tab-pane fade in active" id="s1" style="overflow-y: auto;"><h2>Свойства товара</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Свойство</th>
+                        <th>Значение</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in product.properties">
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.value }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="s2"><h2>Заказы с этим товаром</h2>
             <table class="table">
                 <thead>
                     <tr>
@@ -132,7 +149,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="tab-pane fade" id="s2"><h2>Движений с этим товаром</h2>
+        <div class="tab-pane fade" id="s3"><h2>Движений с этим товаром</h2>
             <table class="table">
                 <thead>
                     <tr>
@@ -152,5 +169,6 @@
                 </tbody>
             </table>
         </div>
+        
     </div>
 </div>
