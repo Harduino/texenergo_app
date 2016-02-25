@@ -506,3 +506,20 @@ path.link {
     stroke: #666;
     stroke-width: 1.5px;
 }
+.vco-graph-tooltip{
+    width: 200px;
+    border: 1px solid rgb(59, 62, 66);
+    border-radius: 4px;
+    background-color: rgba(255, 254, 254, 0.99);
+    padding: 10px;
+}
+.vco-graph-tooltip ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.vco-graph-tooltip li {
+    font-size: 13px;
+    line-height: 25px;
+    pointer-events: none;
+}

@@ -52,6 +52,15 @@
                             return '#2ca02c';
                         default : return '#c7c7c7'
                     }
+                },
+                tooltip: function(item, index){
+                    return '<div class="vco-graph-tooltip">' +
+                            '<ul>' +
+                                '<li><b>Номер:</b> '+item.number+'</li>' +
+                                '<li><b>Дата:</b> '+$filter('date')(item.date, 'dd MMMM yy, HH:mm')+'</li>' +
+                                '<li><b>Итого:</b> '+$filter('currency')(item.total)+'</li>' +
+                            '</ul>' +
+                        '</div>'
                 }
             }
         };

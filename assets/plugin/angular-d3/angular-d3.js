@@ -56,6 +56,8 @@
                     var path = appendLinks(svg, force);
                     var node = appendNodes(svg, d);
 
+                    _config.tooltip &&  appendTooltip(node);
+
                     force.on("tick", tickHandler.bind({node: node, path:path}));
 
                     _config.actions && addListeners(svg, _config.actions);
@@ -109,6 +111,25 @@
                                 '</div>';
                         });
                     return node;
+                }
+
+                function appendTooltip(node){
+                    var tooltip = d3.select(element[0]).append("div")
+                        .attr("class", "tooltip").style('opacity', 1).style('visibility', 'hidden');
+                    var $t = $('force-layout-graph .tooltip');
+
+                    node.on("mouseover", function(d,i) {
+                        console.log(d);
+                        tooltip.style('visibility', 'visible').html(_config.tooltip(d, i));
+                        var width = $t.outerWidth(),
+                            height = $t.outerHeight();
+                        tooltip.style("left", (d.x - width/2 + 10) + "px")
+                            .style("top", (d.y - height - 15) + "px");
+                    }).on("mouseout", function() {
+                        tooltip.style('visibility', 'hidden');
+                    });
+
+                    return tooltip;
                 }
 
                 function tickHandler(){
