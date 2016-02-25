@@ -38,9 +38,8 @@
         });
 
         function setFileWorkerOptions(product){
-            var endpointDomain = 'http://' + (window.location.host.match(/localhost|127\.0\.0\.1/) == null ? 'www.texenergo.com' : 'localhost:3000');
             sc.fileModalOptions={
-                url: (endpointDomain + '/api/products/'+ product.id +'/image'),
+                url: '/api/products/'+ product.id +'/image',
                 files: [product.image],
                 r_delete: serverApi.deleteImage,
                 view: 'products',
@@ -60,7 +59,7 @@
                     formData.append("title", file.title);
                 },
                 complete: function(file){
-                    product.image_url = '/uploads/'+ file.id + '/original' + this.cutExtension(file.name).extension;
+                    product.image_url = appConfig.serverUrl + '/uploads/'+ file.id + '/original' + this.cutExtension(file.name).extension;
                     !sc.$$phase && sc.$apply(angular.noop);
                 },
                 dropzoneConfig: {
