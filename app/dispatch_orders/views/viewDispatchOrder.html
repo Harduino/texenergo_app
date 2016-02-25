@@ -98,7 +98,7 @@
                     </td>
                     <td>{{ item.product.article }}</td>
                     <td>{{ item.quantity }}</td>
-                    <td>{{ item.customer_order.number }}</td>
+                    <td><a ng-href="#/customer_orders/{{ item.customer_order.id }}">{{ item.customer_order.number }}</a></td>
                     <td class="text-right">{{ item.total | currency }}</td>
                 </tr>
                 <tr>
