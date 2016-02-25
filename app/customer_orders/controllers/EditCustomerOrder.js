@@ -235,7 +235,6 @@
         }
         
         function recalculateCustomerOrder() {
-            console.log("Started");
             serverApi.recalculateCustomerOrder($stateParams.id, function(result){
                 if(result.status == 200 && !result.data.errors) {
                     funcFactory.showNotification("Успешно", 'Заказ успешно отправлен.', true);

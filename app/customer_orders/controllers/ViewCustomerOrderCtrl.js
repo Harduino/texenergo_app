@@ -10,7 +10,7 @@
         sc.order = {};
         sc.total = 0;
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack}, {type: 'edit', callback: goEditCustomerOrder}, {type:'files', callback: showFileModal}, {type: 'send_email', callback: sendCustomerOrder}, {type:'recalculate'}, {type:'logs', callback: goToLogs}, {type:'confirm_order', callback: confirmCustomerOrder}],
+            navButtsOptions:[{type:'back', callback:returnBack}, {type: 'edit', callback: goEditCustomerOrder}, {type:'files', callback: showFileModal}, {type: 'send_email', callback: sendCustomerOrder}, {type: 'recalculate', callback: recalculateCustomerOrder}, {type:'logs', callback: goToLogs}, {type:'confirm_order', callback: confirmCustomerOrder}],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
                 scaleColor:false,
@@ -44,7 +44,6 @@
          * Get order details
          */
         serverApi.getCustomerOrderDetails($stateParams.id, function(result){
-            console.log(result.data);
             var order = sc.order = result.data;
 
             funcFactory.setPageTitle('Заказ ' + sc.order.number);
@@ -155,6 +154,17 @@
                     sc.order = result.data;
                 } else {
                     funcFactory.showNotification("Не удалось " + item.name.toLowerCase() + ' заказ', result.data.errors);
+                }
+            });
+        }
+        
+        function recalculateCustomerOrder() {
+            serverApi.recalculateCustomerOrder($stateParams.id, function(result){
+                if(result.status == 200 && !result.data.errors) {
+                    funcFactory.showNotification("Успешно", 'Заказ успешно отправлен.', true);
+                    sc.data.order = result.data;
+                } else {
+                    funcFactory.showNotification("Неудача", 'Ошибка при попытке отправить заказ.', true);
                 }
             });
         }
