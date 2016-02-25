@@ -482,12 +482,27 @@ a[data-toggle="tab"]{
 #content.login-page{
     padding-top: 36px;
 }
-.link {
+.link, marker {
     stroke: #000;
     stroke-width: 1.5px;
 }
 
 .circle {
     stroke: #000;
+    stroke-width: 1.5px;
+}
+.force-node-label{
+    white-space: normal;
+    text-overflow: ellipsis;
+    overflow: visible;
+    line-height: 20px;
+    font-size: 13px;
+    text-align: center;
+    text-shadow: 0 0 2px white;
+    cursor: default;
+}
+path.link {
+    fill: none;
+    stroke: #666;
     stroke-width: 1.5px;
 }

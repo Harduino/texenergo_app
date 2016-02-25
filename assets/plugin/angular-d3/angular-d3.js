@@ -7,20 +7,18 @@
     var module = angular.module('angular.d3', []);
 
     module.directive('forceLayoutGraph', [function(){
+        var _colors = d3.scale.category20().range();
         var _defaultConfig = {
-            size: [400, 200],
-            linkStrength: 0.1,
-            friction: 0.9,
-            linkDistance: 20,
-            charge: -30,
-            gravity: 0.1,
-            theta: 0.8
+            d3:{
+                size: [400, 400],
+                linkDistance: 80,
+                charge: -200
+            }
         };
 
         return {
             restrict: 'E',
             scope: {
-                actions:"=",
                 config: "=",
                 data: "="
             },
@@ -37,65 +35,115 @@
 
                 function drawChart(data){
                     var d = data;
-                    console.log(d);
+
+                    setEdgesAttributes(d);
+
                     var force = d3.layout.force()
                         .nodes(d.nodes)
                         .links(d.links);
 
                     configurate(force);
 
+                    force.start();
+
                     var d3Element = d3.select(element[0]);
                     d3Element.selectAll("*").remove();
 
-                    var _color = d3.scale.category20().range();
-
                     var svg = d3Element.append("svg")
-                        .attr("width", _config.size[0])
-                        .attr("height", _config.size[1]);
+                        .attr("width", _config.d3.size[0])
+                        .attr("height", _config.d3.size[1]);
 
-                    var _x = d3.scale.ordinal()
-                        .domain(d.nodes)
-                        .rangePoints([0, _config.size[0]]).range();
+                    var path = appendLinks(svg, force);
+                    var node = appendNodes(svg, d);
 
-                    var _y = d3.scale.ordinal()
-                        .domain(d.nodes)
-                        .rangePoints([0, _config.size[1]]).range();
+                    force.on("tick", tickHandler.bind({node: node, path:path}));
 
-//                    var tip = d3.tip()
-//                        .attr('class', 'd3-tip')
-//                        .offset([-10, 0])
-//                        .html(function (d) {
-//                            return  d.number + "";
-//                        });
-//                    svg.call(tip);
+                    _config.actions && addListeners(svg, _config.actions);
 
+                }
+
+                function appendLinks(svg, force){
+                    svg.append("svg:defs").selectAll("marker")
+                        .data(["end"])
+                        .enter().append("svg:marker")
+                        .attr("id", String)
+                        .attr("viewBox", "0 -5 10 10")
+                        .attr("refX", 22)
+                        .attr("refY", -1.5)
+                        .attr("markerWidth", 6)
+                        .attr("markerHeight", 6)
+                        .attr("orient", "auto")
+                        .append("svg:path")
+                        .attr("d", "M0,-5L10,0L0,5");
+
+                    var path = svg.append("svg:g").selectAll("path")
+                        .data(force.links())
+                        .enter().append("svg:path")
+                        .attr("class", "link")
+                        .attr("marker-end", "url(#end)");
+
+                    return path;
+
+                }
+
+                function appendNodes(svg, data){
                     var node = svg.selectAll(".node")
-                        .data(d.nodes)
+                        .data(data.nodes)
                         .enter().append("g")
-                        .attr("class", "node")
-                        .attr("transform", function(d, i){return "translate("+ _x[i] +"," + _y[i] + ")"})
-                        .attr("r", 10)
-                        .call(force.drag);
-//                        .on('mouseover', tip.show)
-//                        .on('mouseout', tip.hide);
+                        .attr("class", "node");
 
                     node.append('circle')
                         .attr('class', 'circle')
                         .attr('r', 10)
-                        .style("fill", function(d, i) { return _color[i]});
+                        .style("fill", function(d, i) { return defineColor(d,i)});
 
-                    node.append("text")
-                        .attr("dx", 12)
-                        .attr("dy", ".35em")
-                        .text(function(d) { return d.number });
+                    node.append("foreignObject")
+                        .attr("width", 100)
+                        .attr("height", 25)
+                        //.text(function(d) {return d.name;})
+                        .attr("class", "force-node-label").attr("transform", function(){return "translate(-50," + 10 + ")"})
+                        .style("color", function(d){return d.color;})
+                        .html(function(d){
+                            return '<div>' +
+                                d.number +
+                                '</div>';
+                        });
+                    return node;
+                }
 
-                    scope.actions && addListeners(svg, scope.actions);
+                function tickHandler(){
+                    this.node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+                    this.path.attr("d", function(d) {
+                        var dx = d.target.x - d.source.x,
+                            dy = d.target.y - d.source.y,
+                            dr = Math.sqrt(dx * dx + dy * dy);
+                        return "M" +
+                            d.source.x + "," +
+                            d.source.y + "A" +
+                            dr + "," + dr + " 0 0,1 " +
+                            d.target.x + "," +
+                            d.target.y;
+                    });
                 }
 
                 function configurate(force){
                     var f = force;
-                    Object.keys(_config).map(function(property){
-                        f[property](_config[property]);
+                    Object.keys(_config.d3).map(function(property){
+                        f[property](_config.d3[property]);
+                    });
+                }
+
+                function setEdgesAttributes(d){
+                    var nodeById = d3.map();
+
+                    d.nodes.forEach(function(node) {
+                        nodeById.set(node.id, node);
+                    });
+
+                    d.links.forEach(function(link) {
+                        link.source = nodeById.get(link.from);
+                        link.target = nodeById.get(link.to);
                     });
                 }
 
@@ -106,8 +154,33 @@
                 }
 
                 function updateDefaultWidth(){
-                    _defaultConfig.size[0] = element.parent().outerWidth();
+                    _defaultConfig.d3.size[0] = element.parent().outerWidth();
                 }
+
+                function defineColor(item, index){
+                    return _config.colorSetter ? _config.colorSetter(item, index) : _colors[index];
+                }
+
+//                function placeElementsByCircle(nodes, nodeRadius){
+//                    var radius = 100; // radius of the circle
+//                    var width = _config.size[0],
+//                        height = _config.size[1],
+//                        angle = 0,
+//                        step = (2*Math.PI) / nodes.length;
+//
+//                    nodes.map(function(item, ind){
+//                        var x, y;
+//                        if(ind == 0){
+//                            x = width/2-nodeRadius;
+//                            y = height/2-nodeRadius;
+//                        }else{
+//                            x = Math.round(width/2 + radius * Math.cos(angle) - nodeRadius);
+//                            y = Math.round(height/2 + radius * Math.sin(angle) - nodeRadius);
+//                            angle += step;
+//                        }
+//                        item.point = {x:x, y:y};
+//                    });
+//                }
             }
         }
     }]);

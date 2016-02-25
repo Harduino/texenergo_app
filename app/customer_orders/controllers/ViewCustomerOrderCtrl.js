@@ -23,18 +23,37 @@
         };
         sc.data = {
             networkData: null,
-            networkActions: [
-                {
-                    select: '.node',
-                    action: 'click',
-                    handler: function(e){
-                        switch (e.type){
-                            case "CustomerOrder" : $state.go('app.customer_orders.view', {id: e.id});
-                                break;
+            networkConfig: {
+                actions:[
+                    {
+                        select: '.node',
+                        action: 'click',
+                        handler: function (e) {
+                            switch (e.type) {
+                                case "CustomerOrder" :
+                                    $state.go('app.customer_orders.view', {id: e.id});
+                                    break;
+                                case "DispatchOrder" :
+                                    $state.go('app.dispatch_orders.view', {id: e.id});
+                                    break;
+                                case "IncomingTransfer" :
+                                    $state.go('app.incoming_transfers.view', {id: e.id});
+                            }
                         }
                     }
+                ],
+                colorSetter: function(item){
+                    switch (item.type){
+                        case 'CustomerOrder' :
+                            return '#1f77b4';
+                        case 'DispatchOrder' :
+                            return '#d62728';
+                        case 'IncomingTransfer' :
+                            return '#2ca02c';
+                        default : return '#c7c7c7'
+                    }
                 }
-            ]
+            }
         };
 
         sc.amontPercent = 0;
