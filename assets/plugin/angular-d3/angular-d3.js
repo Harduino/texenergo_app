@@ -13,7 +13,8 @@
                 size: [400, 400],
                 linkDistance: 80,
                 charge: -200
-            }
+            },
+            draggableNodes: true
         };
 
         return {
@@ -44,6 +45,8 @@
 
                     configurate(force);
 
+                    var drag = _config.draggableNodes ?  appendDrag(force) : null;
+
                     force.start();
 
                     var d3Element = d3.select(element[0]);
@@ -55,6 +58,8 @@
 
                     var path = appendLinks(svg, force);
                     var node = appendNodes(svg, d);
+
+                    drag && node.call(drag);
 
                     _config.tooltip &&  appendTooltip(node);
 
@@ -129,6 +134,17 @@
                     });
 
                     return tooltip;
+                }
+
+                function appendDrag(force){
+                    return force.drag()
+                        .on("dragstart", function (d) {
+                            d3.select(this).classed("fixed", d.fixed = true);
+                            $('force-layout-graph .tooltip').hide();
+                        }).on("dragend", function(){
+                            d3.event.sourceEvent.stopPropagation();
+                            d3.event.sourceEvent.preventDefault();
+                        });
                 }
 
                 function tickHandler(){

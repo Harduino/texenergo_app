@@ -29,6 +29,7 @@
                         select: '.node',
                         action: 'click',
                         handler: function (e) {
+                            if (d3.event.defaultPrevented) return;
                             switch (e.type) {
                                 case "CustomerOrder" :
                                     $state.go('app.customer_orders.view', {id: e.id});
