@@ -14,7 +14,8 @@
                 linkDistance: 80,
                 charge: -200
             },
-            draggableNodes: true
+            draggableNodes: true,
+            zoomable: true
         };
 
         return {
@@ -56,8 +57,14 @@
                         .attr("width", _config.d3.size[0])
                         .attr("height", _config.d3.size[1]);
 
-                    var path = appendLinks(svg, force);
-                    var node = appendNodes(svg, d);
+                    svg.append("g");
+
+                    var inner = svg.select("g");
+
+                    _config.zoomable && appendZoom(svg, inner);
+
+                    var path = appendLinks(inner, force);
+                    var node = appendNodes(inner, d);
 
                     drag && node.call(drag);
 
@@ -145,6 +152,14 @@
                             d3.event.sourceEvent.stopPropagation();
                             d3.event.sourceEvent.preventDefault();
                         });
+                }
+
+                function appendZoom(svg, inner){
+                    var zoom = d3.behavior.zoom()
+                        .on("zoom", function() {
+                            inner.attr("transform", /*"translate(" + d3.event.translate + ")*/"scale(" + d3.event.scale + ")");
+                        });
+                    svg.call(zoom);
                 }
 
                 function tickHandler(){
