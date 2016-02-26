@@ -28,7 +28,10 @@
 
                 updateDefaultWidth();
                 //extend default configs
-                var _config = scope.config ? angular.extend(_defaultConfig, scope.config || {}) : _defaultConfig;
+                var _config = scope.config ? angular.extend(_defaultConfig, scope.config || {}) : _defaultConfig,
+                    _inDrag = false,
+                    _translate = [0, 0],
+                    _scale = 1;
 
                 //watch for data changes
                 scope.$watch('data', function(dataValue){
@@ -119,23 +122,23 @@
                         .style("color", function(d){return d.color;})
                         .html(function(d){
                             return '<div>' +
-                                d.number +
+                                    d.number +
                                 '</div>';
                         });
                     return node;
                 }
 
                 function appendTooltip(node){
-                    var tooltip = d3.select(element[0]).append("div")
-                        .attr("class", "tooltip").style('opacity', 1).style('display', 'none');
-                    var $t = $('force-layout-graph .tooltip');
+                    var tooltip = d3.select("body").append("div")
+                        .attr("class", "tooltip graph-tip").style('opacity', 1).style('display', 'none');
+                    var $t = $('.graph-tip');
 
                     node.selectAll('circle').on("mouseover", function(d,i) {
                         tooltip.style('display', 'block').html(_config.tooltip(d, i));
                         var width = $t.outerWidth(),
                             height = $t.outerHeight();
-                        tooltip.style("left", (d.x - width/2 + 10) + "px")
-                            .style("top", (d.y - height - 15) + "px");
+                        tooltip.style("left", (event.pageX - width/2 + 10) + "px")
+                            .style("top", (event.pageY - height - 15) + "px");
                     }).on("mouseout", function() {
                         tooltip.style('display', 'none');
                     });
@@ -146,9 +149,11 @@
                 function appendDrag(force){
                     return force.drag()
                         .on("dragstart", function (d) {
+                            _inDrag = true;
                             d3.select(this).classed("fixed", d.fixed = true);
                             $('force-layout-graph .tooltip').hide();
                         }).on("dragend", function(){
+                            _inDrag = false;
                             d3.event.sourceEvent.stopPropagation();
                             d3.event.sourceEvent.preventDefault();
                         });
@@ -157,7 +162,10 @@
                 function appendZoom(svg, inner){
                     var zoom = d3.behavior.zoom()
                         .on("zoom", function() {
-                            inner.attr("transform", /*"translate(" + d3.event.translate + ")*/"scale(" + d3.event.scale + ")");
+                            if(_inDrag) return;
+                            _translate = d3.event.translate;
+                            _scale = d3.event.scale;
+                            inner.attr("transform", "translate(" + _translate + ")scale(" + _scale + ")");
                         });
                     svg.call(zoom);
                 }
@@ -211,6 +219,10 @@
                 function defineColor(item, index){
                     return _config.colorSetter ? _config.colorSetter(item, index) : _colors[index];
                 }
+
+                scope.$on("destroy", function(){
+                    $('.graph-tip').remove();
+                });
 
 //                function placeElementsByCircle(nodes, nodeRadius){
 //                    var radius = 100; // radius of the circle
