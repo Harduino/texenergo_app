@@ -115,18 +115,17 @@
 
                 function appendTooltip(node){
                     var tooltip = d3.select(element[0]).append("div")
-                        .attr("class", "tooltip").style('opacity', 1).style('visibility', 'hidden');
+                        .attr("class", "tooltip").style('opacity', 1).style('display', 'none');
                     var $t = $('force-layout-graph .tooltip');
 
-                    node.on("mouseover", function(d,i) {
-                        console.log(d);
-                        tooltip.style('visibility', 'visible').html(_config.tooltip(d, i));
+                    node.selectAll('circle').on("mouseover", function(d,i) {
+                        tooltip.style('display', 'block').html(_config.tooltip(d, i));
                         var width = $t.outerWidth(),
                             height = $t.outerHeight();
                         tooltip.style("left", (d.x - width/2 + 10) + "px")
                             .style("top", (d.y - height - 15) + "px");
                     }).on("mouseout", function() {
-                        tooltip.style('visibility', 'hidden');
+                        tooltip.style('display', 'none');
                     });
 
                     return tooltip;
