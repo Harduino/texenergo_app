@@ -544,4 +544,11 @@ path.link {
     padding: 20px 15px;
     margin-top: 4px;
 }
+.graph-zoom-zlider>.pwm-card-size-slider{
+    width: 200px;
+}
+.graph-zoom-zlider>.fa{
+    margin: -6px 8px;
+    color: rgb(59, 62, 66);
+}
 /*UI END*/

@@ -201,9 +201,11 @@
                     <div class="widget-body">
                         <div class="well well-clean well-white no-padding">
                             <force-layout-graph data="data.networkData" config="data.networkConfig"></force-layout-graph>
-                            <div class="not-selectable" style="width: 236px; margin-top: -5px; margin-right: 12px; float: right;">
+                            <section class="display-flex graph-zoom-zlider" style="float: right;">
+                                <i class="fa fa-minus"></i>
                                 <div id="graph_zoom_slider" te-jq-ui="sliderOptions" data-ui-type="slider" class="pwm-card-size-slider"></div>
-                            </div>
+                                <i class="fa fa-plus"></i>
+                            </section>
                         </div>
                     </div>
                 </div>
