@@ -134,11 +134,14 @@
                     var $t = $('.graph-tip');
 
                     node.selectAll('circle').on("mouseover", function(d,i) {
+                        if(_inDrag) return;
                         tooltip.style('display', 'block').html(_config.tooltip(d, i));
                         var width = $t.outerWidth(),
-                            height = $t.outerHeight();
-                        tooltip.style("left", (event.pageX - width/2 + 10) + "px")
-                            .style("top", (event.pageY - height - 15) + "px");
+                            height = $t.outerHeight(),
+                            offsetOfCircle = $(this).offset();
+
+                        tooltip.style("left", (offsetOfCircle.left - width/2 + 10 * _scale) + "px")
+                            .style("top", (offsetOfCircle.top - height - 5) + "px");
                     }).on("mouseout", function() {
                         tooltip.style('display', 'none');
                     });
@@ -152,7 +155,7 @@
                             _inDrag = true;
                             d3.select(this).classed("fixed", d.fixed = true);
                             $('force-layout-graph .tooltip').hide();
-                        }).on("dragend", function(){
+                        }).on("dragend", function(d){
                             _inDrag = false;
                             d3.event.sourceEvent.stopPropagation();
                             d3.event.sourceEvent.preventDefault();
