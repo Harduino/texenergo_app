@@ -30,33 +30,17 @@
                         action: 'click',
                         handler: function (e) {
                             if (d3.event.defaultPrevented) return;
-                            switch (e.type) {
-                                case "CustomerOrder" :
-                                    $state.go('app.customer_orders.view', {id: e.id});
-                                    break;
-                                case "DispatchOrder" :
-                                    $state.go('app.dispatch_orders.view', {id: e.id});
-                                    break;
-                                case "IncomingTransfer" :
-                                    $state.go('app.incoming_transfers.view', {id: e.id});
-                            }
+                            $state.go(getPropertyByDocumentType(e).state, {id: e.id});
                         }
                     }
                 ],
                 colorSetter: function(item){
-                    switch (item.type){
-                        case 'CustomerOrder' :
-                            return '#1f77b4';
-                        case 'DispatchOrder' :
-                            return '#d62728';
-                        case 'IncomingTransfer' :
-                            return '#2ca02c';
-                        default : return '#c7c7c7'
-                    }
+                    return getPropertyByDocumentType(item).color;
                 },
                 tooltip: function(item, index){
                     return '<div class="vco-graph-tooltip">' +
                             '<ul>' +
+                                '<li><b>Тип:</b> '+getPropertyByDocumentType(item).title+'</li>' +
                                 '<li><b>Номер:</b> '+item.number+'</li>' +
                                 '<li><b>Дата:</b> '+$filter('date')(item.date, 'dd MMMM yy, HH:mm')+'</li>' +
                                 '<li><b>Итого:</b> '+$filter('currency')(item.total)+'</li>' +
@@ -209,6 +193,30 @@
                     funcFactory.showNotification("Неудача", 'Ошибка при попытке отправить заказ.', true);
                 }
             });
+        }
+
+        function getPropertyByDocumentType(item){
+            switch (item.type){
+                case "CustomerOrder" : return {
+                    title: "Заказ клиента",
+                    color: "#1f77b4",
+                    state: "app.customer_orders.view"
+                };
+                case "DispatchOrder": return {
+                    title: "Списание",
+                    color: "#d62728",
+                    state: "app.dispatch_orders.view"
+                };
+                case "IncomingTransfer": return {
+                    title: "Входящий платеж",
+                    color: "#2ca02c",
+                    state: "app.incoming_transfers.view"
+                };
+                default : return {
+                    title: "Не определен",
+                    color: "#c7c7c7"
+                }
+            }
         }
     }]);
 }());
