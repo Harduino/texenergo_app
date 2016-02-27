@@ -235,7 +235,7 @@
                     return _config.colorSetter ? _config.colorSetter(item, index) : _colors[index];
                 }
 
-                scope.$on("destroy", function(){
+                scope.$on("$destroy", function(){
                     $('.graph-tip').remove();
                 });
 
