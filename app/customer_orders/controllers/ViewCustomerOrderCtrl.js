@@ -62,12 +62,25 @@
                                 '<li><b>Итого:</b> '+$filter('currency')(item.total)+'</li>' +
                             '</ul>' +
                         '</div>'
+                },
+                zoomChange: function(zoom){
+                    $("#graph_zoom_slider").slider("value", zoom);
                 }
             }
         };
 
         sc.amontPercent = 0;
         sc.dispatchedPercent = 0;
+
+        sc.sliderOptions = {
+            value:1,
+            min: 0.9,
+            max: 3,
+            step: 0.01,
+            slide: function(event, ui){
+                sc.data.networkConfig.zoom = ui.value;
+            }
+        };
 
         /**
          * Get order details

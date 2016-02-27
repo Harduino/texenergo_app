@@ -15,7 +15,8 @@
                 charge: -200
             },
             draggableNodes: true,
-            zoomable: true
+            zoomable: true,
+            useZoomHandlers: true
         };
 
         return {
@@ -163,14 +164,25 @@
                 }
 
                 function appendZoom(svg, inner){
-                    var zoom = d3.behavior.zoom()
+                    var zoom = d3.behavior.zoom().scaleExtent([0.9,3])
                         .on("zoom", function() {
                             if(_inDrag) return;
                             _translate = d3.event.translate;
                             _scale = d3.event.scale;
-                            inner.attr("transform", "translate(" + _translate + ")scale(" + _scale + ")");
+                            var translate = "translate(" + _translate + ")scale(" + _scale + ")";
+                            inner.attr("transform", translate);
+                            _config.zoomChange && _config.zoomChange(_scale);
                         });
                     svg.call(zoom);
+
+                    if(_config.useZoomHandlers) {
+                        Object.defineProperty(scope.config, "zoom", { set: function (value) {
+                            _scale = value;
+                            zoom.scale(_scale);
+                            var translate = "translate(" + _translate + ")scale(" + _scale + ")";
+                            inner.attr("transform", translate);
+                        }});
+                    }
                 }
 
                 function tickHandler(){

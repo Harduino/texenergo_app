@@ -523,3 +523,25 @@ path.link {
     line-height: 25px;
     pointer-events: none;
 }
+/*UI*/
+.pwm-card-size-slider{
+    height: 1px;
+    background: rgb(149,149,149);
+    border-color: rgb(149,149,149);
+    border: none;
+}
+.pwm-card-size-slider>.ui-slider-handle, .pwm-card-size-slider>.ui-slider-handle:hover, .pwm-card-size-slider>.ui-slider-handle:focus{
+    outline: none;
+    margin-top: -1px;
+    width: 12px;
+    border-radius: 0;
+    background: rgb(218,26,51);
+    border-color: rgb(218,26,51);
+    margin-left: -6px;
+    height: 10px;
+}
+.pwm-card-size-slider-container{
+    padding: 20px 15px;
+    margin-top: 4px;
+}
+/*UI END*/
