@@ -29,7 +29,7 @@
                     </li>
                 </ul>
             </li>
-            <li data-menu-collapse ng-show="index.CustomerOrder || index.SupplierOrder">
+            <li data-menu-collapse ng-show="index.CustomerOrder || index.SupplierOrder || index.QuotationOrder">
                 <a href="#"><i class="fa fa-lg fa-fw fa-book"></i> <span class="menu-item-parent">Заказы</span></a>
                 <ul>
                     <li data-ui-sref-active="active" ng-if="index.CustomerOrder">
@@ -37,6 +37,9 @@
                     </li>
                     <li data-ui-sref-active="active" ng-if="index.SupplierOrder">
                         <a data-ui-sref="app.supplier_orders" ng-bind="index.SupplierOrder.indexTitle"></a>
+                    </li>
+                    <li data-ui-sref-active="active" ng-if="index.QuotationOrder">
+                        <a data-ui-sref="app.quotation_orders" ng-bind="index.QuotationOrder.indexTitle"></a>
                     </li>
                 </ul>
             </li>
