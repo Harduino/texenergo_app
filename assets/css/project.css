@@ -523,7 +523,11 @@ path.link {
     line-height: 25px;
     pointer-events: none;
 }
-/*UI*/
+.widget-tollb-row-with-t{
+    margin-left: -10px;
+    margin-right: -10px;
+}
+/*UI slider*/
 .pwm-card-size-slider{
     height: 1px;
     background: rgb(149,149,149);
@@ -551,4 +555,4 @@ path.link {
     margin: -6px 8px;
     color: rgb(59, 62, 66);
 }
-/*UI END*/
+/*UI slider END*/
