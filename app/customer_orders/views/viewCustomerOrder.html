@@ -3,203 +3,229 @@
         <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">{{visual.titles + order.number}}</h2>
         <form-nav-buttons subdata="order" data-role="order" options="visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
         <hr>
-        <div class="row">
-            <div class="col-xs-12 col-md-3">
-                <span easypiechart options="visual.chartOptions" percent="amontPercent" class="easy-pie-chart">
-                    <span class="percent ng-cloak" ng-bind="amontPercent"></span>
-                </span>
-                <span class="easy-pie-title">оплачен</span>
-            </div>
-            <div class="col-xs-12 col-md-3">
-                <span easypiechart options="visual.chartOptions" percent="dispatchedPercent" class="easy-pie-chart">
-                    <span class="percent ng-cloak" ng-bind="dispatchedPercent"></span>
-                </span>
-                <span class="easy-pie-title">отгружен</span>
-            </div>
-        </div>
-        <div class="row margin-top-10">
-            <p class="col-xs-12 col-md-3 font-bold">
-                Название:
-            </p>
-            <p class="col-md-9">{{order.title}}</p>
-        </div>
-        <div class="row">
-            <p class="col-xs-12 col-md-3 font-bold">
-                Описание:
-            </p>
-            <p class="col-md-9">{{order.description}}</p>
-        </div>
-        <div class="row">
-            <p class="col-xs-12 col-md-3 font-bold">
-                Дата заказа:
-            </p>
-            <p class="col-md-9">{{order.date | date:'dd MMMM yy, HH:mm'}}</p>
-        </div>
-        <div class="row">
-            <p class="col-xs-12 col-md-3 font-bold">
-                Партнер:
-            </p>
-            <p class="col-md-9">
-                <a ng-href="/#/partners/{{order.partner.id}}">{{order.partner.name}}</a>
-            </p>
-        </div>
-        <div class="row">
-            <p class="col-xs-12 col-md-3 font-bold">
-                Статус:
-            </p>
-            <p class="col-md-9">{{order.status}}</p>
-        </div>
-    </div>
-    <ul class="nav nav-tabs bordered" id="myTab1">
-        <li class="active"><a data-toggle="tab" href="#s1">Позиции заказа</a></li>
-        <li><a data-toggle="tab" href="#s2">Отгрузки</a></li>
-        <li><a data-toggle="tab" href="#s3">Документы</a></li>
-    </ul>
-    <div class="tab-content padding-10 well-white" id="myTabContent1">
-        <div class="tab-pane fade in active" id="s1">
-            <table class="table table-hover table-bordered">
-                <thead>
-                    <tr>
-                        <th class="hidden-xs"></th>
-                        <th>Наименование</th>
-                        <th class="hidden-xs">Артикул</th>
-                        <th class="hidden-xs text-right">Цена</th>
-                        <th class="text-right">Кол-во</th>
-                        <th class="text-right">Итого</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat='item in order.customer_order_contents'>
-                        <td class="hidden-xs">{{ $index + 1 }}</td>
-                        <td>
-                            <a ng-href="/#/products/{{ item.product.id }}">{{ item.product.name }}</a>
-                        </td>
-                        <td class="hidden-xs">{{ item.product.article}}</td>
-                        <td class="hidden-xs text-right">{{ item | price_net | currency}}</td>
-                        <td class="text-right">{{ item.quantity }}</td>
-                        <td class="text-right">{{ item | price_net : item.quantity | currency}}</td>
-                    </tr>
-                    <tr>
-                        <td class="hidden-xs"></td>
-                        <td></td>
-                        <td class="hidden-xs"></td>
-                        <td class="hidden-xs"></td>
-                        <td class="text-right">Итого, руб:</td>
-                        <td class="text-right">{{total | currency}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="tab-pane fade" id="s2">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="hidden-xs"></th>
-                        <th>Наименование</th>
-                        <th ng-hide="order.status === 'Не подтвержден'">Осталось отгрузить</th>
-                        <th class="hidden-xs" ng-hide="order.status === 'Закрыт'">Склад</th>
-                        <th class="hidden-xs" ng-hide="order.status === 'Закрыт'">Срок поставки</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="item in order.dispatched">
-                        <td class="hidden-xs">{{ $index + 1 }}</td>
-                        <td>
-                            <a ng-href="/#/products/{{ item.product.id}}">
-                                {{ item.product.name + ' '+ item.product.article }}
-                            </a>
-                        </td>
-                        <td ng-hide="order.status === 'Не подтвержден'" class="success" ng-class="{'warning': item.remains > 0}">
-                            {{item.remains}}
-                        </td>
-                        <td class="hidden-xs" ng-hide="order.status === 'Закрыт'">{{ item.stock }}</td>
-                        <td class="hidden-xs" ng-hide="order.status === 'Закрыт'">
-                            {{ item.delivery_terms }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="tab-pane fade" id="s3">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th class="hidden-xs">#</th>
-                        <th>Номер документа</th>
-                        <th class="hidden-xs">Дата документа</th>
-                        <th>По этому заказу</th>
-                        <th class="hidden-xs">Сумма документа</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="item in order.dispatch_orders">
-                        <td class="hidden-xs">{{ $index + 1 }}</td>
-                        <td>{{ item.number }}</td>
-                        <td class="hidden-xs">{{ item.date | date:'dd MMMM yy, HH:mm'}}</td>
-                        <td>{{ item.linked_total | currency}}</td>
-                        <td class="hidden-xs">{{ item.total | currency}}</td>
-                        <td class="center" style="max-width: 40px;">
-                            <div class="btn-group">
-                                <a class="btn btn-xs btn-info" ng-href="/#/dispatch_orders/{{item.id}}"><i class="fa fa-eye"></i></a>
-                                <a class="btn btn-xs btn-default" ng-href="/#/dispatch_orders/{{item.id}}/edit"><i class="fa fa-pencil"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr ng-if="order.dispatch_orders.length>1">
-                        <td colspan="3" class="text-right">Итого, руб:</td>
-                        <td>{{ total_dispatched_linked | currency}}</td>
-                        <td>{{ total_dispatched | currency}}</td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th class="hidden-xs">#</th>
-                        <th>Вх. номер</th>
-                        <th class="hidden-xs">Вх. дата</th>
-                        <th>По этому заказу</th>
-                        <th class="hidden-xs">Сумма документа</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="item in order.incoming_transfers">
-                        <td class="hidden-xs">{{ $index + 1 }}</td>
-                        <td>{{ item.number }}</td>
-                        <td class="hidden-xs">{{ item.date | date:'dd MMMM yy, HH:mm' }}</td>
-                        <td>{{ item.linked_total | currency}}</td>
-                        <td class="hidden-xs">{{ item.amount | currency}}</td>
-                        <td class="center" style="max-width: 40px;">
-                            <div class="btn-group">
-                                <a class="btn btn-xs btn-info" ng-href="/#/incoming_transfers/{{ item.id }}"><i class="fa fa-eye"></i></a>
-                                <a class="btn btn-xs btn-default" ng-href="/#/incoming_transfers/{{ item.id }}/edit"><i class="fa fa-pencil"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr ng-if="order.incoming_transfers.length>1">
-                        <td colspan="3" class="text-right">Итого, руб:</td>
-                        <td>{{ total_paid_linked | currency }}</td>
-                        <td>{{ total_paid | currency }}</td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        
     </div>
     <file-worker data-trigger="visual.showFileModal" data-config="fileModalOptions"></file-worker>
-
     <section id="widget-grid" widget-grid>
         <div class="row">
             <article class="col-md-12">
-                <div id="view_customer_order_network" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false">
+                <div id="view-customer-order-1" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false" data-widget-collapsed="true">
                     <header>
-                        <h2>Связаные платежи</h2>
+                        <h2>Общая информация</h2>
                     </header>
                     <div class="widget-body">
                         <div class="well well-clean well-white no-padding">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-3">
+                                    <span easypiechart options="visual.chartOptions" percent="amontPercent" class="easy-pie-chart">
+                                        <span class="percent ng-cloak" ng-bind="amontPercent"></span>
+                                    </span>
+                                    <span class="easy-pie-title">оплачен</span>
+                                </div>
+                                <div class="col-xs-12 col-md-3">
+                                    <span easypiechart options="visual.chartOptions" percent="dispatchedPercent" class="easy-pie-chart">
+                                        <span class="percent ng-cloak" ng-bind="dispatchedPercent"></span>
+                                    </span>
+                                    <span class="easy-pie-title">отгружен</span>
+                                </div>
+                            </div>
+                            <div class="row margin-top-10">
+                                <p class="col-xs-12 col-md-3 font-bold">
+                                    Название:
+                                </p>
+                                <p class="col-md-9">{{order.title}}</p>
+                            </div>
+                            <div class="row">
+                                <p class="col-xs-12 col-md-3 font-bold">
+                                    Описание:
+                                </p>
+                                <p class="col-md-9">{{order.description}}</p>
+                            </div>
+                            <div class="row">
+                                <p class="col-xs-12 col-md-3 font-bold">
+                                    Дата заказа:
+                                </p>
+                                <p class="col-md-9">{{order.date | date:'dd MMMM yy, HH:mm'}}</p>
+                            </div>
+                            <div class="row">
+                                <p class="col-xs-12 col-md-3 font-bold">
+                                    Партнер:
+                                </p>
+                                <p class="col-md-9">
+                                    <a ng-href="/#/partners/{{order.partner.id}}">{{order.partner.name}}</a>
+                                </p>
+                            </div>
+                            <div class="row">
+                                <p class="col-xs-12 col-md-3 font-bold">
+                                    Статус:
+                                </p>
+                                <p class="col-md-9">{{order.status}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+        <div class="row">
+            <article class="col-md-12">
+                <div id="view-customer-order-2" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false">
+                    <header>
+                        <h2>Позиции заказа</h2>
+                    </header>
+                    <div class="widget-body">
+                        <div class="well well-clean well-white no-padding">
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="hidden-xs"></th>
+                                        <th>Наименование</th>
+                                        <th class="hidden-xs">Артикул</th>
+                                        <th class="hidden-xs text-right">Цена</th>
+                                        <th class="text-right">Кол-во</th>
+                                        <th class="text-right">Итого</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat='item in order.customer_order_contents'>
+                                        <td class="hidden-xs">{{ $index + 1 }}</td>
+                                        <td>
+                                            <a ng-href="/#/products/{{ item.product.id }}">{{ item.product.name }}</a>
+                                        </td>
+                                        <td class="hidden-xs">{{ item.product.article}}</td>
+                                        <td class="hidden-xs text-right">{{ item | price_net | currency}}</td>
+                                        <td class="text-right">{{ item.quantity }}</td>
+                                        <td class="text-right">{{ item | price_net : item.quantity | currency}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="hidden-xs"></td>
+                                        <td></td>
+                                        <td class="hidden-xs"></td>
+                                        <td class="hidden-xs"></td>
+                                        <td class="text-right">Итого, руб:</td>
+                                        <td class="text-right">{{total | currency}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+        <div class="row">
+            <article class="col-md-12">
+                <div id="view-customer-order-3" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false" data-widget-collapsed="true">
+                    <header>
+                        <h2>Отгрузки</h2>
+                    </header>
+                    <div class="widget-body">
+                        <div class="well well-clean well-white no-padding">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="hidden-xs"></th>
+                                        <th>Наименование</th>
+                                        <th ng-hide="order.status === 'Не подтвержден'">Осталось отгрузить</th>
+                                        <th class="hidden-xs" ng-hide="order.status === 'Закрыт'">Склад</th>
+                                        <th class="hidden-xs" ng-hide="order.status === 'Закрыт'">Срок поставки</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in order.dispatched">
+                                        <td class="hidden-xs">{{ $index + 1 }}</td>
+                                        <td>
+                                            <a ng-href="/#/products/{{ item.product.id}}">
+                                                {{ item.product.name + ' '+ item.product.article }}
+                                            </a>
+                                        </td>
+                                        <td ng-hide="order.status === 'Не подтвержден'" class="success" ng-class="{'warning': item.remains > 0}">
+                                            {{item.remains}}
+                                        </td>
+                                        <td class="hidden-xs" ng-hide="order.status === 'Закрыт'">{{ item.stock }}</td>
+                                        <td class="hidden-xs" ng-hide="order.status === 'Закрыт'">
+                                            {{ item.delivery_terms }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+        <div class="row">
+            <article class="col-md-12">
+                <div id="view-customer-order-4" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false" data-widget-collapsed="true">
+                    <header>
+                        <h2>Связаные документы</h2>
+                    </header>
+                    <div class="widget-body">
+                        <div class="well well-clean well-white no-padding">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="hidden-xs">#</th>
+                                        <th>Номер документа</th>
+                                        <th class="hidden-xs">Дата документа</th>
+                                        <th>По этому заказу</th>
+                                        <th class="hidden-xs">Сумма документа</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in order.dispatch_orders">
+                                        <td class="hidden-xs">{{ $index + 1 }}</td>
+                                        <td>{{ item.number }}</td>
+                                        <td class="hidden-xs">{{ item.date | date:'dd MMMM yy, HH:mm'}}</td>
+                                        <td>{{ item.linked_total | currency}}</td>
+                                        <td class="hidden-xs">{{ item.total | currency}}</td>
+                                        <td class="center" style="max-width: 40px;">
+                                            <div class="btn-group">
+                                                <a class="btn btn-xs btn-info" ng-href="/#/dispatch_orders/{{item.id}}"><i class="fa fa-eye"></i></a>
+                                                <a class="btn btn-xs btn-default" ng-href="/#/dispatch_orders/{{item.id}}/edit"><i class="fa fa-pencil"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr ng-if="order.dispatch_orders.length>1">
+                                        <td colspan="3" class="text-right">Итого, руб:</td>
+                                        <td>{{ total_dispatched_linked | currency}}</td>
+                                        <td>{{ total_dispatched | currency}}</td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="hidden-xs">#</th>
+                                        <th>Вх. номер</th>
+                                        <th class="hidden-xs">Вх. дата</th>
+                                        <th>По этому заказу</th>
+                                        <th class="hidden-xs">Сумма документа</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in order.incoming_transfers">
+                                        <td class="hidden-xs">{{ $index + 1 }}</td>
+                                        <td>{{ item.number }}</td>
+                                        <td class="hidden-xs">{{ item.date | date:'dd MMMM yy, HH:mm' }}</td>
+                                        <td>{{ item.linked_total | currency}}</td>
+                                        <td class="hidden-xs">{{ item.amount | currency}}</td>
+                                        <td class="center" style="max-width: 40px;">
+                                            <div class="btn-group">
+                                                <a class="btn btn-xs btn-info" ng-href="/#/incoming_transfers/{{ item.id }}"><i class="fa fa-eye"></i></a>
+                                                <a class="btn btn-xs btn-default" ng-href="/#/incoming_transfers/{{ item.id }}/edit"><i class="fa fa-pencil"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr ng-if="order.incoming_transfers.length>1">
+                                        <td colspan="3" class="text-right">Итого, руб:</td>
+                                        <td>{{ total_paid_linked | currency }}</td>
+                                        <td>{{ total_paid | currency }}</td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                             <force-layout-graph data="data.networkData" config="data.networkConfig"></force-layout-graph>
                             <section class="display-flex graph-zoom-zlider" style="float: right;">
                                 <i class="fa fa-minus"></i>
