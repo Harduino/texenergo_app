@@ -369,6 +369,16 @@
         this.getAbilities = function(success, fail){
             $http.get('/api/system_info').then(success, fail);
         };
+        
+        // Logs
+        this.getSearchLogs = function(page, query, config, success, fail){
+            var path = '/api/logs/search?page='+page + (query ? ('&q=' + query) : '');
+            $http.get(path, config).then(success, fail);
+        };
+        this.getParseLogs = function(page, query, config, success, fail){
+            var path = '/api/logs/parse?page='+page + (query ? ('&q=' + query) : '');
+            $http.get(path, config).then(success, fail);
+        };
     }]);
 
     module.factory('Abilities', ['serverApi', '$q', '$state', 'CanCan', 'User', function(serverApi, $q, $state, CanCan, User){
