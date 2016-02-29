@@ -26,7 +26,7 @@
                 element.find('.widget-body').prepend('<div class="jarviswidget-editbox"><input class="form-control" type="text"></div>');
 
                 element.addClass('jarviswidget');
-                $rootScope.$emit('jarvisWidgetAdded', element )
+                $rootScope.$emit('jarvisWidgetAdded', element)
 
             }
         }

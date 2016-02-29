@@ -396,7 +396,6 @@
                      * Set a style(if present).
                      **/
                     if (jsonSettings.widget[key].style) {
-                        //console.log("test");
                         widgetId.removeClassPrefix('jarviswidget-color-')
                             .addClass(jsonSettings.widget[key].style)
                             .attr('data-widget-attstyle', '' + jsonSettings.widget[key].style + '');
@@ -415,11 +414,8 @@
                     /**
                      * Toggle content widget.
                      **/
-                    if (jsonSettings.widget[key].collapsed == 1) {
-                        widgetId.addClass('jarviswidget-collapsed')
-                            .children('div')
-                            .hide(1);
-                    }
+                    var clpsd = jsonSettings.widget[key].collapsed == 1;
+                    widgetId[(clpsd ? "addClass" : "removeClass")]('jarviswidget-collapsed').data('widget-collapsed', clpsd).children('div')[clpsd ? "hide" : "show"](1);
 
                     /**
                      * Update title widget (if needed).
@@ -1239,7 +1235,6 @@
 	                    content: self.o.deleteMsg,
 	                    buttons: '[No][Yes]'
 	                }, function (ButtonPressed) {
-	                    //console.log(ButtonPressed);
 	                    if (ButtonPressed == "Yes") {
 	                        /**
 	                         * Run function for the indicator image.
