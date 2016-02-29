@@ -64,6 +64,7 @@ appConfig.sound_on = true;
         'app.dashboard',
         'app.customer_orders',
         'app.dispatch_orders',
+        'app.quotation_orders',
         'app.contacts',
         'app.partners',
         'app.supplier_orders',

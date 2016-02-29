@@ -114,6 +114,12 @@
         this.getRelatedOrdersOfCustomer = function(id, success, fail){
             $http.get('/api/customer_orders/' + id + '/trace').then(success, fail);
         };
+        
+        // Quotataion Orders
+        this.getQuotationOrders = function(page, query, config, success, fail){
+            var path = '/api/quotation_orders?page='+page + (query ? ('&q=' + query) : '');
+            $http.get(path, config).then(success, fail);
+        };
 
         // Supplier Orders
         this.getSupplierOrders = function(page, query, config, success, fail){
