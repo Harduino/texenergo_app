@@ -7,22 +7,20 @@
         sc.data = {
             customerOrders:[],
             dispatchOrders:[],
-            parseLog: [],
-            searchLog: [],
             parseLogSearchQ: "",
             searchLogSearchQ: ""
         };
 
         sc.searchLogScrlCnfg = {
             dataMethod: serverApi.getSearchLogs,
-            resultCollection: sc.data.searchLog,
-            queryModel: sc.data.searchLogSearchQ
+            resultCollection: [],
+            setQueryValue: angular.noop // here the directive will return setQueryFunction
         };
 
         sc.parseLogScrlCnfg = {
             dataMethod: serverApi.getParseLogs,
-            resultCollection: sc.data.parseLog,
-            queryModel: sc.data.parseLogSearchQ
+            resultCollection: [],
+            setQueryValue: angular.noop // here the directive will return setQueryFunction
         };
 
         
@@ -35,14 +33,10 @@
         });
 
         sc.filterLogTable = function(e, type){
-            if(e.keyCode == 13){
-                // filter table depending on type
+            if(e.keyCode == 13 || e.type == "click"){
+                sc[type + "LogScrlCnfg"].setQueryValue(sc.data[type + "LogSearchQ"]);
             }
         };
-
-        sc.refreshTable = function(type){
-            //cal refresh functions
-        }
 
     }]);
 
