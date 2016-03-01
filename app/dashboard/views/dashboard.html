@@ -108,16 +108,18 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Дата</th>
+                                        <th class="hidden-xs">Дата</th>
                                         <th>Запрос</th>
-                                        <th>Количестов</th>
+                                        <th>Количесто</th>
+                                        <th>Кто</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="row in searchLogScrlCnfg.resultCollection track by $index">
-                                        <td>{{row.date | date:'dd.mm.yy'}}</td>
+                                        <td class="hidden-xs">{{row.date | date:'dd/MM/yy'}}</td>
                                         <td>{{row.query}}</td>
                                         <td>{{row.count}}</td>
+                                        <td>{{row.user_email}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -150,14 +152,18 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Дата</th>
+                                        <th class="hidden-xs">Дата</th>
+                                        <th>Запрос</th>
                                         <th>Продукт</th>
+                                        <th>Кто</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="row in parseLogScrlCnfg.resultCollection track by $index">
-                                        <td>{{row.date | date:'dd.mm.yy'}}</td>
+                                        <td class="hidden-xs">{{row.date | date:'dd/MM/yy'}}</td>
+                                        <td>{{row.source}}</td>
                                         <td>{{row.product}}</td>
+                                        <td>{{row.user_email}}</td>
                                     </tr>
                                 </tbody>
                             </table>
