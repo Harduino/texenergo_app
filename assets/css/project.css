@@ -79,7 +79,7 @@
 .no-warp{
     white-space: nowrap;
 }
-.scroll-up-btn{
+.scroll-up-btn, .dshb-t-scroll-up-btn{
     position: fixed;
     top: 84%;
     right: 6px;
@@ -98,6 +98,10 @@
     -o-transition: opacity 0.5s;
     transition: opacity 0.5s;
     visibility: hidden;
+}
+.dshb-t-scroll-up-btn{
+    position: absolute;
+    top: 500px;
 }
 .scroll-up-btn:hover{
     opacity: 1;

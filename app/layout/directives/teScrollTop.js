@@ -3,22 +3,28 @@
  * Append button to scroll top
  */
 (function(){
-    angular.module('app.layout').directive('teScrollTop', ['$window', function($window){
+    angular.module('app.layout').directive('teScrollTop', ['$parse', function($parse){
         return {
             restrict: 'E',
-            link: function(scope, element){
-                element.addClass('scroll-up-btn not-selectable');
+            scope:{},
+            link: function(scope, element, attrs){
+                var config = angular.extend({
+                    container: window,
+                    buttonClass: ""
+                }, $parse(attrs.config || {})());
+
+                element.addClass("scroll-up-btn " + config.buttonClass + ' not-selectable');
                 scope.teScrollTop = function(){
-                    angular.element('body').scrollTop(0);
+                    w.scrollTop(0);
                 };
 
-                var w = $(window);
+                var w = $(config.container);
 
                 w.scroll(onScroll);
 
                 function onScroll() {
                     var top = w.scrollTop(),
-                        height = w.height();
+                        height = w.outerHeight();
                     if(top>=height*2){
                         !element.hasClass('slideUp') && element.addClass('slideUp');
                     }else element.removeClass('slideUp');
