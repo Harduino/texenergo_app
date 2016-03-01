@@ -560,3 +560,6 @@ path.link {
     color: rgb(59, 62, 66);
 }
 /*UI slider END*/
+.dshb-parse-log-c, .dshb-srch-log-c{
+    height: 500px;
+}
