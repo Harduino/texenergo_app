@@ -5,16 +5,6 @@
     "use strict";
 
     angular.module('te.infinity.scroll', []).directive('teInfinity', ['$q', '$timeout', function($q, $timeout){
-        var _config = {
-            startFrom:2,
-            startPage:1,
-            scrollDistance:30,
-            delay: 500,
-            dataMethod: angular.noop,
-            liveLoad: false,
-            loadAfterInit: true,
-            resultCollection: []
-        };
 
         return {
             restrict: "A",
@@ -22,21 +12,32 @@
                 config: '=teInfinity'
             },
             link: function(scope, element){
-                var config,
-                    page,                                       // current page for load
+
+                var config = {
+                    startFrom:0,
+                    startPage:1,
+                    scrollDistance:30,
+                    delay: 500,
+                    dataMethod: angular.noop,
+                    liveLoad: false,
+                    loadAfterInit: true,
+                    resultCollection: []
+                };
+
+                var page,                                       // current page for load
                     content = $(element[0].firstElementChild),  // content of scroll
                     inLoad = false,                             // loading status
                     query,                                      // search query
                     canceler,                                   // request canceler
                     timeout_p;                                  // $timeout promise
 
-                config = angular.extend(_config, scope.config);
+                config = angular.extend(config, scope.config);
 
                 element.scroll(scroll);
 
                 config.liveLoad ? scope.$watch('config.queryModel', function(value){
                     setQueryValue(value);
-                }) : _config.setQueryValue = setQueryValue;
+                }) : scope.config.setQueryValue = setQueryValue;
 
                 config.loadAfterInit && setQueryValue("");
 
@@ -47,16 +48,17 @@
                         page = config.startPage;
                         inLoad = false;
                         query = value;
-                        scope.$select.items = [];
-                        if((value !== "" || config.loadAfterInit) && value.length>=config.startFrom) timeout_p = $timeout(load, config.delay);
+                        scope.config.resultCollection = [];
+                        if(value.length>=config.startFrom) timeout_p = $timeout(load, config.delay);
                         else scope.searchStatus='before';
                     }
                 }
 
                 function scroll(){
-                    if(!inLoad && ((content.outerHeight() - content.scrollTop() - element.outerHeight())<config.scrollDistance)){
+                    var p = content.outerHeight() - element.scrollTop() - element.outerHeight();
+                    if(!inLoad && p<config.scrollDistance && p>-1){
                         page++;
-                        load(_config.notShowLoadStatus);
+                        load(config.notShowLoadStatus);
                     }
                 }
 

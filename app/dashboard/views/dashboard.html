@@ -98,13 +98,13 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
-                                    <button class="btn btn-default" ng-click="refreshTable('search')">
+                                    <button class="btn btn-default" ng-click="filterLogTable($event, 'search')">
                                         <i class="fa fa-refresh"></i> <span class="hidden-mobile">Обновить</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        <div class="table-responsive">
+                        <div class="table-responsive" te-infinity="searchLogScrlCnfg" style="height: 500px;">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -114,8 +114,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="row in data.searchLog">
-                                        <td>{{row.date | date:'dd MMMM yy, HH:mm'}}</td>
+                                    <tr ng-repeat="row in searchLogScrlCnfg.resultCollection track by $index">
+                                        <td>{{row.date | date:'dd.mm.yy'}}</td>
                                         <td>{{row.query}}</td>
                                         <td>{{row.count}}</td>
                                     </tr>
@@ -140,13 +140,13 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
-                                    <button class="btn btn-default" ng-click="refreshTable('parse')">
+                                    <button class="btn btn-default" ng-click="filterLogTable($event, 'parse')">
                                         <i class="fa fa-refresh"></i> <span class="hidden-mobile">Обновить</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        <div class="table-responsive">
+                        <div class="table-responsive" te-infinity="parseLogScrlCnfg" style="height: 500px;">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -155,8 +155,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="row in data.parseLog">
-                                        <td>{{row.date | date:'dd MMMM yy, HH:mm'}}</td>
+                                    <tr ng-repeat="row in parseLogScrlCnfg.resultCollection track by $index">
+                                        <td>{{row.date | date:'dd.mm.yy'}}</td>
                                         <td>{{row.product}}</td>
                                     </tr>
                                 </tbody>
