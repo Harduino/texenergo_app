@@ -53,6 +53,7 @@ appConfig.sound_on = true;
         'ui.select',
         'ui.tinymce',
         'angular.d3',
+        'te.infinity.scroll',
         
         // Permissions
         'cancan.export',
