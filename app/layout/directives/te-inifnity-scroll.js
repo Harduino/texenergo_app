@@ -4,7 +4,7 @@
 (function(){
     "use strict";
 
-    angular.module('te.infinity.scroll', []).directive('teInfinity', ['$q', '$timeout', function($q, $timeout){
+    angular.module('te.infinity.scroll', []).directive('teInfinity', ['$q', '$timeout', '$compile', function($q, $timeout, $compile){
 
         return {
             restrict: "A",
@@ -21,7 +21,12 @@
                     dataMethod: angular.noop,
                     liveLoad: false,
                     loadAfterInit: true,
-                    resultCollection: []
+                    resultCollection: [],
+                    searchStatusTmpl: '<div class="ui-select-status">' +
+                        '<span ng-if="searchStatus == \'before\'">Введите еще хотя бы {{config.startFrom}} символа</span>'+
+                        '<span ng-if="searchStatus == \'noresult\'">Нет результатов</span>'+
+                        '<span ng-if="searchStatus == \'inload\'">Загрузка...</span>'+
+                        '</div>'
                 };
 
                 var page,                                       // current page for load
@@ -29,9 +34,12 @@
                     inLoad = false,                             // loading status
                     query,                                      // search query
                     canceler,                                   // request canceler
-                    timeout_p;                                  // $timeout promise
+                    timeout_p,                                  // $timeout promise
+                    elHeight = element.outerHeight();
 
                 config = angular.extend(config, scope.config);
+
+                element.append($compile(config.searchStatusTmpl)(scope));
 
                 element.scroll(scroll);
 
@@ -55,8 +63,8 @@
                 }
 
                 function scroll(){
-                    var p = content.outerHeight() - element.scrollTop() - element.outerHeight();
-                    if(!inLoad && p<config.scrollDistance && p>-1){
+                    var p = content.outerHeight() - element.scrollTop() - elHeight;
+                    if(!inLoad && p<config.scrollDistance && p>-elHeight/2){
                         page++;
                         load(config.notShowLoadStatus);
                     }
