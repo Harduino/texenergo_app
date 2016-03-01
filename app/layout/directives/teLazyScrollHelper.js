@@ -31,7 +31,7 @@
 
                 function setVisualStatus(inLoad, noResults){
                     inLoad ? element.after(loader) : loader.remove();
-                    noResults && element.after('<div class="font-lg text-align-center">Нет резульатов.</div>');
+                    noResults && element.after('<div class="font-lg text-align-center">Нет результатов.</div>');
                 }
 
                 attrs.$set('infiniteScroll', scope.loadList);

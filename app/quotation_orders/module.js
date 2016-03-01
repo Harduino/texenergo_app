@@ -28,6 +28,21 @@
                     templateUrl: '/app/quotation_orders/views/quotationOrders.html'
                 }
             }
+        }).state('app.quotation_orders.edit', {
+            url: '/:id',
+            data:{
+                title: 'Рассчёт',
+                access:{
+                    action:'edit',
+                    params:'QuotationOrder'
+                }
+            },
+            views:{
+                "content@app":{
+                    controller: 'EditQuotationOrderCtrl',
+                    templateUrl: '/app/quotation_orders/views/editQuotationOrder.html'
+                }
+            }
         });
     });
 }());

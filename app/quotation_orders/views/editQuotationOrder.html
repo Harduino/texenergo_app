@@ -1,0 +1,123 @@
+<div id="content">
+    <div class="row">
+        <big-breadcrumbs items="[visual.titles[0]]" data-icon="edit" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+    </div>
+    <div class="well well-white">
+        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">Делаем рассчёт</h2>
+        <hr>
+        <section id="widget-grid" widget-grid>
+            <div class="row">
+                <article class="col-md-12">
+                    <div id="edit_quotation_order_1" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false">
+                        <header>
+                            <h2>Описание рассчёта</h2>
+                        </header>
+                        <div class="widget-body">
+                            <div class="well well-clean well-white">
+                                <div class="form-group">
+                                    <label class="control-label input-group-addon">Название</label>
+                                    <input class="form-control" ng-model="data.quotationOrder.title" type="text" placeholder="Название">
+                                </div>
+                                <button ng-if="visual.roles.can_edit" class="btn btn-info" ng-click="saveQuotationOrderInfo()">Сохранить</button>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <article class="col-md-12">
+                    <div id="edit_quotation_order_2" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false">
+                        <header>
+                            <h2>Элементы</h2>
+                        </header>
+                        <div class="widget-body">
+                            <div class="well well-clean well-white">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label class="control-label input-group-addon">Описание</label>
+                                        <input class="form-control" ng-model="newElement.description" type="text" placeholder="Описание" ng-keypress="addNewElement($event)">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="control-label input-group-addon">Код</label>
+                                        <input class="form-control" ng-model="newElement.schema_code" type="text" placeholder="Код" ng-keypress="addNewElement($event)">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="control-label input-group-addon">Комментарий</label>
+                                        <input class="form-control" ng-model="newElement.comment" type="text" placeholder="Комментарий" ng-keypress="addNewElement($event)">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <table class="table table-bordered margin-top-10">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Описание</th>
+                                                <th>Код</th>
+                                                <th>Комментарий</th>
+                                                <th>Товар</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="element in data.quotationOrder.elements" class="order-items a-row-add">
+                                                <td ng-class="{'danger': element.highlight }" ng-mouseover="highlightProduct(element)" ng-mouseleave="unhighlightProduct()" />
+                                                <td>{{ element.description }}</td>
+                                                <td>{{ element.schema_code }}</td>
+                                                <td>{{ element.comment }}</td>
+                                                <td  class="smart-form">
+                                                    <label class="select">
+                                                        <select name="mySelect" id="mySelect" ng-options="item.name for item in data.quotationOrder.products track by items.id" ng-model="item.product_name"></select>
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <article class="col-md-12">
+                    <div id="edit_quotation_order_3" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false">
+                        <header>
+                            <h2>Комплектация</h2>
+                        </header>
+                        <div class="widget-body">
+                            <div class="well well-clean well-white">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label input-group-addon">Товар</label>
+                                        <input class="form-control" ng-model="newProduct.name" type="text" placeholder="Описание" ng-keypress="addNewProduct($event, newProduct.name)">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <table class="table table-bordered margin-top-10">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Название</th>
+                                                <th>Артикул</th>
+                                                <th>Количество</th>
+                                                <th>Элемент</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="product in data.quotationOrder.products" class="order-items a-row-add">
+                                                <td ng-class="{'danger': product.highlight }" ng-mouseover="highlightElement(product)" ng-mouseleave="unhighlightElement()" />
+                                                <td>{{ product.product.name }}</td>
+                                                <td>{{ product.product.article }}</td>
+                                                <td>{{ product.quantity }}</td>
+                                                <td  class="smart-form">
+                                                    <label class="select">
+                                                        <select name="mySelect" id="mySelect" ng-options="element.description for element in data.quotationOrder.elements track by element.description" ng-model="item.element"></select>
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </div>
+</div>

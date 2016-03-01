@@ -10,7 +10,7 @@
 
         sc.visual = {
 //            navButtsOptions:[{ type: 'new', callback: createNewOrder }],
-//            navTableButts:[{type:'view', callback:viewCustomerOrder}, {type:'table_edit', callback:editCustomerOrder}, {type:'remove', callback:removeCustomerOrder}],
+            navTableButts:[{type:'edit', callback:editQuotationOrder}],//, {type:'table_edit', callback:editCustomerOrder}, {type:'remove', callback:removeCustomerOrder}],
             canAddPartner: CanCan.can('see_multiple', 'Partner'),
             titles:[window.gon.index.QuotationOrder.indexTitle]
         };
@@ -59,8 +59,9 @@
         }
 
         function editQuotationOrder(item){
-            $state.go('app.quotation_orders.view.edit', {id:item.data.id || item.data._id});
+            $state.go('app.quotation_orders.edit', {id:item.data.id || item.data._id});
         }
+        
 
 //        function createNewOrder(){
 //            sc.newOrderData.date = new Date();
