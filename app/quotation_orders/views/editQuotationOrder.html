@@ -63,13 +63,19 @@
                                                 <td ng-class="{'danger': element.highlight }" ng-mouseover="highlightProduct(element)" ng-mouseleave="unhighlightProduct()">
                                                     <i class="fa fa-circle-thin"></i>
                                                 </td>
-                                                <td>{{ element.description }}</td>
-                                                <td>{{ element.schema_code }}</td>
-                                                <td>{{ element.comment }}</td>
-                                                <td  class="smart-form">
-                                                    <label class="select">
-                                                        <select name="mySelect" ng-options="item.name for item in data.quotationOrder.products track by id" ng-model="element.product_name"></select>
-                                                    </label>
+                                                <td>
+                                                    <a editable-text="element.description">{{ element.description || 'Нет описания' }}</a>
+                                                </td>
+                                                <td>
+                                                    <a editable-text="element.schema_code">{{ element.schema_code || 'Нет кода' }}</a>
+                                                </td>
+                                                <td>
+                                                    <a editable-text="element.comment">{{ element.comment || 'Нет комментария' }}</a>
+                                                </td>
+                                                <td>
+                                                    <a editable-select="element.product_name" e-ng-options="item.name for item in data.quotationOrder.products track by $index">
+                                                        {{ element.product_name || 'Не выбрано' }}
+                                                    </a>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -127,11 +133,13 @@
                                                 </td>
                                                 <td>{{ item.product.name }}</td>
                                                 <td>{{ item.product.article }}</td>
-                                                <td>{{ item.quantity }}</td>
-                                                <td  class="smart-form">
-                                                    <label class="select">
-                                                        <select name="mySelect" id="mySelect" ng-options="element.description for element in data.quotationOrder.elements track by element.description" ng-model="item.element"></select>
-                                                    </label>
+                                                <td>
+                                                    <a editable-number="item.quantity" e-min="0">{{ item.quantity || 'Значение не установлено'}}</a>
+                                                </td>
+                                                <td>
+                                                    <a editable-select="item.element" e-ng-options="element.description for element in data.quotationOrder.elements track by $index">
+                                                        {{ item.element.description || 'Не выбрано' }}
+                                                    </a>
                                                 </td>
                                             </tr>
                                         </tbody>

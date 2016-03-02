@@ -6,7 +6,7 @@
 
     "use strict";
 
-    var module = angular.module('app.quotation_orders', ['ui.router', 'easypiechart']);
+    var module = angular.module('app.quotation_orders', ['ui.router', 'easypiechart', 'xeditable']);
 
     module.config(function ($stateProvider) {
         $stateProvider.state('app.quotation_orders', {

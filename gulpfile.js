@@ -16,7 +16,8 @@ gulp.task('styles', function() {
         'assets/css/fixes.css',
         'assets/css/smartadmin-rtl.min.css',
         'assets/css/project.css',
-        'assets/css/select.min.css'
+        'assets/css/select.min.css',
+        'assets/plugin/x-editable/xeditable.css'
     ])
     .on('error', console.log)
     .pipe(concat('app-styles.css'))
@@ -47,6 +48,7 @@ gulp.task('libs', function(){
         'assets/plugin/infinite-scroll/ng-infinite-scroll.js',
         'assets/plugin/easy-pie-chart/angular.easypiechart.min.js',
         'assets/plugin/ui-tinymce/tinymce.js',
+        'assets/plugin/x-editable/xeditable.js',
 
 
         'assets/plugin/cancan/export.js',

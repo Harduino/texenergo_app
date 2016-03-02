@@ -2,7 +2,9 @@
  * Created by Egor Lobanov on 23.11.15.
  */
 (function(){
-    angular.module('app.quotation_orders').controller('EditQuotationOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', '$filter', 'funcFactory', function($scope, $state, $stateParams, serverApi, $filter, funcFactory){
+    angular.module('app.quotation_orders').run(function(editableOptions) {
+        editableOptions.theme = 'bs3';
+    }).controller('EditQuotationOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', '$filter', 'funcFactory', function($scope, $state, $stateParams, serverApi, $filter, funcFactory){
         var sc = $scope;
         sc.data ={
             quotationOrder:{},

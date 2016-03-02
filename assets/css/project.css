@@ -585,3 +585,10 @@ path.link {
 .eqo-th-highlightable{
     width: 20px;
 }
+.editable{
+    cursor: default;
+}
+.editable-input{
+    min-height: 32px;
+    height: 32px;
+}
