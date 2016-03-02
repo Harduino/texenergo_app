@@ -7,9 +7,15 @@
         sc.data ={
             quotationOrder:{},
             productsList: [],//селект выбора продукта
+            selectedProduct: null, //выбранный продукт
             total:0
         };
         sc.newElement = {};//данные продукта, который необходимо добавить к заказу
+        //config для селекта продуктов
+        sc.pSelectConfig = {
+            startPage: 0,
+            dataMethod: serverApi.getSearch
+        };
 
         serverApi.getQuotationOrderDetails($stateParams.id, function(result){
             sc.data.quotationOrder = result.data;
@@ -53,12 +59,14 @@
             }
         };
         
-        sc.addNewProduct = function(e){
-            if(e.keyCode==13 || e.type == "click"){
-                sc.data.quotationOrder.products.push({product: {name: sc.newProduct.name, article: ""}, quantity: 1, element: null});
+        sc.addNewProduct = function(){
+            var p = sc.data.selectedProduct;
+            if(p){
+                sc.data.quotationOrder.products.push({product: p, quantity: 1, element: null});
+                sc.data.selectedProduct = null;
             }
         };
-        
+
         sc.highlightElement = function(item){
             for(var i=0; i < sc.data.quotationOrder.elements.length; i++){
                 if(sc.data.quotationOrder.elements[i].id===item.element_id){
