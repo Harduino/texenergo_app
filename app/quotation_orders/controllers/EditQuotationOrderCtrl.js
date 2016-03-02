@@ -63,6 +63,12 @@
             var p = sc.data.selectedProduct;
             if(p){
                 sc.data.quotationOrder.products.push({product: p, quantity: 1, element: null});
+                sc.data.quotationOrder.elements.push({
+                    description: p.name,
+                    schema_code: '',
+                    comment: '',
+                    id: p.id || p._id
+                });
                 sc.data.selectedProduct = null;
             }
         };

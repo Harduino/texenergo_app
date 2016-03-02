@@ -31,21 +31,19 @@
                         <div class="widget-body">
                             <div class="well well-clean well-white">
                                 <div class="row">
-                                    <div class="display-inline bordered-container" ng-keypress="addNewElement($event)">
+                                    <div class="display-inline bordered-container titled col-xs-12 col-sm-12 col-md-12 float-none" ng-keypress="addNewElement($event)">
+                                        <span class="title">Добавить элемент</span>
                                         <div class="col-md-4">
-                                            <label class="control-label input-group-addon">Описание</label>
-                                            <input class="form-control" ng-model="newElement.description" type="text" placeholder="Описание">
+                                            <input class="form-control item" ng-model="newElement.description" type="text" placeholder="Описание">
                                         </div>
                                         <div class="col-md-3">
-                                            <label class="control-label input-group-addon">Код</label>
-                                            <input class="form-control" ng-model="newElement.schema_code" type="text" placeholder="Код">
+                                            <input class="form-control item" ng-model="newElement.schema_code" type="text" placeholder="Код">
                                         </div>
                                         <div class="col-md-4">
-                                            <label class="control-label input-group-addon">Комментарий</label>
-                                            <input class="form-control" ng-model="newElement.comment" type="text" placeholder="Комментарий">
+                                            <input class="form-control item" ng-model="newElement.comment" type="text" placeholder="Комментарий">
                                         </div>
                                         <div class="col-md-1 text-align-center">
-                                            <button class="btn btn-success" ng-click="addNewElement($event)" style="margin-top: 14px;">
+                                            <button class="btn btn-success" ng-click="addNewElement($event)">
                                                 <i class="fa fa-plus"></i> <span class="hidden-md hidden-lg">Добавить</span>
                                             </button>
                                         </div>
@@ -53,7 +51,7 @@
                                     <table class="table table-bordered margin-top-10">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
+                                                <th class="eqo-th-highlightable"></th>
                                                 <th>Описание</th>
                                                 <th>Код</th>
                                                 <th>Комментарий</th>
@@ -62,13 +60,15 @@
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="element in data.quotationOrder.elements" class="order-items a-row-add">
-                                                <td ng-class="{'danger': element.highlight }" ng-mouseover="highlightProduct(element)" ng-mouseleave="unhighlightProduct()">{{$index+1}}</td>
+                                                <td ng-class="{'danger': element.highlight }" ng-mouseover="highlightProduct(element)" ng-mouseleave="unhighlightProduct()">
+                                                    <i class="fa fa-circle-thin"></i>
+                                                </td>
                                                 <td>{{ element.description }}</td>
                                                 <td>{{ element.schema_code }}</td>
                                                 <td>{{ element.comment }}</td>
                                                 <td  class="smart-form">
                                                     <label class="select">
-                                                        <select name="mySelect" id="mySelect" ng-options="item.name for item in data.quotationOrder.products track by items.id" ng-model="item.product_name"></select>
+                                                        <select name="mySelect" ng-options="item.name for item in data.quotationOrder.products track by id" ng-model="element.product_name"></select>
                                                     </label>
                                                 </td>
                                             </tr>
@@ -87,8 +87,9 @@
                         <div class="widget-body">
                             <div class="well well-clean well-white">
                                 <div class="row">
-                                    <div class="display-inline bordered-container col-xs-12 col-sm-12 col-md-12 float-none">
-                                        <div class="col-xs-10 col-sm-10 col-md-11">
+                                    <div class="display-inline bordered-container titled col-xs-12 col-sm-12 col-md-12 float-none">
+                                        <span class="title">Добавить товар</span>
+                                        <div class="col-xs-10 col-sm-10 col-md-11 item">
                                             <ui-select ui-select-infinity="pSelectConfig" ng-model="data.selectedProduct" theme="select2" on-select="selectProductForAppend($item, $model)" reset-search-input="false" style="width: 100%;">
                                                 <ui-select-match placeholder="Введите товар для добавления...">{{$select.selected.name}}</ui-select-match>
                                                 <ui-select-choices repeat="product in data.productsList | filter:$select.search" class="search-item">
@@ -112,7 +113,7 @@
                                     <table class="table table-bordered margin-top-10">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
+                                                <th class="eqo-th-highlightable"></th>
                                                 <th>Название</th>
                                                 <th>Артикул</th>
                                                 <th>Количество</th>
@@ -121,7 +122,9 @@
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="item in data.quotationOrder.products" class="order-items a-row-add">
-                                                <td ng-class="{'danger': product.highlight }" ng-mouseover="highlightElement(product)" ng-mouseleave="unhighlightElement()">{{$index+1}}</td>
+                                                <td ng-class="{'danger': product.highlight }" ng-mouseover="highlightElement(product)" ng-mouseleave="unhighlightElement()">
+                                                    <i class="fa fa-circle-thin"></i>
+                                                </td>
                                                 <td>{{ item.product.name }}</td>
                                                 <td>{{ item.product.article }}</td>
                                                 <td>{{ item.quantity }}</td>

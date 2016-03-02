@@ -567,6 +567,21 @@ path.link {
     border: 1px solid rgb(221, 221, 221);
     padding: 10px;
 }
+.bordered-container>.title{
+    position: absolute;
+    margin-top: -31px;
+    background-color: #ffffff;
+    margin-left: 14px;
+}
+.bordered-container.titled{
+    padding-top: 20px;
+}
+.bordered-container .item{
+    margin-bottom: 10px;
+}
 .float-none{
     float: none;
+}
+.eqo-th-highlightable{
+    width: 20px;
 }
