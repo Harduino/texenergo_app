@@ -30,21 +30,26 @@
                         </header>
                         <div class="widget-body">
                             <div class="well well-clean well-white">
-                                <div class="form-group">
-                                    <div class="col-md-4">
-                                        <label class="control-label input-group-addon">Описание</label>
-                                        <input class="form-control" ng-model="newElement.description" type="text" placeholder="Описание" ng-keypress="addNewElement($event)">
+                                <div class="row">
+                                    <div class="display-inline bordered-container" ng-keypress="addNewElement($event)">
+                                        <div class="col-md-4">
+                                            <label class="control-label input-group-addon">Описание</label>
+                                            <input class="form-control" ng-model="newElement.description" type="text" placeholder="Описание">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="control-label input-group-addon">Код</label>
+                                            <input class="form-control" ng-model="newElement.schema_code" type="text" placeholder="Код">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label input-group-addon">Комментарий</label>
+                                            <input class="form-control" ng-model="newElement.comment" type="text" placeholder="Комментарий">
+                                        </div>
+                                        <div class="col-md-1 text-align-center">
+                                            <button class="btn btn-success add-btn" ng-click="addNewElement($event)">
+                                                <i class="fa fa-plus"></i> <span class="hidden-md hidden-lg">Добавить</span>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <label class="control-label input-group-addon">Код</label>
-                                        <input class="form-control" ng-model="newElement.schema_code" type="text" placeholder="Код" ng-keypress="addNewElement($event)">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="control-label input-group-addon">Комментарий</label>
-                                        <input class="form-control" ng-model="newElement.comment" type="text" placeholder="Комментарий" ng-keypress="addNewElement($event)">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
                                     <table class="table table-bordered margin-top-10">
                                         <thead>
                                             <tr>
@@ -81,13 +86,18 @@
                         </header>
                         <div class="widget-body">
                             <div class="well well-clean well-white">
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                        <label class="control-label input-group-addon">Товар</label>
-                                        <input class="form-control" ng-model="newProduct.name" type="text" placeholder="Описание" ng-keypress="addNewProduct($event, newProduct.name)">
+                                <div class="row">
+                                    <div class="display-inline bordered-container" ng-keypress="addNewProduct($event)">
+                                        <div class="col-md-11">
+                                            <label class="control-label input-group-addon">Товар</label>
+                                            <input class="form-control" ng-model="newProduct.name" type="text" placeholder="Описание">
+                                        </div>
+                                        <div class="col-md-1 text-align-center">
+                                            <button class="btn btn-success add-btn" ng-click="addNewProduct($event)">
+                                                <i class="fa fa-plus"></i> <span class="hidden-md hidden-lg">Добавить</span>
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-12">
                                     <table class="table table-bordered margin-top-10">
                                         <thead>
                                             <tr>
@@ -99,11 +109,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="product in data.quotationOrder.products" class="order-items a-row-add">
-                                                <td ng-class="{'danger': product.highlight }" ng-mouseover="highlightElement(product)" ng-mouseleave="unhighlightElement()" />
-                                                <td>{{ product.product.name }}</td>
-                                                <td>{{ product.product.article }}</td>
-                                                <td>{{ product.quantity }}</td>
+                                            <tr ng-repeat="item in data.quotationOrder.products" class="order-items a-row-add">
+                                                <td ng-class="{'danger': product.highlight }" ng-mouseover="highlightElement(product)" ng-mouseleave="unhighlightElement()"/>
+                                                <td>{{ item.product.name }}</td>
+                                                <td>{{ item.product.article }}</td>
+                                                <td>{{ item.quantity }}</td>
                                                 <td  class="smart-form">
                                                     <label class="select">
                                                         <select name="mySelect" id="mySelect" ng-options="element.description for element in data.quotationOrder.elements track by element.description" ng-model="item.element"></select>

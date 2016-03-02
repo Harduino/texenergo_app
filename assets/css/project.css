@@ -563,3 +563,10 @@ path.link {
 .dshb-parse-log-c, .dshb-srch-log-c{
     height: 500px;
 }
+.bordered-container {
+    border: 1px solid rgb(221, 221, 221);
+    padding: 10px;
+}
+.bordered-container .add-btn{
+    margin-top: 14px;
+}

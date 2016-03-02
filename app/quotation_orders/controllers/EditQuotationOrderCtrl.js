@@ -12,7 +12,7 @@
         sc.newElement = {};//данные продукта, который необходимо добавить к заказу
 
         serverApi.getQuotationOrderDetails($stateParams.id, function(result){
-            var o = sc.data.quotationOrder = result.data;
+            sc.data.quotationOrder = result.data;
         });
 
         /**
@@ -33,7 +33,7 @@
         };
         
         sc.addNewElement = function(e){
-            if(e.which==13){
+            if(e.keyCode==13 || e.type == "click"){
                 var newElement = sc.newElement;
                 var data = {
                     quotation_order_element: {
@@ -47,49 +47,49 @@
                         sc.data.quotationOrder.elements.push(data.quotation_order_element);
                         sc.newElement = {};
                     } else {
-                        debugger;
+                        funcFactory.showNotification("Неудача", 'Не удалось добавить элемент');
                     }
                 });
             }
         };
         
-        sc.addNewProduct = function(e, productName){
-            if(e.which==13){
-                sc.data.quotationOrder.products.push({product: {name: productName, article: ""}, quantity: 1, element: null});
+        sc.addNewProduct = function(e){
+            if(e.keyCode==13 || e.type == "click"){
+                sc.data.quotationOrder.products.push({product: {name: sc.newProduct.name, article: ""}, quantity: 1, element: null});
             }
-        }
+        };
         
         sc.highlightElement = function(item){
-            for(i=0; i < sc.data.quotationOrder.elements.length; i++){
+            for(var i=0; i < sc.data.quotationOrder.elements.length; i++){
                 if(sc.data.quotationOrder.elements[i].id===item.element_id){
                     sc.data.quotationOrder.elements[i].highlight = true;
                 }
             }
-        }
+        };
         
         sc.unhighlightElement = function(){
-            for(i=0; i < sc.data.quotationOrder.elements.length; i++){
+            for(var i=0; i < sc.data.quotationOrder.elements.length; i++){
                 if(sc.data.quotationOrder.elements[i].highlight){
                     sc.data.quotationOrder.elements[i].highlight = false;
                 }
             }
-        }
+        };
         
         sc.highlightProduct = function(item){
-            for(i=0; i < sc.data.quotationOrder.products.length; i++){
+            for(var i=0; i < sc.data.quotationOrder.products.length; i++){
                 if(sc.data.quotationOrder.products[i].element_id===item.id){
                     sc.data.quotationOrder.products[i].highlight = true;
                 }
             }
-        }
+        };
         
         sc.unhighlightProduct = function(){
-            for(i=0; i < sc.data.quotationOrder.products.length; i++){
+            for(var i=0; i < sc.data.quotationOrder.products.length; i++){
                 if(sc.data.quotationOrder.products[i].highlight){
                     sc.data.quotationOrder.products[i].highlight = false;
                 }
             }
-        }
+        };
 
     }]);
 }());
