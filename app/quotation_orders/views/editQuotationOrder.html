@@ -1,6 +1,6 @@
 <div id="content">
     <div class="row">
-        <big-breadcrumbs items="[visual.titles[0]]" data-icon="edit" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+        <big-breadcrumbs items="[visual.title]" data-icon="edit" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
     </div>
     <div class="well well-white">
         <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">Делаем рассчёт</h2>
@@ -64,17 +64,17 @@
                                                     <i class="fa fa-circle-thin"></i>
                                                 </td>
                                                 <td>
-                                                    <a editable-text="element.description">{{ element.description || 'Нет описания' }}</a>
+                                                    <a editable-text="element.description" onaftersave="saveElementChange(element)">{{ element.description || 'Нет описания' }}</a>
                                                 </td>
                                                 <td>
-                                                    <a editable-text="element.schema_code">{{ element.schema_code || 'Нет кода' }}</a>
+                                                    <a editable-text="element.schema_code" onaftersave="saveElementChange(element)">{{ element.schema_code || 'Нет кода' }}</a>
                                                 </td>
                                                 <td>
-                                                    <a editable-text="element.comment">{{ element.comment || 'Нет комментария' }}</a>
+                                                    <a editable-text="element.comment" onaftersave="saveElementChange(element)">{{ element.comment || 'Нет комментария' }}</a>
                                                 </td>
                                                 <td>
-                                                    <a editable-select="element.product_name" e-ng-options="item.name for item in data.quotationOrder.products track by $index">
-                                                        {{ element.product_name || 'Не выбрано' }}
+                                                    <a editable-select="element.product" onaftersave="saveElementChange(element)" e-ng-options="item.product.name for item in data.quotationOrder.products">
+                                                        {{ element.product.product.name || 'Не выбрано' }}
                                                     </a>
                                                 </td>
                                             </tr>
@@ -134,10 +134,10 @@
                                                 <td>{{ item.product.name }}</td>
                                                 <td>{{ item.product.article }}</td>
                                                 <td>
-                                                    <a editable-number="item.quantity" e-min="0">{{ item.quantity || 'Значение не установлено'}}</a>
+                                                    <a editable-number="item.quantity" onaftersave="saveProductChange(item)" e-min="0">{{ item.quantity || 'Значение не установлено'}}</a>
                                                 </td>
                                                 <td>
-                                                    <a editable-select="item.element" e-ng-options="element.description for element in data.quotationOrder.elements track by $index">
+                                                    <a editable-select="item.element" onaftersave="saveProductChange(item)" e-ng-options="element.description for element in data.quotationOrder.elements">
                                                         {{ item.element.description || 'Не выбрано' }}
                                                     </a>
                                                 </td>

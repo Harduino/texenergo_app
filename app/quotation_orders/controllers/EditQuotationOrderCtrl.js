@@ -12,6 +12,9 @@
             selectedProduct: null, //выбранный продукт
             total:0
         };
+        sc.visual = {
+            title: "Рассчет"//window.gon.index.QuotationOrders.indexTitle
+        };
         sc.newElement = {};//данные продукта, который необходимо добавить к заказу
         //config для селекта продуктов
         sc.pSelectConfig = {
@@ -73,6 +76,16 @@
                 });
                 sc.data.selectedProduct = null;
             }
+        };
+
+        sc.saveElementChange = function(element){
+            console.log(element);
+            // send changes on server
+        };
+
+        sc.saveProductChange = function(item){
+            console.log(item);
+            // send changes on server
         };
 
         sc.highlightElement = function(item){
