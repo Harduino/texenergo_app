@@ -61,7 +61,7 @@
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="element in data.quotationOrder.elements" class="order-items a-row-add">
-                                                <td ng-class="{'danger': element.highlight }" ng-mouseover="highlightProduct(element)" ng-mouseleave="unhighlightProduct()">
+                                                <td ng-class="{'danger': element.highlight }" ng-mouseover="highlight('products', 'element.id', element.id)" ng-mouseleave="highlight('products')">
                                                     <i class="fa fa-circle-thin"></i>
                                                 </td>
                                                 <td>
@@ -133,7 +133,7 @@
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="item in data.quotationOrder.products" class="order-items a-row-add">
-                                                <td ng-class="{'danger': product.highlight }" ng-mouseover="highlightElement(product)" ng-mouseleave="unhighlightElement()">
+                                                <td ng-class="{'danger': item.highlight }" ng-mouseover="highlight('elements', 'product.id', item.id)" ng-mouseleave="highlight('elements')">
                                                     <i class="fa fa-circle-thin"></i>
                                                 </td>
                                                 <td>
@@ -144,7 +144,7 @@
                                                     <a editable-number="item.quantity" onaftersave="saveProductChange(item)" e-min="0" buttons="no">{{ item.quantity || 'Значение не установлено'}}</a>
                                                 </td>
                                                 <td>
-                                                    <a editable-select="item.element" onaftersave="saveProductChange(item)" e-ng-options="element.description for element in data.quotationOrder.elements" buttons="no">
+                                                    <a editable-select="item.element" onaftersave="saveProductChange(item)" e-ng-options="element.description for element in data.quotationOrder.elements track by element.id" buttons="no">
                                                         {{ item.element.description || 'Не выбрано' }}
                                                     </a>
                                                 </td>

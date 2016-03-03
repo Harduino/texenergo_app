@@ -119,6 +119,7 @@
             });
 
             modalInstance.result.then(function (selectedProduct) {
+                findDependencies(sc.data.quotationOrder.elements, "product.id", p.id, null, removeDeletedDeps, "product");
                 p.product = selectedProduct;
             });
         };
@@ -157,37 +158,14 @@
             item[config] = null;
         }
 
-//        sc.highlightElement = function(item){
-//            for(var i=0; i < sc.data.quotationOrder.elements.length; i++){
-//                if(sc.data.quotationOrder.elements[i].id===item.element_id){
-//                    sc.data.quotationOrder.elements[i].highlight = true;
-//                }
-//            }
-//        };
-//
-//        sc.unhighlightElement = function(){
-//            for(var i=0; i < sc.data.quotationOrder.elements.length; i++){
-//                if(sc.data.quotationOrder.elements[i].highlight){
-//                    sc.data.quotationOrder.elements[i].highlight = false;
-//                }
-//            }
-//        };
-//
-//        sc.highlightProduct = function(item){
-//            for(var i=0; i < sc.data.quotationOrder.products.length; i++){
-//                if(sc.data.quotationOrder.products[i].element_id===item.id){
-//                    sc.data.quotationOrder.products[i].highlight = true;
-//                }
-//            }
-//        };
-//
-//        sc.unhighlightProduct = function(){
-//            for(var i=0; i < sc.data.quotationOrder.products.length; i++){
-//                if(sc.data.quotationOrder.products[i].highlight){
-//                    sc.data.quotationOrder.products[i].highlight = false;
-//                }
-//            }
-//        };
+        sc.highlight = function(dataProp, byProp, propValue){
+            var highlight = (byProp && propValue) != undefined,
+                c = highlight ? [byProp, propValue] : ["highlight", true];
+
+            findDependencies(sc.data.quotationOrder[dataProp], c[0], c[1], null, function(row){
+                row.highlight = highlight;
+            });
+        };
 
     }]).controller("EqoModalInstanceCtrl", ['$scope', '$uibModalInstance', 'serverApi', 'product', function($scope, $uibModalInstance, serverApi, product){
         var sc = $scope;
