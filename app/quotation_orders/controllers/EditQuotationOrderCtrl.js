@@ -45,7 +45,7 @@
         };
         
         sc.addNewElement = function(e){
-            if(e.keyCode==13 || e.type == "click"){
+            if((e.keyCode==13 && e.target.nodeName !== "BUTTON") || e.type == "click"){
                 var newElement = sc.newElement;
                 var data = {
                     quotation_order_element: {
@@ -56,6 +56,8 @@
                 };
                 serverApi.addQuotationOrderElement(sc.data.quotationOrder.id, data, function(result){
                     if(result.status == 200 && !result.data.errors){
+                        console.log(result.data);
+                        data.quotation_order_element.id = new Date().toISOString() + "_el";
                         sc.data.quotationOrder.elements.push(data.quotation_order_element);
                         sc.newElement = {};
                     } else {
@@ -68,13 +70,18 @@
         sc.addNewProduct = function(){
             var p = sc.data.selectedProduct;
             if(p){
-                sc.data.quotationOrder.products.push({id: (p.id || p._id), product: p, quantity: 1, element: null});
-                sc.data.quotationOrder.elements.push({
+                var el = {
                     description: p.name,
                     schema_code: '',
                     comment: '',
-                    id: p.id || p._id
-                });
+                    id: (p.id || p._id) + "_el",
+                    product:{
+                        id: (p.id || p._id),
+                        product: p
+                    }
+                };
+                sc.data.quotationOrder.products.push({id: (p.id || p._id), product: p, quantity: 1, element:el});
+                sc.data.quotationOrder.elements.push(el);
                 sc.data.selectedProduct = null;
             }
         };
@@ -91,7 +98,7 @@
 
         sc.removeElement = function(item, index){
             sc.data.quotationOrder.elements.splice(index, 1);
-            //findDependencies(sc.data.quotationOrder.elements, "product.id", item.id, null, removeDeletedDeps, "product");
+            findDependencies(sc.data.quotationOrder.products, "element.id", item.id, null, removeDeletedDeps, 'element');
             // send changes on server
         };
 
