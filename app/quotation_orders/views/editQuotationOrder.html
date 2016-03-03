@@ -60,9 +60,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="element in data.quotationOrder.elements" class="order-items a-row-add">
-                                                <td ng-class="{'danger': element.highlight }" ng-mouseover="highlight('products', 'element.id', element.id)" ng-mouseleave="highlight('products')">
-                                                    <i class="fa fa-circle-thin"></i>
+                                            <tr ng-repeat="element in data.quotationOrder.elements" class="order-items a-row-add" ng-hide="element.hidden">
+                                                <td ng-class="{'danger': element.highlight }" ng-mouseover="highlight('products', 'element.id', element.id)" ng-mouseleave="highlight('products')" ng-click="hideIndependentRows(element, 'products', 'element.id', element.id)">
+                                                    <i class="eqo-td-circle-ico" ng-class="{'active': element.hideIndependentRows}"></i>
                                                 </td>
                                                 <td>
                                                     <a editable-text="element.description" onaftersave="saveElementChange(element)" buttons="no">{{ element.description || 'Нет описания' }}</a>
@@ -132,9 +132,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="item in data.quotationOrder.products" class="order-items a-row-add">
-                                                <td ng-class="{'danger': item.highlight }" ng-mouseover="highlight('elements', 'product.id', item.id)" ng-mouseleave="highlight('elements')">
-                                                    <i class="fa fa-circle-thin"></i>
+                                            <tr ng-repeat="item in data.quotationOrder.products" class="order-items a-row-add" ng-hide="item.hidden">
+                                                <td ng-class="{'danger': item.highlight }" ng-mouseover="highlight('elements', 'product.id', item.id)" ng-mouseleave="highlight('elements')" ng-click="hideIndependentRows(item, 'elements', 'product.id', item.id)">
+                                                    <i class="eqo-td-circle-ico" ng-class="{'active': item.hideIndependentRows}"></i>
                                                 </td>
                                                 <td>
                                                     <a class="editable-click" ng-click="changeProductModal(item)">{{ item.product.name }}</a>

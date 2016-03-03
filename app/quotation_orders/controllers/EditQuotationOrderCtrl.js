@@ -87,12 +87,12 @@
         };
 
         sc.saveElementChange = function(element){
-            console.log(element);
+//            console.log(element);
             // send changes on server
         };
 
         sc.saveProductChange = function(item){
-            console.log(item);
+//            console.log(item);
             // send changes on server
         };
 
@@ -145,7 +145,7 @@
                 }catch(err){
                     console.warn(err.message);
                 }
-                p !== undefined && cfunc(p, propValue) && resultFunc(item, resultFuncConfig);
+                cfunc(p, propValue) && resultFunc(item, resultFuncConfig);
             });
         }
 
@@ -164,6 +164,18 @@
 
             findDependencies(sc.data.quotationOrder[dataProp], c[0], c[1], null, function(row){
                 row.highlight = highlight;
+            });
+        };
+
+        sc.hideIndependentRows = function(item, dataProp, byProp, propValue){
+            var hide = item.hideIndependentRows =  !item.hideIndependentRows,
+                c = hide ? [byProp, propValue] : ["hidden", false];
+
+            findDependencies(sc.data.quotationOrder[dataProp], c[0], c[1], function(a, b){
+                return a !== b;
+
+            }, function(row){
+                row.hidden = hide;
             });
         };
 
