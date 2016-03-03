@@ -599,3 +599,6 @@ path.link {
 .eqo-td-rm-ico:hover{
     color: rgb(51, 51, 51);
 }
+.eqo-centred-modal>.modal-dialog{
+    margin-top: 130px;
+}

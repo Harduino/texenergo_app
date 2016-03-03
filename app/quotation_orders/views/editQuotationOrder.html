@@ -100,7 +100,7 @@
                                     <div class="display-inline bordered-container titled col-xs-12 col-sm-12 col-md-12 float-none">
                                         <span class="title">Добавить товар</span>
                                         <div class="col-xs-10 col-sm-10 col-md-11 item">
-                                            <ui-select ui-select-infinity="pSelectConfig" ng-model="data.selectedProduct" theme="select2" on-select="selectProductForAppend($item, $model)" reset-search-input="false" style="width: 100%;">
+                                            <ui-select ui-select-infinity="pSelectConfig" ng-model="data.selectedProduct" theme="select2" reset-search-input="false" style="width: 100%;">
                                                 <ui-select-match placeholder="Введите товар для добавления...">{{$select.selected.name}}</ui-select-match>
                                                 <ui-select-choices repeat="product in data.productsList | filter:$select.search" class="search-item">
                                                     <div class="search-tr">
@@ -136,7 +136,9 @@
                                                 <td ng-class="{'danger': product.highlight }" ng-mouseover="highlightElement(product)" ng-mouseleave="unhighlightElement()">
                                                     <i class="fa fa-circle-thin"></i>
                                                 </td>
-                                                <td>{{ item.product.name }}</td>
+                                                <td>
+                                                    <a class="editable-click" ng-click="changeProductModal(item)">{{ item.product.name }}</a>
+                                                </td>
                                                 <td>{{ item.product.article }}</td>
                                                 <td>
                                                     <a editable-number="item.quantity" onaftersave="saveProductChange(item)" e-min="0" buttons="no">{{ item.quantity || 'Значение не установлено'}}</a>
@@ -160,4 +162,28 @@
             </div>
         </section>
     </div>
+    <script type="text/ng-template" id="eqoModal.tmpl.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Изменить товар</h3>
+        </div>
+        <div class="modal-body">
+            <ui-select ui-select-infinity="pSelectConfig" ng-model="data.selectedProduct" theme="select2" reset-search-input="false" class="full-width">
+                <ui-select-match placeholder="Введите товар для добавления...">{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="product in data.productsList | filter:$select.search" class="search-item">
+                    <div class="search-tr">
+                        <div class="search-td col-md-1">
+                            <img ng-src="{{product.image_url}}">
+                        </div>
+                        <div class="search-td col-md-7" ng-bind-html="product.name | highlight: $select.search"></div>
+                        <div class="search-td col-md-2">{{product.stock}} ед.</div>
+                        <div class="search-td col-md-2">{{product.price | currency}}</div>
+                    </div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">Изменить</button>
+            <button class="btn btn-danger" type="button" ng-click="cancel()">Отмена</button>
+        </div>
+    </script>
 </div>
