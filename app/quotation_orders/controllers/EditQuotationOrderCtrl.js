@@ -88,6 +88,16 @@
             // send changes on server
         };
 
+        sc.removeElement = function(index){
+            sc.data.quotationOrder.elements.splice(index, 1);
+            // send changes on server
+        };
+
+        sc.removeProduct = function(index){
+            sc.data.quotationOrder.products.splice(index, 1);
+            // send changes on server
+        };
+
         sc.highlightElement = function(item){
             for(var i=0; i < sc.data.quotationOrder.elements.length; i++){
                 if(sc.data.quotationOrder.elements[i].id===item.element_id){

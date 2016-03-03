@@ -51,11 +51,12 @@
                                     <table class="table table-bordered margin-top-10">
                                         <thead>
                                             <tr>
-                                                <th class="eqo-th-highlightable"></th>
+                                                <th class="eqo-th-iconed"></th>
                                                 <th>Описание</th>
                                                 <th>Код</th>
                                                 <th>Комментарий</th>
                                                 <th>Товар</th>
+                                                <th class="eqo-th-iconed"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -76,6 +77,9 @@
                                                     <a editable-select="element.product" onaftersave="saveElementChange(element)" e-ng-options="item.product.name for item in data.quotationOrder.products" buttons="no">
                                                         {{ element.product.product.name || 'Не выбрано' }}
                                                     </a>
+                                                </td>
+                                                <td class="eqo-td-rm-ico" ng-click="removeElement($index)">
+                                                    <i class="fa fa-times-circle"></i>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -119,11 +123,12 @@
                                     <table class="table table-bordered margin-top-10">
                                         <thead>
                                             <tr>
-                                                <th class="eqo-th-highlightable"></th>
+                                                <th class="eqo-th-iconed"></th>
                                                 <th>Название</th>
                                                 <th>Артикул</th>
                                                 <th>Количество</th>
                                                 <th>Элемент</th>
+                                                <th class="eqo-th-iconed"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -140,6 +145,9 @@
                                                     <a editable-select="item.element" onaftersave="saveProductChange(item)" e-ng-options="element.description for element in data.quotationOrder.elements" buttons="no">
                                                         {{ item.element.description || 'Не выбрано' }}
                                                     </a>
+                                                </td>
+                                                <td class="eqo-td-rm-ico" ng-click="removeProduct($index)">
+                                                    <i class="fa fa-times-circle"></i>
                                                 </td>
                                             </tr>
                                         </tbody>
