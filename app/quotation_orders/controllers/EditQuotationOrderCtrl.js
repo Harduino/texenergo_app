@@ -5,7 +5,7 @@
     angular.module('app.quotation_orders').run(['editableOptions', function(editableOptions) {
         editableOptions.theme = 'bs3';
 
-    }]).controller('EditQuotationOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', '$filter', 'funcFactory', '$uibModal', function($scope, $state, $stateParams, serverApi, $filter, funcFactory, $uibModal){
+    }]).controller('EditQuotationOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', '$filter', 'funcFactory', '$uibModal', '$parse', function($scope, $state, $stateParams, serverApi, $filter, funcFactory, $uibModal, $parse){
         var sc = $scope;
         sc.data ={
             quotationOrder:{},
@@ -68,7 +68,7 @@
         sc.addNewProduct = function(){
             var p = sc.data.selectedProduct;
             if(p){
-                sc.data.quotationOrder.products.push({product: p, quantity: 1, element: null});
+                sc.data.quotationOrder.products.push({id: (p.id || p._id), product: p, quantity: 1, element: null});
                 sc.data.quotationOrder.elements.push({
                     description: p.name,
                     schema_code: '',
@@ -89,13 +89,15 @@
             // send changes on server
         };
 
-        sc.removeElement = function(index){
+        sc.removeElement = function(item, index){
             sc.data.quotationOrder.elements.splice(index, 1);
+            //findDependencies(sc.data.quotationOrder.elements, "product.id", item.id, null, removeDeletedDeps, "product");
             // send changes on server
         };
 
-        sc.removeProduct = function(index){
+        sc.removeProduct = function(item, index){
             sc.data.quotationOrder.products.splice(index, 1);
+            findDependencies(sc.data.quotationOrder.elements, "product.id", item.id, null, removeDeletedDeps, "product");
             // send changes on server
         };
 
@@ -113,6 +115,40 @@
                 p.product = selectedProduct;
             });
         };
+
+        /**
+         * Will find dependencies into collection by property
+         * @param collection - collection where to search
+         * @param byProp - String: path of properties for $parser
+         * @param propValue - Object: value to compare with
+         * @param compareFunc - function that calls to compare values of properties should return Bool
+         * @param resultFunc - function that calls every time when, equal values are found
+         * @param resultFuncConfig - Object: configuration that will be passed into resultFunc
+         */
+        function findDependencies(collection, byProp, propValue, compareFunc, resultFunc, resultFuncConfig){
+            var propParser = $parse(byProp),
+                cfunc = compareFunc || function(a,b){
+                    return a == b;
+                };
+            collection.map(function(item){
+                var p;
+                try{
+                    p = propParser(item);
+                }catch(err){
+                    console.warn(err.message);
+                }
+                p !== undefined && cfunc(p, propValue) && resultFunc(item, resultFuncConfig);
+            });
+        }
+
+        /**
+         * Remove deleted dependencies if they selected into <select>
+         * @param item - Object: item of collection
+         * @param config - Object
+         */
+        function removeDeletedDeps(item, config){
+            item[config] = null;
+        }
 
 //        sc.highlightElement = function(item){
 //            for(var i=0; i < sc.data.quotationOrder.elements.length; i++){

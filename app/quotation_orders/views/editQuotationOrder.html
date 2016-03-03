@@ -78,7 +78,7 @@
                                                         {{ element.product.product.name || 'Не выбрано' }}
                                                     </a>
                                                 </td>
-                                                <td class="eqo-td-rm-ico" ng-click="removeElement($index)">
+                                                <td class="eqo-td-rm-ico" ng-click="removeElement(element, $index)">
                                                     <i class="fa fa-times-circle"></i>
                                                 </td>
                                             </tr>
@@ -148,7 +148,7 @@
                                                         {{ item.element.description || 'Не выбрано' }}
                                                     </a>
                                                 </td>
-                                                <td class="eqo-td-rm-ico" ng-click="removeProduct($index)">
+                                                <td class="eqo-td-rm-ico" ng-click="removeProduct(item, $index)">
                                                     <i class="fa fa-times-circle"></i>
                                                 </td>
                                             </tr>
