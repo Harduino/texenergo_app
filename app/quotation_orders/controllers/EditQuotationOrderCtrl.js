@@ -145,7 +145,7 @@
                 }catch(err){
                     console.warn(err.message);
                 }
-                cfunc(p, propValue) && resultFunc(item, resultFuncConfig);
+                cfunc(p, propValue, item) && resultFunc(item, resultFuncConfig);
             });
         }
 
@@ -167,12 +167,20 @@
             });
         };
 
-        sc.hideIndependentRows = function(item, dataProp, byProp, propValue){
-            var hide = item.hideIndependentRows =  !item.hideIndependentRows,
+        sc.hideIndependentRows = function(item, dataProp, byProp, propValue, collectionProp){
+            var hide = !item.hideIndependentRows,
                 c = hide ? [byProp, propValue] : ["hidden", false];
 
-            findDependencies(sc.data.quotationOrder[dataProp], c[0], c[1], function(a, b){
-                return a !== b;
+            hide && sc.data.quotationOrder[collectionProp].map(function(item){
+                 if(item.hideIndependentRows) item.hideIndependentRows = false;
+            });
+
+            item.hideIndependentRows = hide;
+
+            findDependencies(sc.data.quotationOrder[dataProp], c[0], c[1], function(a, b, dep){
+                var result = (a !== b);
+                if(!result && hide) dep.hidden = false;
+                return result;
 
             }, function(row){
                 row.hidden = hide;
