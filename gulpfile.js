@@ -37,7 +37,6 @@ gulp.task('libs', function(){
         'assets/plugin/angular-sanitize/angular-sanitize.min.js',
         'assets/plugin/angular-animate/angular-animate.min.js',
         'assets/plugin/angular-cookies/angular-cookies.min.js',
-//        'assets/plugin/angular-bootstrap/ui-bootstrap-custom-tpls-0.14.3.min.js',
         'assets/plugin/angular-bootstrap/ui-bootstrap-custom-tpls-1.2.1.min.js',
         'assets/plugin/angular-d3/angular-d3.js',
         'assets/plugin/ui-select/select.min.js',
@@ -50,6 +49,7 @@ gulp.task('libs', function(){
         'assets/plugin/easy-pie-chart/angular.easypiechart.min.js',
         'assets/plugin/ui-tinymce/tinymce.js',
         'assets/plugin/x-editable/xeditable.js',
+//        'assets/plugin/x-editable/x-editable-custom.js',
 
 
         'assets/plugin/cancan/export.js',

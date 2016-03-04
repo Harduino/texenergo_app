@@ -71,7 +71,7 @@
             var p = sc.data.selectedProduct;
             if(p){
                 var el = {
-                    description: p.name,
+                    description: "Для\n " + p.name,
                     schema_code: '',
                     comment: '',
                     id: (p.id || p._id) + "_el",
@@ -94,6 +94,19 @@
         sc.saveProductChange = function(item){
 //            console.log(item);
             // send changes on server
+        };
+
+        /**
+         * On select product of element search for element with same product.
+         * If element found and description has prefix "Для\n", remove it.
+         * @param element
+         */
+        sc.syncElementProduct = function(element){
+            findDependencies(sc.data.quotationOrder.elements, "product.id", element.product.id, function(a, b, item){
+                return a===b && item.description && item.description.indexOf('Для\n')==0;
+            }, function(row, index){
+                sc.data.quotationOrder.elements.splice(index,1);
+            });
         };
 
         sc.removeElement = function(item, index){
@@ -136,16 +149,16 @@
         function findDependencies(collection, byProp, propValue, compareFunc, resultFunc, resultFuncConfig){
             var propParser = $parse(byProp),
                 cfunc = compareFunc || function(a,b){
-                    return a == b;
+                    return a === b;
                 };
-            collection.map(function(item){
+            collection.map(function(item, index){
                 var p;
                 try{
                     p = propParser(item);
                 }catch(err){
                     console.warn(err.message);
                 }
-                cfunc(p, propValue, item) && resultFunc(item, resultFuncConfig);
+                cfunc(p, propValue, item) && resultFunc(item, index, resultFuncConfig);
             });
         }
 
@@ -154,7 +167,7 @@
          * @param item - Object: item of collection
          * @param config - Object
          */
-        function removeDeletedDeps(item, config){
+        function removeDeletedDeps(item, index, config){
             item[config] = null;
         }
 

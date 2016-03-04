@@ -74,7 +74,7 @@
                                                     <a editable-text="element.comment" onaftersave="saveElementChange(element)" buttons="no">{{ element.comment || 'Нет комментария' }}</a>
                                                 </td>
                                                 <td>
-                                                    <a editable-select="element.product" onaftersave="saveElementChange(element)" e-ng-options="item.product.name for item in data.quotationOrder.products track by item.id" buttons="no">
+                                                    <a editable-select="element.product" onaftersave="saveElementChange(element); syncElementProduct(element)" e-ng-options="item.product.name for item in data.quotationOrder.products track by item.id" buttons="no">
                                                         {{ element.product.product.name || 'Не выбрано' }}
                                                     </a>
                                                 </td>
@@ -115,7 +115,7 @@
                                             </ui-select>
                                         </div>
                                         <div class="col-xs-2 col-sm-2 col-md-1 text-align-center">
-                                            <button class="btn btn-success" ng-click="addNewProduct()">
+                                            <button class="btn btn-success" ng-click="addNewProduct()" ng-disabled="!data.selectedProduct">
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </div>
@@ -182,8 +182,8 @@
             </ui-select>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="ok()">Изменить</button>
             <button class="btn btn-danger" type="button" ng-click="cancel()">Отмена</button>
+            <button class="btn btn-primary" type="button" ng-click="ok()">Изменить</button>
         </div>
     </script>
 </div>
