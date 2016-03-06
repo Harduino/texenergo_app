@@ -102,11 +102,14 @@
          * @param element
          */
         sc.syncElementProduct = function(element){
-            findDependencies(sc.data.quotationOrder.elements, "product.id", element.product.id, function(a, b, item){
-                return a===b && item.description && item.description.indexOf('Для\n')==0;
-            }, function(row, index){
-                sc.data.quotationOrder.elements.splice(index,1);
-            });
+            var p = element.product;
+            if(p){
+                findDependencies(sc.data.quotationOrder.elements, "product.id", p.id, function(a, b, item){
+                    return a===b && item.description && item.description.indexOf('Для\n')==0;
+                }, function(row, index){
+                    sc.data.quotationOrder.elements.splice(index,1);
+                });
+            }
         };
 
         sc.removeElement = function(item, index){

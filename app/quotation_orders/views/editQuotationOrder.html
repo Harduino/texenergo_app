@@ -74,7 +74,7 @@
                                                     <a editable-text="element.comment" onaftersave="saveElementChange(element)" buttons="no">{{ element.comment || 'Нет комментария' }}</a>
                                                 </td>
                                                 <td>
-                                                    <a editable-select="element.product" onaftersave="saveElementChange(element); syncElementProduct(element)" e-ng-options="item.product.name for item in data.quotationOrder.products track by item.id" buttons="no">
+                                                    <a editable-select-with-default="element.product" onaftersave="saveElementChange(element); syncElementProduct(element)" e-ng-options="item.product.name for item in data.quotationOrder.products track by item.id" buttons="no">
                                                         {{ element.product.product.name || 'Не выбрано' }}
                                                     </a>
                                                 </td>

@@ -49,7 +49,7 @@ gulp.task('libs', function(){
         'assets/plugin/easy-pie-chart/angular.easypiechart.min.js',
         'assets/plugin/ui-tinymce/tinymce.js',
         'assets/plugin/x-editable/xeditable.js',
-//        'assets/plugin/x-editable/x-editable-custom.js',
+        'assets/plugin/x-editable/x-editable-custom.js',
 
 
         'assets/plugin/cancan/export.js',
