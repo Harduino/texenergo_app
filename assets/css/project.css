@@ -614,3 +614,6 @@ path.link {
 .eqo-td-circle-ico.active{
     background-color: rgb(51, 51, 51);
 }
+.blue-hover:hover{
+    color: #428bca;;
+}

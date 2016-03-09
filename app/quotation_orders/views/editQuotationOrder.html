@@ -77,6 +77,7 @@
                                                     <a editable-select-with-default="element.product" onaftersave="saveElementChange(element); syncElementProduct(element)" e-ng-options="item.product.name for item in data.quotationOrder.products track by item.id" buttons="no">
                                                         {{ element.product.product.name || 'Не выбрано' }}
                                                     </a>
+                                                    <i class="fa fa-search-plus blue-hover" ng-click="createAndAppendProductToElement(element)"></i>
                                                 </td>
                                                 <td class="eqo-td-rm-ico" ng-click="removeElement(element, $index)">
                                                     <i class="fa fa-times-circle"></i>
@@ -115,7 +116,7 @@
                                             </ui-select>
                                         </div>
                                         <div class="col-xs-2 col-sm-2 col-md-1 text-align-center">
-                                            <button class="btn btn-success" ng-click="addNewProduct()" ng-disabled="!data.selectedProduct">
+                                            <button class="btn btn-success" ng-click="addNewProduct(data.selectedProduct, true)" ng-disabled="!data.selectedProduct">
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </div>

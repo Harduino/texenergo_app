@@ -67,23 +67,52 @@
             }
         };
         
-        sc.addNewProduct = function(){
-            var p = sc.data.selectedProduct;
+        sc.addNewProduct = function(product, createElement){
+            var p = product;
             if(p){
-                var el = {
-                    description: "Для\n " + p.name,
-                    schema_code: '',
-                    comment: '',
-                    id: (p.id || p._id) + "_el",
-                    product:{
-                        id: (p.id || p._id),
-                        product: p
-                    }
-                };
-                sc.data.quotationOrder.products.push({id: (p.id || p._id), product: p, quantity: 1, element:el});
-                sc.data.quotationOrder.elements.push(el);
-                sc.data.selectedProduct = null;
+                var el,
+                    productItem = {id: (p.id || p._id), product: p, quantity: 1};
+                if(createElement) {
+                    el = {
+                        description: "Для\n " + p.name,
+                        schema_code: '',
+                        comment: '',
+                        id: (p.id || p._id) + "_el",
+                        product:{
+                            id: (p.id || p._id),
+                            product: p
+                        }
+                    };
+                    productItem.element = el;
+                }
+                sc.data.quotationOrder.products.push(productItem);
+                if(createElement) {
+                    sc.data.quotationOrder.elements.push(el);
+                    sc.data.selectedProduct = null;
+                }
+                return productItem;
             }
+        };
+
+        /**
+         * Creates Product from Element item
+         * @param element - element item.
+         */
+        sc.createAndAppendProductToElement = function(element){
+            var modalInstance = $uibModal.open({
+                templateUrl: 'eqoModal.tmpl.html',
+                controller: 'EqoModalInstanceCtrl',
+                windowClass: 'eqo-centred-modal',
+                resolve:{
+                    product: null
+                }
+            });
+
+            modalInstance.result.then(function (selectedProduct) {
+                var productItem = sc.addNewProduct(selectedProduct);
+                productItem.element = element;
+                element.product = productItem;
+            });
         };
 
         sc.saveElementChange = function(element){
@@ -124,6 +153,10 @@
             // send changes on server
         };
 
+        /**
+         * Opens modal window with ability to change product of Product item.
+         * @param p - product
+         */
         sc.changeProductModal = function(p){
             var modalInstance = $uibModal.open({
                 templateUrl: 'eqoModal.tmpl.html',
