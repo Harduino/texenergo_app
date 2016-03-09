@@ -23,12 +23,12 @@
                 </section>
                 <section class="form-group">
                     <label class="control-label">Дата поступления</label>
-                    <p class="input-group">
-                        <input type="text" class="form-control" uib-datepicker-popup="{{'dd.MM.yyyy'}}" ng-model="newTransfer.date" is-open="dateDrop.opened" max-date="dateDrop.maxDate"/>
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="dateDrop.open()"><i class="glyphicon glyphicon-calendar"></i></button>
-                    </span>
-                    </p>
+                    <datepicker date-format="dd.MM.yyyy" class="input-group">
+                        <input ng-model="newTransfer.date" type="text" placeholder="Выберите дату" class="full-width input-sm form-control">
+                        <span class="input-group-addon">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </span>
+                    </datepicker>
                 </section>
                 <section class="form-group">
                     <label class="control-label">Описание</label>

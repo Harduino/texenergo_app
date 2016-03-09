@@ -3,7 +3,7 @@
  * directive of create transfer form
  */
 (function(){
-    angular.module('app.layout').directive('transferBuilder', ['serverApi', 'funcFactory', function(serverApi, funcFactory){
+    angular.module('app.layout').directive('transferBuilder', ['serverApi', 'funcFactory', '$filter', function(serverApi, funcFactory, $filter){
         return {
             restrict: 'E',
             scope:{
@@ -59,7 +59,7 @@
 
                 function clearForm(){
                     scope.newTransfer = {
-                        date: new Date,
+                        date: $filter("date")(new Date(), 'dd.MM.yyyy'),
                         amount:0,
                         partner:{},
                         partner_id:'',

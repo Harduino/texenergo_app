@@ -17,7 +17,8 @@ gulp.task('styles', function() {
         'assets/css/smartadmin-rtl.min.css',
         'assets/css/project.css',
         'assets/css/select.min.css',
-        'assets/plugin/x-editable/xeditable.css'
+        'assets/plugin/x-editable/xeditable.css',
+        'assets/plugin/angular-datepicker/css/angular-datepicker.css'
     ])
     .on('error', console.log)
     .pipe(concat('app-styles.css'))
@@ -37,7 +38,7 @@ gulp.task('libs', function(){
         'assets/plugin/angular-sanitize/angular-sanitize.min.js',
         'assets/plugin/angular-animate/angular-animate.min.js',
         'assets/plugin/angular-cookies/angular-cookies.min.js',
-        'assets/plugin/angular-bootstrap/ui-bootstrap-custom-tpls-1.2.1.min.js',
+        'assets/plugin/angular-bootstrap/ui-bootstrap-custom-tpls-1.2.4.min.js',
         'assets/plugin/angular-d3/angular-d3.js',
         'assets/plugin/ui-select/select.min.js',
         'assets/plugin/fastclick/lib/fastclick.js',
@@ -50,6 +51,7 @@ gulp.task('libs', function(){
         'assets/plugin/ui-tinymce/tinymce.js',
         'assets/plugin/x-editable/xeditable.js',
         'assets/plugin/x-editable/x-editable-custom.js',
+        'assets/plugin/angular-datepicker/js/angular-datepicker.js',
 
 
         'assets/plugin/cancan/export.js',
