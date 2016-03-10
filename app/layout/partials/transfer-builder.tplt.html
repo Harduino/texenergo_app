@@ -23,12 +23,12 @@
                 </section>
                 <section class="form-group">
                     <label class="control-label">Дата поступления</label>
-                    <datepicker date-format="dd.MM.yyyy" class="input-group">
-                        <input ng-model="newTransfer.date" type="text" placeholder="Выберите дату" class="full-width input-sm form-control">
+                    <div class="input-group">
+                        <input type="text" te-jq-ui="datePickerConfig" data-watch-options="true" te-jq-datepicker data-ui-type="datepicker" ng-model="newTransfer.date" class="full-width input-sm form-control" style="position: initial;">
                         <span class="input-group-addon">
                             <i class="glyphicon glyphicon-calendar"></i>
                         </span>
-                    </datepicker>
+                    </div>
                 </section>
                 <section class="form-group">
                     <label class="control-label">Описание</label>

@@ -26,11 +26,8 @@
                     _modal.modal('show');
                 };
 
-                scope.dateDrop = {
-                    opened: false,
-                    open: function() {
-                        scope.dateDrop.opened = true;
-                    }
+                scope.datePickerConfig = {
+                    dateFormat: 'dd.mm.yy'
                 };
 
                 clearForm();
@@ -59,14 +56,13 @@
 
                 function clearForm(){
                     scope.newTransfer = {
-                        date: $filter("date")(new Date(), 'dd.MM.yyyy'),
+                        date: new Date(),
                         amount:0,
                         partner:{},
                         partner_id:'',
                         number: null,
                         description: ''
                     };
-                    scope.dateDrop.maxDate = scope.newTransfer.date;
                 }
             },
             templateUrl: '/app/layout/partials/transfer-builder.tplt.html'

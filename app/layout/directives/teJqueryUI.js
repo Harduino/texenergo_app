@@ -3,7 +3,9 @@
  * directive create Jq UI element with options
  */
 (function(){
-    angular.module('app.layout').directive('teJqUi', function(){
+    var module = angular.module('te-jq-ui', []);
+
+    module.directive('teJqUi', function(){
         return{
             restrict: 'A',
             scope:{
@@ -18,7 +20,7 @@
                         element[type](value||{});
                     };
 
-                    attrs.watchOptions ? scope.watch('options', function(value){
+                    attrs.watchOptions ? scope.$watch('options', function(value){
                             value && setOptions(value);
                         })
                     : setOptions(scope.options);
@@ -30,4 +32,24 @@
             }
         };
     });
+    module.directive('teJqDatepicker', [ function(){
+        return {
+            restrict: 'A',
+            require: 'ngModel',
+            link: function(scope, element, attrs, ngModel){
+
+                ngModel.$formatters.push(function(value){
+                    if(value){
+                        return $.datepicker.formatDate('dd.mm.yy', value);
+                    }
+                });
+
+                scope.$watch(attrs.ngModel, function(value, oldValue){
+                    if(value !== oldValue) {
+                        ngModel.$setViewValue(element.datepicker("getDate"));
+                    }
+                }, true);
+            }
+        }
+    }]);
 }());

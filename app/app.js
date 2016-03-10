@@ -55,6 +55,7 @@ appConfig.sound_on = true;
         'angular.d3',
         'te.infinity.scroll',
         '720kb.datepicker',
+        'te-jq-ui',
         
         // Permissions
         'cancan.export',
