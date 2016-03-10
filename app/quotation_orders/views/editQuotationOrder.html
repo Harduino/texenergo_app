@@ -31,7 +31,7 @@
                         <div class="widget-body">
                             <div class="well well-clean well-white">
                                 <div class="row">
-                                    <form name="ceForm" class="display-inline bordered-container titled col-xs-12 col-sm-12 col-md-12 float-none eqo-add-elem-form" ng-keypress="addNewElement($event)" novalidate>
+                                    <form name="ceForm" class="display-inline bordered-container titled col-xs-12 col-sm-12 col-md-12 float-none eqo-add-elem-form" ng-keypress="addNewElement($event, ceForm.description.$error.required)" novalidate>
                                         <span class="title">Добавить элемент</span>
                                         <div class="col-md-4">
                                             <input name="description" class="form-control item" ng-model="newElement.description" ng-class="{'inp-error': errElemAdd}" type="text" placeholder="Описание" required="">
@@ -43,7 +43,7 @@
                                             <input name="comment" class="form-control item" ng-model="newElement.comment" type="text" placeholder="Комментарий">
                                         </div>
                                         <div class="col-md-1 text-align-center" ng-mouseover="errElemAdd=ceForm.description.$error.required" ng-mouseleave="errElemAdd=false">
-                                            <button class="btn btn-success" ng-click="addNewElement($event)" ng-disabled="ceForm.description.$error.required">
+                                            <button class="btn btn-success" ng-click="addNewElement($event, ceForm.description.$error.required)" ng-disabled="ceForm.description.$error.required">
                                                 <i class="fa fa-plus"></i> <span class="hidden-md hidden-lg">Добавить</span>
                                             </button>
                                         </div>

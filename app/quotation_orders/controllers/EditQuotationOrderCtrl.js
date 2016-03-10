@@ -44,8 +44,8 @@
             });
         };
         
-        sc.addNewElement = function(e){
-            if((e.keyCode==13 && e.target.nodeName !== "BUTTON") || e.type == "click"){
+        sc.addNewElement = function(e, invalid){
+            if(e.type == "click" && !invalid){
                 var newElement = sc.newElement;
                 var data = {
                     quotation_order_element: {
