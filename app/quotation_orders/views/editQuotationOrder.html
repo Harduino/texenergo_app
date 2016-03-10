@@ -31,23 +31,23 @@
                         <div class="widget-body">
                             <div class="well well-clean well-white">
                                 <div class="row">
-                                    <div class="display-inline bordered-container titled col-xs-12 col-sm-12 col-md-12 float-none" ng-keypress="addNewElement($event)">
+                                    <form name="ceForm" class="display-inline bordered-container titled col-xs-12 col-sm-12 col-md-12 float-none eqo-add-elem-form" ng-keypress="addNewElement($event)" novalidate>
                                         <span class="title">Добавить элемент</span>
                                         <div class="col-md-4">
-                                            <input class="form-control item" ng-model="newElement.description" type="text" placeholder="Описание">
+                                            <input name="description" class="form-control item" ng-model="newElement.description" ng-class="{'inp-error': errElemAdd}" type="text" placeholder="Описание" required="">
                                         </div>
                                         <div class="col-md-3">
-                                            <input class="form-control item" ng-model="newElement.schema_code" type="text" placeholder="Код">
+                                            <input name="code" class="form-control item" ng-model="newElement.schema_code" type="text" placeholder="Код">
                                         </div>
                                         <div class="col-md-4">
-                                            <input class="form-control item" ng-model="newElement.comment" type="text" placeholder="Комментарий">
+                                            <input name="comment" class="form-control item" ng-model="newElement.comment" type="text" placeholder="Комментарий">
                                         </div>
-                                        <div class="col-md-1 text-align-center">
-                                            <button class="btn btn-success" ng-click="addNewElement($event)">
+                                        <div class="col-md-1 text-align-center" ng-mouseover="errElemAdd=ceForm.description.$error.required" ng-mouseleave="errElemAdd=false">
+                                            <button class="btn btn-success" ng-click="addNewElement($event)" ng-disabled="ceForm.description.$error.required">
                                                 <i class="fa fa-plus"></i> <span class="hidden-md hidden-lg">Добавить</span>
                                             </button>
                                         </div>
-                                    </div>
+                                    </form>
                                     <table class="table table-bordered margin-top-10">
                                         <thead>
                                             <tr>

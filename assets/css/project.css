@@ -615,5 +615,11 @@ path.link {
     background-color: rgb(51, 51, 51);
 }
 .blue-hover:hover{
-    color: #428bca;;
+    color: #428bca;
+}
+form.eqo-add-elem-form input.ng-invalid.ng-touched, form.eqo-add-elem-form input.ng-invalid.ng-untouched{
+    border-color: #ccc!important;
+}
+form.eqo-add-elem-form input.inp-error.ng-invalid.ng-touched, form.eqo-add-elem-form input.inp-error.ng-invalid.ng-untouched{
+    border-color: #a90329!important;
 }
