@@ -111,19 +111,21 @@
                     updateElementsOfOrder(data, function(result){
                         // Link new element to future product
                         dataForProduct.add_product.element_id = result.data.id;
-
+                        updateProductsOfOrder();
                     })
+                }else updateProductsOfOrder();
+
+                function updateProductsOfOrder (){
+                    serverApi.updateQuotationOrder(sc.data.quotationOrder.id, dataForProduct, function(result){
+                        if(result.status == 200 && !result.data.errors){
+                            sc.data.quotationOrder.products.push(result.data);
+                        } else {
+                            funcFactory.showNotification("Неудача", 'Не удалось добавить строку комплектации');
+                        }
+                    });
+
+                    sc.data.selectedProduct = null;
                 }
-                
-                serverApi.updateQuotationOrder(sc.data.quotationOrder.id, dataForProduct, function(result){
-                    if(result.status == 200 && !result.data.errors){
-                        sc.data.quotationOrder.products.push(result.data);
-                    } else {
-                        funcFactory.showNotification("Неудача", 'Не удалось добавить строку комплектации');
-                    }
-                });
-                
-                sc.data.selectedProduct = null;
             }
         };
         
