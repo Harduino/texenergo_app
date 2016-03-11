@@ -57,16 +57,27 @@
                         comment: newElement.comment
                     }
                 };
-                serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
-                    if(result.status == 200 && !result.data.errors){
-                        sc.data.quotationOrder.elements.push(result.data);
-                        sc.newElement = {};
-                    } else {
-                        funcFactory.showNotification("Неудача", 'Не удалось добавить элемент');
-                    }
-                });
+                updateElementsOfOrder(data);
             }
         };
+
+
+        /**
+         * Отправляем данные создаваемого элемента на сервер
+         * @param data - поля создаваемого элемента
+         * @param callback
+         */
+        function updateElementsOfOrder(data, callback){
+            serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
+                if(result.status == 200 && !result.data.errors){
+                    sc.data.quotationOrder.elements.push(result.data);
+                    sc.newElement = {};
+                    callback && callback(result);
+                } else {
+                    funcFactory.showNotification("Неудача", 'Не удалось добавить элемент');
+                }
+            });
+        }
         
         /**
          * Добавляем новый товар
@@ -97,17 +108,11 @@
                             comment: ""
                         }
                     };
-                    serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
-                        if(result.status == 200 && !result.data.errors){
-                            
-                            // Link new element to future product
-                            dataForProduct.add_product.element_id = result.data.id;
-                            
-                            sc.data.quotationOrder.elements.push(result.data);
-                        } else {
-                            funcFactory.showNotification("Неудача", 'Не удалось добавить элемент');
-                        }
-                    });
+                    updateElementsOfOrder(data, function(result){
+                        // Link new element to future product
+                        dataForProduct.add_product.element_id = result.data.id;
+
+                    })
                 }
                 
                 serverApi.updateQuotationOrder(sc.data.quotationOrder.id, dataForProduct, function(result){
