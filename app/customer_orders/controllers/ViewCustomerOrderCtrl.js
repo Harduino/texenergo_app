@@ -28,9 +28,9 @@
                     {
                         select: '.node',
                         action: 'click',
-                        handler: function (e) {
+                        handler: function (item) {
                             if (d3.event.defaultPrevented) return;
-                            $state.go(getPropertyByDocumentType(e).state, {id: e.id});
+                            $state.go(getPropertyByDocumentType(item).state, {id: item.id});
                         }
                     }
                 ],
@@ -212,6 +212,9 @@
         }
 
         function getPropertyByDocumentType(item){
+            if (sc.data.networkData.format !== undefined && sc.data.networkData.format[item.type] !== undefined) {
+                return sc.data.networkData.format[item.type];
+            }
             switch (item.type){
                 case "CustomerOrder" : return {
                     title: "Заказ клиента",

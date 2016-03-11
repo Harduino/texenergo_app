@@ -26,7 +26,6 @@
                 data: "="
             },
             link: function(scope, element, attrs){
-
                 updateDefaultWidth();
                 //extend default configs
                 var _config = scope.config ? angular.extend(_defaultConfig, scope.config || {}) : _defaultConfig,
@@ -41,7 +40,6 @@
 
                 function drawChart(data){
                     var d = data;
-
                     setEdgesAttributes(d);
 
                     var force = d3.layout.force()
@@ -238,27 +236,6 @@
                 scope.$on("$destroy", function(){
                     $('.graph-tip').remove();
                 });
-
-//                function placeElementsByCircle(nodes, nodeRadius){
-//                    var radius = 100; // radius of the circle
-//                    var width = _config.size[0],
-//                        height = _config.size[1],
-//                        angle = 0,
-//                        step = (2*Math.PI) / nodes.length;
-//
-//                    nodes.map(function(item, ind){
-//                        var x, y;
-//                        if(ind == 0){
-//                            x = width/2-nodeRadius;
-//                            y = height/2-nodeRadius;
-//                        }else{
-//                            x = Math.round(width/2 + radius * Math.cos(angle) - nodeRadius);
-//                            y = Math.round(height/2 + radius * Math.sin(angle) - nodeRadius);
-//                            angle += step;
-//                        }
-//                        item.point = {x:x, y:y};
-//                    });
-//                }
             }
         }
     }]);
