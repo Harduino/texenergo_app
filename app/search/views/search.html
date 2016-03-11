@@ -17,7 +17,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="item in data.searchList">
-                    <td>{{item.article}}</td>
+                    <td><a ng-href="/#/products/{{item.id || item._id}}" class="black">{{item.article}}</a></td>
                     <td>{{item.name}}</td>
                     <td>{{item.manufacturer}}</td>
                     <td class="no-warp">{{item.price | currency}}</td>
