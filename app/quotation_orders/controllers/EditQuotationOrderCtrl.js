@@ -44,21 +44,22 @@
             });
         };
         
+        /**
+         * Добавляем новый элемент
+         */
         sc.addNewElement = function(e, invalid){
             if(e.type == "click" && !invalid){
                 var newElement = sc.newElement;
                 var data = {
-                    quotation_order_element: {
+                    add_element: {
                         description: newElement.description,
                         schema_code: newElement.schema_code,
                         comment: newElement.comment
                     }
                 };
-                serverApi.addQuotationOrderElement(sc.data.quotationOrder.id, data, function(result){
+                serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
                     if(result.status == 200 && !result.data.errors){
-                        console.log(result.data);
-                        data.quotation_order_element.id = new Date().toISOString() + "_el";
-                        sc.data.quotationOrder.elements.push(data.quotation_order_element);
+                        sc.data.quotationOrder.elements.push(result.data);
                         sc.newElement = {};
                     } else {
                         funcFactory.showNotification("Неудача", 'Не удалось добавить элемент');
@@ -67,36 +68,63 @@
             }
         };
         
+        /**
+         * Добавляем новый товар
+         */
         sc.addNewProduct = function(product, createElement){
             var p = product;
             if(p){
-                var el,
-                    productItem = {id: (p.id || p._id), product: p, quantity: 1};
+                var dataForProduct = {
+                    add_product: {
+                        product_id: (p.id || p._id),
+                        quantity: 1
+                    }
+                }
+                
+                /**
+                 * В случае если вдруг нам каким-то образом уже известен element_id
+                **/
+                if(p.element_id !== undefined) {
+                    dataForProduct.add_product.element_id = p.element_id;
+                }
+                
+                // Сначала создаём новый элемент для связи
                 if(createElement) {
-                    el = {
-                        description: "Для\n " + p.name,
-                        schema_code: '',
-                        comment: '',
-                        id: (p.id || p._id) + "_el",
-                        product:{
-                            id: (p.id || p._id),
-                            product: p
+                    var data = {
+                        add_element: {
+                            description: "Для " + p.name,
+                            schema_code: "",
+                            comment: ""
                         }
-                    };
-                    productItem.element = el;
+                    }
+                    serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
+                        if(result.status == 200 && !result.data.errors){
+                            
+                            // Link new element to future product
+                            dataForProduct.add_product.element_id = result.data.id;
+                            
+                            sc.data.quotationOrder.elements.push(result.data);
+                        } else {
+                            funcFactory.showNotification("Неудача", 'Не удалось добавить элемент');
+                        }
+                    });
                 }
-                sc.data.quotationOrder.products.push(productItem);
-                if(createElement) {
-                    sc.data.quotationOrder.elements.push(el);
-                    sc.data.selectedProduct = null;
-                }
-                return productItem;
+                
+                serverApi.updateQuotationOrder(sc.data.quotationOrder.id, dataForProduct, function(result){
+                    if(result.status == 200 && !result.data.errors){
+                        sc.data.quotationOrder.products.push(result.data);
+                    } else {
+                        funcFactory.showNotification("Неудача", 'Не удалось добавить строку комплектации');
+                    }
+                });
+                
+                sc.data.selectedProduct = null;
             }
         };
-
+        
         /**
-         * Creates Product from Element item
-         * @param element - element item.
+         * Добавляем новый товар, но из уже имеющегося элемента.
+         * Отличие от обычного в том, что элемент уже есть и новый товар просто к нему привязывается.
          */
         sc.createAndAppendProductToElement = function(element){
             var modalInstance = $uibModal.open({
@@ -114,51 +142,115 @@
             });
 
             modalInstance.result.then(function (selectedProduct) {
-                var productItem = sc.addNewProduct(selectedProduct);
-                productItem.element = element;
-                element.product = productItem;
+                selectedProduct.element_id = element.id;
+                sc.addNewProduct(selectedProduct);
+            });
+        };
+        
+        /**
+         * Обновляем элемент
+         */
+        sc.saveElementChange = function(element){
+            data = {
+                update_element: {
+                    id: element.id,
+                    schema_code: element.schema_code,
+                    comment: element.comment,
+                    description: element.description
+                }
+            }
+            serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
+                if(result.status == 200 && !result.data.errors){
+                    for(var i=0; i < sc.data.quotationOrder.elements.length; i++) {
+                        if (sc.data.quotationOrder.elements[i] == result.data.id) {
+                            sc.data.quotationOrder.elements[i] = result.data;
+                            funcFactory.showNotification("Удача", "Обновил элемент", true);
+                            break;
+                        }
+                    }
+                } else {
+                    funcFactory.showNotification("Неудача", 'Не удалось добавить элемент');
+                }
             });
         };
 
-        sc.saveElementChange = function(element){
-//            console.log(element);
-            // send changes on server
-        };
-
-        sc.saveProductChange = function(item){
-//            console.log(item);
-            // send changes on server
-        };
-
         /**
-         * On select product of element search for element with same product.
-         * If element found and description has prefix "Для\n", remove it.
-         * @param element
+         * Обновляем товар
          */
-        sc.syncElementProduct = function(element){
-            var p = element.product;
-            if(p){
-                findDependencies(sc.data.quotationOrder.elements, "product.id", p.id, function(a, b, item){
-                    return a===b && item.description && item.description.indexOf('Для\n')==0;
-                }, function(row, index){
-                    sc.data.quotationOrder.elements.splice(index,1);
-                });
+        sc.saveProductChange = function(item){
+            data = {
+                update_product: {
+                    id: item.id,
+                    quantity: item.quantity,
+                    product_id: item.product_id
+                }
             }
-        };
-
-        sc.removeElement = function(item, index){
-            sc.data.quotationOrder.elements.splice(index, 1);
-            findDependencies(sc.data.quotationOrder.products, "element.id", item.id, null, removeDeletedDeps, 'element');
-            // send changes on server
-        };
-
-        sc.removeProduct = function(item, index){
-            sc.data.quotationOrder.products.splice(index, 1);
-            findDependencies(sc.data.quotationOrder.elements, "product.id", item.id, null, removeDeletedDeps, "product");
-            // send changes on server
+            serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
+                if(result.status == 200 && !result.data.errors){
+                    for(var i=0; i < sc.data.quotationOrder.products.length; i++) {
+                        if (sc.data.quotationOrder.products[i] == result.data.id) {
+                            sc.data.quotationOrder.products[i] = result.data;
+                            funcFactory.showNotification("Удача", "Обновил товар", true);
+                            break;
+                        }
+                    }
+                } else {
+                    funcFactory.showNotification("Неудача", 'Не удалось добавить элемент');
+                }
+            });
         };
 
         /**
+         * Удаляем элемент
+         */
+        sc.removeElement = function(item, index){
+            data = {
+                remove_element: {
+                    id: item.id
+                }
+            }
+            serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
+                if(result.status == 200 && !result.data.errors){
+                    sc.data.quotationOrder.elements.splice(index, 1);
+                    funcFactory.showNotification("Удача", "Удалил элемент", true);
+                } else {
+                    funcFactory.showNotification("Неудача", 'Не удалось добавить элемент');
+                }
+            });
+        };
+
+        /**
+         * Удаляем товар
+         */
+        sc.removeProduct = function(item, index){
+            data = {
+                remove_product: {
+                    id: item.id
+                }
+            }
+            serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
+                if(result.status == 200 && !result.data.errors){
+                    sc.data.quotationOrder.products.splice(index, 1);
+                    
+                    /**
+                     * Ищем и удаляем связанные элементы
+                     */
+                    for(var i=0; i<sc.data.quotationOrder.elements.length; i++){
+                        console.log(sc.data.quotationOrder.elements[i].description, ('Для '+item.product.name),"");
+                        if(sc.data.quotationOrder.elements[i].description===('Для '+item.product.name)) {
+                            sc.removeElement(sc.data.quotationOrder.elements[i], i);
+                        }
+                    }
+                    
+                    funcFactory.showNotification("Удача", "Удалил товар", true);
+                } else {
+                    funcFactory.showNotification("Неудача", 'Не удалось удалить товар');
+                }
+            });
+        };
+
+        /**
+         * Открываем модальное окно, чтобы заменить товар в Комплектации на другой
          * Opens modal window with ability to change product of Product item.
          * @param p - product
          */
@@ -174,11 +266,14 @@
             });
 
             modalInstance.result.then(function (selectedProduct) {
-                findDependencies(sc.data.quotationOrder.elements, "product.id", p.id, null, removeDeletedDeps, "product");
-                p.product = selectedProduct;
+                sc.saveProductChange({id: p.id, quantity: p.quantity, product_id: (selectedProduct._id || selectedProduct.id)});
             });
         };
 
+        
+        
+        
+        
         /**
          * Will find dependencies into collection by property
          * @param collection - collection where to search
@@ -189,6 +284,7 @@
          * @param resultFuncConfig - Object: configuration that will be passed into resultFunc
          */
         function findDependencies(collection, byProp, propValue, compareFunc, resultFunc, resultFuncConfig){
+            
             var propParser = $parse(byProp),
                 cfunc = compareFunc || function(a,b){
                     return a === b;

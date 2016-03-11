@@ -123,8 +123,11 @@
         this.getQuotationOrderDetails = function(id, success, fail){
             $http.get('/api/quotation_orders/' + id).then(success, fail);
         };
-        this.addQuotationOrderElement = function(id, data, success, fail){
-            $http.post('/api/quotation_orders/'+id+'/elements', data).then(success, fail);
+//        this.addQuotationOrderElement = function(id, data, success, fail){
+//            $http.post('/api/quotation_orders/'+id+'/elements', data).then(success, fail);
+//        };
+        this.updateQuotationOrder = function(id, data, success, fail){
+            $http.put('/api/quotation_orders/' + id, data).then(success, fail);
         };
 
         // Supplier Orders
