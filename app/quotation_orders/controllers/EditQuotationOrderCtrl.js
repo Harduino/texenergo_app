@@ -79,7 +79,7 @@
                         product_id: (p.id || p._id),
                         quantity: 1
                     }
-                }
+                };
                 
                 /**
                  * В случае если вдруг нам каким-то образом уже известен element_id
@@ -96,7 +96,7 @@
                             schema_code: "",
                             comment: ""
                         }
-                    }
+                    };
                     serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
                         if(result.status == 200 && !result.data.errors){
                             
@@ -151,14 +151,14 @@
          * Обновляем элемент
          */
         sc.saveElementChange = function(element){
-            data = {
+            var data = {
                 update_element: {
                     id: element.id,
                     schema_code: element.schema_code,
                     comment: element.comment,
                     description: element.description
                 }
-            }
+            };
             serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
                 if(result.status == 200 && !result.data.errors){
                     for(var i=0; i < sc.data.quotationOrder.elements.length; i++) {
@@ -178,13 +178,13 @@
          * Обновляем товар
          */
         sc.saveProductChange = function(item){
-            data = {
+            var data = {
                 update_product: {
                     id: item.id,
                     quantity: item.quantity,
                     product_id: item.product_id
                 }
-            }
+            };
             serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
                 if(result.status == 200 && !result.data.errors){
                     for(var i=0; i < sc.data.quotationOrder.products.length; i++) {
@@ -204,11 +204,11 @@
          * Удаляем элемент
          */
         sc.removeElement = function(item, index){
-            data = {
+            var data = {
                 remove_element: {
                     id: item.id
                 }
-            }
+            };
             serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
                 if(result.status == 200 && !result.data.errors){
                     sc.data.quotationOrder.elements.splice(index, 1);
@@ -223,11 +223,11 @@
          * Удаляем товар
          */
         sc.removeProduct = function(item, index){
-            data = {
+            var data = {
                 remove_product: {
                     id: item.id
                 }
-            }
+            };
             serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
                 if(result.status == 200 && !result.data.errors){
                     sc.data.quotationOrder.products.splice(index, 1);
@@ -270,51 +270,13 @@
             });
         };
 
-        
-        
-        
-        
-        /**
-         * Will find dependencies into collection by property
-         * @param collection - collection where to search
-         * @param byProp - String: path of properties for $parser
-         * @param propValue - Object: value to compare with
-         * @param compareFunc - function that calls to compare values of properties should return Bool
-         * @param resultFunc - function that calls every time when, equal values are found
-         * @param resultFuncConfig - Object: configuration that will be passed into resultFunc
-         */
-        function findDependencies(collection, byProp, propValue, compareFunc, resultFunc, resultFuncConfig){
-            
-            var propParser = $parse(byProp),
-                cfunc = compareFunc || function(a,b){
-                    return a === b;
-                };
-            collection.map(function(item, index){
-                var p;
-                try{
-                    p = propParser(item);
-                }catch(err){
-                    console.warn(err.message);
-                }
-                cfunc(p, propValue, item) && resultFunc(item, index, resultFuncConfig);
-            });
-        }
-
-        /**
-         * Remove deleted dependencies if they selected into <select>
-         * @param item - Object: item of collection
-         * @param config - Object
-         */
-        function removeDeletedDeps(item, index, config){
-            item[config] = null;
-        }
-
         sc.highlight = function(dataProp, byProp, propValue){
             var highlight = (byProp && propValue) != undefined,
                 c = highlight ? [byProp, propValue] : ["highlight", true];
 
-            findDependencies(sc.data.quotationOrder[dataProp], c[0], c[1], null, function(row){
-                row.highlight = highlight;
+            sc.data.quotationOrder[dataProp].map(function(item){
+                var val = $parse(c[0])(item);
+                if(val === c[1]) item.highlight = highlight;
             });
         };
 
@@ -328,13 +290,10 @@
 
             item.hideIndependentRows = hide;
 
-            findDependencies(sc.data.quotationOrder[dataProp], c[0], c[1], function(a, b, dep){
-                var result = (a !== b);
-                if(!result && hide) dep.hidden = false;
-                return result;
-
-            }, function(row){
-                row.hidden = hide;
+            sc.data.quotationOrder[dataProp].map(function(item){
+                var val = $parse(c[0])(item),
+                    result = (val !== c[1]);
+                item.hidden = !result && hide ? false : hide;
             });
         };
 
