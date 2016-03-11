@@ -65,6 +65,22 @@
                 sc.data.networkConfig.zoom = ui.value;
             }
         };
+        
+        sc.saveProductChange = function(data) {
+            var product = data.item;
+            serverApi.updateCustomerOrderProduct(sc.order.id, product.id, {
+                quantity: product.quantity,
+                discount: product.discount
+            }, function(result){
+                if(!result.data.errors){
+                    var r = sc.order.customer_order_contents[data.index];
+                    sc.order.customer_order_contents[data.index] = angular.extend(r, result.data);
+                    funcFactory.showNotification('Успешно обновлены данные продукта', product.name, true);
+                }else{
+                    funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors);
+                }
+            });
+        }
 
         /**
          * Get order details

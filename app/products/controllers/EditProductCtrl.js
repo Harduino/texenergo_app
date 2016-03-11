@@ -63,7 +63,7 @@
                     !sc.$$phase && sc.$apply(angular.noop);
                 },
                 dropzoneConfig: {
-                    acceptedFiles: '.jpg,.png,.gif'
+                    acceptedFiles: '.jpg,.png,.gif,.jpeg'
                 }
             };
         }

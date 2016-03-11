@@ -82,6 +82,7 @@
                                         <th class="hidden-xs">Артикул</th>
                                         <th class="hidden-xs text-right">Цена</th>
                                         <th class="text-right">Кол-во</th>
+                                        <th class="text-right hidden-xs">Скидка</th>
                                         <th class="text-right">Итого</th>
                                     </tr>
                                 </thead>
@@ -93,7 +94,14 @@
                                         </td>
                                         <td class="hidden-xs">{{ item.product.article}}</td>
                                         <td class="hidden-xs text-right">{{ item | price_net | currency}}</td>
-                                        <td class="text-right">{{ item.quantity }}</td>
+                                        <td class="text-right">
+                                            <a ng-if="order.can_edit" editable-number="item.quantity" onaftersave="saveProductChange({item: item, index: $index})" e-min="0" buttons="no">{{ item.quantity }}</a>
+                                            <span ng-if="!order.can_edit">{{ item.quantity }}</span>
+                                        </td>
+                                        <td class="text-right">
+                                            <a ng-if="order.can_edit" editable-number="item.discount" onaftersave="saveProductChange({item: item, index: $index})" e-min="0" buttons="no">{{ item.discount }}</a>
+                                            <span ng-if="!order.can_edit">{{ item.discount }}</span>
+                                        </td>
                                         <td class="text-right">{{ item | price_net : item.quantity | currency}}</td>
                                     </tr>
                                     <tr>
@@ -101,7 +109,8 @@
                                         <td></td>
                                         <td class="hidden-xs"></td>
                                         <td class="hidden-xs"></td>
-                                        <td class="text-right">Итого, руб:</td>
+                                        <td></td>
+                                        <td class="text-right hidden-xs">Итого, руб:</td>
                                         <td class="text-right">{{total | currency}}</td>
                                     </tr>
                                 </tbody>
