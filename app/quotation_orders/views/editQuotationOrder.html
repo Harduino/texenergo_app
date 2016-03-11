@@ -165,7 +165,7 @@
     </div>
     <script type="text/ng-template" id="eqoModal.tmpl.html">
         <div class="modal-header">
-            <h3 class="modal-title">Изменить товар</h3>
+            <h3 class="modal-title">{{config.title}}</h3>
         </div>
         <div class="modal-body">
             <ui-select ui-select-infinity="pSelectConfig" ng-model="data.selectedProduct" theme="select2" reset-search-input="false" class="full-width">
@@ -183,8 +183,8 @@
             </ui-select>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-danger" type="button" ng-click="cancel()">Отмена</button>
-            <button class="btn btn-primary" type="button" ng-click="ok()">Изменить</button>
+            <button class="btn btn-danger" type="button" ng-click="cancel()">{{config.btnCancelText}}</button>
+            <button class="btn btn-primary" type="button" ng-click="ok()">{{config.btnOkText}}</button>
         </div>
     </script>
 </div>

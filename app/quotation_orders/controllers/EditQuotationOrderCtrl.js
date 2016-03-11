@@ -104,7 +104,12 @@
                 controller: 'EqoModalInstanceCtrl',
                 windowClass: 'eqo-centred-modal',
                 resolve:{
-                    product: null
+                    product: null,
+                    config: {
+                        title: 'Добавить товар',
+                        btnOkText: 'Добавить',
+                        btnCancelText: 'Отмена'
+                    }
                 }
             });
 
@@ -163,7 +168,8 @@
                 controller: 'EqoModalInstanceCtrl',
                 windowClass: 'eqo-centred-modal',
                 resolve: {
-                    product : p.product
+                    product : p.product,
+                    config: {}
                 }
             });
 
@@ -236,7 +242,7 @@
             });
         };
 
-    }]).controller("EqoModalInstanceCtrl", ['$scope', '$uibModalInstance', 'serverApi', 'product', function($scope, $uibModalInstance, serverApi, product){
+    }]).controller("EqoModalInstanceCtrl", ['$scope', '$uibModalInstance', 'serverApi', 'product', 'config', function($scope, $uibModalInstance, serverApi, product, config){
         var sc = $scope;
 
         sc.pSelectConfig = {
@@ -247,6 +253,11 @@
             selectedProduct: product,
             productsList: []
         };
+        sc.config = angular.extend({
+            title: 'Изменить товар',
+            btnOkText: 'Изменить',
+            btnCancelText: 'Отмена'
+        }, config);
 
         sc.ok = function () {
             $uibModalInstance.close(sc.data.selectedProduct);
