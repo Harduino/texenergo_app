@@ -5,7 +5,7 @@
 
     "use strict";
 
-    angular.module('app.customer_orders').controller('ViewCustomerOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', '$filter', 'customerOrdersNotifications', function($scope, $state, $stateParams, serverApi, funcFactory, $filter, notifications){
+    angular.module('app.customer_orders').controller('ViewCustomerOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', '$filter', 'customerOrdersNotifications', '$uibModal', function($scope, $state, $stateParams, serverApi, funcFactory, $filter, notifications, $uibModal){
         var sc = $scope;
         sc.order = {};
         sc.total = 0;
@@ -19,7 +19,11 @@
                 size:50
             },
             showFileModal: angular.noop,
-            titles: window.gon.index.CustomerOrder.objectTitle + ': №'
+            titles: window.gon.index.CustomerOrder.objectTitle + ': №',
+            sortOpts: {
+                update: updateRowPositionView,
+                items: "> .order-items"
+            }
         };
         sc.data = {
             networkData: null,
@@ -81,7 +85,48 @@
                 }
             });
         }
+        
+        // Заменяет товар в строке и вызывается из модального окна. Следовательно, не знаем index-а строки и поэтому ищем через for(){}
+        // Именно этим и отличается от sc.savProductChange
+        sc.saveProductSubstitute = function(data) {
+            serverApi.updateCustomerOrderProduct(sc.order.id, data.id, {
+                product_id: data.product_id
+            }, function(result){
+                if(!result.data.errors){
+                    for(var i=0; i<sc.order.customer_order_contents.length; i++){
+                        if(sc.order.customer_order_contents[i].id == data.id){
+                            sc.order.customer_order_contents[i] = result.data;
+                        }
+                    }
+                    funcFactory.showNotification('Успешно обновлены данные продукта', result.data.product.name, true);
+                }else{
+                    funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors);
+                }
+            });
+        }
 
+        /**
+         * Открываем модальное окно, чтобы заменить товар в Комплектации на другой
+         * Opens modal window with ability to change product of Product item.
+         * @param p - product
+         */
+        sc.changeCustomerOrderProductModal = function(p){
+            var modalInstance = $uibModal.open({
+                templateUrl: 'eqoChangeCustomerOrderProductModal.tmpl.html',
+                controller: 'EqoChangeCustomerOrderProductModalCtrl',
+                windowClass: 'eqo-centred-modal',
+                resolve: {
+                    product : p.product,
+                    config: {}
+                }
+            });
+
+            modalInstance.result.then(function (selectedProduct) {
+                sc.saveProductSubstitute({id: p.id, quantity: p.quantity, product_id: (selectedProduct._id || selectedProduct.id)});
+            });
+        };
+
+        
         /**
          * Get order details
          */
@@ -237,5 +282,49 @@
                 }
             }
         }
+        
+        function updateRowPositionView(e, ui){
+            var $this = $(this),
+                last_ind = angular.element(ui.item).scope().$index,
+                new_ind = ui.item.index(),
+                data = {customer_order: {command: "переместить_строку "+(last_ind+1)+"_на_" + (new_ind+1)}};
+            serverApi.updateCommandCustomerOrder(sc.order.id, data, function(result){
+                if(result.status == 200){
+                    sc.order.customer_order_contents.swapItemByindex(last_ind, new_ind);
+                }else{
+                    funcFactory.showNotification('Не удалось переместить сторку', result.data.errors);
+                    $this.sortable( "cancel" );
+                }
+            }, function(){
+                $this.sortable( "cancel" );
+            });
+        }
+    }]).controller("EqoChangeCustomerOrderProductModalCtrl", ['$scope', '$uibModalInstance', 'serverApi', 'product', 'config', function($scope, $uibModalInstance, serverApi, product, config){
+        var sc = $scope;
+
+        sc.pSelectConfig = {
+            startPage: 0,
+            dataMethod: serverApi.getSearch
+        };
+        sc.data = {
+            selectedProduct: product,
+            productsList: []
+        };
+        sc.config = angular.extend({
+            title: 'Изменить товар',
+            btnOkText: 'Изменить',
+            btnCancelText: 'Отмена'
+        }, config);
+
+        sc.ok = function () {
+            $uibModalInstance.close(sc.data.selectedProduct);
+        };
+
+        sc.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
     }]);
+//    .controller("EqoItemSelectorModalCtrl", ['$scope', '$uibModalInstance', 'data', function(sc, $uibModalInstance, data){
+//        sc.data = data;
+//    }]);
 }());
