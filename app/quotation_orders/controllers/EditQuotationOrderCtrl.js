@@ -325,6 +325,7 @@
                 select: function(item, data){
                     data.selectedId = element.product_id = item ?  item.id : null;
                     sc.saveElementChange(element);
+                    modal.close();
                 }
             });
         };
@@ -336,6 +337,7 @@
                 prop: "description",
                 select: function(item, data){
                     data.selectedId = product.element_id = item.id;
+                    modal.close();
                 }
             });
         };
