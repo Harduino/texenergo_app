@@ -135,8 +135,8 @@
          */
         sc.createAndAppendProductToElement = function(element){
             var modalInstance = $uibModal.open({
-                templateUrl: 'eqoModal.tmpl.html',
-                controller: 'EqoModalInstanceCtrl',
+                templateUrl: 'eqoChangeProductModal.tmpl.html',
+                controller: 'EqoChangeProductModalCtrl',
                 windowClass: 'eqo-centred-modal',
                 resolve:{
                     product: null,
@@ -263,8 +263,8 @@
          */
         sc.changeProductModal = function(p){
             var modalInstance = $uibModal.open({
-                templateUrl: 'eqoModal.tmpl.html',
-                controller: 'EqoModalInstanceCtrl',
+                templateUrl: 'eqoChangeProductModal.tmpl.html',
+                controller: 'EqoChangeProductModalCtrl',
                 windowClass: 'eqo-centred-modal',
                 resolve: {
                     product : p.product,
@@ -304,7 +304,29 @@
             });
         };
 
-    }]).controller("EqoModalInstanceCtrl", ['$scope', '$uibModalInstance', 'serverApi', 'product', 'config', function($scope, $uibModalInstance, serverApi, product, config){
+        sc.changeElementProduct = function(element){
+            var modal = dependentItemSelector({
+                list: sc.data.quotationOrder.products,
+                title: 'Выберите продукт',
+                selectedId: element.product_id
+            });
+        };
+        sc.changeProductElement = function(){
+
+        };
+
+       function dependentItemSelector (data){
+            return $uibModal.open({
+                templateUrl: 'eqoChangeProductModal.tmpl.html',
+                controller: 'EqoChangeProductModalCtrl',
+                windowClass: 'eqo-centred-modal',
+                resolve: {
+                    data : data
+                }
+            });
+        }
+
+    }]).controller("EqoChangeProductModalCtrl", ['$scope', '$uibModalInstance', 'serverApi', 'product', 'config', function($scope, $uibModalInstance, serverApi, product, config){
         var sc = $scope;
 
         sc.pSelectConfig = {
@@ -328,5 +350,7 @@
         sc.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
+    }]).controller("EqoItemSelectorModalCtrl", ['$scope', '$uibModalInstance', 'data', function(sc, $uibModalInstance, data){
+        sc.data = data;
     }]);
 }());
