@@ -371,25 +371,15 @@
         return function(item, prop){
             return $parse(prop)(item);
         }
-    }]).filter('eqoProductNameById', function(){
-        return function(collection, id){
+    }]).filter('eqoItemNameById', ['$parse', function($parse){
+        return function(collection, id, prop){
             if(id && collection.length){
                 for(var i=collection.length-1; i>-1; i--){
                     var item = collection[i];
-                    if(item.id === id) return item.product.name;
+                    if(item.id === id) return $parse(prop)(item);
                 }
             }
             return 'Не выбрано';
         }
-    }).filter('eqoElementNameById', function(){
-        return function(collection, id){
-            if(id && collection.length){
-                for(var i=collection.length-1; i>-1; i--){
-                    var item = collection[i];
-                    if(item.id === id) return item.description;
-                }
-            }
-            return 'Не выбрано';
-        }
-    });
+    }]);
 }());
