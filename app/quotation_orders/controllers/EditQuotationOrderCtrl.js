@@ -163,7 +163,8 @@
                     id: element.id,
                     schema_code: element.schema_code,
                     comment: element.comment,
-                    description: element.description
+                    description: element.description,
+                    product_id: element.product_id
                 }
             };
             serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
@@ -313,6 +314,7 @@
                 withEmpty: true,
                 select: function(item, data){
                     data.selectedId = element.product_id = item ?  item.id : null;
+                    sc.saveElementChange(element);
                 }
             });
         };

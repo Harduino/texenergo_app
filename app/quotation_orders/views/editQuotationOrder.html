@@ -75,10 +75,6 @@
                                                 </td>
                                                 <td>
                                                     <a class="editable-click" ng-click="changeElementProduct(element)">{{data.quotationOrder.products | eqoProductNameById : element.product_id}}</a>
-                                                    <!--<a editable-select-with-default="element.product" onaftersave="saveElementChange(element); syncElementProduct(element)" e-ng-options="item.product.name for item in data.quotationOrder.products track by item.id" buttons="no">-->
-                                                        <!--{{ element.product.product.name || 'Не выбрано' }}-->
-                                                    <!--</a>-->
-                                                    <!--<i class="fa fa-search-plus blue-hover" ng-click="createAndAppendProductToElement(element)"></i>-->
                                                 </td>
                                                 <td class="eqo-td-rm-ico" ng-click="removeElement(element, $index)">
                                                     <i class="fa fa-times-circle"></i>
