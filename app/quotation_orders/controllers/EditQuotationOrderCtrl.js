@@ -308,17 +308,30 @@
             var modal = dependentItemSelector({
                 list: sc.data.quotationOrder.products,
                 title: 'Выберите продукт',
-                selectedId: element.product_id
+                selectedId: element.product_id,
+                prop: "product.name",
+                withEmpty: true,
+                select: function(item, data){
+                    data.selectedId = element.product_id = item.id;
+                }
             });
         };
-        sc.changeProductElement = function(){
-
+        sc.changeProductElement = function(product){
+            var modal = dependentItemSelector({
+                list: sc.data.quotationOrder.elements,
+                title: 'Выберите элемент',
+                selectedId: product.element_id,
+                prop: "description",
+                select: function(item, data){
+                    data.selectedId = item.element_id = item.id;
+                }
+            });
         };
 
        function dependentItemSelector (data){
             return $uibModal.open({
-                templateUrl: 'eqoChangeProductModal.tmpl.html',
-                controller: 'EqoChangeProductModalCtrl',
+                templateUrl: 'eqoItemSelectorModal.tmpl.html',
+                controller: 'EqoItemSelectorModalCtrl',
                 windowClass: 'eqo-centred-modal',
                 resolve: {
                     data : data
@@ -352,5 +365,9 @@
         };
     }]).controller("EqoItemSelectorModalCtrl", ['$scope', '$uibModalInstance', 'data', function(sc, $uibModalInstance, data){
         sc.data = data;
+    }]).filter("parseProp", ['$parse', function($parse){
+        return function(item, prop){
+            return $parse(prop)(item);
+        }
     }]);
 }());
