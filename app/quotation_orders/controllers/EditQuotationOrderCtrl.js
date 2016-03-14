@@ -312,7 +312,7 @@
                 prop: "product.name",
                 withEmpty: true,
                 select: function(item, data){
-                    data.selectedId = element.product_id = item.id;
+                    data.selectedId = element.product_id = item ?  item.id : null;
                 }
             });
         };
@@ -323,7 +323,7 @@
                 selectedId: product.element_id,
                 prop: "description",
                 select: function(item, data){
-                    data.selectedId = item.element_id = item.id;
+                    data.selectedId = product.element_id = item.id;
                 }
             });
         };
@@ -369,5 +369,25 @@
         return function(item, prop){
             return $parse(prop)(item);
         }
-    }]);
+    }]).filter('eqoProductNameById', function(){
+        return function(collection, id){
+            if(id && collection.length){
+                for(var i=collection.length-1; i>-1; i--){
+                    var item = collection[i];
+                    if(item.id === id) return item.product.name;
+                }
+            }
+            return 'Не выбрано';
+        }
+    }).filter('eqoElementNameById', function(){
+        return function(collection, id){
+            if(id && collection.length){
+                for(var i=collection.length-1; i>-1; i--){
+                    var item = collection[i];
+                    if(item.id === id) return item.description;
+                }
+            }
+            return 'Не выбрано';
+        }
+    });
 }());

@@ -74,7 +74,7 @@
                                                     <a editable-text="element.comment" onaftersave="saveElementChange(element)" buttons="no">{{ element.comment || 'Нет комментария' }}</a>
                                                 </td>
                                                 <td>
-                                                    <a class="editable-click" ng-click="changeElementProduct(element)">Не выбрано</a>
+                                                    <a class="editable-click" ng-click="changeElementProduct(element)">{{data.quotationOrder.products | eqoProductNameById : element.product_id}}</a>
                                                     <!--<a editable-select-with-default="element.product" onaftersave="saveElementChange(element); syncElementProduct(element)" e-ng-options="item.product.name for item in data.quotationOrder.products track by item.id" buttons="no">-->
                                                         <!--{{ element.product.product.name || 'Не выбрано' }}-->
                                                     <!--</a>-->
@@ -149,7 +149,7 @@
                                                     <!--<a editable-select="item.element" onaftersave="saveProductChange(item)" e-ng-options="element.description for element in data.quotationOrder.elements track by element.id" buttons="no">-->
                                                         <!--{{ item.element.description || 'Не выбрано' }}-->
                                                     <!--</a>-->
-                                                    <a class="editable-click" ng-click="changeProductElement(item)">Не выбрано</a>
+                                                    <a class="editable-click" ng-click="changeProductElement(item)">{{data.quotationOrder.elements | eqoElementNameById : item.element_id}}</a>
                                                 </td>
                                                 <td class="eqo-td-rm-ico" ng-click="removeProduct(item, $index)">
                                                     <i class="fa fa-times-circle"></i>
