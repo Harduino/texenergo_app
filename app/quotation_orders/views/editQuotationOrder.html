@@ -61,7 +61,7 @@
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="element in data.quotationOrder.elements" class="order-items a-row-add" ng-hide="element.hidden">
-                                                <td ng-class="{'danger': element.highlight }" ng-mouseover="highlight('products', 'element.id', element.id)" ng-mouseleave="highlight('products')" ng-click="hideIndependentRows(element, 'products', 'element.id', element.id, 'elements')">
+                                                <td ng-class="{'danger': element.highlight }" ng-mouseover="highlight('products', 'element_id', element.id)" ng-mouseleave="highlight('products')" ng-click="hideIndependentRows(element, 'products', 'element.id', element.id, 'elements')">
                                                     <i class="eqo-td-circle-ico" ng-class="{'active': element.hideIndependentRows}"></i>
                                                 </td>
                                                 <td>
@@ -131,7 +131,7 @@
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="item in data.quotationOrder.products" class="order-items a-row-add" ng-hide="item.hidden">
-                                                <td ng-class="{'danger': item.highlight }" ng-mouseover="highlight('elements', 'product.id', item.id)" ng-mouseleave="highlight('elements')" ng-click="hideIndependentRows(item, 'elements', 'product.id', item.id, 'products')">
+                                                <td ng-class="{'danger': item.highlight }" ng-mouseover="highlight('elements', 'product_id', item.id)" ng-mouseleave="highlight('elements')" ng-click="hideIndependentRows(item, 'elements', 'product.id', item.id, 'products')">
                                                     <i class="eqo-td-circle-ico" ng-class="{'active': item.hideIndependentRows}"></i>
                                                 </td>
                                                 <td>
@@ -142,9 +142,6 @@
                                                     <a editable-number="item.quantity" onaftersave="saveProductChange(item)" e-min="0" buttons="no">{{ item.quantity || 'Значение не установлено'}}</a>
                                                 </td>
                                                 <td>
-                                                    <!--<a editable-select="item.element" onaftersave="saveProductChange(item)" e-ng-options="element.description for element in data.quotationOrder.elements track by element.id" buttons="no">-->
-                                                        <!--{{ item.element.description || 'Не выбрано' }}-->
-                                                    <!--</a>-->
                                                     <a class="editable-click" ng-click="changeProductElement(item)">{{data.quotationOrder.elements | eqoItemNameById : item.element_id : "description"}}</a>
                                                 </td>
                                                 <td class="eqo-td-rm-ico" ng-click="removeProduct(item, $index)">
