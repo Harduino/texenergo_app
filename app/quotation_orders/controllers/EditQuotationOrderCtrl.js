@@ -288,17 +288,27 @@
             });
         };
 
-        sc.hideIndependentRows = function(item, dataProp, byProp, propValue, collectionProp){
-            var hide = !item.hideIndependentRows,
-                c = hide ? [byProp, propValue] : ["hidden", false];
+        sc.hideTableRows = function(row, type){
+            var cf = {
+                    "product": {
+                        self: "products",
+                        hide: "elements"
+                    },
+                    "element": {
+                        self: "elements",
+                        hide: "products"
+                    }
+                }[type],
+                hide = !row.hideIndependentRows,
+                c = hide ? [type + "_id", row.id] : ["hidden", false];
 
-            hide && sc.data.quotationOrder[collectionProp].map(function(item){
-                 if(item.hideIndependentRows) item.hideIndependentRows = false;
+            hide && sc.data.quotationOrder[cf.self].map(function(item){
+                if(item.hideIndependentRows) item.hideIndependentRows = false;
             });
 
-            item.hideIndependentRows = hide;
+            row.hideIndependentRows = hide;
 
-            sc.data.quotationOrder[dataProp].map(function(item){
+            sc.data.quotationOrder[cf.hide].map(function(item){
                 var val = $parse(c[0])(item),
                     result = (val !== c[1]);
                 item.hidden = !result && hide ? false : hide;
@@ -315,6 +325,7 @@
                 select: function(item, data){
                     data.selectedId = element.product_id = item ?  item.id : null;
                     sc.saveElementChange(element);
+                    modal.close();
                 }
             });
         };
@@ -326,6 +337,7 @@
                 prop: "description",
                 select: function(item, data){
                     data.selectedId = product.element_id = item.id;
+                    modal.close();
                 }
             });
         };
@@ -371,25 +383,15 @@
         return function(item, prop){
             return $parse(prop)(item);
         }
-    }]).filter('eqoProductNameById', function(){
-        return function(collection, id){
+    }]).filter('eqoItemNameById', ['$parse', function($parse){
+        return function(collection, id, prop){
             if(id && collection.length){
                 for(var i=collection.length-1; i>-1; i--){
                     var item = collection[i];
-                    if(item.id === id) return item.product.name;
+                    if(item.id === id) return $parse(prop)(item);
                 }
             }
             return 'Не выбрано';
         }
-    }).filter('eqoElementNameById', function(){
-        return function(collection, id){
-            if(id && collection.length){
-                for(var i=collection.length-1; i>-1; i--){
-                    var item = collection[i];
-                    if(item.id === id) return item.description;
-                }
-            }
-            return 'Не выбрано';
-        }
-    });
+    }]);
 }());
