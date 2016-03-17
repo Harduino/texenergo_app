@@ -10,7 +10,7 @@
 
         sc.visual = {
 //            navButtsOptions:[{ type: 'new', callback: createNewOrder }],
-            navTableButts:[{type:'edit', callback:editQuotationOrder}],//, {type:'table_edit', callback:editCustomerOrder}, {type:'remove', callback:removeCustomerOrder}],
+            navTableButts:[{type:'table_edit', callback:editQuotationOrder}],//, {type:'table_edit', callback:editCustomerOrder}, {type:'remove', callback:removeCustomerOrder}],
             canAddPartner: CanCan.can('see_multiple', 'Partner'),
             titles:[window.gon.index.QuotationOrder.indexTitle]
         };

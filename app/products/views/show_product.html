@@ -58,7 +58,7 @@
                                 <input class="form-control" type="text">
                             </div>
                             <div class="widget-body">
-                                <img class="img-thumbnail" ng-src="{{ product.image_url }}" img-error="/assets/smart_admin/no_image.png", style="max-height: 200px; max-width: 200px;">
+                                <img class="img-thumbnail" ng-src="{{ product.image_url }}" img-error="http://cdn.texenergo.com/no_image.png", style="max-height: 200px; max-width: 200px;">
                             </div>
                         </div>
                     </div>
@@ -223,9 +223,9 @@
                                     <tbody>
                                         <tr ng-repeat="item in product.product_orders">
                                             <td>{{ item.date | date:'dd/MM/yy HH:mm' }}</td>
-                                            <td><a href="/#/{{ item.type=='DispatchOrder' ? 'dispatch_orders' : 'receive_orders' }}/{{ item.id }}">{{ item.number }}</a></td>
+                                            <td><a href="/#/{{ item.type=='DispatchOrder' ? 'dispatch_orders' : 'receive_orders' }}/{{ item.id }}">{{ item.number || "Б/Н" }}</a></td>
                                             <td>{{ item.status }}</td>
-                                            <td>{{ item.quantity }}</td>
+                                            <td class="{{ item.type=='DispatchOrder' ? 'danger' : 'success' }}">{{ item.quantity }}</td>
                                         </tr>
                                     </tbody>
                                 </table>

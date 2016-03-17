@@ -63,7 +63,7 @@
                                         <div class="search-td col-md-1">
                                             <img ng-src="{{product.image_url}}">
                                         </div>
-                                        <div class="search-td col-md-7" ng-bind-html="product.name | highlight: $select.search"></div>
+                                        <div class="search-td col-md-7" ng-bind-html="(product.name + ' ' + product.article) | highlight: $select.search"></div>
                                         <div class="search-td col-md-2">{{product.stock}} ед.</div>
                                         <div class="search-td col-md-2">{{product.price | currency}}</div>
                                     </div>

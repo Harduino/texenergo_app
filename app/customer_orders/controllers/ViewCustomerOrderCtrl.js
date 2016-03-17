@@ -324,7 +324,4 @@
             $uibModalInstance.dismiss('cancel');
         };
     }]);
-//    .controller("EqoItemSelectorModalCtrl", ['$scope', '$uibModalInstance', 'data', function(sc, $uibModalInstance, data){
-//        sc.data = data;
-//    }]);
 }());
