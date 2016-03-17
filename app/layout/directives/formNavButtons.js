@@ -35,7 +35,8 @@
                     label_pdf:{name:'Бирка', ico:'truck'},
                     packing_list_pdf:{name:'Упаковочный лист', ico:'list-ol'},
                     at_partners:{name:'У партнёров', ico:'exchange'},
-                    automatically: {name: 'Автоматически', ico: 'rocket'}
+                    automatically: {name: 'Автоматически', ico: 'rocket'},
+                    add: {ico: "plus", class: 'btn-success'}
                 };
 
                 var btnClass = attrs.contentClass || 'btn btn-success';
