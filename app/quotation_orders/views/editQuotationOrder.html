@@ -87,7 +87,7 @@
                         </div>
                     </div>
                 </article>
-                <article class="col-md-12">
+                <article class="col-md-6">
                     <div id="edit_quotation_order_3" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false">
                         <header>
                             <h2>Комплектация</h2>
@@ -147,6 +147,39 @@
                                                 <td class="eqo-td-rm-ico" ng-click="removeProduct(item, $index)">
                                                     <i class="fa fa-times-circle"></i>
                                                 </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <article class="col-md-6">
+                    <div id="edit_quotation_order_4" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false">
+                        <header>
+                            <h2>Смета</h2>
+                        </header>
+                        <div class="widget-body">
+                            <div class="well well-clean well-white">
+                                <div class="row">
+                                    <table class="table table-bordered margin-top-10">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Наименование</th>
+                                                <th>Количество</th>
+                                                <th>Цена, р</th>
+                                                <th>Итого, р</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="prod in data.quotationOrder.products">
+                                                <td>{{ $index + 1}}</td>
+                                                <td>{{prod.product.name}}</td>
+                                                <td>{{prod.quantity}}</td>
+                                                <td>{{prod.product.price}}</td>
+                                                <td>{{prod.product.price * prod.quantity}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
