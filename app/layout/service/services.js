@@ -120,12 +120,15 @@
             var path = '/api/quotation_orders?page='+page + (query ? ('&q=' + query) : '');
             $http.get(path, config).then(success, fail);
         };
+        this.createQuotationOrder = function(data, success, fail){
+            $http.post('/api/quotation_orders/', data).then(success, fail);
+        };
+        this.deleteQuotationOrder = function(id, success, fail){
+            $http.delete('/api/quotation_orders/'+id).then(success, fail);
+        };
         this.getQuotationOrderDetails = function(id, success, fail){
             $http.get('/api/quotation_orders/' + id).then(success, fail);
         };
-//        this.addQuotationOrderElement = function(id, data, success, fail){
-//            $http.post('/api/quotation_orders/'+id+'/elements', data).then(success, fail);
-//        };
         this.updateQuotationOrder = function(id, data, success, fail){
             $http.put('/api/quotation_orders/' + id, data).then(success, fail);
         };

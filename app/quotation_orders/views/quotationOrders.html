@@ -26,4 +26,30 @@
         </table>
         <te-scroll-top></te-scroll-top>
     </div>
+    <div class="modal fade" id="createNewQuotationModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">Создать новый рассчёт</h4>
+                </div>
+                <div class="modal-body">
+                    <section class="form-group">
+                        <label class="control-label">Название</label>
+                        <input type="text" ng-model="data.newQuotationOrderData.title" class="input-sm form-control">
+                    </section>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearNewQuotationOrder()">
+                        Отмена
+                    </button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addNewQuotationOrder()">
+                        Сохранить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
