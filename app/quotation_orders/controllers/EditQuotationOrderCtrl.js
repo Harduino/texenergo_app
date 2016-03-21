@@ -190,7 +190,8 @@
                 update_product: {
                     id: item.id,
                     quantity: item.quantity,
-                    product_id: item.product_id
+                    product_id: item.product_id,
+                    element_id: item.element_id || null
                 }
             };
             serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
@@ -327,6 +328,8 @@
                 prop: "description",
                 select: function(item, data){
                     data.selectedId = product.element_id = item.id;
+                    var d = angular.extend({product_id: product.product.id}, product);
+                    sc.saveProductChange(d);
                     modal.close();
                 }
             });
