@@ -55,7 +55,6 @@
                                                 <th>Описание</th>
                                                 <th>Код</th>
                                                 <th>Комментарий</th>
-                                                <th>Товар</th>
                                                 <th class="eqo-th-iconed"></th>
                                             </tr>
                                         </thead>
@@ -72,9 +71,6 @@
                                                 </td>
                                                 <td>
                                                     <a editable-text="element.comment" onaftersave="saveElementChange(element)" buttons="no">{{ element.comment || 'Нет комментария' }}</a>
-                                                </td>
-                                                <td>
-                                                    <a class="editable-click" ng-click="changeElementProduct(element)">{{data.quotationOrder.products | eqoItemNameById : element.product_id : "product.name"}}</a>
                                                 </td>
                                                 <td class="eqo-td-rm-ico" ng-click="removeElement(element, $index)">
                                                     <i class="fa fa-times-circle"></i>
@@ -131,7 +127,7 @@
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="item in data.quotationOrder.products" class="order-items a-row-add" ng-hide="item.hidden">
-                                                <td ng-class="{'danger': item.highlight }" ng-mouseover="highlight('elements', 'product_id', item.id)" ng-mouseleave="highlight('elements')" ng-click="hideTableRows(item, 'product')">
+                                                <td ng-class="{'danger': item.highlight }" ng-mouseover="highlight('elements', 'id', item.element_id)" ng-mouseleave="highlight('elements')" ng-click="hideTableRows(item, 'product')">
                                                     <i class="eqo-td-circle-ico" ng-class="{'active': item.hideIndependentRows}"></i>
                                                 </td>
                                                 <td>

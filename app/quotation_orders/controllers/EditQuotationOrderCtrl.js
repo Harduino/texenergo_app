@@ -315,20 +315,6 @@
             });
         };
 
-        sc.changeElementProduct = function(element){
-            var modal = dependentItemSelector({
-                list: sc.data.quotationOrder.products,
-                title: 'Выберите продукт',
-                selectedId: element.product_id,
-                prop: "product.name",
-                withEmpty: true,
-                select: function(item, data){
-                    data.selectedId = element.product_id = item ?  item.id : null;
-                    sc.saveElementChange(element);
-                    modal.close();
-                }
-            });
-        };
         sc.changeProductElement = function(product){
             var modal = dependentItemSelector({
                 list: sc.data.quotationOrder.elements,
