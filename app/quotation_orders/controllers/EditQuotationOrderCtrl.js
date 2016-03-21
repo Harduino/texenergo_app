@@ -292,15 +292,19 @@
             var cf = {
                     "product": {
                         self: "products",
-                        hide: "elements"
+                        hide: "elements",
+                        sProp: "id",
+                        byProp: "element_id"
                     },
                     "element": {
                         self: "elements",
-                        hide: "products"
+                        hide: "products",
+                        sProp: "element_id",
+                        byProp: "id"
                     }
                 }[type],
                 hide = !row.hideIndependentRows,
-                c = hide ? [type + "_id", row.id] : ["hidden", false];
+                c = hide ? [cf.sProp, row[cf.byProp]] : ["hidden", false];
 
             hide && sc.data.quotationOrder[cf.self].map(function(item){
                 if(item.hideIndependentRows) item.hideIndependentRows = false;
