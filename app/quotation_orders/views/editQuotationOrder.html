@@ -174,8 +174,8 @@
                                                 <td>{{ $index + 1}}</td>
                                                 <td>{{prod.product.name}}</td>
                                                 <td>{{prod.quantity}}</td>
-                                                <td>{{prod.product.price}}</td>
-                                                <td>{{prod.product.price * prod.quantity}}</td>
+                                                <td>{{prod.product.price | number : 2}}</td>
+                                                <td>{{prod.product.price * prod.quantity | number : 2}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
