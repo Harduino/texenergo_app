@@ -633,3 +633,15 @@ a.black {
 .scrollable-y{
     overflow-y: auto;
 }
+.td-nb-btn{
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    padding: 4px;
+}
+.td-nb-btn.themed{
+    color: rgba(76, 79, 83, 0.5);
+}
+.td-nb-btn.themed:hover{
+    color: rgba(76, 79, 83, 1);
+}

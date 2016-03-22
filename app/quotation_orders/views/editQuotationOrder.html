@@ -65,6 +65,7 @@
                                                 </td>
                                                 <td>
                                                     <a editable-text="element.description" onaftersave="saveElementChange(element)" buttons="no">{{ element.description || 'Нет описания' }}</a>
+                                                    <i ng-click="createAndAppendProductToElement(element)" uib-tooltip="Добавить товар" tooltip-popup-delay="300" class="fa fa-plus td-nb-btn themed"></i>
                                                 </td>
                                                 <td>
                                                     <a editable-text="element.schema_code" onaftersave="saveElementChange(element)" buttons="no">{{ element.schema_code || 'Нет кода' }}</a>
@@ -108,7 +109,7 @@
                                                 </ui-select-choices>
                                             </ui-select>
                                         </div>
-                                        <div class="col-xs-2 col-sm-2 col-md-1 text-align-center">
+                                        <div class="col-xs-2 col-sm-2 col-md-1 text-align-center no-padding">
                                             <button class="btn btn-success" ng-click="addNewProduct(data.selectedProduct, true)" ng-disabled="!data.selectedProduct">
                                                 <i class="fa fa-plus"></i>
                                             </button>
@@ -159,7 +160,7 @@
                         <div class="widget-body">
                             <div class="well well-clean well-white">
                                 <div class="row">
-                                    <table class="table table-bordered margin-top-10">
+                                    <table class="table table-bordered">
                                         <thead>
                                             <tr>
                                                 <th></th>
