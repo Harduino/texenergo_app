@@ -41,10 +41,11 @@
                     }
                 });
 
-            modalInstance.result.then(function (selectedProduct) {
-                sc.saveProductSubstitute({id: p.id, quantity: p.quantity, product_id: (selectedProduct._id || selectedProduct.id)});
-            });
-        };
+                modalInstance.result.then(function (selectedProduct) {
+                    console.log(p);
+                    sc.saveProductSubstitute({id: p.id, quantity: p.quantity, product_id: (selectedProduct._id || selectedProduct.id)});
+                });
+            }
 
             /**
              * Открывает view с просмотром информации о продукте
@@ -98,7 +99,7 @@
             sc.addProductToCustomerOrder = function(customer_order){
                 var post = {
                     product_id: sc.data.product.id,
-                    quantity: (sc.data.quantity || 1),
+                    quantity: (sc.data.quantity || 1)
                 };
 
                 serverApi.addCustomerOrderProduct(customer_order.id, post, function(result){
