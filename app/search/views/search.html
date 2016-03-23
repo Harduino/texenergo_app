@@ -19,8 +19,8 @@
             <tbody>
                 <tr ng-repeat="item in data.searchList">
                     <td class="hidden-xs"><img ng-src="{{item.image_url}}" style="max-heigth: 40px; max-width: 40px;" class="img img-responsive" img-error="http://cdn.texenergo.com/no_image.png"></img></td>
-                    <td><a ng-href="/#/products/{{item.id || item._id}}" class="black">{{item.article}}</a></td>
-                    <td>{{item.name}}</td>
+                    <td te-copy-to-buffer><a ng-href="/#/products/{{item.id || item._id}}" class="black" te-buffer-value>{{item.article}}</a></td>
+                    <td te-copy-to-buffer><span te-buffer-value>{{item.name}}</span></td>
                     <td>{{item.manufacturer}}</td>
                     <td class="no-warp">{{item.price | currency}}</td>
                     <td>{{item.stock}}</td>
