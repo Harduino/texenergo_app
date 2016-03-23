@@ -342,7 +342,7 @@
                 }
             }
             return false;
-        }
+        };
 
        function dependentItemSelector (data){
             return $uibModal.open({

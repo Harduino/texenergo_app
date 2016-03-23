@@ -13,9 +13,11 @@
         return {
             restrict: 'A',
             transclude: true,
-            link: function(sc, element, attrs){
-                var input = element.find(".te-c-buffer-input");
-                sc.copy = function(){
+            link: function(scope, element, attrs){
+                var input = element.find(".te-c-buffer-input"),
+                    btn = element.find('.te-c-to-buffer-ico');
+
+                var copy = function(){
                     var value = "",
                         vals = element.find("[te-buffer-value='']"),
                         length = vals.length;
@@ -32,6 +34,12 @@
                     input.select();
                     document.execCommand('copy');
                 };
+
+                btn.click(copy);
+
+                scope.$on("$destroy", function(){
+                    btn.off("click", copy);
+                });
             },
             template: '<ng-transclude></ng-transclude>' +
                 '<i class="fa fa-copy te-c-to-buffer-ico" ng-click="copy()">' +
