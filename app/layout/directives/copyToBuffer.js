@@ -42,7 +42,7 @@
                 });
             },
             template: '<ng-transclude></ng-transclude>' +
-                '<i class="fa fa-copy te-c-to-buffer-ico" ng-click="copy()">' +
+                '<i class="fa fa-copy te-c-to-buffer-ico">' +
                 '<input class="te-c-buffer-input" type="text">' +
                 '</i>'
         }
