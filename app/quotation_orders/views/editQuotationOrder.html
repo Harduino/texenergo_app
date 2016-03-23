@@ -65,6 +65,7 @@
                                                 </td>
                                                 <td>
                                                     <a editable-text="element.description" onaftersave="saveElementChange(element)" buttons="no">{{ element.description || 'Нет описания' }}</a>
+                                                    <em ng-if="!isElementLinked(element)" class="pull-right text-danger">Не связан!</em>
                                                     <i ng-click="createAndAppendProductToElement(element)" uib-tooltip="Добавить товар" tooltip-popup-delay="300" class="fa fa-plus td-nb-btn themed"></i>
                                                 </td>
                                                 <td>

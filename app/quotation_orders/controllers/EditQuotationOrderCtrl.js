@@ -334,6 +334,15 @@
                 }
             });
         };
+        
+        sc.isElementLinked = function(element){
+            for(var i=0; i<sc.data.quotationOrder.products.length; i++) {
+                if(sc.data.quotationOrder.products[i].element_id==element.id){
+                    return true;
+                }
+            }
+            return false;
+        }
 
        function dependentItemSelector (data){
             return $uibModal.open({
