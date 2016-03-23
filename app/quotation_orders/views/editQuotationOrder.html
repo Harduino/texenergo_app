@@ -134,6 +134,9 @@
                                                 </td>
                                                 <td>
                                                     <a class="editable-click" ng-click="changeProductModal(item)">{{ item.product.name }}</a>
+                                                    <button ng-if="item.message" class="btn btn-{{item.message.level}}" title="{{item.message.text}}">
+                                                        !
+                                                    </button>
                                                 </td>
                                                 <td>{{ item.product.article }}</td>
                                                 <td>
