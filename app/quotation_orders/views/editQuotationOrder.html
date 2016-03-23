@@ -55,7 +55,6 @@
                                                 <th>Описание</th>
                                                 <th>Код</th>
                                                 <th>Комментарий</th>
-                                                <th>Товар</th>
                                                 <th class="eqo-th-iconed"></th>
                                             </tr>
                                         </thead>
@@ -66,15 +65,16 @@
                                                 </td>
                                                 <td>
                                                     <a editable-text="element.description" onaftersave="saveElementChange(element)" buttons="no">{{ element.description || 'Нет описания' }}</a>
+                                                    <span ng-if="!isElementLinked(element)">
+                                                        <em class="pull-right text-danger">Не связан!</em>
+                                                        <i ng-click="createAndAppendProductToElement(element)" uib-tooltip="Добавить товар" tooltip-popup-delay="300" class="fa fa-plus td-nb-btn themed"></i>
+                                                    </span>
                                                 </td>
                                                 <td>
                                                     <a editable-text="element.schema_code" onaftersave="saveElementChange(element)" buttons="no">{{ element.schema_code || 'Нет кода' }}</a>
                                                 </td>
                                                 <td>
                                                     <a editable-text="element.comment" onaftersave="saveElementChange(element)" buttons="no">{{ element.comment || 'Нет комментария' }}</a>
-                                                </td>
-                                                <td>
-                                                    <a class="editable-click" ng-click="changeElementProduct(element)">{{data.quotationOrder.products | eqoItemNameById : element.product_id : "product.name"}}</a>
                                                 </td>
                                                 <td class="eqo-td-rm-ico" ng-click="removeElement(element, $index)">
                                                     <i class="fa fa-times-circle"></i>
@@ -112,7 +112,7 @@
                                                 </ui-select-choices>
                                             </ui-select>
                                         </div>
-                                        <div class="col-xs-2 col-sm-2 col-md-1 text-align-center">
+                                        <div class="col-xs-2 col-sm-2 col-md-1 text-align-center no-padding">
                                             <button class="btn btn-success" ng-click="addNewProduct(data.selectedProduct, true)" ng-disabled="!data.selectedProduct">
                                                 <i class="fa fa-plus"></i>
                                             </button>
@@ -131,11 +131,14 @@
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="item in data.quotationOrder.products" class="order-items a-row-add" ng-hide="item.hidden">
-                                                <td ng-class="{'danger': item.highlight }" ng-mouseover="highlight('elements', 'product_id', item.id)" ng-mouseleave="highlight('elements')" ng-click="hideTableRows(item, 'product')">
+                                                <td ng-class="{'danger': item.highlight }" ng-mouseover="highlight('elements', 'id', item.element_id)" ng-mouseleave="highlight('elements')" ng-click="hideTableRows(item, 'product')">
                                                     <i class="eqo-td-circle-ico" ng-class="{'active': item.hideIndependentRows}"></i>
                                                 </td>
                                                 <td>
                                                     <a class="editable-click" ng-click="changeProductModal(item)">{{ item.product.name }}</a>
+                                                    <button ng-if="item.message" class="btn btn-{{item.message.level}}" title="{{item.message.text}}">
+                                                        !
+                                                    </button>
                                                 </td>
                                                 <td>{{ item.product.article }}</td>
                                                 <td>
@@ -163,7 +166,7 @@
                         <div class="widget-body">
                             <div class="well well-clean well-white">
                                 <div class="row">
-                                    <table class="table table-bordered margin-top-10">
+                                    <table class="table table-bordered">
                                         <thead>
                                             <tr>
                                                 <th></th>
@@ -178,8 +181,8 @@
                                                 <td>{{ $index + 1}}</td>
                                                 <td>{{prod.product.name}}</td>
                                                 <td>{{prod.quantity}}</td>
-                                                <td>{{prod.product.price}}</td>
-                                                <td>{{prod.product.price * prod.quantity}}</td>
+                                                <td>{{prod.product.price | number : 2}}</td>
+                                                <td>{{prod.product.price * prod.quantity | number : 2}}</td>
                                             </tr>
                                         </tbody>
                                     </table>

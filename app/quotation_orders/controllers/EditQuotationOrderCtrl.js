@@ -190,13 +190,14 @@
                 update_product: {
                     id: item.id,
                     quantity: item.quantity,
-                    product_id: item.product_id
+                    product_id: item.product_id,
+                    element_id: item.element_id || null
                 }
             };
             serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
                 if(result.status == 200 && !result.data.errors){
                     for(var i=0; i < sc.data.quotationOrder.products.length; i++) {
-                        if (sc.data.quotationOrder.products[i] == result.data.id) {
+                        if (sc.data.quotationOrder.products[i].id == result.data.id) {
                             sc.data.quotationOrder.products[i] = result.data;
                             funcFactory.showNotification("Удача", "Обновил товар", true);
                             break;
@@ -292,15 +293,19 @@
             var cf = {
                     "product": {
                         self: "products",
-                        hide: "elements"
+                        hide: "elements",
+                        sProp: "id",
+                        byProp: "element_id"
                     },
                     "element": {
                         self: "elements",
-                        hide: "products"
+                        hide: "products",
+                        sProp: "element_id",
+                        byProp: "id"
                     }
                 }[type],
                 hide = !row.hideIndependentRows,
-                c = hide ? [type + "_id", row.id] : ["hidden", false];
+                c = hide ? [cf.sProp, row[cf.byProp]] : ["hidden", false];
 
             hide && sc.data.quotationOrder[cf.self].map(function(item){
                 if(item.hideIndependentRows) item.hideIndependentRows = false;
@@ -315,20 +320,6 @@
             });
         };
 
-        sc.changeElementProduct = function(element){
-            var modal = dependentItemSelector({
-                list: sc.data.quotationOrder.products,
-                title: 'Выберите продукт',
-                selectedId: element.product_id,
-                prop: "product.name",
-                withEmpty: true,
-                select: function(item, data){
-                    data.selectedId = element.product_id = item ?  item.id : null;
-                    sc.saveElementChange(element);
-                    modal.close();
-                }
-            });
-        };
         sc.changeProductElement = function(product){
             var modal = dependentItemSelector({
                 list: sc.data.quotationOrder.elements,
@@ -337,9 +328,20 @@
                 prop: "description",
                 select: function(item, data){
                     data.selectedId = product.element_id = item.id;
+                    var d = angular.extend({product_id: product.product.id}, product);
+                    sc.saveProductChange(d);
                     modal.close();
                 }
             });
+        };
+        
+        sc.isElementLinked = function(element){
+            for(var i=0; i<sc.data.quotationOrder.products.length; i++) {
+                if(sc.data.quotationOrder.products[i].element_id==element.id){
+                    return true;
+                }
+            }
+            return false;
         };
 
        function dependentItemSelector (data){

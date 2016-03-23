@@ -38,7 +38,7 @@ gulp.task('libs', function(){
         'assets/plugin/angular-sanitize/angular-sanitize.min.js',
         'assets/plugin/angular-animate/angular-animate.min.js',
         'assets/plugin/angular-cookies/angular-cookies.min.js',
-        'assets/plugin/angular-bootstrap/ui-bootstrap-custom-tpls-1.2.4.min.js',
+        'assets/plugin/angular-bootstrap/ui-bootstrap-custom-tpls-1.2.5.min.js',
         
         'assets/plugin/ui-select/select.min.js',
         'assets/plugin/fastclick/lib/fastclick.js',

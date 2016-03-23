@@ -55,6 +55,7 @@ appConfig.sound_on = true;
         'angular.d3',
         'te.infinity.scroll',
         'te-jq-ui',
+        'teBuffer',
         
         // Permissions
         'cancan.export',

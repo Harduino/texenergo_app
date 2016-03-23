@@ -6,11 +6,14 @@
 
     'use strict';
 
-    angular.module('app.products').controller('ProductCtrl', ['$scope', '$stateParams', 'serverApi', '$state', 'funcFactory', function($scope, $stateParams, serverApi, $state, funcFactory){
+    angular.module('app.products').controller('ProductCtrl', ['$scope', '$stateParams', 'serverApi', '$state', 'funcFactory', '$uibModal', function($scope, $stateParams, serverApi, $state, funcFactory, $uibModal){
         var sc = $scope;
 
         sc.visual = {
-            navButtsOptions:[{type:'edit', callback: goToEdit}, {type:'logs', callback: goToPartnerLogs}, {type: 'at_partners', callback: goToSupplierInfos}],
+            navButtsOptions:[{type:'edit', callback: goToEdit}, {type:'logs', callback: goToPartnerLogs},
+                {type: 'at_partners', callback: goToSupplierInfos},
+                {type:'add', callback:appendProductToCustomerOrder}
+            ],
             roles: {}
         };
 
@@ -33,6 +36,17 @@
                 });
             }
         };
+
+        function appendProductToCustomerOrder(product_id){
+            $uibModal.open({
+                templateUrl: 'app/layout/partials/productToCustomerOrder.html',
+                controller: 'productToCustomerOrderModalCtrl',
+                windowClass: 'eqo-centred-modal',
+                resolve: {
+                    product : {id: product_id}
+                }
+            });
+        }
 
         function goToEdit(){
             $state.go('app.product.edit', $stateParams);
