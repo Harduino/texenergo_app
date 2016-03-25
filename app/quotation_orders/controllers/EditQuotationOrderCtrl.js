@@ -143,7 +143,8 @@
                     config: {
                         title: 'Добавить товар',
                         btnOkText: 'Добавить',
-                        btnCancelText: 'Отмена'
+                        btnCancelText: 'Отмена',
+                        searchText: element.comment
                     }
                 }
             });
@@ -357,6 +358,12 @@
 
     }]).controller("EqoChangeProductModalCtrl", ['$scope', '$uibModalInstance', 'serverApi', 'product', 'config', function($scope, $uibModalInstance, serverApi, product, config){
         var sc = $scope;
+
+        sc.initProdSelect = function(){
+            if(config.searchText){
+                angular.element('#eqo_cp_modal_p_select').data().$uiSelectController.search = config.searchText;
+            }
+        };
 
         sc.pSelectConfig = {
             startPage: 0,
