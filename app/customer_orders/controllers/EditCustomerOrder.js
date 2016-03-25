@@ -82,7 +82,6 @@
             sc.productForAppend = item;
             sc.productForAppend.id = item.id || item._id;
             sc.productForAppend.quantity = 0;
-            if(!item.hasOwnProperty('discount')) sc.productForAppend.discount = 0;
         };
 
         /**
@@ -96,7 +95,6 @@
                     post = {
                         product_id: t.id,
                         quantity: t.quantity,
-                        discount: t.discount,
                         query_original: selectCtrl.search
                     };
                 sc.productForAppend = {};

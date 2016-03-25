@@ -92,14 +92,7 @@
                                                 <i class="fa fa-exclamation-triangle"></i><span class="font-sm">{{' доступно ' + productForAppend.stock +' шт.'}}</span>
                                             </div>
                                         </td>
-                                        <td>
-                                            <span>
-                                                <input class="form-control table-input" ng-model="productForAppend.discount" model-filter="{min:0, max:100}" filter-name="te_number" type="text">
-                                                <div class="note">
-                                                    <i class="fa fa-exclamation-triangle"></i><span class="font-sm"> от 0 до 100</span>
-                                                </div>
-                                            </span>
-                                        </td>
+                                        <td></td>
                                         <td>{{productForAppend | price_net: productForAppend.quantity | currency}}</td>
                                         <td class="center-item-text">
                                             <div ng-click="appendProduct()" class="btn btn-success">

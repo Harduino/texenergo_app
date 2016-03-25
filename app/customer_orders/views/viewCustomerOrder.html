@@ -89,11 +89,13 @@
                                 <tbody te-jq-ui="visual.sortOpts" data-ui-type="sortable">
                                     <tr ng-repeat='item in order.customer_order_contents' class="order-items">
                                         <td class="hidden-xs">{{ $index + 1 }}</td>
-                                        <td>
-                                            <a ng-href="/#/products/{{ item.product.id }}">{{ item.product.name }}</a>
+                                        <td te-copy-to-buffer>
+                                            <a ng-href="/#/products/{{ item.product.id }}" te-buffer-value>{{ item.product.name }}</a>
                                             <i class="fa fa-search-plus blue-hover" ng-click="changeCustomerOrderProductModal(item)"></i>
                                         </td>
-                                        <td class="hidden-xs">{{ item.product.article}}</td>
+                                        <td class="hidden-xs" te-copy-to-buffer>
+                                            <span te-buffer-value>{{ item.product.article}}</span>
+                                        </td>
                                         <td class="hidden-xs text-right">{{ item | price_net | currency}}</td>
                                         <td class="text-right">
                                             <a ng-if="order.can_edit" editable-number="item.quantity" onaftersave="saveProductChange({item: item, index: $index})" e-min="0" buttons="no">{{ item.quantity }}</a>
