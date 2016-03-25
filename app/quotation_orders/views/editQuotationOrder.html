@@ -87,7 +87,7 @@
                         </div>
                     </div>
                 </article>
-                <article class="col-md-6">
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                     <div id="edit_quotation_order_3" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false">
                         <header>
                             <h2>Комплектация</h2>
@@ -118,15 +118,15 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <table class="table table-bordered margin-top-10">
+                                    <table class="table table-bordered margin-top-10 table-fixed">
                                         <thead>
                                             <tr>
-                                                <th class="eqo-th-iconed"></th>
+                                                <th class="eqo-th-iconed" style="width: 32px;"></th>
                                                 <th>Название</th>
                                                 <th>Артикул</th>
-                                                <th>Количество</th>
+                                                <th style="width: 95px;">Количество</th>
                                                 <th>Элемент</th>
-                                                <th class="eqo-th-iconed"></th>
+                                                <th class="eqo-th-iconed" style="width: 32px;"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -135,10 +135,8 @@
                                                     <i class="eqo-td-circle-ico" ng-class="{'active': item.hideIndependentRows}"></i>
                                                 </td>
                                                 <td>
+                                                    <span ng-if="item.message" class="badge alert-{{item.message.level}}" uib-tooltip="{{item.message.text}}">!</span>
                                                     <a class="editable-click" ng-click="changeProductModal(item)">{{ item.product.name }}</a>
-                                                    <button ng-if="item.message" class="btn btn-{{item.message.level}}" title="{{item.message.text}}">
-                                                        !
-                                                    </button>
                                                 </td>
                                                 <td>{{ item.product.article }}</td>
                                                 <td>
@@ -158,7 +156,7 @@
                         </div>
                     </div>
                 </article>
-                <article class="col-md-6">
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                     <div id="edit_quotation_order_4" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false">
                         <header>
                             <h2>Смета</h2>

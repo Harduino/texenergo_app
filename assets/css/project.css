@@ -674,3 +674,12 @@ td:hover .td-nb-btn.themed{
     opacity: 1;
 }
 /* end copy to buffer */
+.scroll-x{
+    overflow-x: auto;
+}
+.table-fixed{
+    table-layout: fixed;
+}
+.table-fixed td{
+    word-wrap: break-word;
+}
