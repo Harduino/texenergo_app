@@ -12,7 +12,8 @@
             scope:{
                 role: '=',
                 options:'=',//список кнопок которые необходимо отобразить
-                subdata: '=' // модель или данные которые необходимо вернуть в хендлер клика
+                subdata: '=', // модель или данные которые необходимо вернуть в хендлер клика
+                template: '@'
             },
             link: function(scope, element, attrs){
                 var temp = [];
@@ -36,7 +37,7 @@
                     packing_list_pdf:{name:'Упаковочный лист', ico:'list-ol'},
                     at_partners:{name:'У партнёров', ico:'exchange'},
                     automatically: {name: 'Автоматически', ico: 'rocket'},
-                    add: {ico: "plus", class: 'btn-success'}
+                    add: {ico: "plus", class: 'btn-success', name: "В заказ"}
                 };
 
                 var btnClass = attrs.contentClass || 'btn btn-success';
@@ -87,6 +88,12 @@
                     //вызываем callback кнопки
                     !item.disabled && item.callback && item.callback(scope.subdata, item);
                 }
+                
+                scope.showText = function(){
+                    return (scope.template === undefined) || (scope.template !== "table");
+                    
+                }
+                
             },
             template: $templateCache.get('formNavButtons.tmpl.html')
         }

@@ -25,7 +25,7 @@
 
         $templateCache.put('formNavButtons.tmpl.html',
             '<div ng-repeat="item in buttons track by $index" ng-if="item.hasOwnProperty(\'disabled\') || !item.role || role[item.role] === true" ng-disabled="item.disabled" ng-class="item.class" ng-click="buttonClick(item)">'+
-                '<i class="fa fa-{{item.ico}}"></i><span class="hidden-xs">{{item.name}}</span>'+
+                '<i class="fa fa-{{item.ico}}"></i><span class="hidden-xs" ng-if="showText()">{{ item.name }}</span>'+
             '</div>'
         );
     }]);
