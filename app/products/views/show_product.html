@@ -3,11 +3,13 @@
         <big-breadcrumbs items="['Просмотр товара']" data-icon="edit" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
     </div>
     <div class="well product-info">
-        <div class="col-xs-12 col-md-12 no-padding">
-            <h2 class="txt-color-blueDark semi-bold prod-review-title">{{ product.name }}</h2>
-            <form-nav-buttons options="visual.navButtsOptions" subdata="product.id" class="btn-group margin-top-10"></form-nav-buttons>
+        <div class="row">
             <div class="col-xs-12 col-md-12">
-                <hr>
+                <h2 class="txt-color-blueDark semi-bold prod-review-title">{{ product.name }}</h2>
+                <form-nav-buttons options="visual.navButtsOptions" subdata="product.id" class="btn-group margin-top-10"></form-nav-buttons>
+                <div class="col-xs-12 col-md-12">
+                    <hr>
+                </div>
             </div>
         </div>
         <section id="widget-grid" widget-grid>
