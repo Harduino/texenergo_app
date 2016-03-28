@@ -412,9 +412,14 @@
     }]).controller("EqoChangeProductModalCtrl", ['$scope', '$uibModalInstance', 'serverApi', 'product', 'config', function($scope, $uibModalInstance, serverApi, product, config){
         var sc = $scope;
 
+        /**
+         * Для удобства работы подставляет в поиск товара его описание. Если такое описание есть.
+         * Иногда в описании есть количество. Убираем его регексом.
+         */
         sc.initProdSelect = function(){
             if(config.searchText){
-                angular.element('#eqo_cp_modal_p_select').data().$uiSelectController.search = config.searchText;
+                var x = config.searchText.replace(/\s*\d+\s*шт/i,"")
+                angular.element('#eqo_cp_modal_p_select').data().$uiSelectController.search = x;
             }
         };
 
