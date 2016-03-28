@@ -165,8 +165,12 @@
                                                 <td>{{ $index + 1}}</td>
                                                 <td>{{prod.product.name}}</td>
                                                 <td>{{prod.quantity}}</td>
-                                                <td>{{prod.product.price | number : 2}}</td>
-                                                <td>{{prod.product.price * prod.quantity | number : 2}}</td>
+                                                <td class="text-right">{{prod.product.price | number : 2}}</td>
+                                                <td class="text-right">{{prod.product.price * prod.quantity | number : 2}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4" class="text-right">Итого, руб:</td>
+                                                <td class="text-right">{{ data.total | number : 2}}</td>
                                             </tr>
                                         </tbody>
                                     </table>

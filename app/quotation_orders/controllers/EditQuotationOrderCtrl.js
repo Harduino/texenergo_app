@@ -354,6 +354,21 @@
             }
             return false;
         };
+        
+        /**
+         * следим за изменеиями в коллекции (включая свойства коллекции) при изменении пересчитываем total
+         */
+        sc.$watch('data.quotationOrder.products', function(values){
+            if(values){
+                var total = 0;
+
+                values.map(function(item){
+                    total += item.product.price * item.quantity;
+                });
+
+                sc.data.total = total;
+            }
+        }, true);
 
        function dependentItemSelector (data){
             return $uibModal.open({
