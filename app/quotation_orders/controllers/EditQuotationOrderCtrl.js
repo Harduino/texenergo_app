@@ -148,6 +148,8 @@
                     }
                 }
             });
+            
+            element.highlight = true;
 
             modalInstance.result.then(function (selectedProduct) {
                 var match = element.comment.match(/(\d+)\s*шт/i);
@@ -157,6 +159,10 @@
                 }
                 sc.addNewProduct(selectedProduct);
             });
+            
+            modalInstance.closed.then(function(){
+                element.highlight = !element.highlight;
+            })
         };
         
         /**
