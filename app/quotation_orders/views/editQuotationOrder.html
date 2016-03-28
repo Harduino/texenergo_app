@@ -121,7 +121,7 @@
                                                     <i class="eqo-td-circle-ico" ng-class="{'active': item.hideIndependentRows}"></i>
                                                 </td>
                                                 <td>
-                                                    <span ng-if="item.message" class="badge alert-{{item.message.level}}" uib-tooltip="{{item.message.text}}">!</span>
+                                                    <span ng-if="item.message" class="badge alert-{{item.message.level}}" uib-tooltip="{{item.message.text}}" ng-click="resolveMessage(item)">!</span>
                                                     <a class="editable-click" ng-click="changeProductModal(item)">{{ item.product.name }}</a>
                                                 </td>
                                                 <td>{{ item.product.article }}</td>

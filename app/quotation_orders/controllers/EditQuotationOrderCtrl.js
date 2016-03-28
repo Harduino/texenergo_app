@@ -356,6 +356,34 @@
         };
         
         /**
+         * Когда есть жалобы 
+         */
+        sc.resolveMessage = function(item){
+            if(item.message === undefined || item.message.resolution === undefined) {
+                return true;
+            }
+            var data = {
+                resolve_product: {
+                    id: item.id,
+                    resolver: item.message.resolution
+                }
+            };
+            serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
+                if(result.status == 200 && !result.data.errors){
+                    for(var i=0; i < sc.data.quotationOrder.products.length; i++) {
+                        if (sc.data.quotationOrder.products[i].id == result.data.id) {
+                            sc.data.quotationOrder.products[i] = result.data;
+                            funcFactory.showNotification("Удача", "Обновил товар", true);
+                            break;
+                        }
+                    }
+                } else {
+                    funcFactory.showNotification("Неудача", 'Не удалось добавить элемент');
+                }
+            });
+        }
+        
+        /**
          * следим за изменеиями в коллекции (включая свойства коллекции) при изменении пересчитываем total
          */
         sc.$watch('data.quotationOrder.products', function(values){
