@@ -88,7 +88,7 @@
                 var dataForProduct = {
                     add_product: {
                         product_id: (p.id || p._id),
-                        quantity: 1
+                        quantity: (p.quantity || 1)
                     }
                 };
                 
@@ -150,7 +150,11 @@
             });
 
             modalInstance.result.then(function (selectedProduct) {
+                var match = element.comment.match(/(\d+)\s*шт/i);
                 selectedProduct.element_id = element.id;
+                if(match !== null){
+                    selectedProduct.quantity = parseInt(match[1]);
+                }
                 sc.addNewProduct(selectedProduct);
             });
         };
