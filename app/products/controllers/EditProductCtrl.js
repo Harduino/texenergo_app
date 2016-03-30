@@ -36,6 +36,7 @@
         
         sc.uploader = new FileUploader({
             withCredentials: true,
+            queueLimit: 1,
             onCompleteItem: function(fileItem, response, status, headers) {
                 if(status===200){
                     sc.data.product.image_url = response.image_url;
@@ -48,7 +49,7 @@
         });
         
         function setFileUploadOptions(product){
-            sc.uploader.url = 'http://localhost:3000/api/products/'+ product.id +'/image';
+            sc.uploader.url = 'http://www.texenergo.com/api/products/'+ product.id +'/image';
         }
 
         /**
