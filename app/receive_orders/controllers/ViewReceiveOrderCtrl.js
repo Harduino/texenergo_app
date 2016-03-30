@@ -5,11 +5,11 @@
 
     "use strict";
 
-    angular.module('app.receive_orders').controller('ViewReceiveOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', function($scope, $state, $stateParams, serverApi, funcFactory){
+    angular.module('app.receive_orders').controller('ViewReceiveOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', 'FileUploader', function($scope, $state, $stateParams, serverApi, funcFactory, FileUploader){
         var sc = $scope;
         sc.receiveOrder = {};
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack}, {type:'files', callback:showFileModal}, {type:'edit', callback: goEditReceiveOrder}],
+            navButtsOptions:[{type:'back', callback:returnBack}, {type:'edit', callback: goEditReceiveOrder}],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
                 scaleColor:false,
@@ -23,28 +23,36 @@
 
         sc.amontPercent = 0;
         sc.receivedPercent = 0;
+        
+        sc.uploader = new FileUploader({
+            withCredentials: true,
+            queueLimit: 5,
+            onCompleteItem: function(fileItem, response, status, headers) {
+                if(status===200){
+                    sc.receiveOrder.documents.push(response);
+                    sc.uploader.clearQueue();
+                    funcFactory.showNotification("Успешно", 'Приложил документ.',true);
+                } else {
+                    funcFactory.showNotification('Не удалось приложить документ', response.errors);   
+                }
+            }
+        });
+        
+        function setFileUploadOptions(receive_order){
+            sc.uploader.url = 'http://localhost:3000/api/receive_orders/'+ receive_order.id +'/documents';
+        }
 
         serverApi.getReceiveOrderDetails($stateParams.id, function(result){
-            console.log(result.data);
             var receiveOrder = sc.receiveOrder = result.data;
             funcFactory.setPageTitle('Поступление ' + sc.receiveOrder.number);
             sc.amontPercent = funcFactory.getPercent(receiveOrder.paid_amount, receiveOrder.total);
             sc.receivedPercent = funcFactory.getPercent(receiveOrder.receivedPercent, receiveOrder.total);
-
-            sc.fileModalOptions={
-                url:'/api/receive_orders/'+ receiveOrder.id +'/documents',
-                files: receiveOrder.documents,
-                r_delete: serverApi.deleteFile,
-                view: 'receive_orders',
-                id: receiveOrder.id
-            };
+            setFileUploadOptions(receiveOrder);
+            
         });
 
         function returnBack(){
             $state.go('app.receive_orders',{});
-        }
-        function showFileModal(){
-            sc.visual.showFileModal();
         }
         
         function goEditReceiveOrder(){
