@@ -5,7 +5,7 @@
 
     "use strict";
 
-    angular.module('app.dispatch_orders').controller('ViewDispatchOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', function($scope, $state, $stateParams, serverApi, funcFactory){
+    angular.module('app.dispatch_orders').controller('ViewDispatchOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', 'FileUploader', function($scope, $state, $stateParams, serverApi, funcFactory, FileUploader){
         var _pattern = /\/?#/;
 
         var sc = $scope;
@@ -13,11 +13,10 @@
         sc.visual = {
             navButtsOptions:[
                 { type: 'back', callback: returnBack },
-                { type: 'files', callback:showFileModal},
                 { type: 'upd_form_pdf', callback: openDispatchOrderPdf },
                 { type: 'label_pdf', callback: openLabelPdf },
                 { type: 'packing_list_pdf', callback: openPackingListPdf },
-                { type:'confirm_order', callback: updateStatusDispatchOrder}
+                { type: 'confirm_order', callback: updateStatusDispatchOrder}
             ],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
@@ -33,6 +32,24 @@
         sc.amontPercent = 0;
         sc.dispatchedPercent = 0;
 
+        sc.uploader = new FileUploader({
+            withCredentials: true,
+            queueLimit: 5,
+            onCompleteItem: function(fileItem, response, status, headers) {
+                if(status===200){
+                    sc.receiveOrder.documents.push(response);
+                    sc.uploader.clearQueue();
+                    funcFactory.showNotification("Успешно", 'Приложил документ.',true);
+                } else {
+                    funcFactory.showNotification('Не удалось приложить документ', response.errors);   
+                }
+            }
+        });
+        
+        function setFileUploadOptions(dispatch_order){
+            sc.uploader.url = 'http://www.texenergo.com/api/dispatch_order/'+ dispatch_order.id +'/documents';
+        }
+        
         serverApi.getDispatchOrderDetails($stateParams.id, function(result){
             console.log(result.data);
 
@@ -40,13 +57,7 @@
             sc.amontPercent = funcFactory.getPercent(dispatchOrder.paid_amount, dispatchOrder.total);
             sc.dispatchedPercent = funcFactory.getPercent(dispatchOrder.dispatched_amount, dispatchOrder.total);
 
-            sc.fileModalOptions={
-                url:'/api/dispatch_orders/'+ dispatchOrder.id +'/documents',
-                r_get: serverApi.getDocuments,
-                r_delete: serverApi.deleteFile,
-                view: 'dispatch_orders',
-                id: dispatchOrder.id
-            };
+            setFileUploadOptions(dispatchOrder);
         });
 
         function returnBack(){
@@ -66,10 +77,6 @@
         function openPackingListPdf(){
             var pdfUrl = "http://www.texenergo.com/admin/dispatch_orders/" + sc.dispatchOrder.id + "/packing_list.pdf";
             window.open(pdfUrl, '_blank');
-        }
-        
-        function showFileModal(){
-            sc.visual.showFileModal();
         }
         
         sc.saveChosenPerson = function(){

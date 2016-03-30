@@ -39,7 +39,7 @@
         });
         
         function setFileUploadOptions(receive_order){
-            sc.uploader.url = 'http://localhost:3000/api/receive_orders/'+ receive_order.id +'/documents';
+            sc.uploader.url = 'http://www.texenergo.com/api/receive_orders/'+ receive_order.id +'/documents';
         }
 
         serverApi.getReceiveOrderDetails($stateParams.id, function(result){
