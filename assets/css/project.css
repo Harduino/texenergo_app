@@ -683,3 +683,4 @@ td:hover .td-nb-btn.themed{
 .table-fixed td{
     word-wrap: break-word;
 }
+.nv-file-over { border: dotted 3px red; }

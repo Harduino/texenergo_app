@@ -56,6 +56,7 @@ appConfig.sound_on = true;
         'te.infinity.scroll',
         'te-jq-ui',
         'teBuffer',
+        'angularFileUpload',
         
         // Permissions
         'cancan.export',

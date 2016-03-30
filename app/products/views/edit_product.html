@@ -16,9 +16,18 @@
                         <form class="widget-body" name="productEdit">
                             <div class="well well-white">
                                 <div class="col-md-12 no-padding">
-                                    <div class="col-sm-12 col-md-3 product-thumb">
-                                        <img class="thumbnail no-padding" ng-src="{{data.product.image_url}}" img-error="/assets/smart_admin/no_image.png">
-                                        <button class="btn btn-info" ng-click="visual.showFileModal()">Загрузить изображение</button>
+                                    <div class="col-sm-12 col-md-3 product-thumb" nv-file-drop=""  uploader="uploader" filters="queueLimit, customFilter">
+                                        <div ng-show="uploader.isHTML5" class="well my-drop-zone" nv-file-over="" uploader="uploader">
+                                            <img class="thumbnail no-padding" ng-src="{{data.product.image_url}}" img-error="/assets/smart_admin/no_image.png">
+                                        </div>
+                                        <div class="row">
+                                            <ul>
+                                                <li ng-repeat="item in uploader.queue">
+                                                    Новая: <span ng-bind="item.file.name"></span><br/>
+                                                    <button class="btn btn-info" ng-click="item.upload()">Заменить</button>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                     <div class="col-sm-12 col-md-9 product-mif-c">
                                         <div class="form-group">
@@ -101,5 +110,4 @@
             </div>
         </section>
     </div>
-    <file-worker data-trigger="visual.showFileModal" data-config="fileModalOptions"></file-worker>
 </div>

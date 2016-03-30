@@ -2,7 +2,7 @@
  * Created by Mikhail Arzhaev on 07.12.15.
  */
 (function(){
-    angular.module('app.products').controller('EditProductCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', function($scope, $state, $stateParams, serverApi, funcFactory){
+    angular.module('app.products').controller('EditProductCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', 'FileUploader', function($scope, $state, $stateParams, serverApi, funcFactory, FileUploader){
         var sc = $scope;
         sc.data ={
             product:{},
@@ -11,8 +11,7 @@
         };
         sc.visual = {
             navButtsOptions:[{type:'show', callback:goToShow}],
-            roles:{},
-            showFileModal: angular.noop
+            roles:{}
         };
 
         sc.tinymceOptions = funcFactory.getTinymceOptions();
@@ -26,46 +25,30 @@
         };
 
         serverApi.getProduct($stateParams.id, function(result){
-            console.log(result.data);
             var product = sc.data.product = result.data;
             product.vat_rate.selected = product.vat_rate.selected.toString();// to let 'select' set selected option from model
             sc.visual.roles = {
                 can_edit: product.can_edit,
                 can_destroy: product.can_destroy
             };
-
-            setFileWorkerOptions(product);
+            setFileUploadOptions(product);
         });
-
-        function setFileWorkerOptions(product){
-            sc.fileModalOptions={
-                url: '/api/products/'+ product.id +'/image',
-                files: [product.image],
-                r_delete: serverApi.deleteImage,
-                view: 'products',
-                id: product.id,
-                filesCount:1,
-                sending: function(file, xhr, formData){
-                    var f = this.serverFiles,
-                        files = this.files;
-
-                    if(f.length>0 && f[0]) {
-                        this.removeFile(f[0]);
-                        f.splice(0,1);
-                    }
-                    files.length>1 && this.removeFile(files[0]);
-
-                    //append title to formData before send
-                    formData.append("title", file.title);
-                },
-                complete: function(file){
-                    product.image_url = appConfig.serverUrl + '/uploads/'+ file.id + '/original' + this.cutExtension(file.name).extension;
-                    !sc.$$phase && sc.$apply(angular.noop);
-                },
-                dropzoneConfig: {
-                    acceptedFiles: '.jpg,.png,.gif,.jpeg'
+        
+        sc.uploader = new FileUploader({
+            withCredentials: true,
+            onCompleteItem: function(fileItem, response, status, headers) {
+                if(status===200){
+                    sc.data.product.image_url = response.image_url;
+                    sc.uploader.clearQueue();
+                    funcFactory.showNotification("Успешно", 'Изменил картинку.',true);
+                } else {
+                    funcFactory.showNotification('Не удалось изменить картинку', result.data.errors);   
                 }
-            };
+            }
+        });
+        
+        function setFileUploadOptions(product){
+            sc.uploader.url = 'http://localhost:3000/api/products/'+ product.id +'/image';
         }
 
         /**
