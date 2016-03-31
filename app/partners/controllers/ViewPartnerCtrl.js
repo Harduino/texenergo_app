@@ -57,10 +57,16 @@
         };
         
         sc.addNewPerson = function(){
-            var data  = {
-                person: sc.newPerson
-            };
-            serverApi.createPerson(sc.partner.id, data, function(result){
+//            var data  = {
+//                person: sc.newPerson
+//            };
+
+            var fd = new FormData();
+            fd.append('file', sc.newPerson.passport_scan);
+            //delete sc.newPerson.passport_scan;
+            fd.append('person', sc.newPerson);
+
+            serverApi.createPerson(sc.partner.id, fd, function(result){
                 if(!result.data.errors){
                     funcFactory.showNotification('Представитель успешно добавлен', '', true);
                     sc.partner.people.push(result.data);
@@ -76,17 +82,7 @@
 
         sc.appendScanHandler = function(file){
             sc.passport_scan=file.name;
-            var fd = new FormData();
-            fd.append('file', file);
             sc.newPerson.passport_scan = fd;
-//            $http.post('/api/partners/' + sc.partner.id + '/people', fd, {
-//                transformRequest: angular.identity,
-//                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-//            }).then(function(result){
-//                console.log(result);
-//            }, function(fail){
-//                console.warn(fail);
-//            });
         };
 
         sc.appendPersonPhotoHandler = function(file){
