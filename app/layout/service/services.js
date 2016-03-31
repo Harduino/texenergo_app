@@ -269,8 +269,8 @@
         };
 
         // Представители партнёра
-        this.createPerson = function(partner_id, data, success, fail){
-            $http.post('/api/partners/' + partner_id + '/people', data).then(success, fail);
+        this.createPerson = function(partner_id, data, success, fail, config){
+            $http.post('/api/partners/' + partner_id + '/people', data, config).then(success, fail);
         };
 
         // Контакты

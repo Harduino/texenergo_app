@@ -4,7 +4,7 @@
  */
 (function(){
 
-    angular.module('app.partners').controller('ViewPartnerCtrl',['$scope', '$state', 'serverApi', '$stateParams', 'funcFactory', function($scope, $state, serverApi, $stateParams, funcFactory){
+    angular.module('app.partners').controller('ViewPartnerCtrl',['$scope', '$state', 'serverApi', '$stateParams', 'funcFactory', '$http', function($scope, $state, serverApi, $stateParams, funcFactory, $http){
         var sc = $scope;
         
         sc.partner = {};
@@ -68,12 +68,25 @@
                 } else {
                     funcFactory.showNotification('Не удалось создать представителя', result.data.errors);
                 }
+            }, angular.noop, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             });
         };
 
         sc.appendScanHandler = function(file){
             sc.passport_scan=file.name;
-            sc.newPerson.passport_scan = file;
+            var fd = new FormData();
+            fd.append('file', file);
+            sc.newPerson.passport_scan = fd;
+//            $http.post('/api/partners/' + sc.partner.id + '/people', fd, {
+//                transformRequest: angular.identity,
+//                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+//            }).then(function(result){
+//                console.log(result);
+//            }, function(fail){
+//                console.warn(fail);
+//            });
         };
 
         sc.appendPersonPhotoHandler = function(file){
