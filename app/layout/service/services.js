@@ -272,6 +272,12 @@
         this.createPerson = function(partner_id, data, success, fail, config){
             $http.post('/api/partners/' + partner_id + '/people', data, config).then(success, fail);
         };
+        this.sendPersonFile = function(partner_id, person_id, data, success, fail){
+            $http.put('/api/partners/'+partner_id+'/people/' + person_id, data, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).then(success, fail);
+        };
 
         // Контакты
         this.getContacts = function(page, query, config, success, fail){

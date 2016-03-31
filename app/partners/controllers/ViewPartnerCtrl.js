@@ -55,39 +55,47 @@
             sc.newPerson = {};
             sc.passport_scan = sc.person_photo= "";
         };
+
+        var _passport_scan_file,
+            _person_photo_file;
         
         sc.addNewPerson = function(){
-//            var data  = {
-//                person: sc.newPerson
-//            };
+            var data  = {
+                person: sc.newPerson
+            };
 
-            var fd = new FormData();
-            fd.append('file', sc.newPerson.passport_scan);
-            //delete sc.newPerson.passport_scan;
-            fd.append('person', sc.newPerson);
-
-            serverApi.createPerson(sc.partner.id, fd, function(result){
+            serverApi.createPerson(sc.partner.id, data, function(result){
                 if(!result.data.errors){
                     funcFactory.showNotification('Представитель успешно добавлен', '', true);
                     sc.partner.people.push(result.data);
-                    sc.clearNewPartnerData();
+                    sc.clearPerson();
+                    sendPersonFiles(result.data.id);
                 } else {
                     funcFactory.showNotification('Не удалось создать представителя', result.data.errors);
                 }
-            }, angular.noop, {
-                transformRequest: angular.identity,
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             });
         };
 
+        function sendPersonFiles(person_id){
+            var send = function(fieldName, file){
+                var fd = new FormData();
+                fd.append(fieldName, file);
+                serverApi.sendPersonFile(sc.partner.id, person_id, fd, function(result){
+                    console.log(result);
+                });
+            };
+            _passport_scan_file && send('passport_scan_file', _passport_scan_file);
+            _person_photo_file && send('person_photo_file', _person_photo_file);
+        }
+
         sc.appendScanHandler = function(file){
             sc.passport_scan=file.name;
-            sc.newPerson.passport_scan = fd;
+            _passport_scan_file = file;
         };
 
         sc.appendPersonPhotoHandler = function(file){
             sc.person_photo=file.name;
-            sc.newPerson.person_photo = file;
+            _person_photo_file = file;
         };
     }]);
 }());
