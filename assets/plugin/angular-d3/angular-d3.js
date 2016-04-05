@@ -7,8 +7,8 @@
     var module = angular.module('angular.d3', []);
 
     module.directive('forceLayoutGraph', [function(){
-        var _colors = d3.scale.category20().range();
-        var _defaultConfig = {
+        var colors = d3.scale.category20().range();
+        var defaultConfig = {
             d3:{
                 size: [400, 400],
                 linkDistance: 80,
@@ -28,10 +28,10 @@
             link: function(scope, element, attrs){
                 updateDefaultWidth();
                 //extend default configs
-                var _config = scope.config ? angular.extend(_defaultConfig, scope.config || {}) : _defaultConfig,
-                    _inDrag = false,
-                    _translate = [0, 0],
-                    _scale = 1;
+                var config = scope.config ? angular.extend(defaultConfig, scope.config || {}) : defaultConfig;
+                var inDrag = false;
+                var translate = [0, 0];
+                var scale = 1;
 
                 //watch for data changes
                 scope.$watch('data', function(dataValue){
@@ -48,7 +48,7 @@
 
                     configurate(force);
 
-                    var drag = _config.draggableNodes ?  appendDrag(force) : null;
+                    var drag = config.draggableNodes ?  appendDrag(force) : null;
 
                     force.start();
 
@@ -56,26 +56,25 @@
                     d3Element.selectAll("*").remove();
 
                     var svg = d3Element.append("svg")
-                        .attr("width", _config.d3.size[0])
-                        .attr("height", _config.d3.size[1]);
+                        .attr("width", config.d3.size[0])
+                        .attr("height", config.d3.size[1]);
 
                     svg.append("g");
 
                     var inner = svg.select("g");
 
-                    _config.zoomable && appendZoom(svg, inner);
+                    config.zoomable && appendZoom(svg, inner);
 
                     var path = appendLinks(inner, force);
                     var node = appendNodes(inner, d);
 
                     drag && node.call(drag);
 
-                    _config.tooltip &&  appendTooltip(node);
+                    config.tooltip &&  appendTooltip(node);
 
                     force.on("tick", tickHandler.bind({node: node, path:path}));
 
-                    _config.actions && addListeners(svg, _config.actions);
-
+                    config.actions && addListeners(svg, config.actions);
                 }
 
                 function appendLinks(svg, force){
@@ -133,13 +132,13 @@
                     var $t = $('.graph-tip');
 
                     node.selectAll('circle').on("mouseover", function(d,i) {
-                        if(_inDrag) return;
-                        tooltip.style('display', 'block').html(_config.tooltip(d, i));
+                        if(inDrag) return;
+                        tooltip.style('display', 'block').html(config.tooltip(d, i));
                         var width = $t.outerWidth(),
                             height = $t.outerHeight(),
                             offsetOfCircle = $(this).offset();
 
-                        tooltip.style("left", (offsetOfCircle.left - width/2 + 10 * _scale) + "px")
+                        tooltip.style("left", (offsetOfCircle.left - width/2 + 10 * scale) + "px")
                             .style("top", (offsetOfCircle.top - height - 5) + "px");
                     }).on("mouseout", function() {
                         tooltip.style('display', 'none');
@@ -151,11 +150,11 @@
                 function appendDrag(force){
                     return force.drag()
                         .on("dragstart", function (d) {
-                            _inDrag = true;
+                            inDrag = true;
                             d3.select(this).classed("fixed", d.fixed = true);
                             $('force-layout-graph .tooltip').hide();
                         }).on("dragend", function(d){
-                            _inDrag = false;
+                            inDrag = false;
                             d3.event.sourceEvent.stopPropagation();
                             d3.event.sourceEvent.preventDefault();
                         });
@@ -164,20 +163,20 @@
                 function appendZoom(svg, inner){
                     var zoom = d3.behavior.zoom().scaleExtent([0.9,3])
                         .on("zoom", function() {
-                            if(_inDrag) return;
-                            _translate = d3.event.translate;
-                            _scale = d3.event.scale;
-                            var translate = "translate(" + _translate + ")scale(" + _scale + ")";
+                            if(inDrag) return;
+                            translate = d3.event.translate;
+                            scale = d3.event.scale;
+                            var translate = "translate(" + translate + ")scale(" + scale + ")";
                             inner.attr("transform", translate);
-                            _config.zoomChange && _config.zoomChange(_scale);
+                            config.zoomChange && config.zoomChange(scale);
                         });
                     svg.call(zoom);
 
-                    if(_config.useZoomHandlers) {
+                    if(config.useZoomHandlers) {
                         Object.defineProperty(scope.config, "zoom", { set: function (value) {
-                            _scale = value;
-                            zoom.scale(_scale);
-                            var translate = "translate(" + _translate + ")scale(" + _scale + ")";
+                            scale = value;
+                            zoom.scale(scale);
+                            var translate = "translate(" + translate + ")scale(" + scale + ")";
                             inner.attr("transform", translate);
                         }});
                     }
@@ -201,8 +200,8 @@
 
                 function configurate(force){
                     var f = force;
-                    Object.keys(_config.d3).map(function(property){
-                        f[property](_config.d3[property]);
+                    Object.keys(config.d3).map(function(property){
+                        f[property](config.d3[property]);
                     });
                 }
 
@@ -226,11 +225,11 @@
                 }
 
                 function updateDefaultWidth(){
-                    _defaultConfig.d3.size[0] = element.parent().outerWidth();
+                    defaultConfig.d3.size[0] = element.parent().outerWidth();
                 }
 
                 function defineColor(item, index){
-                    return _config.colorSetter ? _config.colorSetter(item, index) : _colors[index];
+                    return config.colorSetter ? config.colorSetter(item, index) : colors[index];
                 }
 
                 scope.$on("$destroy", function(){

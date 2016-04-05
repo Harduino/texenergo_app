@@ -46,7 +46,7 @@
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="element in data.quotationOrder.elements" class="order-items a-row-add" ng-hide="element.hidden">
-                                                <td ng-class="{'danger': element.highlight }" ng-mouseover="highlight('products', 'element_id', element.id)" ng-mouseleave="highlight('products')" ng-click="hideTableRows(element, 'element')">
+                                                <td ng-class="{'danger': element.highlight }" ng-mouseover="highlight('equipment', element)" ng-mouseleave="unhighlight('equipment')" ng-click="hideTableRows(element, 'element')">
                                                     <i class="eqo-td-circle-ico" ng-class="{'active': element.hideIndependentRows}"></i>
                                                 </td>
                                                 <td>
@@ -99,7 +99,7 @@
                                             </ui-select>
                                         </div>
                                         <div class="col-xs-2 col-sm-2 col-md-1 text-align-center no-padding">
-                                            <button class="btn btn-success" ng-click="addNewProduct(data.selectedProduct, true)" ng-disabled="!data.selectedProduct">
+                                            <button class="btn btn-success" ng-click="addNewEquipment(data.selectedProduct, true)" ng-disabled="!data.selectedProduct">
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </div>
@@ -116,22 +116,22 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="item in data.quotationOrder.products" class="order-items a-row-add" ng-hide="item.hidden">
-                                                <td ng-class="{'danger': item.highlight }" ng-mouseover="highlight('elements', 'id', item.element_id)" ng-mouseleave="highlight('elements')" ng-click="hideTableRows(item, 'product')">
+                                            <tr ng-repeat="item in data.quotationOrder.equipment" class="order-items a-row-add" ng-hide="item.hidden">
+                                                <td ng-class="{'danger': item.highlight }" ng-mouseover="highlight('elements', item)" ng-mouseleave="unhighlight('elements')" ng-click="hideTableRows(item, 'equipment')">
                                                     <i class="eqo-td-circle-ico" ng-class="{'active': item.hideIndependentRows}"></i>
                                                 </td>
                                                 <td>
                                                     <span ng-if="item.message" class="badge alert-{{item.message.level}}" uib-tooltip="{{item.message.text}}" ng-click="resolveMessage(item)">!</span>
-                                                    <a class="editable-click" ng-click="changeProductModal(item)">{{ item.product.name }}</a>
+                                                    <a class="editable-click" ng-click="changeEquipmentModal(item)">{{ item.product.name }}</a>
                                                 </td>
                                                 <td>{{ item.product.article }}</td>
                                                 <td>
-                                                    <a editable-number="item.quantity" onaftersave="saveProductChange(item)" e-min="0" buttons="no">{{ item.quantity || 'Значение не установлено'}}</a>
+                                                    <a editable-number="item.quantity" onaftersave="saveEquipmentChange(item)" e-min="0" buttons="no">{{ item.quantity || 'Значение не установлено'}}</a>
                                                 </td>
                                                 <td>
-                                                    <a class="editable-click" ng-click="changeProductElement(item)">{{data.quotationOrder.elements | eqoItemNameById : item.element_id : "description"}}</a>
+                                                    <a class="editable-click" ng-click="changeProductElement(item)">{{ findElementByEquipment(item).description }}</a>
                                                 </td>
-                                                <td class="eqo-td-rm-ico" ng-click="removeProduct(item, $index)">
+                                                <td class="eqo-td-rm-ico" ng-click="removeEquipment(item, $index)">
                                                     <i class="fa fa-times-circle"></i>
                                                 </td>
                                             </tr>
@@ -161,7 +161,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="prod in data.quotationOrder.products">
+                                            <tr ng-repeat="prod in data.quotationOrder.equipment">
                                                 <td>{{ $index + 1}}</td>
                                                 <td>{{prod.product.name}}</td>
                                                 <td>{{prod.quantity}}</td>
@@ -186,7 +186,64 @@
                         </header>
                         <div class="widget-body">
                             <div class="well well-clean well-white">
-                                <div class="row"></div>
+                                <quotation-schema data="data.quotationOrder" config="[1,2,3]"></quotation-schema>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                 <article class="col-md-12">
+                    <div id="edit_quotation_order_5" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false">
+                        <header>
+                            <h2>Связи</h2>
+                        </header>
+                        <div class="widget-body">
+                            <div class="well well-clean well-white">
+                                <div class="col-lg-6">
+                                    <label>Фильтр: <input ng-model="searchItemOne"></label>
+                                    <table class="table">
+                                        <tr><th>Описание</th><th>Код/Комментарий</th></tr>
+                                        <tr ng-repeat="item in data.quotationOrder.elements | filter:{description: searchItemOne}" ng-click="setNewLinkFrom(item)" ng-class="{'warning': item.id === newLinkFrom.id}">
+                                            <td>{{item.description}}</td>
+                                            <td>{{item.schema_code}} {{item.comment}}</td>
+                                        </tr>
+                                        <tr ng-repeat="item in data.quotationOrder.equipment | filter:{product: {name: searchItemOne}}" ng-click="setNewLinkFrom(item)" ng-class="{'warning': item.id === newLinkFrom.id}">
+                                            <td>{{item.product.name}}</td>
+                                            <td>{{item.schema_code}} {{item.comment}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label>Фильтр: <input ng-model="searchItemTwo"></label>
+                                    <table class="table">
+                                        <tr><th>Описание</th><th>Код/Комментарий</th></tr>
+                                        <tr ng-repeat="item in data.quotationOrder.elements | filter:{description: searchItemTwo}" ng-click="setNewLinkTo(item)" ng-class="{'warning': item.id === newLinkTo.id}">
+                                            <td>{{item.description}}</td>
+                                            <td>{{item.schema_code}} {{item.comment}}</td>
+                                        </tr>
+                                        <tr ng-repeat="item in data.quotationOrder.equipment | filter:{product: {name: searchItemTwo}}" ng-click="setNewLinkTo(item)" ng-class="{'warning': item.id === newLinkTo.id}">
+                                            <td>{{item.product.name}}</td>
+                                            <td>{{item.schema_code}} {{item.comment}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <button class="btn btn-success" type="button" ng-click="linkItems()">Связать</button>
+                                <hr>
+                                <div class="col-lg-12">
+                                    <table class="table">
+                                        <tr><th>От</th><th>К</th><th></th></tr>
+                                        <tr ng-repeat="item in data.quotationOrder.links">
+                                            <td>
+                                                {{item.source.description || item.source.product.name}}
+                                            </td>
+                                            <td>
+                                                {{item.target.description || item.target.product.name}}
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-danger" type="button" ng-click="removeLink(item, $index)">Удалить</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -194,7 +251,7 @@
             </div>
         </section>
     </div>
-    <script type="text/ng-template" id="eqoChangeProductModal.tmpl.html">
+    <script type="text/ng-template" id="eqoChangeEquipmentModal.tmpl.html">
         <div class="modal-header">
             <h3 class="modal-title">{{config.title}}</h3>
         </div>
