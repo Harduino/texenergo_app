@@ -21,13 +21,19 @@
             scope: {
                 data: "="
             },
+
+            // TODO 0.
+            // Стоит ли вообще в директиву выносить? Реюзабельности пока не предвидется. Я бы в контроллере оставил.
             link: function(scope, element, attrs){
                 // Setting current effective width
                 defaultConfig.d3.size[0] = element.parent().outerWidth();
-
                 var inDrag = false;
 
                 // Watch for data changes
+                //
+                // TODO 4. См TODO 3, но надо как-то сделать синхронизацию с "большим" scope-ом.
+                // При каждом маленьком изменении заново строить может быть плохой идей - вдруг человек долго кружочки расставлял.
+                // Может что-то типа кнопки "Обновить"?
                 scope.$watch('data', function(dataValue){
                     dataValue && drawChart(dataValue);
                 });
@@ -40,6 +46,9 @@
 
                     setEdgesAttributes(d);
 
+                    // TODO 3
+                    // Конфигурацию снаружи брать не будем. Весь конфиг в обозримом будущем будет здесь.
+                    // Подправить, чтобы со старта всё полезное пространство было занято (ширина/высота)
                     var force = d3
                         .layout
                         .force()
@@ -66,11 +75,34 @@
 
                     node.call(appendDrag(force));
 
+                    // TODO 1
+                    // См. в EditQuotationOrderCtrl.js
+                    // Там есть linkItems(), addNewLink() и связанные вещи.
+                    // Сейчас они вызываются через ярвис "Связи". Совсем неудобно - надо на схему переместить функционал.
+                    // Человек кликает на кружок и поехали
+                    // if sc.newLinkFrom != null
+                    //     if sc.newLinkFrom == currentNode
+                    //         sc.newLinkFrom = null
+                    //         exit
+                    //     else
+                    //         sc.newLinkTo = currentNode
+                    //         saveLinkToServer
+                    //     end
+                    // else
+                    //     sc.newLinkFrom = currentNode
+                    // end
+                    // Может как-то выделять текущий выбранный кружок?
+                    svg.selectAll(".node").on("click", function(item){
+                        if (d3.event.defaultPrevented) return;
+                        console.log("Clicked on", item);
+                    });
+
                     force.on("tick", tickHandler.bind({node: node, path:path}));
 
                     force.start();
                 }
 
+                // Связи предоставленные сервером линкуем на будущие кружочки
                 function setEdgesAttributes(d){
                     var nodeById = d3.map();
 
@@ -84,6 +116,7 @@
                     });
                 }
 
+                // Создание динамичной красоты.
                 function tickHandler(){
                     this.node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
@@ -100,6 +133,8 @@
                     });
                 }
 
+                // Возмоность двигать кружочки.
+                // Единожды передвинутый кружочек "залипает" на одном месте7
                 function appendDrag(force) {
                     return force.drag()
                         .on("dragstart", function (d) {
@@ -113,6 +148,7 @@
                         });
                 }
 
+                // Прикрепляем кружочки вместе с названием и, наведении мышки, описанием.
                 function appendNodes(svg, nodes) {
                     // Add a group for circle and comment
                     var node = svg.selectAll('.node')
@@ -148,11 +184,11 @@
                             return '<div>' + t.substring(0, 10) + '</div>';
                         });
 
-
-
-
-                    var tooltip = d3.select("body").append("div")
-                        .attr("class", "tooltip graph-tip").style('opacity', 1).style('display', 'none');
+                    var tooltip = d3.select("body")
+                        .append("div")
+                        .attr("class", "tooltip graph-tip")
+                        .style('opacity', 1)
+                        .style('display', 'none');
                     var $t = $('.graph-tip');
 
                     node.selectAll('circle').on("mouseover", function(d,i) {
@@ -181,10 +217,13 @@
                         tooltip.style('display', 'none');
                     });
 
-
                     return node;
                 }
 
+
+                // Прикрепляем стрелочки.
+                // @param svg - рабочая зона
+                // @param links - массив со связями
                 function appendLinks(svg, links){
                     svg.append("svg:defs").selectAll("marker")
                         .data(["end"])
@@ -204,6 +243,16 @@
                         .enter().append("svg:path")
                         .attr("class", "link")
                         .attr("marker-end", "url(#end)");
+
+
+                    // TODO 2
+                    // См. EditQuotationOrderCtrl.js
+                    // Там есть sc.removeLink()
+                    // При dblclick на стрелочки вывести подтверждение типа: "Точно удалить? Ты не двинулся?"
+                    // Если не двинулся, то кинуть запрос на сервер.
+                    svg.selectAll('path').on("dblclick", function(d,i) {
+                        console.log("double click on", d);
+                    });
 
                     return path;
 

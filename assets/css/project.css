@@ -684,3 +684,28 @@ td:hover .td-nb-btn.themed{
     word-wrap: break-word;
 }
 .nv-file-over { border: dotted 3px red; }
+
+
+
+.link {
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+
+.node {
+  cursor: move;
+  fill: #ccc;
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+
+.node {
+    fill: #ccc;
+    stroke: #fff;
+    stroke-width: 2px;
+}
+
+.link {
+    stroke: #777;
+    stroke-width: 2px;
+}

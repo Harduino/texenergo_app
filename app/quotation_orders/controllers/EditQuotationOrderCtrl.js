@@ -497,7 +497,7 @@
                 if(result.status == 200 && !result.data.errors){
                     sc.data.quotationOrder.elements.splice(index, 1);
                     
-                    / Сбрасываем все связи на новые если сервер и передал
+                    // Сбрасываем все связи на новые если сервер и передал
                     if(result.data.links !== undefined) {
                         sc.data.quotationOrder.links = result.data.links;
                     }

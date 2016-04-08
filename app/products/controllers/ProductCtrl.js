@@ -59,5 +59,34 @@
         function goToSupplierInfos(){
             $state.go('app.product.supplier_infos', $stateParams);
         }
+
+        /**
+         * Обновляем информацию по товару
+         */
+        sc.saveProduct = function(){
+            var product = sc.product;
+            var data = {
+                    product:{
+                        name: product.name,
+                        description: product.description,
+                        article: product.article//,
+                        // manufacturer_id: product.manufacturer.id,
+                        // catalogue_ids: (product.catalogues || []).map(function(item){
+                        //     return item.id;
+                        // }),
+                        // type: product.type.selected,
+                        // unit: product.unit.selected,
+                        // vat_rate: product.vat_rate.selected,
+                        // weight: product.weight
+                    }
+                };
+            serverApi.updateProduct(product.id, data, function(result){
+                if(!result.data.errors){
+                    funcFactory.showNotification("Успешно", 'Товар '+product.name+' успешно отредактирована.',true);
+                } else {
+                    funcFactory.showNotification('Не удалось отредактировать категорию '+product.name, result.data.errors);
+                }
+            });
+        };
     }]);
 }());

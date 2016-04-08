@@ -73,7 +73,6 @@
                     }
                 };
             serverApi.updateProduct(product.id, data, function(result){
-                console.log(result);
                 if(!result.data.errors){
                     funcFactory.showNotification("Успешно", 'Товар '+product.name+' успешно отредактирована.',true);
                 } else {

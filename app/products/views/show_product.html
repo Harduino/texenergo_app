@@ -24,7 +24,7 @@
                             <div class="widget-body">
                                 <div>
                                     <b>Артикул:</b>
-                                    {{ product.article }}
+                                    <span editable-text="product.article" onaftersave="saveProduct()"> {{ product.article }}</span>
                                 </div>
                                 <div>
                                     <b>Производитель:</b>
