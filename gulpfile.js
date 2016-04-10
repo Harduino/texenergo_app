@@ -74,9 +74,9 @@ gulp.task('app', function(){
         'app/layout/actions/*.js',
         'app/layout/filters/filters.js',
         'app/layout/service/services.js',
-        'app/layout/directives/*.js',
         'assets/widgets/directives/*.js',
         'app/*/controllers/*.js',
+        'app/*/directives/*.js',
         'assets/plugin/angular-d3/angular-d3.js',
         'app/app.js'
     ])

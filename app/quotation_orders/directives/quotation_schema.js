@@ -4,7 +4,7 @@
 (function(){
     "use strict";
 
-    angular.module('app.layout').directive('quotationSchema', [function(){
+    angular.module('app.quotation_orders').directive('quotationSchema', [function(){
         var defaultConfig = {
             d3:{
                 size: [400, 400],
@@ -23,9 +23,10 @@
             },
 
             // TODO 0.
-            // Стоит ли вообще в директиву выносить? Реюзабельности пока не предвидется. Я бы в контроллере оставил.
+            // В контроллере не хорошо, много кода + идет как достаточно самодостаточный элемент.
+            // Если вдруг понадобится реиспользовать, не придется делать рефакторинг. Так легче поддерживать и модифицировать.
             link: function(scope, element, attrs){
-                // Setting current effective width
+                // Setting current effective Width
                 defaultConfig.d3.size[0] = element.parent().outerWidth();
                 var inDrag = false;
 
@@ -37,6 +38,10 @@
                 scope.$watch('data', function(dataValue){
                     dataValue && drawChart(dataValue);
                 });
+
+                scope.drawChart = function(data){
+                    drawChart(data);
+                };
 
                 function drawChart(d) {
                     if(d.equipment===undefined) return;
@@ -161,7 +166,7 @@
                     node.append('circle')
                         .attr('r', 10)
                         .attr("class", "circle")
-                        .style("fill", function(d, i) { return (d.type==="element" ? "red" : "green"); })
+                        .style("fill", function(d, i) { return (d.type==="element" ? "red" : "green"); });
 
                     // Append a node's description
                     node.append("foreignObject")
@@ -174,7 +179,7 @@
                             switch(d.type){
                                 case "element":
                                     t = d.description;
-                                    break
+                                    break;
                                 case "equipment":
                                     t = d.product.name;
                                     break;
@@ -198,7 +203,7 @@
                             switch(d.type){
                                 case "element":
                                     t = "Элемент: " + d.description;
-                                    break
+                                    break;
                                 case "equipment":
                                     t = "Товар: " + d.product.name;
                                     break;
@@ -211,7 +216,7 @@
                             height = $t.outerHeight(),
                             offsetOfCircle = $(this).offset();
 
-                        tooltip.style("left", (offsetOfCircle.left - width/2 + 10 * 1) + "px")
+                        tooltip.style("left", (offsetOfCircle.left - width/2 + 10) + "px")
                             .style("top", (offsetOfCircle.top - height - 5) + "px");
                     }).on("mouseout", function() {
                         tooltip.style('display', 'none');
@@ -245,13 +250,15 @@
                         .attr("marker-end", "url(#end)");
 
 
-                    // TODO 2
+                    // TODO 2 - COMPLETED
                     // См. EditQuotationOrderCtrl.js
                     // Там есть sc.removeLink()
                     // При dblclick на стрелочки вывести подтверждение типа: "Точно удалить? Ты не двинулся?"
                     // Если не двинулся, то кинуть запрос на сервер.
+
+                    // !!!!  Нужно ли потом удалить линк или перерисовать ? 
                     svg.selectAll('path').on("dblclick", function(d,i) {
-                        console.log("double click on", d);
+                        scope.$emit('qos-removeLink', {link:d, index:i});
                     });
 
                     return path;

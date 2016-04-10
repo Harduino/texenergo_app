@@ -281,7 +281,7 @@
                     return undefined;
                 }
             });
-        }
+        };
         
         // Функция для добавления нового элемента
         // Вроде ничего хитрого.
@@ -303,7 +303,7 @@
                     }
                 });
             }
-        }
+        };
 
         // Используется в двух местах ниже - есть создание товара из двух же разных мест.
         // Возвращает запрос, понятный сервер для добавления товара.
@@ -394,12 +394,12 @@
         // Устанавливает текущей выбранный элемент или строку комплектации для создания связи.
         sc.setNewLinkFrom = function(item){
             sc.newLinkFrom = {id: item.id, name: (item.description || item.product.name)};
-        }
+        };
 
         // Устанавливает текущей выбранный элемент или строку комплектации для создания связи.
         sc.setNewLinkTo = function(item){
             sc.newLinkTo = {id: item.id, name: (item.description || item.product.name)};
-        }
+        };
 
         // Отправляет запрос на сервер для создания связи
         // Сбрасывает выбранные вне зависимости от ответа сервера. Это плохо?
@@ -407,8 +407,19 @@
             sc.addNewLink(sc.newLinkFrom, sc.newLinkTo, {});
             sc.newLinkFrom = null;
             sc.newLinkTo = null;
-        }
-        
+        };
+
+        sc.$on('qos-removeLink', function(event, data){
+            $.SmartMessageBox({
+                title: "Удалить",
+                content: "Вы действительно хотите удалить связь?",
+                buttons: '[Нет][Да]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed === "Да") {
+                    sc.removeLink(data.link, data.index);
+                }
+            });
+        });
         
         
         // ЗДЕСЬ ОБНОВЛЕНИЕ И УДАЛЕНИЕ УЖЕ СУЩЕСТВУЮЩИХ
@@ -563,7 +574,7 @@
                     funcFactory.showNotification("Неудача", 'Не удалось удалить связь');
                 }
             });
-        }
+        };
         
         /**
          * Открываем модальное окно, чтобы заменить товар в Комплектации на другой
@@ -614,7 +625,7 @@
          */
         sc.initProdSelect = function(){
             if(config.searchText){
-                var x = config.searchText.replace(/\s*\d+\s*шт/i,"")
+                var x = config.searchText.replace(/\s*\d+\s*шт/i,"");
                 angular.element('#eqo_cp_modal_p_select').data().$uiSelectController.search = x;
             }
         };
@@ -641,4 +652,4 @@
             $uibModalInstance.dismiss('cancel');
         };
     }])
-})
+}());
