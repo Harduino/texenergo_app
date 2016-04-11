@@ -6,7 +6,7 @@
 
     'use strict';
 
-    angular.module('app.products').controller('ProductCtrl', ['$scope', '$stateParams', 'serverApi', '$state', 'funcFactory', '$uibModal', function($scope, $stateParams, serverApi, $state, funcFactory, $uibModal){
+    angular.module('app.products').controller('ProductCtrl', ['$scope', '$stateParams', 'serverApi', '$state', 'funcFactory', '$uibModal', 'CanCan', function($scope, $stateParams, serverApi, $state, funcFactory, $uibModal, CanCan){
         var sc = $scope;
 
         sc.visual = {
@@ -14,7 +14,7 @@
                 {type: 'at_partners', callback: goToSupplierInfos},
                 {type:'add', callback:appendProductToCustomerOrder}
             ],
-            roles: {}
+            roles: {can_edit: CanCan.can('edit', 'Product')}
         };
 
         sc.product = {};// данные продукта

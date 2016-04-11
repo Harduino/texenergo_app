@@ -22,9 +22,10 @@
                                 <input class="form-control" type="text">
                             </div>
                             <div class="widget-body">
-                                <div>
+                                <div ng-switch="visual.roles.can_edit">
                                     <b>Артикул:</b>
-                                    <span editable-text="product.article" onaftersave="saveProduct()"> {{ product.article }}</span>
+                                    <span ng-switch-when="true" editable-text="product.article" onaftersave="saveProduct()"> {{ product.article }}</span>
+                                    <span ng-switch-default>{{ product.article }}</span>
                                 </div>
                                 <div>
                                     <b>Производитель:</b>
