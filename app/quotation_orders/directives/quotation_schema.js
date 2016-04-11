@@ -19,7 +19,8 @@
         return {
             restrict: 'E',
             scope: {
-                data: "="
+                data: "=",
+                instanceCallback: '=?'
             },
 
             // TODO 0.
@@ -28,22 +29,24 @@
             link: function(scope, element, attrs){
                 // Setting current effective Width
                 defaultConfig.d3.size[0] = element.parent().outerWidth();
+                defaultConfig.d3.size[1] = element.parent().outerHeight();
                 var inDrag = false;
 
                 // Watch for data changes
                 //
-                // TODO 4. См TODO 3, но надо как-то сделать синхронизацию с "большим" scope-ом.
+                // TODO 4. См TODO 3, но надо как-то сделать синхронизацию с "большим" scope-ом. - COMPLETED
                 // При каждом маленьком изменении заново строить может быть плохой идей - вдруг человек долго кружочки расставлял.
                 // Может что-то типа кнопки "Обновить"?
+
                 scope.$watch('data', function(dataValue){
-                    dataValue && drawChart(dataValue);
+                    dataValue && scope.drawChart(dataValue);
                 });
 
-                scope.drawChart = function(data){
-                    drawChart(data);
-                };
+                // возвращаю scope директивы что бы дать возможность родительскому контролеру
+                // получить доступ к его методам
+                scope.instanceCallback && scope.instanceCallback(scope);
 
-                function drawChart(d) {
+                scope.drawChart = function(d) {
                     if(d.equipment===undefined) return;
                     if(d.elements===undefined) return;
                     scope.nodes = d.equipment.concat(d.elements);
@@ -51,7 +54,7 @@
 
                     setEdgesAttributes(d);
 
-                    // TODO 3
+                    // TODO 3 - COMPLETED
                     // Конфигурацию снаружи брать не будем. Весь конфиг в обозримом будущем будет здесь.
                     // Подправить, чтобы со старта всё полезное пространство было занято (ширина/высота)
                     var force = d3
@@ -63,11 +66,12 @@
                         .nodes(scope.nodes)
                         .links(scope.links);
 
+                    element.find("svg").remove();
                     var svg = d3
                         .select(element[0])
                         .append('svg')
-                        .attr('width', 960)
-                        .attr('height', 500);
+                        .attr('width', defaultConfig.d3.size[0])
+                        .attr('height', defaultConfig.d3.size[1]);
 
                     // Common group for all pieces
                     svg.append("g");
@@ -105,7 +109,7 @@
                     force.on("tick", tickHandler.bind({node: node, path:path}));
 
                     force.start();
-                }
+                };
 
                 // Связи предоставленные сервером линкуем на будущие кружочки
                 function setEdgesAttributes(d){
@@ -256,7 +260,7 @@
                     // При dblclick на стрелочки вывести подтверждение типа: "Точно удалить? Ты не двинулся?"
                     // Если не двинулся, то кинуть запрос на сервер.
 
-                    // !!!!  Нужно ли потом удалить линк или перерисовать ? 
+                    // !!!!  Нужно ли потом удалить линк или перерисовать ?
                     svg.selectAll('path').on("dblclick", function(d,i) {
                         scope.$emit('qos-removeLink', {link:d, index:i});
                     });

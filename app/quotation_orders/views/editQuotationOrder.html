@@ -185,8 +185,9 @@
                             <h2>Схема</h2>
                         </header>
                         <div class="widget-body">
-                            <div class="well well-clean well-white">
-                                <quotation-schema data="data.quotationOrder"></quotation-schema>
+                            <div class="well well-clean well-white" style="height: 400px;">
+                                <button class="btn btn-default right" ng-click="refreshChart()">Обновить</button>
+                                <quotation-schema data="data.quotationOrder" instance-callback="getQuotationSchemaInstance"></quotation-schema>
                             </div>
                         </div>
                     </div>

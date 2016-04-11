@@ -5,7 +5,6 @@
     }]).controller('EditQuotationOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', '$filter', 'funcFactory', '$uibModal', '$parse', function($scope, $state, $stateParams, serverApi, $filter, funcFactory, $uibModal, $parse){
         var sc = $scope;
         
-        
         sc.data ={
             quotationOrder:{},
             productsList: [], // Используестя при поиске нового товара для добавления. Хранит список найденных.
@@ -14,7 +13,9 @@
             newLinkFrom: null, // Выбранный объект для связи типа От
             newLinkTo: null // Выбранный объект для связи типа К
         };
-        
+
+        // получаем scope графа
+        var _quotationSchemaInstance;
         
         sc.visual = {
             title: "Рассчет"//window.gon.index.QuotationOrders.indexTitle
@@ -420,6 +421,19 @@
                 }
             });
         });
+
+        sc.getQuotationSchemaInstance = function(instance){
+            console.log(instance);
+            _quotationSchemaInstance = instance;
+        };
+
+        sc.refreshChart = function(){
+            console.log(_quotationSchemaInstance);
+            _quotationSchemaInstance.drawChart(sc.data.quotationOrder);
+        };
+
+
+
         
         
         // ЗДЕСЬ ОБНОВЛЕНИЕ И УДАЛЕНИЕ УЖЕ СУЩЕСТВУЮЩИХ
