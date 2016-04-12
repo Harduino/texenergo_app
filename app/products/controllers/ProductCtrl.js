@@ -91,10 +91,10 @@
                         name: product.name,
                         description: product.description,
                         article: product.article,
-                        manufacturer_id: product.manufacturer.id//,
-                        // catalogue_ids: (product.catalogues || []).map(function(item){
-                        //     return item.id;
-                        // }),
+                        manufacturer_id: product.manufacturer.id,
+                        catalogue_ids: (product.catalogues || []).map(function(item){
+                             return item.id;
+                        })//,
                         // type: product.type.selected,
                         // unit: product.unit.selected,
                         // vat_rate: product.vat_rate.selected,
@@ -126,6 +126,22 @@
             });
         };
 
+        sc.changeCatalogues = function(){
+            var modalInstance = $uibModal.open({
+                templateUrl: 'spChangeCataloguesModal.tmpl.html',
+                controller: 'productCatalogueModalCtrl',
+                windowClass: 'eqo-centred-modal',
+                resolve: {
+                    data: { catalogues: sc.product.catalogues}
+                }
+            });
+
+            modalInstance.result.then(function (selected) {
+                sc.product.catalogues = selected;
+                sc.saveProduct();
+            });
+        };
+
     }]).controller('productManufacturerModalCtrl', ['$scope', 'serverApi', '$uibModalInstance', 'product', function(sc, serverApi, $uibModalInstance, product){
         sc.data = {
             manufacturer: product
@@ -135,6 +151,20 @@
         };
         sc.ok = function () {
             $uibModalInstance.close(sc.data.manufacturer);
+        };
+        sc.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+    }]).controller('productCatalogueModalCtrl', ['$scope', 'serverApi', '$uibModalInstance', 'data', function(sc, serverApi, $uibModalInstance, data){
+        sc.data = {
+            selected: data.catalogues,
+            catalogues: []
+        };
+        sc.cselectConfig = {
+            dataMethod: serverApi.getCatalogues
+        };
+        sc.ok = function () {
+            $uibModalInstance.close(sc.data.selected);
         };
         sc.cancel = function () {
             $uibModalInstance.dismiss('cancel');

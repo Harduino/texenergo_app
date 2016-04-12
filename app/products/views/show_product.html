@@ -107,6 +107,7 @@
                                 <input class="form-control" type="text">
                             </div>
                             <div class="widget-body">
+                                <button ng-switch-when="true" class="btn btn-success right" ng-click="changeCatalogues()">Изменить</button>
                                 <div class="dd">
                                     <ol class="dd-list">
                                         <li class="dd-item" ng-repeat="catalogue in product.catalogues">
@@ -275,5 +276,22 @@
     <div class="modal-footer">
         <button class="btn btn-danger" type="button" ng-click="cancel()">Отмена</button>
         <button class="btn btn-primary" type="button" ng-click="ok()">Выбрать</button>
+    </div>
+</script>
+<script type="text/ng-template" id="spChangeCataloguesModal.tmpl.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Добавить категории</h3>
+    </div>
+    <div class="modal-body">
+        <ui-select multiple ui-select-infinity="cselectConfig" ng-model="data.selected" theme="select2" class="full-width">
+            <ui-select-match placeholder="Добавьте категории">{{$item.name}}</ui-select-match>
+            <ui-select-choices repeat="c in data.catalogues | filter:$select.search">
+                <div ng-bind-html="c.name | highlight: $select.search"></div>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-danger" type="button" ng-click="cancel()">Отмена</button>
+        <button class="btn btn-primary" type="button" ng-click="ok()">Добавить</button>
     </div>
 </script>
