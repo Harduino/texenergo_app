@@ -337,6 +337,39 @@
             });
         };
 
+        // Иногда сервер подмечает возможные ошибки в комплектации.
+        // Если он знает как их исправить, то также передает item.message.resolution значение которого надо вернуть.
+        // Сервер возвращает новое значение для текущего оборудование в спецификации
+        sc.resolveMessage = function(item, message){
+            if(message === undefined || message.resolution === undefined) {
+                return true;
+            }
+            var data = {
+                resolve_equipment: {
+                    id: item.id,
+                    resolver: message.resolution
+                }
+            };
+            serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
+                if(result.status == 200 && !result.data.errors){
+
+                    if (Array.isArray(result.data)) {
+                        sc.data.quotationOrder.equipment = result.data;
+                    } else {
+                        for(var i=0; i < sc.data.quotationOrder.equipment.length; i++) {
+                            if (sc.data.quotationOrder.equipment[i].id == result.data.id) {
+                                sc.data.quotationOrder.equipment[i] = result.data;
+                                funcFactory.showNotification("Удача", "Обновил товар", true);
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    funcFactory.showNotification("Неудача", 'Не удалось добавить элемент');
+                }
+            });
+        }
+
 
         /**
          * Кликаем на плюсик элемента и создаём для него товар.
