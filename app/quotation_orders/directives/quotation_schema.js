@@ -23,21 +23,14 @@
                 instanceCallback: '=?'
             },
 
-            // TODO 0.
-            // В контроллере не хорошо, много кода + идет как достаточно самодостаточный элемент.
-            // Если вдруг понадобится реиспользовать, не придется делать рефакторинг. Так легче поддерживать и модифицировать.
             link: function(scope, element, attrs){
                 // Setting current effective Width
                 defaultConfig.d3.size[0] = element.parent().outerWidth();
                 defaultConfig.d3.size[1] = element.parent().outerHeight();
                 var inDrag = false;
 
-                // Watch for data changes
-                //
-                // TODO 4. См TODO 3, но надо как-то сделать синхронизацию с "большим" scope-ом. - COMPLETED
-                // При каждом маленьком изменении заново строить может быть плохой идей - вдруг человек долго кружочки расставлял.
-                // Может что-то типа кнопки "Обновить"?
 
+                //могу добавить отслеживание свойств но тогда перерисовка зацикливается, копирование объекта тоже не очень помогает
                 scope.$watch('data', function(dataValue){
                     dataValue && scope.drawChart(dataValue);
                 });
@@ -45,6 +38,8 @@
                 // возвращаю scope директивы что бы дать возможность родительскому контролеру
                 // получить доступ к его методам
                 scope.instanceCallback && scope.instanceCallback(scope);
+
+                // можно подумать о том что бы не перерисовывать каждый раз а добавлять или удалять определенный связи и ноды
 
                 scope.drawChart = function(d) {
                     if(d.equipment===undefined) return;
@@ -54,9 +49,6 @@
 
                     setEdgesAttributes(d);
 
-                    // TODO 3 - COMPLETED
-                    // Конфигурацию снаружи брать не будем. Весь конфиг в обозримом будущем будет здесь.
-                    // Подправить, чтобы со старта всё полезное пространство было занято (ширина/высота)
                     var force = d3
                         .layout
                         .force()
@@ -66,7 +58,9 @@
                         .nodes(scope.nodes)
                         .links(scope.links);
 
+                    //очищаем элемент перед отрисовкой новой диаграммы
                     element.find("svg").remove();
+
                     var svg = d3
                         .select(element[0])
                         .append('svg')
@@ -84,31 +78,21 @@
 
                     node.call(appendDrag(force));
 
-                    // TODO 1
-                    // См. в EditQuotationOrderCtrl.js
-                    // Там есть linkItems(), addNewLink() и связанные вещи.
-                    // Сейчас они вызываются через ярвис "Связи". Совсем неудобно - надо на схему переместить функционал.
-                    // Человек кликает на кружок и поехали
-                    // if sc.newLinkFrom != null
-                    //     if sc.newLinkFrom == currentNode
-                    //         sc.newLinkFrom = null
-                    //         exit
-                    //     else
-                    //         sc.newLinkTo = currentNode
-                    //         saveLinkToServer
-                    //     end
-                    // else
-                    //     sc.newLinkFrom = currentNode
-                    // end
-                    // Может как-то выделять текущий выбранный кружок?
+
                     svg.selectAll(".node").on("click", function(item){
                         if (d3.event.defaultPrevented) return;
-                        console.log("Clicked on", item);
+                        scope.$emit('qos-nodeSelected', item);
+                        scope.clearSelection();
+                        d3.select(this).classed("selected", true);
                     });
 
                     force.on("tick", tickHandler.bind({node: node, path:path}));
 
                     force.start();
+                };
+
+                scope.clearSelection = function(){
+                    d3.selectAll('.node').classed("selected", false);
                 };
 
                 // Связи предоставленные сервером линкуем на будущие кружочки

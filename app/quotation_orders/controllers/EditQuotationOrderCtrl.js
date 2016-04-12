@@ -9,10 +9,10 @@
             quotationOrder:{},
             productsList: [], // Используестя при поиске нового товара для добавления. Хранит список найденных.
             selectedProduct: null, // Используется при поиске нового товара для добавления. Хранит выбранный.
-            total:0, // Считаем итого в руб по смете
-            newLinkFrom: null, // Выбранный объект для связи типа От
-            newLinkTo: null // Выбранный объект для связи типа К
+            total:0 // Считаем итого в руб по смете
         };
+        sc.newLinkFrom =  null; // Выбранный объект для связи типа От
+        sc.newLinkTo =  null; // Выбранный объект для связи типа К
 
         // получаем scope графа
         var _quotationSchemaInstance;
@@ -263,7 +263,7 @@
         // @param t - От to. Дальше аналогично f.
         // @param value - Не используется. В будущем здесь может быть что угодно. Например, свойство или комментарий.
         // id у всех уникальные. Поэтому сервер уже сам разбирается что к чему относится.
-        sc.addNewLink = function(f, t, value) {
+        sc.addNewLink = function(f, t, value, callback) {
             var dataForNewLink = {
                 add_link: {
                     from: (f.id || f._id),
@@ -273,6 +273,7 @@
             serverApi.updateQuotationOrder(sc.data.quotationOrder.id, dataForNewLink, function(result){
                 if(result.status == 200 && !result.data.errors){
                     sc.data.quotationOrder.links.push(result.data);
+                    callback && callback();
                     return result.data;
                 } else if (result.data.errors !== undefined) {
                     funcFactory.showNotification("Неудача", result.data.errors);
@@ -436,9 +437,9 @@
         };
 
         // Отправляет запрос на сервер для создания связи
-        // Сбрасывает выбранные вне зависимости от ответа сервера. Это плохо?
-        sc.linkItems = function(){
-            sc.addNewLink(sc.newLinkFrom, sc.newLinkTo, {});
+        // Сбрасывает выбранные вне зависимости от ответа сервера. Это плохо? Плохо, нужно хотыбя предупреждать пользователя что не удалось
+        sc.linkItems = function(callback){
+            sc.addNewLink(sc.newLinkFrom, sc.newLinkTo, {}, callback);
             sc.newLinkFrom = null;
             sc.newLinkTo = null;
         };
@@ -461,11 +462,19 @@
         };
 
         sc.refreshChart = function(){
-            console.log(_quotationSchemaInstance);
             _quotationSchemaInstance.drawChart(sc.data.quotationOrder);
         };
 
-
+        sc.$on('qos-nodeSelected', function(event, item){
+            if(sc.newLinkFrom !== null){
+                if(sc.newLinkFrom.id !== item.id){
+                    sc.setNewLinkTo(item);
+                    sc.linkItems(function(){
+                        sc.refreshChart();
+                    });
+                }
+            }else sc.setNewLinkFrom(item);
+        });
 
         
         
