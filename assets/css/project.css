@@ -657,6 +657,9 @@ td:hover .td-nb-btn.themed{
     opacity: 1;
     color: rgba(76, 79, 83, 1);
 }
+.editable-click{
+    cursor: pointer;
+}
 /* UI copy to buffer */
 .te-c-buffer-input{
     position:absolute;

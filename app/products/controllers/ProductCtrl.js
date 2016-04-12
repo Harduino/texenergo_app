@@ -17,6 +17,8 @@
             roles: {can_edit: CanCan.can('edit', 'Product')}
         };
 
+        sc.tinymceOptions = funcFactory.getTinymceOptions();
+
         sc.product = {};// данные продукта
         sc.data = {
             quantity:0
@@ -69,8 +71,8 @@
                     product:{
                         name: product.name,
                         description: product.description,
-                        article: product.article//,
-                        // manufacturer_id: product.manufacturer.id,
+                        article: product.article,
+                        manufacturer_id: product.manufacturer.id//,
                         // catalogue_ids: (product.catalogues || []).map(function(item){
                         //     return item.id;
                         // }),
@@ -87,6 +89,36 @@
                     funcFactory.showNotification('Не удалось отредактировать категорию '+product.name, result.data.errors);
                 }
             });
+        };
+
+        sc.changeManufacturer = function(){
+            var modalInstance = $uibModal.open({
+                templateUrl: 'spChangeManufacturerModal.tmpl.html',
+                controller: 'productManufacturerModalCtrl',
+                windowClass: 'eqo-centred-modal',
+                resolve: {
+                    product: sc.product.manufacturer
+                }
+            });
+
+            modalInstance.result.then(function (selected) {
+                sc.product.manufacturer = selected;
+                sc.saveProduct();
+            });
+        };
+
+    }]).controller('productManufacturerModalCtrl', ['$scope', 'serverApi', '$uibModalInstance', 'product', function(sc, serverApi, $uibModalInstance, product){
+        sc.data = {
+            manufacturer: product
+        };
+        sc.mSelectConfig = {
+            dataMethod: serverApi.getManufacturers
+        };
+        sc.ok = function () {
+            $uibModalInstance.close(sc.data.manufacturer);
+        };
+        sc.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
         };
     }]);
 }());

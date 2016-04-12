@@ -1,11 +1,14 @@
-<div id="content">
+<div id="content" ng-switch="visual.roles.can_edit">
     <div class="row">
         <big-breadcrumbs items="['Просмотр товара']" data-icon="edit" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
     </div>
     <div class="well product-info">
         <div class="row">
             <div class="col-xs-12 col-md-12">
-                <h2 class="txt-color-blueDark semi-bold prod-review-title">{{ product.name }}</h2>
+                <div>
+                    <h2 ng-switch-when="true" editable-text="product.name" onaftersave="saveProduct()" class="txt-color-blueDark semi-bold prod-review-title display-inline">{{ product.name }}</h2>
+                    <h2 ng-switch-when="false" class="txt-color-blueDark semi-bold prod-review-title display-inline">{{product.name}}</h2>
+                </div>
                 <form-nav-buttons options="visual.navButtsOptions" subdata="product.id" class="btn-group margin-top-10"></form-nav-buttons>
                 <div class="col-xs-12 col-md-12">
                     <hr>
@@ -22,14 +25,15 @@
                                 <input class="form-control" type="text">
                             </div>
                             <div class="widget-body">
-                                <div ng-switch="visual.roles.can_edit">
+                                <div>
                                     <b>Артикул:</b>
                                     <span ng-switch-when="true" editable-text="product.article" onaftersave="saveProduct()"> {{ product.article }}</span>
-                                    <span ng-switch-default>{{ product.article }}</span>
+                                    <span ng-switch-when="false">{{ product.article }}</span>
                                 </div>
                                 <div>
                                     <b>Производитель:</b>
-                                    {{ product.manufacturer.name }}
+                                    <span ng-switch-when="false">{{ product.manufacturer.name }}</span>
+                                    <a ng-switch-when="true" class="editable-click" ng-click="changeManufacturer()">{{product.manufacturer.name}}</a>
                                 </div>
                                 <div>
                                     <b>Цена:</b>
@@ -70,11 +74,14 @@
                     <div id="show-product-3" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false" data-widget-collapsed="true">
                         <header><h2>Описание</h2></header>
                         <div>
-                            <div class="jarviswidget-editbox">
-                                <input class="form-control" type="text">
-                            </div>
-                            <div class="widget-body">
+                            <div ng-switch-when="false" class="widget-body">
                                 <div ng-bind-html="product.description"></div>
+                            </div>
+                            <div style="padding-bottom: 10px;">
+                                <div style="display: flex; flex-direction: row; justify-content: flex-end;">
+                                    <button class="btn btn-success" ng-click="saveProduct()">Сохранить</button>
+                                </div>
+                                <textarea ui-tinymce="tinymceOptions" ng-model="product.description"></textarea>
                             </div>
                         </div>
                     </div>
@@ -240,3 +247,20 @@
         </section>
     </div>
 </div>
+<script type="text/ng-template" id="spChangeManufacturerModal.tmpl.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Выбирите производителя</h3>
+    </div>
+    <div class="modal-body">
+        <ui-select  ui-select-infinity="mSelectConfig" ng-model="data.manufacturer" theme="select2" class="td-ui-select">
+            <ui-select-match placeholder="Производитель не выбран">{{$select.selected.name}}</ui-select-match>
+            <ui-select-choices repeat="m in data.manufacturers | filter:$select.search">
+                <div ng-bind-html="m.name | highlight: $select.search"></div>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-danger" type="button" ng-click="cancel()">Отмена</button>
+        <button class="btn btn-primary" type="button" ng-click="ok()">Выбрать</button>
+    </div>
+</script>
