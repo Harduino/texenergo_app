@@ -6,7 +6,7 @@
 
     'use strict';
 
-    angular.module('app.products').controller('ProductCtrl', ['$scope', '$stateParams', 'serverApi', '$state', 'funcFactory', '$uibModal', 'CanCan', function($scope, $stateParams, serverApi, $state, funcFactory, $uibModal, CanCan){
+    angular.module('app.products').controller('ProductCtrl', ['$scope', '$stateParams', 'serverApi', '$state', 'funcFactory', '$uibModal', 'CanCan', 'FileUploader', function($scope, $stateParams, serverApi, $state, funcFactory, $uibModal, CanCan, FileUploader){
         var sc = $scope;
 
         sc.visual = {
@@ -24,11 +24,30 @@
             quantity:0
         };
 
+        sc.uploader = new FileUploader({
+            withCredentials: true,
+            queueLimit: 1,
+            onCompleteItem: function(fileItem, response, status, headers) {
+                if(status===200){
+                    sc.product.image_url = response.image_url;
+                    sc.uploader.clearQueue();
+                    funcFactory.showNotification("Успешно", 'Изменил картинку.',true);
+                } else {
+                    funcFactory.showNotification('Не удалось изменить картинку', result.data.errors);
+                }
+            }
+        });
+
         //получаем информацию о продукте при загрузке контроллера $stateParams.id - id продукта
         serverApi.getProduct($stateParams.id, function(result){
             sc.product = result.data;
             console.log(result.data);
+            setFileUploadOptions(result.data);
         });
+
+        function setFileUploadOptions(product){
+            sc.uploader.url = 'http://www.texenergo.com/api/products/'+ product.id +'/image';
+        }
 
         sc.getLeadTime = function(id, quantity){
             if(event.keyCode == 13){
