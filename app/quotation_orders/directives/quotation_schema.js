@@ -237,7 +237,6 @@
                         .attr("class", "link")
                         .attr("marker-end", "url(#end)");
 
-                    // !!!!  Нужно ли потом удалить линк или перерисовать ?
                     svg.selectAll('path').on("dblclick", function(d,i) {
                         scope.$emit('qos-removeLink', {link:d, index:i});
                     });

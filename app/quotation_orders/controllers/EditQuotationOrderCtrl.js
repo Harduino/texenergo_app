@@ -545,13 +545,8 @@
             };
             serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
                 if(result.status == 200 && !result.data.errors){
-                    for(var i=0; i < sc.data.quotationOrder.equipment.length; i++) {
-                        if (sc.data.quotationOrder.equipment[i].id == result.data.id) {
-                            sc.data.quotationOrder.equipment[i] = result.data;
-                            funcFactory.showNotification("Удача", "Обновил товар", true);
-                            break;
-                        }
-                    }
+                    angular.extend(item, result.data);
+                    funcFactory.showNotification("Удача", "Обновил товар", true);
                 } else {
                     funcFactory.showNotification("Неудача", 'Не удалось добавить элемент');
                 }
