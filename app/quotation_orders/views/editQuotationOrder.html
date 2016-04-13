@@ -131,7 +131,8 @@
                                                     <a editable-number="item.quantity" onaftersave="saveEquipmentChange(item)" e-min="0" buttons="no">{{ item.quantity || 'Значение не установлено'}}</a>
                                                 </td>
                                                 <td>
-                                                    <a class="editable-click" ng-click="changeProductElement(item)">{{ findElementByEquipment(item).description }}</a>
+                                                    <!--<a class="editable-click" ng-click="changeProductElement(item)">{{ findElementByEquipment(item).description }}</a>-->
+                                                    {{ findElementByEquipment(item).description }}
                                                 </td>
                                                 <td class="eqo-td-rm-ico" ng-click="removeEquipment(item, $index)">
                                                     <i class="fa fa-times-circle"></i>
