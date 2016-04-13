@@ -60,6 +60,7 @@
 
                     //очищаем элемент перед отрисовкой новой диаграммы
                     element.find("svg").remove();
+                    $('body').find('.tooltip.graph-tip').remove();
 
                     var svg = d3
                         .select(element[0])

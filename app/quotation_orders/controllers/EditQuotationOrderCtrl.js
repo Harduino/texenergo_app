@@ -455,7 +455,9 @@
                 buttons: '[Нет][Да]'
             }, function (ButtonPressed) {
                 if (ButtonPressed === "Да") {
-                    sc.removeLink(data.link, data.index);
+                    sc.removeLink(data.link, data.index, function(){
+                        sc.refreshChart();
+                    });
                 }
             });
         });
@@ -617,7 +619,7 @@
         /**
          * Удаляем связь. Требуется только её id
          */
-        sc.removeLink = function(link, index){
+        sc.removeLink = function(link, index, callback){
             var data = {
                 remove_link: {
                     id: link.id
@@ -625,7 +627,8 @@
             };
             serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
                 if(result.status == 200 && !result.data.errors){
-                    sc.data.quotationOrder.links.splice(index, 1);
+                    sc.data.quotationOrder.links.splice(index-1, 1);
+                    callback && callback();
                     funcFactory.showNotification("Удача", "Удалил связь", true);
                 } else {
                     funcFactory.showNotification("Неудача", 'Не удалось удалить связь');
