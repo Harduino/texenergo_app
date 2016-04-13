@@ -142,6 +142,22 @@
             });
         };
 
+        sc.canEditProduct = function(){
+            for(var i=0; i < gon.ability.rules.length; i++) {
+                if(gon.ability.rules[i].subjects[0]==="Product") {
+                    for (var j = 0; j <= gon.ability.rules[i].actions.length; j++) {
+                        if (gon.ability.rules[j].actions[j]==="update") {
+                            return true;
+                        }
+                    }
+                }
+                if(gon.ability.rules[i].subjects[0]==="all") {
+                    return true;
+                }
+            }
+            return false;
+        }
+
     }]).controller('productManufacturerModalCtrl', ['$scope', 'serverApi', '$uibModalInstance', 'product', function(sc, serverApi, $uibModalInstance, product){
         sc.data = {
             manufacturer: product

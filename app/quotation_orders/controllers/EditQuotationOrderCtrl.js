@@ -428,7 +428,11 @@
 
         // Устанавливает текущей выбранный элемент или строку комплектации для создания связи.
         sc.setNewLinkFrom = function(item){
-            sc.newLinkFrom = {id: item.id, name: (item.description || item.product.name)};
+            if(item!==null){
+                sc.newLinkFrom = {id: item.id, name: (item.description || item.product.name)};
+            } else {
+                sc.newLinkFrom = null;
+            }
         };
 
         // Устанавливает текущей выбранный элемент или строку комплектации для создания связи.
@@ -472,6 +476,8 @@
                     sc.linkItems(function(){
                         sc.refreshChart();
                     });
+                } else {
+                    sc.setNewLinkFrom(null);
                 }
             }else sc.setNewLinkFrom(item);
         });

@@ -25,16 +25,13 @@
         };
         
         serverApi.getPartnerDetails($stateParams.id, function(result){
-            console.log(result.data);
             sc.partner = result.data;
             
             serverApi.getCustomerOrders(1, "-"+sc.partner.prefix+"-", {}, function(result){
-                console.log("CustomerOrders: ", result);
                 sc.partner.customerOrders = result.data;
             });
             
             serverApi.getDispatchOrders(1, "-"+sc.partner.prefix+"-", {}, function(result){
-                console.log("DispatchOrders: ", result);
                 sc.partner.dispatchOrders = result.data;
             });
         });

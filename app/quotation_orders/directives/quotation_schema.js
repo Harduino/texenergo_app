@@ -237,13 +237,6 @@
                         .attr("class", "link")
                         .attr("marker-end", "url(#end)");
 
-
-                    // TODO 2 - COMPLETED
-                    // См. EditQuotationOrderCtrl.js
-                    // Там есть sc.removeLink()
-                    // При dblclick на стрелочки вывести подтверждение типа: "Точно удалить? Ты не двинулся?"
-                    // Если не двинулся, то кинуть запрос на сервер.
-
                     // !!!!  Нужно ли потом удалить линк или перерисовать ?
                     svg.selectAll('path').on("dblclick", function(d,i) {
                         scope.$emit('qos-removeLink', {link:d, index:i});
