@@ -717,3 +717,7 @@ td:hover .td-nb-btn.themed{
     stroke: #777;
     stroke-width: 2px;
 }
+td .editable-controls>input[type="number"]{
+    width: 100%;
+    max-width: 100%;
+}
