@@ -69,6 +69,17 @@
                 sc.data.networkConfig.zoom = ui.value;
             }
         };
+
+        sc.summaryPanelOptions = {
+            appendTo: 'body',
+            scroll: true,
+            containment: 'body'
+        };
+        sc.summaryData = {
+            show: false,
+            positions: {},
+            total: 0
+        };
         
         sc.saveProductChange = function(data) {
             var product = data.item;
@@ -125,6 +136,37 @@
                 sc.saveProductSubstitute({id: p.id, quantity: p.quantity, product_id: (selectedProduct._id || selectedProduct.id)});
             });
         };
+
+        sc.selectPosition = function($event, item){
+            if($event.shiftKey){
+
+                $event.preventDefault();
+                $event.stopImmediatePropagation();
+
+                item.selected = !item.selected;
+
+                if(item.selected){
+                    sc.summaryData.positions[item.id] = item;
+                } else {
+                    delete sc.summaryData.positions[item.id];
+                }
+            }
+        };
+
+        sc.$watch('summaryData.positions', function(values){
+            if(values){
+                var total = 0;
+                var keys = Object.keys(values);
+
+                sc.summaryData.show = keys.length>0;
+
+                keys.map(function(prop){
+                    var item = values[prop];
+                    total += $filter('price_net')(item, item.quantity);
+                });
+                sc.summaryData.total = total;
+            }
+        }, true);
 
         
         /**
