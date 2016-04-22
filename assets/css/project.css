@@ -741,3 +741,6 @@ td .editable-controls>input[type="number"]{
 .table-bordered tr.selected{
     background-color: #ecf3f8;
 }
+.order-items.ui-sortable-helper{
+    height: auto!important;
+}

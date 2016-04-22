@@ -18,7 +18,15 @@
         var _quotationSchemaInstance;
         
         sc.visual = {
-            title: "Рассчет"//window.gon.index.QuotationOrders.indexTitle
+            title: "Рассчет",//window.gon.index.QuotationOrders.indexTitle
+            sortElementsOptions: {
+                update: updateElemntRowPosition,
+                items: "> .order-items"
+            },
+            sortEquipmentOptions: {
+                update: updateEquipmentRowPosition,
+                items: "> .order-items"
+            }
         };
         
         
@@ -676,6 +684,32 @@
                 });
             });
         };
+
+        function updateElemntRowPosition(e, ui){
+            var $this = $(this),
+                last_ind = angular.element(ui.item).scope().$index,
+                new_ind = ui.item.index();
+                //data = {customer_order: {command: "переместить_строку "+(last_ind+1)+"_на_" + (new_ind+1)}};
+            console.log(last_ind, new_ind);
+//            serverApi.[name](sc.order.id, data, function(result){
+//                if(result.status == 200){
+//                    sc.order.customer_order_contents.swapItemByindex(last_ind, new_ind);
+//                }else{
+//                    funcFactory.showNotification('Не удалось переместить сторку', result.data.errors);
+//                    $this.sortable( "cancel" );
+//                }
+//            }, function(){
+//                $this.sortable( "cancel" );
+//            });
+        }
+
+        function updateEquipmentRowPosition(e, ui){
+            var $this = $(this),
+                last_ind = angular.element(ui.item).scope().$index,
+                new_ind = ui.item.index();
+            console.log(last_ind, new_ind);
+        }
+
     }]).controller("EqoChangeEquipmentModalCtrl", ['$scope', '$uibModalInstance', 'serverApi', 'product', 'config', function($scope, $uibModalInstance, serverApi, product, config){
         var sc = $scope;
 
