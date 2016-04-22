@@ -188,8 +188,29 @@
                             <h2>Схема</h2>
                         </header>
                         <div class="widget-body">
-                            <div class="well well-clean well-white" style="height: 400px;">
+                            <div class="well well-clean well-white no-padding" style="height: 400px;">
                                 <button class="btn btn-default right" ng-click="refreshChart()">Обновить</button>
+                                <div class="eqo-schema-control-p">
+                                    <header class="panel-heading">
+                                        Наличие узлов
+                                    </header>
+                                    <form class="smart-form">
+                                        <fieldset>
+                                            <section>
+                                                <label class="toggle eqo-schema-elem">
+                                                    <input type="checkbox" name="checkbox-toggle" ng-model="visual.showSchemeElements" ng-change="toggleAvailabilityOfNodes('red', visual.showSchemeElements)">
+                                                    <i data-swchon-text="ON" data-swchoff-text="OFF"></i>
+                                                    Элементы
+                                                </label>
+                                                <label class="toggle eqo-schema-prod">
+                                                    <input type="checkbox" name="checkbox-toggle" ng-model="visual.showSchemeProducts" ng-change="toggleAvailabilityOfNodes('green', visual.showSchemeProducts)">
+                                                    <i data-swchon-text="ON" data-swchoff-text="OFF"></i>
+                                                    Комплекты
+                                                </label>
+                                            </section>
+                                        </fieldset>
+                                    </form>
+                                </div>
                                 <quotation-schema data="data.quotationOrder" instance-callback="getQuotationSchemaInstance"></quotation-schema>
                             </div>
                         </div>

@@ -744,3 +744,26 @@ td .editable-controls>input[type="number"]{
 .order-items.ui-sortable-helper{
     height: auto!important;
 }
+.eqo-schema-control-p{
+    position: absolute;
+    width: 230px;
+    right: 0;
+    top: 45px;
+    border: 1px solid #4c4f53;
+}
+.eqo-schema-control-p>header{
+    background-color: #4c4f53;
+    color: white;
+}
+.eqo-schema-control-p .eqo-schema-elem>input:checked+i{
+    border-color: red;
+}
+.eqo-schema-control-p .eqo-schema-elem>i:before{
+    background-color: red;
+}
+.eqo-schema-control-p .eqo-schema-prod>input:checked+i{
+    border-color: #008000;
+}
+.eqo-schema-control-p .eqo-schema-prod>i:before{
+    background-color: #008000;
+}

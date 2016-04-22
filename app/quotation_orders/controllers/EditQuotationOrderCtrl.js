@@ -26,7 +26,9 @@
             sortEquipmentOptions: {
                 update: updateEquipmentRowPosition,
                 items: "> .order-items"
-            }
+            },
+            showSchemeElements: true,
+            showSchemeProducts: true
         };
         
         
@@ -477,6 +479,21 @@
 
         sc.refreshChart = function(){
             _quotationSchemaInstance.drawChart(sc.data.quotationOrder);
+        };
+
+        sc.toggleAvailabilityOfNodes = function(color, show){
+            if(!sc.visual.showSchemeElements && !sc.visual.showSchemeProducts){
+                var c;
+                if(color === 'red'){
+                    sc.visual.showSchemeProducts = true;
+                    c = 'green';
+                }else{
+                    sc.visual.showSchemeElements = true;
+                    c = 'red';
+                }
+                _quotationSchemaInstance.toggleAvailability(c, true);
+            }
+            _quotationSchemaInstance.toggleAvailability(color, show);
         };
 
         sc.$on('qos-nodeSelected', function(event, item){

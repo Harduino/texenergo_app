@@ -96,6 +96,15 @@
                     d3.selectAll('.node').classed("selected", false);
                 };
 
+                scope.toggleAvailability = function(color, show){
+//                    d3.selectAll(".").each(function(){
+//                        var ng = d3.select(this).select(function() { return this.parentNode;});
+//                        ng.classed("display-none",visible);
+//                    });
+                    d3.selectAll('.node.'+color).classed('display-none', !show);
+                    d3.selectAll('.link.' + color).classed('display-none', !show);
+                };
+
                 // Связи предоставленные сервером линкуем на будущие кружочки
                 function setEdgesAttributes(d){
                     var nodeById = d3.map();
@@ -149,13 +158,16 @@
                         .data(nodes)
                         .enter()
                         .append("g")
-                        .attr("class", "node");
+                        .attr("class", function(d){
+                            d.color = getColorByType(d);
+                            return "node " + d.color;
+                        });
 
                     // Append a circle to the group
                     node.append('circle')
                         .attr('r', 10)
                         .attr("class", "circle")
-                        .style("fill", function(d, i) { return (d.type==="element" ? "red" : "green"); });
+                        .style("fill", function(d, i) { return d.color});
 
                     // Append a node's description
                     node.append("foreignObject")
@@ -235,7 +247,9 @@
                     var path = svg.append("svg:g").selectAll("path")
                         .data(links)
                         .enter().append("svg:path")
-                        .attr("class", "link")
+                        .attr("class", function(d){
+                            return "link " + getColorByType(d.source) + ' ' + getColorByType(d.target);
+                        })
                         .attr("marker-end", "url(#end)");
 
                     svg.selectAll('path').on("dblclick", function(d,i) {
@@ -244,6 +258,10 @@
 
                     return path;
 
+                }
+
+                function getColorByType(item){
+                    return item.type==="element" ? "red" : "green"
                 }
             }
         }
