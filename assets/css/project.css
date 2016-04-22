@@ -23,6 +23,17 @@
 .prod-review-title{
     margin-bottom: 0; margin-top: 12px;
 }
+.prod-review-title+form{
+    width: 100%;
+    margin-top: 12px;
+}
+.prod-review-title+form>.editable-controls.form-group{
+    width: 100%;
+    padding-right: 95px;
+}
+.prod-review-title+form>.editable-controls.form-group>input{
+    min-width: 100%;
+}
 .category-list{
     margin: 10px 0 0 0;
 }
