@@ -20,7 +20,7 @@
         sc.visual = {
             title: "Рассчет",//window.gon.index.QuotationOrders.indexTitle
             sortElementsOptions: {
-                update: updateElemntRowPosition,
+                update: updateElementRowPosition,
                 items: "> .order-items"
             },
             sortEquipmentOptions: {
@@ -702,29 +702,46 @@
             });
         };
 
-        function updateElemntRowPosition(e, ui){
+        // Implements persistently changes rows position for Elements
+        function updateElementRowPosition(e, ui){
             var $this = $(this),
                 last_ind = angular.element(ui.item).scope().$index,
                 new_ind = ui.item.index();
-                //data = {customer_order: {command: "переместить_строку "+(last_ind+1)+"_на_" + (new_ind+1)}};
-            console.log(last_ind, new_ind);
-//            serverApi.[name](sc.order.id, data, function(result){
-//                if(result.status == 200){
-//                    sc.order.customer_order_contents.swapItemByindex(last_ind, new_ind);
-//                }else{
-//                    funcFactory.showNotification('Не удалось переместить сторку', result.data.errors);
-//                    $this.sortable( "cancel" );
-//                }
-//            }, function(){
-//                $this.sortable( "cancel" );
-//            });
+            var data = {
+                change_rows: {
+                    where: "element",
+                    from: last_ind,
+                    to: new_ind
+                }
+            };
+            serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
+                if(result.status == 200){
+                    funcFactory.showNotification("Удача", "Сохранил изменение порядка", true);
+                }else{
+                  funcFactory.showNotification('Не удалось сохранить изменение порядка', result.data.errors);
+                }
+            });
         }
 
+        // Implements persistently changes rows position for Equipment
         function updateEquipmentRowPosition(e, ui){
             var $this = $(this),
                 last_ind = angular.element(ui.item).scope().$index,
                 new_ind = ui.item.index();
-            console.log(last_ind, new_ind);
+            var data = {
+                change_rows: {
+                    where: "equipment",
+                    from: last_ind,
+                    to: new_ind
+                }
+            };
+            serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
+                if(result.status == 200){
+                    funcFactory.showNotification("Удача", "Сохранил изменение порядка", true);
+                }else{
+                  funcFactory.showNotification('Не удалось сохранить изменение порядка', result.data.errors);
+                }
+            });
         }
 
     }]).controller("EqoChangeEquipmentModalCtrl", ['$scope', '$uibModalInstance', 'serverApi', 'product', 'config', function($scope, $uibModalInstance, serverApi, product, config){
