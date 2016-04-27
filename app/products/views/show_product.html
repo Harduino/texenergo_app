@@ -123,21 +123,34 @@
                 </article>
                 <article class="col-md-6">
                     <div id="show-product-5" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false" data-widget-collapsed="true">
-                        <header><h2>PDF Каталоги</h2></header>
+                        <header><h2>У партнёров</h2></header>
                         <div>
                             <div class="jarviswidget-editbox">
                                 <input class="form-control" type="text">
                             </div>
                             <div class="widget-body">
-                                <div class="dd">
-                                    <ol class="dd-list">
-                                        <li class="dd-item" ng-repeat="pdf in product.pdf_catalogues">
-                                            <div class="dd-handle">
-                                                <a href="/#/pdf_catalogues/{{ pdf.id }}">{{ pdf.name || 'Без имени'}}</a>
-                                            </div>
-                                        </li>
-                                    </ol>
-                                </div>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Поставщик</th>
+                                            <th class="hidden-xs">Код поставщика</th>
+                                            <th class="hidden-xs hidden-md">Закупка</th>
+                                            <th>Продажа</th>
+                                            <th>Остаток</th>
+                                            <th class="hidden-xs hidden-md">Срок поставки</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="row in product.supplier_infos">
+                                            <td>{{row.supplier_code}}</td>
+                                            <td class="hidden-xs">{{row.foreign_code}}</td>
+                                            <td class="hidden-xs hidden-sm hidden-md">{{row.prime_cost | currency}}</td>
+                                            <td>{{row.price | currency}}</td>
+                                            <td>{{row.quantity}}</td>
+                                            <td class="hidden-xs hidden-sm hidden-md">{{row.lead_time}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

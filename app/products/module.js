@@ -62,24 +62,6 @@
                     templateUrl: '/app/products/views/partner_logs.html'
                 }
             }
-        }).state('app.product.supplier_infos', {
-            url: '/supplier_infos',
-            params: {
-                id: ''
-            },
-            data:{
-                title:'История товара',
-                access:{
-                    action:'supplier_infos',
-                    params:'Product'
-                }
-            },
-            views:{
-                "content@app":{
-                    controller: 'SupplierInfosProductCtrl',
-                    templateUrl: '/app/products/views/supplier_infos.html'
-                }
-            }
         });
     });
 }());

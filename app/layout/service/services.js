@@ -66,9 +66,6 @@
         this.deleteProductPartnerLog = function(product_id, log_id, success, fail){
             $http.delete('/api/products/'+product_id+'/partner_logs/' + log_id).then(success, fail);
         };
-        this.getProductSupplierInfos = function(id, success, fail){
-            $http.get('/api/products/'+id +'/supplier_infos.json').then(success, fail);
-        };
 
         //Customer Orders
         this.getCustomerOrders = function(page, query, config, success, fail){

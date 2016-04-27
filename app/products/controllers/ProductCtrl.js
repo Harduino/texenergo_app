@@ -11,7 +11,6 @@
 
         sc.visual = {
             navButtsOptions:[{type:'edit', callback: goToEdit}, {type:'logs', callback: goToPartnerLogs},
-                {type: 'at_partners', callback: goToSupplierInfos},
                 {type:'add', callback:appendProductToCustomerOrder}
             ],
             roles: {can_edit: CanCan.can('edit', 'Product')}
@@ -75,10 +74,6 @@
 
         function goToPartnerLogs(){
             $state.go('app.product.partner_logs', $stateParams);
-        }
-
-        function goToSupplierInfos(){
-            $state.go('app.product.supplier_infos', $stateParams);
         }
 
         /**
