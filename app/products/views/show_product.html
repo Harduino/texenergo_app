@@ -6,8 +6,15 @@
         <div class="row">
             <div class="col-xs-12 col-md-12">
                 <div>
-                    <h2 ng-if="canEditProduct()" editable-text="product.name" onaftersave="saveProduct()" class="txt-color-blueDark semi-bold prod-review-title display-inline">{{ product.name }}</h2>
-                    <h2 ng-if="!canEditProduct()" class="txt-color-blueDark semi-bold prod-review-title display-inline">{{product.name}}</h2>
+                    <h2 ng-if="canEditProduct()" editable-text="product.name" onaftersave="saveProduct()" class="txt-color-blueDark semi-bold prod-review-title display-inline">
+                        {{ product.name }}
+                    </h2>
+                    <h2 ng-if="!canEditProduct()" class="txt-color-blueDark semi-bold prod-review-title display-inline">
+                        {{product.name}}
+                    </h2>
+                    <span ng-if="product.obsolete.flag" class="text-danger">
+                        (Снят с производства)
+                    </span>
                 </div>
                 <form-nav-buttons options="visual.navButtsOptions" subdata="product.id" class="btn-group margin-top-10"></form-nav-buttons>
                 <div class="col-xs-12 col-md-12">
@@ -27,7 +34,7 @@
                             <div class="widget-body">
                                 <div>
                                     <b>Артикул:</b>
-                                    <span ng-if="canEditProduct()" editable-text="product.article" onaftersave="saveProduct()">{{ product.article }}!</span>
+                                    <span ng-if="canEditProduct()" editable-text="product.article" onaftersave="saveProduct()">{{ product.article || "Нет артикула" }}</span>
                                     <span ng-if="!canEditProduct()">{{ product.article }}?</span>
                                 </div>
                                 <div>
@@ -39,13 +46,22 @@
                                     <b>Цена:</b>
                                     {{ product.price | currency}}
                                 </div>
-                                <div>
+                                <div >
                                     <b>Остаток:</b>
-                                    {{ product.stock }}
+                                    {{ canEditProduct() ? product.stock : product.stock_with_mfk }}
                                 </div>
-                                <div>
-                                    <b>Остаток с МФК:</b>
-                                    {{ product.stock_with_mfk }}
+                                <div ng-if="canEditProduct()">
+                                    <b>Остаток у МФК:</b>
+                                    {{ product.stock_with_mfk - product.stock }}
+                                </div>
+                                <div ng-if="canEditProduct()">
+                                    <b>Снятие с производства:</b>
+                                    <a href="" ng-click="makeObsolete()" ng-if="product.obsolete.flag">
+                                        Отменить снятие с производства
+                                    </a>
+                                    <a href="" ng-click="makeObsolete()" ng-if="!product.obsolete.flag">
+                                        Отметить как снятый с производства
+                                    </a>
                                 </div>
                                 <div ng-show="product.manufacturer.name === 'Schneider Electric'" class="margin-top-10">
                                     <div class="form-group string optional product_lead_time">

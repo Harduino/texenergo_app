@@ -153,6 +153,28 @@
             return false;
         }
 
+        // Persists a product obsolete by sending request to server
+        sc.makeObsolete = function(){
+            var product = sc.product;
+            var data = {
+                    product:{
+                        obsolete: {
+                            // Historically this one is called 'enable' on server side.
+                            // Could handle and translate from 'flag' on server side, but leaving on client side until the issue escalates
+                            enable: !product.obsolete.flag
+                        }
+                    }
+                };
+            serverApi.updateProduct(product.id, data, function(result){
+                if(!result.data.errors){
+                    sc.product.obsolete.flag = !product.obsolete.flag;
+                    funcFactory.showNotification("Успешно", 'Товар '+product.name+' успешно отредактирована.',true);
+                } else {
+                    funcFactory.showNotification('Не удалось отредактировать категорию '+product.name, result.data.errors);
+                }
+            });
+        }
+
     }]).controller('productManufacturerModalCtrl', ['$scope', 'serverApi', '$uibModalInstance', 'product', function(sc, serverApi, $uibModalInstance, product){
         sc.data = {
             manufacturer: product
