@@ -168,6 +168,68 @@
             }
         }, true);
 
+        // Send HTTP request to remove the product from Customer Order.
+        sc.removeProduct = function(item, index){
+            $.SmartMessageBox({
+                title: "Удалить товар?",
+                content: "Вы действительно хотите номенклатуру " + item.product.name,
+                buttons: '[Нет][Да]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed === "Да") {
+                    serverApi.removeCustomerOrderProduct(sc.order.id, item.id, function(result){
+                        if(!result.data.errors){
+                            sc.order.customer_order_contents.splice(index, 1);
+                            funcFactory.showNotification('Продукт удален:', item.product.name, true);
+                        } else {
+                            funcFactory.showNotification('Не удалось удалить продукт', result.data.errors);
+                        }
+                    });
+                }
+            });
+        }
+
+        // Удаляет все невыделенные товары
+        sc.leaveSelectedItems = function() {
+            for (var i = (sc.order.customer_order_contents.length - 1); i >= 0; i--) {
+
+                var item = sc.order.customer_order_contents[i];
+
+                // If the item is not selected then continue on to the next
+                if (sc.order.customer_order_contents[i].selected)
+                    continue;
+
+                serverApi.removeCustomerOrderProduct(sc.order.id, item.id, function(result){
+                    if(!result.data.errors){
+                        sc.order.customer_order_contents.splice(i, 1);
+                        delete sc.summaryData.positions[item.id];
+                        funcFactory.showNotification('Продукт удален:', item.product.name, true);
+                    } else {
+                        funcFactory.showNotification('Не удалось удалить продукт', result.data.errors);
+                    }
+                });
+            }
+        }
+
+        sc.deleteSelectedItems = function() {
+            for (var i = (sc.order.customer_order_contents.length - 1); i >= 0; i--) {
+
+                var item = sc.order.customer_order_contents[i];
+
+                // If the item is not selected then continue on to the next
+                if (!sc.order.customer_order_contents[i].selected)
+                    continue;
+
+                serverApi.removeCustomerOrderProduct(sc.order.id, item.id, function(result){
+                    if(!result.data.errors){
+                        sc.order.customer_order_contents.splice(i, 1);
+                        delete sc.summaryData.positions[item.id];
+                        funcFactory.showNotification('Продукт удален:', item.product.name, true);
+                    } else {
+                        funcFactory.showNotification('Не удалось удалить продукт', result.data.errors);
+                    }
+                });
+            }
+        }
         
         /**
          * Get order details

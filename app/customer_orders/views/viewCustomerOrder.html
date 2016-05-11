@@ -89,9 +89,10 @@
                                 <tbody te-jq-ui="visual.sortOpts" data-ui-type="sortable">
                                     <tr ng-repeat='item in order.customer_order_contents' class="order-items" ng-click="selectPosition($event, item)" ng-class="{selected: item.selected}">
                                         <td class="hidden-xs">{{ $index + 1 }}</td>
-                                        <td te-copy-to-buffer>
+                                        <td te-copy-to-buffer hidden-buttons>
                                             <a ng-href="/#/products/{{ item.product.id }}" te-buffer-value>{{ item.product.name }}</a>
                                             <i class="fa fa-search-plus blue-hover" ng-click="changeCustomerOrderProductModal(item)"></i>
+                                            <i class="fa fa-times blue-hover" ng-if="order.can_edit" ng-click="removeProduct(item, $index)"></i>
                                         </td>
                                         <td class="hidden-xs" te-copy-to-buffer>
                                             <span te-buffer-value>{{ item.product.article}}</span>
@@ -253,6 +254,12 @@
     <div class="summary-draggable-panel" ng-if="summaryData.show">
         <div class="content" te-jq-ui="summaryPanelOptions" data-ui-type="draggable">
             <b>Итого: {{summaryData.total | currency}}</b>
+            <div class="col-sm-6">
+                <a ng-href="" ng-click="leaveSelectedItems()">Оставить выделенные</a>
+            </div>
+            <div class="col-sm-6">
+                <a ng-href="" ng-click="deleteSelectedItems()">Удалить выделенные</a>
+            </div>
         </div>
     </div>
     <script type="text/ng-template" id="eqoChangeCustomerOrderProductModal.tmpl.html">
