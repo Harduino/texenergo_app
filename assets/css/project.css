@@ -647,9 +647,6 @@ td[hidden-buttons]:hover i.blue-hover {
     opacity: 1;
 }
 
-/*.blue-hover:hover{
-    color: rgba(66, 139, 202, 1);
-}*/
 form.eqo-add-elem-form input.ng-invalid.ng-touched, form.eqo-add-elem-form input.ng-invalid.ng-untouched{
     border-color: #ccc!important;
 }

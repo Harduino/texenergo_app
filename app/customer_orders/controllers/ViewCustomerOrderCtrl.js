@@ -194,7 +194,7 @@
 
                 var item = sc.order.customer_order_contents[i];
 
-                // If the item is not selected then continue on to the next
+                // If the item is selected then continue on to the next
                 if (sc.order.customer_order_contents[i].selected)
                     continue;
 

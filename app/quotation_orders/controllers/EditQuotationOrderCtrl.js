@@ -635,7 +635,7 @@
                     
                     funcFactory.showNotification("Удача", "Удалил товар", true);
                 } else {
-                    funcFactory.showNotification("Неудача", 'Не удалось удалить товар');
+                    funcFactory.showNotification('Не удалось удалить товар', result.data.errors);
                 }
             });
         };
