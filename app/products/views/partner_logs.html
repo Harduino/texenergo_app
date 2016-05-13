@@ -44,6 +44,34 @@
                 </tbody>
             </table>
         </div>
+         <div class="row" ng-show="partner_logs.texenergo_logs.length">
+            <h4>История Texenergo</h4>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th colspan='2'>Название</th>
+                        <th colspan='2'>Артикул</th>
+                        <th colspan='2'>Описание</th>
+                        <th/>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="row in partner_logs.texenergo_logs">
+                        <td>{{row.created_at | date:'dd/MM/yy HH:mm'}}</td>
+                        <td>{{row.name_changes.from}}</td>
+                        <td>{{row.name_changes.to}}</td>
+                        <td>{{row.article_changes.from}}</td>
+                        <td>{{row.article_changes.to}}</td>
+                        <td>{{row.description_changes.from}}</td>
+                        <td>{{row.description_changes.to}}</td>
+                        <td class="center-item-text">
+                            <form-nav-buttons data-role="row" class="btn-group" data-options="visual.navTableButts" subdata="row" data-template="table" content-class="btn btn-xs"></form-nav-buttons>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <div class="row">
             <h4>История партнёров</h4>
             <table class="table table-bordered">
