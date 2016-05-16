@@ -447,7 +447,7 @@
         };
 
         function getConsumer (){
-            _this.consumer = new Cable.Consumer(window.gon.websocket_url);
+            _this.consumer = new ActionCable.Consumer(window.gon.websocket_url);
         }
     }]);
 }());
