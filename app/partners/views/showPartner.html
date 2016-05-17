@@ -5,41 +5,52 @@
         <hr>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Наименование:</p>
-            <p class="col-md-9">{{partner.name}}</p>
+            <p class="col-md-9" ng-if="canEditPartner()">
+                <span editable-text="partner.name" onaftersave="savePartner()" >{{ partner.name }}</span>
+            </p>
+            <p class="col-md-9" ng-if="!canEditPartner()">{{ partner.name }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Официальное наименование:</p>
-            <p class="col-md-9">{{partner.legal_name}}</p>
+            <p class="col-md-9" ng-if="canEditPartner()">
+                <span editable-text="partner.legal_name" onaftersave="savePartner()" >{{ partner.legal_name }}</span>
+            </p>
+            <p class="col-md-9" ng-if="!canEditPartner()">{{ partner.legal_name }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">ИНН/КПП:</p>
             <p class="col-md-9">
-                <span>{{partner.inn | innKpp : partner.kpp}}</span>
+                <span>{{ partner.inn | innKpp : partner.kpp }}</span>
             </p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Адрес доставки:</p>
-            <p class="col-md-9">{{partner.delivery_address}}</p>
+            <p class="col-md-9" ng-if="canEditPartner()">
+                <span editable-text="partner.delivery_address" class="prod-review-title" onaftersave="savePartner()" >{{ partner.delivery_address }}</span>
+            </p>
+            <p class="col-md-9" ng-if="!canEditPartner()">{{ partner.delivery_address }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Адрес официальный:</p>
-            <p class="col-md-9">на момент создания не возвращается сервером</p>
-        </div>
-        <div class="row">
-            <p class="col-xs-12 col-md-3 font-bold">Email:</p>
-            <p class="col-md-9">{{partner.email}}</p>
+            <p class="col-md-9" ng-if="canEditPartner()">
+                <span editable-text="partner.legal_address" class="prod-review-title" onaftersave="savePartner()" >{{ partner.legal_address }}</span>
+            </p>
+            <p class="col-md-9" ng-if="!canEditPartner()">{{ partner.legal_address }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Телефон:</p>
-            <p class="col-md-9">{{partner.phone}}</p>
-        </div>
-        <div class="row">
-            <p class="col-xs-12 col-md-3 font-bold">Руководитель:</p>
-            <p class="col-md-9">на момент создания не возвращается сервером</p>
+            <p class="col-md-9" ng-if="canEditPartner()">
+                <span editable-text="partner.phone" onaftersave="savePartner()" >{{ partner.phone }}</span>
+            </p>
+            <p class="col-md-9" ng-if="!canEditPartner()">{{ partner.phone }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Менеджер:</p>
             <p class="col-md-9">{{ partner.manager_name }}</p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">Отгрузка:</p>
+            <p class="col-md-9">{{ partner.transportation }}</p>
         </div>
         <ul id="myTab1" class="nav nav-tabs bordered margin-top-10">
             <li class="active">

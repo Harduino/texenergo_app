@@ -10,7 +10,7 @@
         sc.partner = {};
         
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack},{type:'edit', callback:editPartner}, {type:'files'}],
+            navButtsOptions:[{type:'back', callback:returnBack}, {type:'files'}],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
                 scaleColor:false,
@@ -47,13 +47,42 @@
             }
             return false;
         }
+
+        sc.canEditPartner = function(){
+            for(var i=0; i < gon.ability.rules.length; i++) {
+                if(gon.ability.rules[i].subjects[0]==="Partner") {
+                    return true;
+                }
+                if(gon.ability.rules[i].subjects[0]==="edit") {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /**
+         * Обновляем информацию по категории
+         */
+        sc.savePartner = function(){
+            var partner = sc.partner;
+            var data = {
+                    partner:{
+                        name: partner.name,
+                        legal_name: partner.legal_name,
+                        delivery_address: partner.delivery_address,
+                        legal_address: partner.legal_address,
+                        phone: partner.phone
+                    }
+                };
+            serverApi.updatePartner(partner.id, data, function(result){
+                if(result.status == 200 && !result.data.errors){
+                    funcFactory.showNotification("Успешно", 'Категория '+partner.name+' успешно отредактирована.',true);
+                }else funcFactory.showNotification("Неудача", 'Не удалось отредактировать категорию '+partner.name,true);
+            });
+        };
         
         function returnBack(){
             $state.go('app.partners',{});
-        }
-        
-        function editPartner(){
-            $state.go('app.partners.view.edit',{});
         }
         
         sc.createPerson = function(){

@@ -41,21 +41,6 @@
                     templateUrl: '/app/partners/views/showPartner.html'
                 }
             }
-        }).state('app.partners.view.edit', {
-            url: '/edit',
-            data:{
-                title:'Редактирование партнёра',
-                access:{
-                    action:'edit',
-                    params:'Partner'
-                }
-            },
-            views:{
-                "content@app":{
-                    controller: 'EditPartnerCtrl',
-                    templateUrl: '/app/partners/views/editPartner.html'
-                }
-            }
         });
     });
 

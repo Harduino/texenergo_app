@@ -10,7 +10,7 @@
 
         sc.visual = {
             navButtsOptions:[{type: 'new', callback: createPartner}],
-            navTableButts:[{type:'view', callback:viewPartner}, {type:'table_edit', callback:editPartner}, {type:'remove'}],
+            navTableButts:[{type:'view', callback:viewPartner}, {type:'remove'}],
             titles:[window.gon.index.Partner.indexTitle]
         };
         
@@ -53,10 +53,6 @@
 
         function viewPartner(data){
             $state.go('app.partners.view', {id:data.id || data._id});
-        }
-
-        function editPartner(data){
-            $state.go('app.partners.view.edit', {id:data.id || data._id});
         }
 
         function createPartner(){
