@@ -12,7 +12,7 @@
         };
         sc.productForAppend = {};
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:goToIndex}, {type:'show', callback:goToShow}, {type:'files', callback:showFileModal}, {type:'confirm_order', callback: confirmOrder}],
+            navButtsOptions:[{type:'back', callback:goToIndex}, {type:'show', callback:goToShow}, {type:'files', callback:showFileModal}, {type:'confirm_order', callback: confirmOrder}, {type:'refresh', callback:refresh}],
             navTableButts:[{type:'table_edit', disabled:false, callback: updateProductOfOrder}, {type:'remove', disabled:false, callback:removeProduct}],
             roles: {can_destroy:true, can_edit:true},
             showFileModal: angular.noop,
@@ -25,6 +25,15 @@
         sc.partnerSelectConfig = {
             dataMethod: serverApi.getPartners
         };
+
+        function refresh (){
+            serverApi.getSupplierOrderDetails($stateParams.id, function(result) {
+                var order = sc.data.supplierOrder = result.data;
+                sc.data.supplierOrder.date = $filter('date')(result.data.date, 'dd.MM.yyyy HH:mm');
+
+                sc.visual.roles.can_confirm = order.can_confirm;
+            });
+        }
 
         serverApi.getSupplierOrderDetails($stateParams.id, function(result){
             var order = sc.data.supplierOrder = result.data;

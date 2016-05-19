@@ -9,7 +9,7 @@
         var sc = $scope;
 
         sc.visual = {
-            navButtsOptions:[{type: 'new', callback: createNewSupplierOrder}, {type: 'automatically', callback: createAutomatically}],
+            navButtsOptions:[{type: 'new', callback: createNewSupplierOrder}, {type: 'automatically', callback: createAutomatically}, {type:'refresh', callback:refresh}],
             navTableButts:[{type:'view', callback:viewOrder}, {type:'table_edit', callback:editOrder}, {type:'remove', callback:removeOrder}],
             canAddPartner: CanCan.can('see_multiple', 'Partner'),
             titles:[window.gon.index.SupplierOrder.indexTitle]
@@ -21,6 +21,10 @@
         sc.newOrderData = {
             date: null
         };
+
+        function refresh(){
+            $state.go('app.supplier_orders', {}, {reload:true});
+        }
 
         function viewOrder(item){
             $state.go('app.supplier_orders.view', {id: item.data.id || item.data._id});
