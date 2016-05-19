@@ -23,10 +23,13 @@
             sortOpts: {
                 update: updateRowPositionView,
                 items: "> .order-items"
-            }
+            },
+            roles: {},
+            navTableButts:[{type:'remove', disabled:false, callback:removeProduct}]
         };
         sc.data = {
             networkData: null,
+            productsList: [],//селект выбора продукта
             networkConfig: {
                 actions:[
                     {
@@ -59,6 +62,12 @@
 
         sc.amontPercent = 0;
         sc.dispatchedPercent = 0;
+        sc.productForAppend = {};//данные продукта, который необходимо добавить к заказу
+
+        sc.pSelectConfig = {
+            startPage: 0,
+            dataMethod: serverApi.getSearch
+        };
 
         sc.sliderOptions = {
             value:1,
@@ -153,6 +162,64 @@
             }
         };
 
+        /**
+         * выбор продукта для добавления к заказу
+         */
+        sc.selectProductForAppend = function(item){
+            sc.productForAppend = item;
+            sc.productForAppend.id = item.id || item._id;
+            sc.productForAppend.quantity = 0;
+        };
+
+        /**
+         * Добавить продукт в список
+         */
+        sc.appendProduct = function(event){
+            var append = function(){
+                var t=sc.productForAppend,
+                    data = angular.extend(t, {product: {name:t.name, id: t.id}}),
+                    selectCtrl = angular.element('#vco_prod_select').data().$uiSelectController,
+                    post = {
+                        product_id: t.id,
+                        quantity: t.quantity,
+                        query_original: selectCtrl.search
+                    };
+                sc.productForAppend = {};
+                sc.data.selectedProduct = null;
+
+                serverApi.addCustomerOrderProduct(sc.order.id, post,function(result){
+                    if(!result.data.errors){
+                        sc.order.customer_order_contents.push(angular.extend(data, result.data));
+                        funcFactory.showNotification('Успешно добавлен продукт', t.name, true);
+                        selectCtrl.open=true;
+                        selectCtrl.search = '';
+                    } else {
+                        funcFactory.showNotification('Не удалось добавить продукт', result.data.errors);
+                    }
+                });
+            };
+            if(event){
+                if(event.keyCode == 13){
+                    append();
+                }
+            } else append();
+        };
+
+        /**
+         * Удаление продукта
+         * @param item - объект с индексом продукта в листе и id
+         */
+        function removeProduct(item){
+            serverApi.removeCustomerOrderProduct(sc.order.id, item.data.id, function(result){
+                if(!result.data.errors){
+                    sc.order.customer_order_contents.splice(item.index, 1);
+                    funcFactory.showNotification('Продукт удален:', item.data.product.name, true);
+                } else {
+                    funcFactory.showNotification('Не удалось удалить продукт', result.data.errors);
+                }
+            });
+        }
+
         sc.$watch('summaryData.positions', function(values){
             if(values){
                 var total = 0;
@@ -240,6 +307,12 @@
             funcFactory.setPageTitle('Заказ ' + sc.order.number);
             sc.amontPercent = funcFactory.getPercent(order.paid_amount, order.total);
             sc.dispatchedPercent = funcFactory.getPercent(order.dispatched_amount, order.total);
+
+            sc.visual.roles = {
+                can_edit: order.can_edit,
+                can_destroy: order.can_edit,
+                can_confirm: order.can_confirm
+            };
 
             calculateTotals(order);
             completeInitPage(order)

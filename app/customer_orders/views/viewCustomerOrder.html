@@ -86,7 +86,21 @@
                     </header>
                     <div class="widget-body">
                         <div class="well well-clean well-white no-padding">
-                            <table class="table table-hover table-bordered">
+                            <div>
+                            <ui-select ng-if="visual.roles.can_edit" id="vco_prod_select" ui-select-infinity="pSelectConfig" ng-model="data.selectedProduct" theme="select2" on-select="selectProductForAppend($item, $model)" reset-search-input="false" style="width: 100%;">
+                                <ui-select-match placeholder="Введите товар для добавления...">{{$select.selected.name}}</ui-select-match>
+                                <ui-select-choices repeat="product in data.productsList | filter:$select.search" class="search-item">
+                                    <div class="search-tr">
+                                        <div class="search-td col-md-1">
+                                            <img ng-src="{{product.image_url}}">
+                                        </div>
+                                        <div class="search-td col-md-7" ng-bind-html="(product.name + ' ' + product.article) | highlight: $select.search"></div>
+                                        <div class="search-td col-md-2">{{product.stock}} ед.</div>
+                                        <div class="search-td col-md-2">{{product.price | currency}}</div>
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <table class="table table-hover table-bordered margin-top-10">
                                 <thead>
                                     <tr>
                                         <th class="hidden-xs"></th>
@@ -96,9 +110,29 @@
                                         <th class="text-right">Кол-во</th>
                                         <th class="text-right hidden-xs">Скидка</th>
                                         <th class="text-right">Итого</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody te-jq-ui="visual.sortOpts" data-ui-type="sortable">
+                                    <tr ng-if="productForAppend.id" class="append-product-row a-row-add" ng-keypress="appendProduct($event)">
+                                        <td></td>
+                                        <td>{{productForAppend.name}}</td>
+                                        <td>{{productForAppend.article}}</td>
+                                        <td>{{productForAppend | price_net | currency}}</td>
+                                        <td>
+                                            <input id="append_product_quantity" class="form-control table-input" ng-model="productForAppend.quantity" model-filter="{min:0}" filter-name="te_number" ng-attr-placeholder="{{'доступно ' + productForAppend.stock +' шт.'}}" type="text" ng-init="focusOnProduct()">
+                                            <div class="note">
+                                                <i class="fa fa-exclamation-triangle"></i><span class="font-sm">{{' доступно ' + productForAppend.stock +' шт.'}}</span>
+                                            </div>
+                                        </td>
+                                        <td></td>
+                                        <td>{{productForAppend | price_net: productForAppend.quantity | currency}}</td>
+                                        <td class="center-item-text">
+                                            <div ng-click="appendProduct()" class="btn btn-success">
+                                                <i class="fa fa-plus"></i>
+                                            </div>
+                                        </td>
+                                    </tr>
                                     <tr ng-repeat='item in order.customer_order_contents' class="order-items" ng-click="selectPosition($event, item)" ng-class="{selected: item.selected}">
                                         <td class="hidden-xs">{{ $index + 1 }}</td>
                                         <td te-copy-to-buffer hidden-buttons>
@@ -119,6 +153,9 @@
                                             <span ng-if="!order.can_edit">{{ item.discount }}</span>
                                         </td>
                                         <td class="text-right">{{ item | price_net : item.quantity | currency}}</td>
+                                        <td>
+                                            <form-nav-buttons ng-if="visual.roles.can_destroy" data-role="visual.roles" class="btn-group" subdata="{data:item, index:$index}" data-options="visual.navTableButts" data-template="table" content-class="btn btn-xs"></form-nav-buttons>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td class="hidden-xs"></td>
@@ -128,9 +165,11 @@
                                         <td></td>
                                         <td class="text-right hidden-xs">Итого, руб:</td>
                                         <td class="text-right">{{total | currency}}</td>
+                                        <td></td>
                                     </tr>
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -144,6 +183,7 @@
                     </header>
                     <div class="widget-body">
                         <div class="well well-clean well-white no-padding">
+                            <div>
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -172,6 +212,7 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                     </div>
                 </div>
