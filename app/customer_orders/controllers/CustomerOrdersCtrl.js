@@ -9,7 +9,7 @@
         var sc = $scope;
 
         sc.visual = {
-            navButtsOptions:[{ type: 'new', callback: createNewOrder }],
+            navButtsOptions:[{ type: 'new', callback: createNewOrder },  {type:'refresh', callback:refresh}],
             navTableButts:[{type:'view', callback:viewCustomerOrder}, {type:'table_edit', callback:editCustomerOrder}, {type:'remove', callback:removeCustomerOrder}],
             canAddPartner: CanCan.can('see_multiple', 'Partner'),
             titles:[window.gon.index.CustomerOrder.indexTitle]
@@ -51,6 +51,10 @@
         };
 
         sc.clearCreateOrder();
+
+        function refresh(){
+            $state.go('app.customer_orders', {}, {reload: true});
+        }
 
         function viewCustomerOrder(item){
             $state.go('app.customer_orders.view', {id:item.data.id || item.data._id});

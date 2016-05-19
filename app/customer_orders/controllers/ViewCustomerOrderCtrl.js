@@ -10,7 +10,9 @@
         sc.order = {};
         sc.total = 0;
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack}, {type: 'edit', callback: goEditCustomerOrder}, {type:'files', callback: showFileModal}, {type: 'send_email', callback: sendCustomerOrder}, {type: 'recalculate', callback: recalculateCustomerOrder}, {type:'logs', callback: goToLogs}, {type:'confirm_order', callback: confirmCustomerOrder}],
+            navButtsOptions:[{type:'back', callback:returnBack}, {type: 'edit', callback: goEditCustomerOrder}, {type:'files', callback: showFileModal}, {type: 'send_email', callback: sendCustomerOrder}, {type: 'recalculate', callback: recalculateCustomerOrder}, {type:'logs', callback: goToLogs},
+                {type:'confirm_order', callback: confirmCustomerOrder},
+                {type:'refresh', callback:refresh}],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
                 scaleColor:false,
@@ -296,31 +298,42 @@
                     }
                 });
             }
-        }
+        };
         
         /**
          * Get order details
          */
-        serverApi.getCustomerOrderDetails($stateParams.id, function(result){
-            var order = sc.order = result.data;
+        getOrderDetails();
+        function getOrderDetails (){
+            serverApi.getCustomerOrderDetails($stateParams.id, function(result){
+                var order = sc.order = result.data;
 
-            funcFactory.setPageTitle('Заказ ' + sc.order.number);
-            sc.amontPercent = funcFactory.getPercent(order.paid_amount, order.total);
-            sc.dispatchedPercent = funcFactory.getPercent(order.dispatched_amount, order.total);
+                funcFactory.setPageTitle('Заказ ' + sc.order.number);
+                sc.amontPercent = funcFactory.getPercent(order.paid_amount, order.total);
+                sc.dispatchedPercent = funcFactory.getPercent(order.dispatched_amount, order.total);
 
-            sc.visual.roles = {
-                can_edit: order.can_edit,
-                can_destroy: order.can_edit,
-                can_confirm: order.can_confirm
-            };
+                sc.visual.roles = {
+                    can_edit: order.can_edit,
+                    can_destroy: order.can_edit,
+                    can_confirm: order.can_confirm
+                };
 
-            calculateTotals(order);
-            completeInitPage(order)
-        });
+                calculateTotals(order);
+                completeInitPage(order)
+            });
+        }
 
-        serverApi.getRelatedOrdersOfCustomer($stateParams.id, function(result){
-            sc.data.networkData = result.data;
-        });
+        getNetworkData();
+        function getNetworkData(){
+            serverApi.getRelatedOrdersOfCustomer($stateParams.id, function(result){
+                sc.data.networkData = result.data;
+            });
+        }
+
+        function refresh(){
+            getOrderDetails();
+            //getNetworkData();
+        }
 
         function completeInitPage(order){
             sc.fileModalOptions={

@@ -12,7 +12,7 @@
         };
         sc.productForAppend = {};//данные продукта, который необходимо добавить к заказу
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:goToIndex}, {type:'show', callback:goToShow}, {type:'files', callback:showFileModal}, {type: 'send_email', callback: sendCustomerOrder}, {type: 'recalculate', callback: recalculateCustomerOrder}, {type:'logs', callback: goToLogs}, {type:'confirm_order', callback:confirmCustomerOrder}],
+            navButtsOptions:[{type:'back', callback:goToIndex}, {type:'show', callback:goToShow}, {type:'files', callback:showFileModal}, {type: 'send_email', callback: sendCustomerOrder}, {type: 'recalculate', callback: recalculateCustomerOrder}, {type:'logs', callback: goToLogs}, {type:'confirm_order', callback:confirmCustomerOrder}, {type:'refresh', callback:refresh}],
             navTableButts:[{type:'table_edit', disabled:false, callback: updateProductOfOrder}, {type:'remove', disabled:false, callback:removeProduct}],
             roles: {},
             showFileModal: angular.noop,
@@ -31,30 +31,33 @@
             dataMethod: serverApi.getPartners
         };
 
-        serverApi.getCustomerOrderDetails($stateParams.id, function(result){
-            var o = sc.data.order = result.data;
-            sc.data.order.date = $filter('date')(o.date, 'dd.MM.yyyy HH:mm');
-            sc.visual.roles = {
-                can_edit: o.can_edit,
-                can_destroy: o.can_edit,
-                can_confirm: o.can_confirm
-            };
+        getCustomerOrderDetails();
+        function getCustomerOrderDetails(){
+            serverApi.getCustomerOrderDetails($stateParams.id, function(result){
+                var o = sc.data.order = result.data;
+                sc.data.order.date = $filter('date')(o.date, 'dd.MM.yyyy HH:mm');
+                sc.visual.roles = {
+                    can_edit: o.can_edit,
+                    can_destroy: o.can_edit,
+                    can_confirm: o.can_confirm
+                };
 
-            funcFactory.setPageTitle('Заказ ' + sc.data.order.number);
+                funcFactory.setPageTitle('Заказ ' + sc.data.order.number);
 
-            sc.fileModalOptions={
-                url:'/api/customer_orders/'+ o.id +'/documents',
-                files: o.documents,
-                r_delete: serverApi.deleteFile,
-                view: 'customer_orders',
-                id: o.id
-            };
+                sc.fileModalOptions={
+                    url:'/api/customer_orders/'+ o.id +'/documents',
+                    files: o.documents,
+                    r_delete: serverApi.deleteFile,
+                    view: 'customer_orders',
+                    id: o.id
+                };
 
-            notifications.subscribe({
-                channel: 'CustomerOrdersChannel',
-                customer_order_id: $stateParams.id
-            }, sc.data.order.customer_order_contents);
-        });
+                notifications.subscribe({
+                    channel: 'CustomerOrdersChannel',
+                    customer_order_id: $stateParams.id
+                }, sc.data.order.customer_order_contents);
+            });
+        }
 
         /**
          * Обновляем информацию по заказу
@@ -147,6 +150,10 @@
                     }
                 } else update();
             }
+        }
+
+        function refresh(){
+            getCustomerOrderDetails();
         }
 
         /**
