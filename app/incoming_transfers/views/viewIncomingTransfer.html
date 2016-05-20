@@ -32,6 +32,35 @@
     </div>
     
     <div class="well well-white">
+        <table class="table table-bordered margin-top-10" ng-if="visual.roles.can_edit">
+            <thead>
+            <tr>
+                <th>Заказ клиента/Исходящий платеж</th>
+                <th>Сумма</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <ui-select id="vit_order_select"  ui-select-infinity="orderSelectConf" ng-model="data.orderForAppend" theme="select2" class="td-ui-select">
+                            <ui-select-match placeholder="Выберите заказ">{{$select.selected.number || $select.selected.incoming_code}}</ui-select-match>
+                            <ui-select-choices repeat="order in data.ordersList">
+                                <div ng-bind-html="order | f_incomingT | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </td>
+                    <td ng-keypress="data.orderForAppend.id && appendOrder($event)">
+                        <input id="append_order_amount" class="form-control table-input" ng-model="data.orderForAppend.amount" model-filter="{min:0, number:true, max:transfer.remaining_amount}" filter-name="te_number" type="text">
+                    </td>
+                    <td class="center-item-text">
+                        <div ng-click="appendOrder()" class="btn btn-success" ng-disabled="!data.orderForAppend.id">
+                            <i class="fa fa-plus"></i>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
         <table class="table">
             <thead>
                 <tr>
@@ -49,7 +78,7 @@
                     <td><span ng-if="item.hasOwnProperty('outgoing_transfer')">{{ item.outgoing_transfer.number }}</span></td>
                     <td>{{ item.amount | currency }}</td>
                     <td>
-                        <form-nav-buttons data-role="row" class="btn-group" data-options="visual.navTableButts" subdata="{data:item, index:$index}" data-template="table" content-class="btn btn-xs"></form-nav-buttons>
+                        <form-nav-buttons data-role="visual.roles" data-role="row" class="btn-group" data-options="visual.navTableButts" subdata="{data:item, index:$index}" data-template="table" content-class="btn btn-xs"></form-nav-buttons>
                     </td>
                 </tr>
                 <tr>

@@ -118,7 +118,7 @@
                     funcFactory.showNotification(t + ' успешно удален','', true);
                 } else {
                     funcFactory.showNotification('Неудалось удалить ' + t, result.data.errors);
-                };
+                }
             });
         }
 
