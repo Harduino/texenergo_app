@@ -12,7 +12,7 @@
             navButtsOptions:[{
                 type: 'new',
                 callback: createIncomingTransfer
-            }],
+            }, {type:'refresh', callback: refresh}],
             navTableButts:[{type:'view', callback:viewIncomingTransfer}, {type:'table_edit', callback:editIncomingTransfer}, {type:'remove', callback:removeIncomingTransfer}],
             role:{
                 can_edit: CanCan.can('edit', 'IncomingTransfer'),
@@ -29,6 +29,10 @@
             createMethod: serverApi.createIncomingTransfer,
             showForm: angular.noop
         };
+
+        function refresh(){
+            $state.go('app.incoming_transfers', {}, {reload:true});
+        }
 
         function viewIncomingTransfer(item){
             $state.go('app.incoming_transfers.view', {id:item.data.id || item.data._id});

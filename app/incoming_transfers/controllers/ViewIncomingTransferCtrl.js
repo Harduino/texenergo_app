@@ -9,7 +9,8 @@
         var sc = $scope;
         sc.incomingTransfer = {};
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack}, {type: 'edit', callback: goToEditIncomingTransfer}, {type:'files', callback: showFileModal}],
+            navButtsOptions:[{type:'back', callback:returnBack}, {type: 'edit', callback: goToEditIncomingTransfer}, {type:'files', callback: showFileModal},
+                {type:'refresh', callback: refresh}],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
                 scaleColor:false,
@@ -21,6 +22,13 @@
             navTableButts:[{type:'view', callback: viewDocument}],
             titles: window.gon.index.IncomingTransfer.objectTitle + ': # '
         };
+
+        function refresh(){
+            serverApi.getIncomingTransferDetails($stateParams.id, function(result) {
+
+                sc.incomingTransfer = result.data;
+            });
+        }
 
         serverApi.getIncomingTransferDetails($stateParams.id, function(result){
             console.log(result.data);

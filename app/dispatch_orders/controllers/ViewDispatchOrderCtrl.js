@@ -16,7 +16,8 @@
                 { type: 'upd_form_pdf', callback: openDispatchOrderPdf },
                 { type: 'label_pdf', callback: openLabelPdf },
                 { type: 'packing_list_pdf', callback: openPackingListPdf },
-                { type: 'confirm_order', callback: updateStatusDispatchOrder}
+                { type: 'confirm_order', callback: updateStatusDispatchOrder},
+                {type:'refresh', callback: getDispatchOrderDetails}
             ],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
@@ -49,16 +50,20 @@
         function setFileUploadOptions(dispatch_order){
             sc.uploader.url = 'http://www.texenergo.com/api/dispatch_order/'+ dispatch_order.id +'/documents';
         }
-        
-        serverApi.getDispatchOrderDetails($stateParams.id, function(result){
-            console.log(result.data);
 
-            var dispatchOrder = sc.dispatchOrder = result.data;
-            sc.amontPercent = funcFactory.getPercent(dispatchOrder.paid_amount, dispatchOrder.total);
-            sc.dispatchedPercent = funcFactory.getPercent(dispatchOrder.dispatched_amount, dispatchOrder.total);
+        getDispatchOrderDetails();
 
-            setFileUploadOptions(dispatchOrder);
-        });
+        function getDispatchOrderDetails(){
+            serverApi.getDispatchOrderDetails($stateParams.id, function(result){
+                console.log(result.data);
+
+                var dispatchOrder = sc.dispatchOrder = result.data;
+                sc.amontPercent = funcFactory.getPercent(dispatchOrder.paid_amount, dispatchOrder.total);
+                sc.dispatchedPercent = funcFactory.getPercent(dispatchOrder.dispatched_amount, dispatchOrder.total);
+
+                setFileUploadOptions(dispatchOrder);
+            });
+        }
 
         function returnBack(){
             $state.go('app.dispatch_orders',{});

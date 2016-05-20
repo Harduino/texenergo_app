@@ -9,7 +9,7 @@
         var sc = $scope;
 
         sc.visual = {
-            navButtsOptions:[{ type: 'new', callback: createNewOrder }],
+            navButtsOptions:[{ type: 'new', callback: createNewOrder }, {type:'refresh', callback:refresh}],
             navTableButts:[{type:'view', callback:viewReceiveOrder}, {type:'table_edit', callback:editReceiveOrder}, {type:'remove', callback:deleteReceiveOrder}],
             role:{
                 can_edit: CanCan.can('edit', 'ReceiveOrder'),
@@ -29,7 +29,11 @@
         };
         
         sc.newOrderData = {};
-        
+
+        function refresh(){
+            $state.go('app.receive_orders', {}, {reload:true});
+        }
+
         function createNewOrder(){
             sc.newOrderData.date = new Date();
             $('#createNewReceiveOrderModal').modal('show');

@@ -10,6 +10,7 @@
 
         sc.visual = {
             navButtsOptions:[
+                {type:'refresh', callback: refresh}
             ],
             navTableButts:[{type:'view', callback:viewOrder}, {type:'table_edit'}, {type:'remove'}],
             titles:[window.gon.index.DispatchOrder.indexTitle]
@@ -19,6 +20,10 @@
             ordersList:[],
             searchQuery:$stateParams.q
         };
+
+        function refresh (){
+            $state.go('app.dispatch_orders', {}, {reload:true});
+        }
 
         function viewOrder(id){
             $state.go('app.dispatch_orders.view', {id:id});

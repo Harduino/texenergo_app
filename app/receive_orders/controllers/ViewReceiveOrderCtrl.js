@@ -9,7 +9,7 @@
         var sc = $scope;
         sc.receiveOrder = {};
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack}, {type:'edit', callback: goEditReceiveOrder}],
+            navButtsOptions:[{type:'back', callback:returnBack}, {type:'edit', callback: goEditReceiveOrder}, {type:'refresh', callback:getReceiveOrderDetails}],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
                 scaleColor:false,
@@ -42,14 +42,17 @@
             sc.uploader.url = 'http://www.texenergo.com/api/receive_orders/'+ receive_order.id +'/documents';
         }
 
-        serverApi.getReceiveOrderDetails($stateParams.id, function(result){
-            var receiveOrder = sc.receiveOrder = result.data;
-            funcFactory.setPageTitle('Поступление ' + sc.receiveOrder.number);
-            sc.amontPercent = funcFactory.getPercent(receiveOrder.paid_amount, receiveOrder.total);
-            sc.receivedPercent = funcFactory.getPercent(receiveOrder.receivedPercent, receiveOrder.total);
-            setFileUploadOptions(receiveOrder);
-            
-        });
+        getReceiveOrderDetails();
+        function getReceiveOrderDetails(){
+            serverApi.getReceiveOrderDetails($stateParams.id, function(result){
+                var receiveOrder = sc.receiveOrder = result.data;
+                funcFactory.setPageTitle('Поступление ' + sc.receiveOrder.number);
+                sc.amontPercent = funcFactory.getPercent(receiveOrder.paid_amount, receiveOrder.total);
+                sc.receivedPercent = funcFactory.getPercent(receiveOrder.receivedPercent, receiveOrder.total);
+                setFileUploadOptions(receiveOrder);
+
+            });
+        }
 
         function returnBack(){
             $state.go('app.receive_orders',{});

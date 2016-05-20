@@ -18,6 +18,7 @@
         var _quotationSchemaInstance;
         
         sc.visual = {
+            navButtsOptions: [{type:'refresh', callback:getQuotationOrderDetails}],
             title: "Рассчет",//window.gon.index.QuotationOrders.indexTitle
             sortElementsOptions: {
                 update: updateElementRowPosition,
@@ -40,12 +41,14 @@
             startPage: 0,
             dataMethod: serverApi.getSearch
         };
-        
 
+        getQuotationOrderDetails();
         // Загружаем рассчёт с сервера для начала работы
-        serverApi.getQuotationOrderDetails($stateParams.id, function(result){
-            sc.data.quotationOrder = result.data;
-        });
+        function getQuotationOrderDetails(){
+            serverApi.getQuotationOrderDetails($stateParams.id, function(result){
+                sc.data.quotationOrder = result.data;
+            });
+        }
         
         /**
          * Обновляем информацию по заказу

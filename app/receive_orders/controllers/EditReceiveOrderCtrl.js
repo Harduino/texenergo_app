@@ -6,7 +6,7 @@
         var sc = $scope;
         sc.receiveOrder = {};
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:goToIndex}, {type:'show', callback:goToShow}, {type:'files', callback:showFileModal}],
+            navButtsOptions:[{type:'back', callback:goToIndex}, {type:'show', callback:goToShow}, {type:'files', callback:showFileModal}, {type:'refresh', callback:refresh}],
             navTableButts:[{type:'table_edit', callback:updateContentsProduct}, {type:'remove', callback:deleteContentsProduct}],
             roles:{
                 can_edit:true,
@@ -27,6 +27,16 @@
             sc.data.productForAppend={country:'',gtd:'', quantity:0, total:0}
         }
         clearProductForAppend();
+
+        function refresh(){
+            serverApi.getReceiveOrderDetails($stateParams.id, function(result){
+                if(!result.data.errors){
+                    var receiveOrder = sc.receiveOrder = result.data;
+                    funcFactory.setPageTitle('Поступление ' + sc.receiveOrder.number);
+                }else funcFactory.showNotification('Ошибка загрузки данных', result.data.errors);
+            });
+
+        }
 
         serverApi.getReceiveOrderDetails($stateParams.id, function(result){
             if(!result.data.errors){

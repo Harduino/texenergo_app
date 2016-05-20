@@ -9,7 +9,7 @@
         var sc = $scope;
         sc.outgoingTransfer = {};
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack}, {type:'files', callback:showFileModal}],
+            navButtsOptions:[{type:'back', callback:returnBack}, {type:'files', callback:showFileModal}, {type:'refresh', callback:refresh}],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
                 scaleColor:false,
@@ -20,6 +20,12 @@
             showFileModal: angular.noop,
             titles: window.gon.index.OutgoingTransfer.objectTitle + ' #'
         };
+
+        function refresh(){
+            serverApi.getOutgoingTransferDetails($stateParams.id, function(result) {
+                sc.outgoingTransfer = result.data;
+            });
+        }
 
         serverApi.getOutgoingTransferDetails($stateParams.id, function(result){
             console.log(result.data);

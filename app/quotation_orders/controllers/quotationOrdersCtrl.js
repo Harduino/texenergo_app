@@ -9,7 +9,7 @@
         var sc = $scope;
 
         sc.visual = {
-            navButtsOptions:[{ type: 'new', callback: createNewQuotationOrderModal }],
+            navButtsOptions:[{ type: 'new', callback: createNewQuotationOrderModal }, {type:'refresh', callback:refresh}],
             navTableButts:[{type:'table_edit', callback:editQuotationOrder}],
             titles:[window.gon.index.QuotationOrder.indexTitle]
         };
@@ -20,17 +20,21 @@
             searchQuery:$stateParams.q,
             newQuotationOrderData: {}
         };
+
+        function refresh (){
+            $state.go('app.quotation_orders', {}, {reload:true});
+        }
         
         sc.clearNewQuotationOrder = function(){
             sc.data.newQuotationOrderData = {};
-        }
+        };
         
         sc.addNewQuotationOrder = function(){
             var data = {
                 quotation_order: {
                     title: sc.data.newQuotationOrderData.title
                 }
-            }
+            };
             serverApi.createQuotationOrder(data, function(result){
                 if(!result.data.errors){
                     sc.data.ordersList.unshift(result.data);
@@ -41,7 +45,7 @@
                     funcFactory.showNotification('Не удалось создать рассчёт', result.data.errors);
                 }
             });
-        }
+        };
         
         function viewQuotationOrder(item){
             $state.go('app.quotation_orders.view', {id:item.data.id || item.data._id});

@@ -12,7 +12,7 @@
             navButtsOptions:[{
                 type: 'new',
                 callback: createOutgoingTransfer
-            }],
+            }, {type:'refresh', callback:refresh}],
             navTableButts:[{type:'view', callback:viewOutgoingTransfer}, {type:'table_edit', callback:editOutgoingTransfer}, {type:'remove', callback:removeOutgoingTransfer}],
             role:{
                 can_edit: CanCan.can('edit', 'OutgoingTransfer'),
@@ -28,6 +28,10 @@
             createMethod: serverApi.createOutgoingTransfer,
             showForm: angular.noop
         };
+
+        function refresh (){
+            $state.go('app.outgoing_transfers', {}, {reload:true});
+        }
 
         function viewOutgoingTransfer(item){
             $state.go('app.outgoing_transfers.view', {id:item.data.id || item.data._id});

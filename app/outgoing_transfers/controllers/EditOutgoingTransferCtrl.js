@@ -13,7 +13,8 @@
             }
         };
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:goToIndex}, {type:'show', callback:goToShow}, {type:'files', callback:showFileModal}, {type:'send_email'}, {type:'logs'}],
+            navButtsOptions:[{type:'back', callback:goToIndex}, {type:'show', callback:goToShow}, {type:'files', callback:showFileModal}, {type:'send_email'}, {type:'logs'},
+                {type:'refresh', callback:refresh}],
             navTableButts:[{type:'remove', callback:removeOrder}],
             roles: {
                 can_destroy: true
@@ -27,6 +28,12 @@
         sc.orderSelectConf = {
             dataMethod: serverApi.getSupplierOrders
         };
+
+        function refresh(){
+            serverApi.getOutgoingTransferDetails($stateParams.id, function(result) {
+                sc.transfer = result.data;
+            });
+        }
 
         serverApi.getOutgoingTransferDetails($stateParams.id, function(result){
             console.log(result.data);
