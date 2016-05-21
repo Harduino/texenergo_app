@@ -38,18 +38,49 @@
     </div>
     
     <div class="well well-white">
-        <table class="table">
+        <table class="table table-bordered margin-top-10">
             <thead>
                 <tr>
-                    <th/>
+                    <th></th>
                     <th>Наименование</th>
                     <th>ГТД/Страна</th>
                     <th>Кол-во</th>
                     <th>Заказ</th>
                     <th>Итого</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
+            <tr ng-if="visual.roles.can_destroy">
+                <td></td>
+                <td>
+                    <ui-select id="vro_prod_select"  ui-select-infinity="productSelectConf" ng-model="data.productForAppend" theme="select2" class="td-ui-select" style="max-width: 310px;" on-select="onSelectProduct($item)">
+                        <ui-select-match>{{$select.selected.product.name}}</ui-select-match>
+                        <ui-select-choices repeat="order in ordersList">
+                            <div ng-bind-html="order.product.name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </td>
+                <td>
+                    <div class="display-flex" style="align-items: center;">
+                        <input class="form-control table-input" ng-model="data.productForAppend.gtd" type="text" placeholder="ГТД" ng-keypress="appendOrder($event)">
+                        &nbsp;/&nbsp;
+                        <input class="form-control table-input" ng-model="data.productForAppend.country" type="text" placeholder="Страна" ng-keypress="appendOrder($event)">
+                    </div>
+                </td>
+                <td>
+                    <input class="form-control table-input" ng-model="data.productForAppend.quantity" model-filter="{min:0}" filter-name="te_number" type="text" ng-keypress="appendOrder($event)">
+                </td>
+                <td>{{data.productForAppend.supplier_order.number || 'не указан'}}</td>
+                <td>
+                    <input class="form-control table-input" ng-model="data.productForAppend.total" model-filter="{min:0, number:true}" filter-name="te_number" type="text" ng-keypress="appendOrder($event)">
+                </td>
+                <td class="center-item-text">
+                    <div ng-click="appendOrder()" class="btn btn-success" ng-disabled="!data.productForAppend.product">
+                        <i class="fa fa-plus"></i>
+                    </div>
+                </td>
+            </tr>
                 <tr ng-repeat="item in receiveOrder.product_order_contents">
                     <td>{{ $index + 1 }}</td>
                     <td>
@@ -67,10 +98,14 @@
                         </a>
                     </td>
                     <td class="text-right">{{ item.total | currency }}</td>
+                    <td>
+                        <form-nav-buttons data-role="visual.roles" class="btn-group" subdata="{data:item, index:$index}" data-options="visual.navTableButts" data-template="table" content-class="btn btn-xs"></form-nav-buttons>
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="5" class="text-right">Итого:</td>
                     <td>{{ receiveOrder.total | currency }}</td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>
