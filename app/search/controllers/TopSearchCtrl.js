@@ -17,11 +17,9 @@
                 //контролы таблицы
                 navButtsOptions:[
                     {type:'add', callback: addProductToCustomerOrderModal},
-                    {type:'view', callback: viewProduct },
-                    {type:'table_edit', callback: editProduct}
+                    {type:'view', callback: viewProduct }
                 ],
                 role:{
-                    can_edit: CanCan.can('Product', 'edit'),
                     can_destroy: CanCan.can('Product', 'destroy')
                 }
             };

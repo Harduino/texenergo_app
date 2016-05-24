@@ -33,7 +33,7 @@
                     sc.data.ordersList.unshift(result.data);
                     funcFactory.showNotification('Заказ успешно добавлен', '', true);
                     sc.clearCreateOrder();
-                    $state.go('app.customer_orders.view.edit', {id: result.data.id});
+                    $state.go('app.customer_orders.view', {id: result.data.id});
                 } else {
                     funcFactory.showNotification('Не удалось создать заказ', result.data.errors);
                 }
