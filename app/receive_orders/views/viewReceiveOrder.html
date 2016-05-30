@@ -47,7 +47,7 @@
                     <th>Кол-во</th>
                     <th>Заказ</th>
                     <th>Итого</th>
-                    <th></th>
+                    <th ng-if="visual.roles.can_destroy"></th>
                 </tr>
             </thead>
             <tbody>
@@ -98,14 +98,14 @@
                         </a>
                     </td>
                     <td class="text-right">{{ item.total | currency }}</td>
-                    <td>
+                    <td ng-if="visual.roles.can_destroy">
                         <form-nav-buttons data-role="visual.roles" class="btn-group" subdata="{data:item, index:$index}" data-options="visual.navTableButts" data-template="table" content-class="btn btn-xs"></form-nav-buttons>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="5" class="text-right">Итого:</td>
                     <td>{{ receiveOrder.total | currency }}</td>
-                    <td></td>
+                    <td ng-if="visual.roles.can_destroy"></td>
                 </tr>
             </tbody>
         </table>
