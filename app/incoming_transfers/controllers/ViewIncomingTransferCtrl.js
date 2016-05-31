@@ -105,7 +105,7 @@
                             sc.incomingTransfer.remaining_amount = result.data.money_transfer.remaining_amount;
                             sc.incomingTransfer.money_to_orders.push(result.data);
                             funcFactory.showNotification('Успешно', t + ' успешно добавлен', true);
-                            angular.element('#eit_order_select').data().$uiSelectController.open=true;
+                            angular.element('#vit_order_select').data().$uiSelectController.open=true;
                         }else funcFactory.showNotification('Неудалось прикрепить ' + t, result.data.errors);
                     });
                 };
@@ -128,6 +128,17 @@
                 }
             });
         }
+
+        sc.$watch('incomingTransfer.money_to_orders', function(val){
+            if(val){
+                var it = sc.incomingTransfer,
+                    ra = it.amount;
+                angular.forEach(it.money_to_orders, function(item){
+                    ra -= item.amount;
+                });
+                it.remaining_amount = ra;
+            }
+        });
 
         function returnBack(){
             $state.go('app.incoming_transfers',{});

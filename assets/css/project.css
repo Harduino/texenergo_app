@@ -598,6 +598,12 @@ path.link:hover {
 .float-none{
     float: none;
 }
+.f-r{
+    float: right;
+}
+.m-r-10{
+    margin-left: 10px;
+}
 .eqo-th-iconed{
     width: 20px;
 }
