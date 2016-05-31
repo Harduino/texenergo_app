@@ -81,17 +81,28 @@
                     </div>
                 </td>
             </tr>
-                <tr ng-repeat="item in receiveOrder.product_order_contents">
+                <tr ng-repeat="item in receiveOrder.product_order_contents" ng-switch="visual.roles.can_destroy">
                     <td>{{ $index + 1 }}</td>
                     <td>
                         <a ng-href="#/products/{{ item.product.id }}">
                             {{ item.product.name }} ({{ item.product.article }})
                         </a>
                     </td>
-                    <td>{{ item.quantity }}</td>
-                    <td class="text-right">{{ item.total | currency }}</td>
                     <td>
-                        <span ng-if="item.gtd">{{ item.gtd }}/{{ item.country }}</span>
+                        <a ng-switch-when="true" editable-number="item.quantity" onaftersave="updateContentsProduct({data:item, index:$index})" e-min="0" buttons="no">{{ item.quantity }}</a>
+                        <span ng-switch-default>{{ item.quantity || 0}}</span>
+                    </td>
+                    <td class="text-right">
+                        <a ng-switch-when="true" editable-text="item.total" buttons="no">{{ (item.total || 0) | currency}}</a>
+                        <span ng-switch-default>{{ item.total | currency }}</span>
+                    </td>
+                    <td>
+                        <span ng-switch-when="true">
+                            <a editable-text="item.gtd" buttons="no">{{ item.gtd || 'Пусто'}}</a>
+                            <span>&nbsp; / &nbsp;</span>
+                            <a editable-text="item.country" buttons="no">{{ item.country || 'Пусто'}}</a>
+                        </span>
+                        <span ng-switch-default ng-if="item.gtd">{{ item.gtd + ' / ' + item.country }}</span>
                     </td>
                     <td>
                         <a href="/admin/#/supplier_orders/{{item.supplier_order.id}}">

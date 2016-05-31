@@ -83,6 +83,23 @@
             }else append();
         };
 
+        sc.updateContentsProduct = function(row){
+            var data = row.data;
+            var put = {
+                quantity: data.quantity || 0,
+                country: data.country || '',
+                gtd: data.gtd || '',
+                total_w_vat: data.total || 0
+            };
+            serverApi.updateReceiveOrderContents(sc.receiveOrder.id, data.id, put, function(result){
+                if(!result.data.errors){
+                    var r = sc.receiveOrder.product_order_contents;
+                    r[row.index] = angular.extend(r[row.index], result.data);
+                    funcFactory.showNotification('Успешно', 'Продукт ' + data.product.name + ' успешно обновлен', true);
+                }else funcFactory.showNotification('Не удалось обновить продукт ' + data.product.name, result.data.errors);
+            })
+        };
+
         function deleteContentsProduct(item){
             var data = item.data;
             serverApi.deleteReceiveOrderContents(sc.receiveOrder.id, data.id, function(result){
