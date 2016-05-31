@@ -43,10 +43,10 @@
                 <tr>
                     <th></th>
                     <th>Наименование</th>
-                    <th>ГТД/Страна</th>
                     <th>Кол-во</th>
-                    <th>Заказ</th>
                     <th>Итого</th>
+                    <th>ГТД/Страна</th>
+                    <th>Заказ</th>
                     <th ng-if="visual.roles.can_destroy"></th>
                 </tr>
             </thead>
@@ -62,19 +62,19 @@
                     </ui-select>
                 </td>
                 <td>
+                    <input class="form-control table-input" ng-model="data.productForAppend.quantity" model-filter="{min:0}" filter-name="te_number" type="text" ng-keypress="appendOrder($event)">
+                </td>
+                <td>
+                    <input class="form-control table-input" ng-model="data.productForAppend.total" model-filter="{min:0, number:true}" filter-name="te_number" type="text" ng-keypress="appendOrder($event)">
+                </td>
+                <td>
                     <div class="display-flex" style="align-items: center;">
                         <input class="form-control table-input" ng-model="data.productForAppend.gtd" type="text" placeholder="ГТД" ng-keypress="appendOrder($event)">
                         &nbsp;/&nbsp;
                         <input class="form-control table-input" ng-model="data.productForAppend.country" type="text" placeholder="Страна" ng-keypress="appendOrder($event)">
                     </div>
                 </td>
-                <td>
-                    <input class="form-control table-input" ng-model="data.productForAppend.quantity" model-filter="{min:0}" filter-name="te_number" type="text" ng-keypress="appendOrder($event)">
-                </td>
                 <td>{{data.productForAppend.supplier_order.number || 'не указан'}}</td>
-                <td>
-                    <input class="form-control table-input" ng-model="data.productForAppend.total" model-filter="{min:0, number:true}" filter-name="te_number" type="text" ng-keypress="appendOrder($event)">
-                </td>
                 <td class="center-item-text">
                     <div ng-click="appendOrder()" class="btn btn-success" ng-disabled="!data.productForAppend.product">
                         <i class="fa fa-plus"></i>
@@ -88,23 +88,24 @@
                             {{ item.product.name }} ({{ item.product.article }})
                         </a>
                     </td>
+                    <td>{{ item.quantity }}</td>
+                    <td class="text-right">{{ item.total | currency }}</td>
                     <td>
                         <span ng-if="item.gtd">{{ item.gtd }}/{{ item.country }}</span>
                     </td>
-                    <td>{{ item.quantity }}</td>
                     <td>
                         <a href="/admin/#/supplier_orders/{{item.supplier_order.id}}">
                             {{ item.supplier_order.number }}
                         </a>
                     </td>
-                    <td class="text-right">{{ item.total | currency }}</td>
                     <td ng-if="visual.roles.can_destroy">
                         <form-nav-buttons data-role="visual.roles" class="btn-group" subdata="{data:item, index:$index}" data-options="visual.navTableButts" data-template="table" content-class="btn btn-xs"></form-nav-buttons>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="5" class="text-right">Итого:</td>
+                    <td colspan="3" class="text-right">Итого:</td>
                     <td>{{ receiveOrder.total | currency }}</td>
+                    <td colspan="2"></td>
                     <td ng-if="visual.roles.can_destroy"></td>
                 </tr>
             </tbody>
