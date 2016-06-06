@@ -51,7 +51,7 @@
                     sc.data.ordersList.unshift(result.data);
                     funcFactory.showNotification('Поступление успешно создано', '', true);
                     sc.clearCreateOrder();
-                    $state.go('app.receive_orders.view.edit', {id: result.data.id});
+                    $state.go('app.receive_orders.view', {id: result.data.id});
                 } else {
                     funcFactory.showNotification('Не удалось создать поступление', result.data.errors);
                 };

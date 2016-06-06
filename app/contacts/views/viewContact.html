@@ -8,24 +8,37 @@
             <p class="col-md-9">{{ contact.last_sign_in_at | date:'dd MMMM yy' }}</p>
         </div>
         <div class="row margin-top-10">
-            <p class="col-xs-12 col-md-3 font-bold">Имя:</p>
-            <p class="col-md-9">{{ contact.first_name }}</p>
+            <b class="col-xs-12 col-md-3 font-bold">Имя:</b>
+            <span ng-if="canEditContact()" editable-text="contact.first_name" onaftersave="saveContact()" class="txt-color-blueDark semi-bold display-inline">
+                {{ contact.first_name }}
+            </span>
+            <span ng-if="!canEditContact()" class="col-md-9">{{ contact.first_name }}</span>
         </div>
         <div class="row margin-top-10">
-            <p class="col-xs-12 col-md-3 font-bold">Фамилия:</p>
-            <p class="col-md-9">{{ contact.last_name }}</p>
+            <b class="col-xs-12 col-md-3 font-bold">Фамилия:</b>
+            <span ng-if="canEditContact()" editable-text="contact.last_name" onaftersave="saveContact()" class="txt-color-blueDark semi-bold display-inline">
+                {{ contact.last_name }}
+            </span>
+            <span ng-if="!canEditContact()" class="col-md-9">{{ contact.last_name }}</span>
         </div>
         <div class="row margin-top-10">
-            <p class="col-xs-12 col-md-3 font-bold">Партнёр:</p>
-            <p class="col-md-9">
+            <b class="col-xs-12 col-md-3 font-bold">Мобильный:</b>
+            <span ng-if="canEditContact()" editable-text="contact.mobile" onaftersave="saveContact()" class="txt-color-blueDark semi-bold display-inline">
+                {{ contact.mobile || "Нет" }}
+            </span>
+            <span ng-if="!canEditContact()" class="col-md-9">{{ contact.mobile || "Нет"}}</span>
+        </div>
+        <div class="row margin-top-10">
+            <b class="col-xs-12 col-md-3 font-bold">Партнёр:</b>
+            <span class="col-md-9">
                 <a ng-href="#/partners/{{ contact.partner.id }}">
                     {{ contact.partner.name }}
                 </a>
-            </p>
+            </span>
         </div>
         <div class="row margin-top-10">
-            <p class="col-xs-12 col-md-3 font-bold">Email:</p>
-            <p class="col-md-9">{{ contact.email }}</p>
+            <b class="col-xs-12 col-md-3 font-bold">Email:</b>
+            <span class="col-md-9">{{ contact.email }}</span>
         </div>
     </div>
     <ul class="nav nav-tabs bordered" id="myTab1">

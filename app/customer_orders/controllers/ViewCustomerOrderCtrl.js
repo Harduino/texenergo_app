@@ -438,10 +438,10 @@
         function recalculateCustomerOrder() {
             serverApi.recalculateCustomerOrder($stateParams.id, function(result){
                 if(result.status == 200 && !result.data.errors) {
-                    funcFactory.showNotification("Успешно", 'Заказ успешно отправлен.', true);
+                    funcFactory.showNotification("Успешно", 'Заказ успешно пересчитан.', true);
                     sc.data.order = result.data;
                 } else {
-                    funcFactory.showNotification("Неудача", 'Ошибка при попытке отправить заказ.', true);
+                    funcFactory.showNotification("Неудача", 'Ошибка при пересчёте заказа.', true);
                 }
             });
         }

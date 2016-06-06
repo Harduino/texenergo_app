@@ -13,7 +13,12 @@
                         {{product.name}}
                     </h2>
                     <span ng-if="product.obsolete.flag" class="text-danger">
-                        (Снят с производства)
+                        (Снят с производства
+                        <span ng-if="product.obsolete.id">
+                            с заменой на
+                            <a ng-href="#/products/{{product.obsolete.id}}">{{ product.obsolete.article }}</a>
+                        </span>
+                        )
                     </span>
                 </div>
                 <form-nav-buttons options="visual.navButtsOptions" subdata="product.id" class="btn-group margin-top-10"></form-nav-buttons>
