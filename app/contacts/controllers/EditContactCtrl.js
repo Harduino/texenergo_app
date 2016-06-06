@@ -32,13 +32,13 @@
         sc.saveContact = function(){
             var contact = sc.data.contact;
             var data = {
-                    contact:{
-                        first_name: contact.first_name,
-                        last_name: contact.last_name,
-                        do_not_email: contact.do_not_email,
-                        partner_id: contact.partner.id
-                    }
-                };
+                contact:{
+                    first_name: contact.first_name,
+                    last_name: contact.last_name,
+                    do_not_email: contact.do_not_email,
+                    partner_id: contact.partner.id
+                }
+            };
             serverApi.updateContact(contact.id, data, function(result){
                 if(!result.data.errors)
                     funcFactory.showNotification("Успешно", 'Контакт ' + contact.email + ' успешно отредактирован.',true);

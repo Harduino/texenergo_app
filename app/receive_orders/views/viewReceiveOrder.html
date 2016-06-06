@@ -93,14 +93,14 @@
                         <span ng-switch-default>{{ item.quantity || 0}}</span>
                     </td>
                     <td class="text-right">
-                        <a ng-switch-when="true" editable-text="item.total" buttons="no">{{ (item.total || 0) | currency}}</a>
+                        <a ng-switch-when="true" editable-text="item.total" onaftersave="updateContentsProduct({data:item, index:$index})" buttons="no">{{ (item.total || 0) | currency}}</a>
                         <span ng-switch-default>{{ item.total | currency }}</span>
                     </td>
                     <td>
                         <span ng-switch-when="true">
-                            <a editable-text="item.gtd" buttons="no">{{ item.gtd || 'Пусто'}}</a>
+                            <a editable-text="item.gtd" buttons="no" onaftersave="updateContentsProduct({data:item, index:$index})">{{ item.gtd || 'Пусто'}}</a>
                             <span>&nbsp; / &nbsp;</span>
-                            <a editable-text="item.country" buttons="no">{{ item.country || 'Пусто'}}</a>
+                            <a editable-text="item.country" buttons="no" onaftersave="updateContentsProduct({data:item, index:$index})">{{ item.country || 'Пусто'}}</a>
                         </span>
                         <span ng-switch-default ng-if="item.gtd">{{ item.gtd + ' / ' + item.country }}</span>
                     </td>

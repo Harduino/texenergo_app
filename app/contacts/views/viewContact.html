@@ -1,5 +1,5 @@
 <div id="content">
-    <div class="well well-white">
+    <div class="well well-white" ng-switch="visual.roles.can_edit">
         <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">{{visual.titles + contact.email }}</h2>
         <form-nav-buttons options="visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
         <hr>
@@ -9,19 +9,40 @@
         </div>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Имя:</p>
-            <p class="col-md-9">{{ contact.first_name }}</p>
+            <p class="col-md-9" ng-switch-when="true">
+                <a editable-text="contact.first_name" buttons="no" onaftersave="saveContact()">{{ contact.first_name || 'Нет'}}</a>
+            </p>
+            <p ng-switch-default class="col-md-9">{{ contact.first_name }}</p>
         </div>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Фамилия:</p>
-            <p class="col-md-9">{{ contact.last_name }}</p>
+            <p class="col-md-9" ng-switch-when="true">
+                <a editable-text="contact.last_name" buttons="no" onaftersave="saveContact()">{{ contact.last_name || 'Нет'}}</a>
+            </p>
+            <p ng-switch-default class="col-md-9">{{ contact.last_name }}</p>
         </div>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Партнёр:</p>
-            <p class="col-md-9">
+            <div class="col-md-9" ng-switch-when="true">
+                <ui-select  ui-select-infinity="partnerSelectConfig" ng-model="contact.partner" theme="select2" on-select="saveContact()" style="width: 50%;">
+                    <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
+                    <ui-select-choices repeat="partner in data.partnersList | filter:$select.search">
+                        <div ng-bind-html="partner.name | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <p class="col-md-9" ng-switch-default>
                 <a ng-href="#/partners/{{ contact.partner.id }}">
                     {{ contact.partner.name }}
                 </a>
             </p>
+        </div>
+        <div class="row margin-top-10">
+            <p class="col-xs-12 col-md-3 font-bold">Мобильный тел:</p>
+            <p class="col-md-9" ng-switch-when="true">
+                <a editable-text="contact.mobile" buttons="no" onaftersave="saveContact()">{{ contact.mobile || 'Нет'}}</a>
+            </p>
+            <p ng-switch-default class="col-md-9">{{ contact.mobile }}</p>
         </div>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Email:</p>
