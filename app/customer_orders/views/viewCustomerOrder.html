@@ -136,9 +136,12 @@
                                     <tr ng-repeat='item in order.customer_order_contents' class="order-items" ng-click="selectPosition($event, item)" ng-class="{selected: item.selected}">
                                         <td class="hidden-xs">{{ $index + 1 }}</td>
                                         <td te-copy-to-buffer hidden-buttons>
+                                            <span ng-repeat="message in item.messages">
+                                                <span class="badge alert-{{message.level}}" uib-tooltip="{{message.text}}">!</span>
+                                            </span>
+
                                             <a ng-href="/#/products/{{ item.product.id }}" te-buffer-value>{{ item.product.name }}</a>
                                             <i class="fa fa-search-plus blue-hover" ng-click="changeCustomerOrderProductModal(item)"></i>
-                                            <i class="fa fa-times blue-hover" ng-if="order.can_edit" ng-click="removeProduct(item, $index)"></i>
                                         </td>
                                         <td class="hidden-xs" te-copy-to-buffer>
                                             <span te-buffer-value>{{ item.product.article}}</span>
