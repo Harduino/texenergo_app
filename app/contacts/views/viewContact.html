@@ -48,6 +48,14 @@
             <p class="col-xs-12 col-md-3 font-bold">Email:</p>
             <p class="col-md-9">{{ contact.email }}</p>
         </div>
+        <div class="row margin-top-10" ng-switch-when="true">
+            <p class="col-xs-12 col-md-3 font-bold">Не высылать email-ы:</p>
+            <p class="col-md-9">
+                <a editable-checkbox="contact.do_not_email" onaftersave="saveContact()">
+                    {{ contact.do_not_email && "Высылать!" || "Не высылать" }}
+                </a>
+            </p>
+        </div>
     </div>
     <ul class="nav nav-tabs bordered" id="myTab1">
         <li class="active"><a data-toggle="tab" href="#s1">Просмотренные товары</a></li>
