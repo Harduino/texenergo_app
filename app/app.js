@@ -115,7 +115,8 @@ appConfig.sound_on = true;
             return {
                 request: function(config){
                     var url = encodeURI(config.url);
-                    config.url = config.method == 'GET' && url.indexOf('html')>-1 ? url : appConfig.serverUrl + url;
+                    var re  = /http/;
+                    config.url = (config.method == 'GET' && url.indexOf('html')>-1) || url.match(re) !== null  ? url : appConfig.serverUrl + url;
                     setInload(true);
                     return config;
                 },

@@ -394,6 +394,17 @@
             var path = '/api/logs/parse?page='+page + (query ? ('&q=' + query) : '');
             $http.get(path, config).then(success, fail);
         };
+
+        this.validateViaDaData = function(type, data){
+            var url = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/' + type;
+            return $http.post(url, data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept' : 'application/json',
+                    'Authorization' : 'Token b9d1af0994c10d361ed1a354b0536f4f18ea099f'
+                }
+            });
+        }
     }]);
 
     module.factory('Abilities', ['serverApi', '$q', '$state', 'CanCan', 'User', function(serverApi, $q, $state, CanCan, User){

@@ -53,13 +53,18 @@
                     mobile: contact.mobile
                 }
             };
-            serverApi.updateContact(contact.id, data, function(result){
-                if(!result.data.errors){
-                    sc.concat = result.data;
-                    funcFactory.showNotification("Успешно", 'Контакт ' + contact.email + ' успешно отредактирован.',true);
-                }
-                else funcFactory.showNotification('Не удалось отредактировать контакт '+contact.email, result.data.errors);
+
+            serverApi.validateViaDaData('fio', {query: contact.first_name}).then(function(result){
+                console.log(result);
             });
+
+//            serverApi.updateContact(contact.id, data, function(result){
+//                if(!result.data.errors){
+//                    sc.concat = result.data;
+//                    funcFactory.showNotification("Успешно", 'Контакт ' + contact.email + ' успешно отредактирован.',true);
+//                }
+//                else funcFactory.showNotification('Не удалось отредактировать контакт '+contact.email, result.data.errors);
+//            });
         };
 
         function returnBack(){
