@@ -91,6 +91,25 @@
             positions: {},
             total: 0
         };
+
+        /**
+         * Обновляем информацию по заказу
+         */
+        sc.saveOrderInfo = function(){
+            var order = sc.order,
+                data = {
+                    customer_order:{
+                        title: order.title,
+                        description: order.description,
+                        partner_id: order.partner.id
+                    }
+                };
+            serverApi.updateCustomerOrder(order.id, data, function(result){
+                if(result.status == 200 && !result.data.errors){
+                    funcFactory.showNotification("Успешно", 'Заказ '+order.number+' успешно отредактирован.',true);
+                }else funcFactory.showNotification("Неудача", 'Не удалось отредактировать заказ '+order.number,true);
+            });
+        };
         
         sc.saveProductChange = function(data) {
             var product = data.item;

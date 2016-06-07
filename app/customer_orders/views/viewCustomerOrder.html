@@ -14,7 +14,7 @@
                         <h2>Общая информация</h2>
                     </header>
                     <div class="widget-body">
-                        <div class="well well-clean well-white no-padding">
+                        <div class="well well-clean well-white no-padding" ng-switch="visual.roles.can_edit">
                             <div class="row">
                                 <div class="col-xs-12 col-md-3">
                                     <span easypiechart options="visual.chartOptions" percent="amontPercent" class="easy-pie-chart">
@@ -33,13 +33,19 @@
                                 <p class="col-xs-12 col-md-3 font-bold">
                                     Название:
                                 </p>
-                                <p class="col-md-9">{{order.title}}</p>
+                                <div class="col-md-9" ng-switch-when="true">
+                                    <a editable-text="order.title" onaftersave="saveOrderInfo()">{{ order.title || 'Нет' }}</a>
+                                </div>
+                                <p ng-switch-default class="col-md-9">{{order.title}}</p>
                             </div>
                             <div class="row">
                                 <p class="col-xs-12 col-md-3 font-bold">
                                     Описание:
                                 </p>
-                                <p class="col-md-9">{{order.description}}</p>
+                                <div class="col-md-9" ng-switch-when="true">
+                                    <a editable-textarea="order.description" onaftersave="saveOrderInfo()">{{ order.description || 'Нет' }}</a>
+                                </div>
+                                <p ng-switch-default class="col-md-9">{{order.description}}</p>
                             </div>
                             <div class="row">
                                 <p class="col-xs-12 col-md-3 font-bold">
