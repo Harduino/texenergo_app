@@ -142,12 +142,17 @@
                 product_id: data.product_id
             }, function(result){
                 if(!result.data.errors){
-                    for(var i=0; i<sc.order.customer_order_contents.length; i++){
-                        if(sc.order.customer_order_contents[i].id == data.id){
-                            sc.order.customer_order_contents[i] = result.data;
+                    for (var i = 0; i < result.data.length; i++) {
+                        var updated_row = result.data[i];
+                        for (var j = 0; j < sc.order.customer_order_contents.length; j++) {
+                            var x = sc.order.customer_order_contents[j];
+                            if (x.id === updated_row.id) {
+                                sc.order.customer_order_contents[j] = angular.extend(x, updated_row);
+                                funcFactory.showNotification('Успешно обновлены данные продукта', updated_row.product.name, true);
+                                break;
+                            }
                         }
                     }
-                    funcFactory.showNotification('Успешно обновлены данные продукта', result.data.product.name, true);
                 }else{
                     funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors);
                 }

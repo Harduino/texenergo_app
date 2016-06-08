@@ -136,7 +136,7 @@
                 }, function(result){
                     if(!result.data.errors){
                         var r = sc.data.order.customer_order_contents[row.index];
-                        sc.data.order.customer_order_contents[row.index] = angular.extend(r, result.data);
+                        sc.data.order.customer_order_contents[row.index] = angular.extend(r, result.data[0]);
                         funcFactory.showNotification('Успешно обновлены данные продукта', item.product.name, true);
                     }else{
                         funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors);
