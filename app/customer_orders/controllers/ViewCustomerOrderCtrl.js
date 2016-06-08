@@ -118,9 +118,17 @@
                 discount: product.discount
             }, function(result){
                 if(!result.data.errors){
-                    var r = sc.order.customer_order_contents[data.index];
-                    sc.order.customer_order_contents[data.index] = angular.extend(r, result.data);
-                    funcFactory.showNotification('Успешно обновлены данные продукта', product.name, true);
+                    for (var i = 0; i < result.data.length; i++) {
+                        var updated_row = result.data[i];
+                        for (var j = 0; j < sc.order.customer_order_contents.length; j++) {
+                            var x = sc.order.customer_order_contents[j];
+                            if (x.id === updated_row.id) {
+                                sc.order.customer_order_contents[j] = angular.extend(x, updated_row);
+                                funcFactory.showNotification('Успешно обновлены данные продукта', x.product.name, true);
+                                break;
+                            }
+                        }
+                    }
                 }else{
                     funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors);
                 }
@@ -210,7 +218,9 @@
 
                 serverApi.addCustomerOrderProduct(sc.order.id, post,function(result){
                     if(!result.data.errors){
-                        sc.order.customer_order_contents.push(angular.extend(data, result.data));
+                        for (var i = 0; i < result.data.length; i++) {
+                            sc.order.customer_order_contents.push(angular.extend(data, result.data[i]));
+                        }
                         funcFactory.showNotification('Успешно добавлен продукт', t.name, true);
                         selectCtrl.open=true;
                         selectCtrl.search = '';

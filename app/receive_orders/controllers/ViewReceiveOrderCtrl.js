@@ -73,7 +73,7 @@
                         funcFactory.showNotification('Успешно', 'Продукт ' + data.product.name + ' успешно добвален', true);
                         sc.receiveOrder.product_order_contents.push(angular.extend(data, result.data));
                         clearProductForAppend();
-                        angular.element('#ero_prod_select').data().$uiSelectController.open=true;
+                        angular.element('#vro_prod_select').data().$uiSelectController.open=true;
                     }else funcFactory.showNotification('Не удалось добавить продукт ' + data.product.name, result.data.errors);
                 });
             };
