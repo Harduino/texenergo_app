@@ -77,7 +77,66 @@
                                 <p class="col-xs-12 col-md-3 font-bold">
                                     Отгрузка:
                                 </p>
-                                <p class="col-md-9">{{order.transportation}}</p>
+                                <p class="col-md-9" ng-if="order.can_edit">
+                                    <a href="#" editable-select="order.transportation_info.transportation" e-ng-options="option for option in order.transportation_info.transportation_options" onaftersave="saveOrderInfo()">
+                                        {{ order.transportation_info.transportation || 'Нет'}}
+                                    </a>
+                                </p>
+                                <p class="col-md-9" ng-if="!order.can_edit">{{order.transportation_info.transportation}}</p>
+                            </div>
+                            <div class="row" ng-if="order.transportation_info.transportable">
+                                <p class="col-xs-12 col-md-3 font-bold">
+                                    Адрес доставки:
+                                </p>
+                                <div class="col-md-9" ng-if="order.can_edit">
+                                    <form editable-form name="deliveryAddressForm" onaftersave="saveOrderInfo()">
+                                        <div>
+                                            <span class="postal_index">Индекс: </span>
+                                            <span editable-text="order.transportation_info.delivery_address.postal_index" e-name="name">
+                                                {{ order.transportation_info.delivery_address.postal_index || 'нет' }}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span class="region">Регион: </span>
+                                            <span editable-text="order.transportation_info.delivery_address.region" e-name="name">
+                                                {{ order.transportation_info.delivery_address.region || 'нет' }}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span class="city">Город: </span>
+                                            <span editable-text="order.transportation_info.delivery_address.city" e-name="name">
+                                                {{ order.transportation_info.delivery_address.city || 'нет' }}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span class="street">Улица: </span>
+                                            <span editable-text="order.transportation_info.delivery_address.street" e-name="name">
+                                                {{ order.transportation_info.delivery_address.street || 'нет' }}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span class="house">Дом: </span>
+                                            <span editable-text="order.transportation_info.delivery_address.house" e-name="name">
+                                                {{ order.transportation_info.delivery_address.house || 'нет' }}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <button type="button" class="btn btn-default" ng-click="deliveryAddressForm.$show()" ng-show="!deliveryAddressForm.$visible">
+                                                Изменить
+                                            </button>
+                                            <span ng-show="deliveryAddressForm.$visible">
+                                                <button type="submit" class="btn btn-primary" ng-disabled="deliveryAddressForm.$waiting">
+                                                    Сохранить
+                                                </button>
+                                                <button type="button" class="btn btn-default" ng-disabled="deliveryAddressForm.$waiting" ng-click="deliveryAddressForm.$cancel()">
+                                                    Отменить
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </form>
+                                    <!--a editable-text="order.transportation_info.delivery_address" onaftersave="saveOrderInfo()">{{ order.transportation_info.delivery_address || 'Нет' }}</a-->
+                                </div>
+                                <p ng-if="!order.can_edit" class="col-md-9">{{order.transportation_info.delivery_address}}</p>
                             </div>
                         </div>
                     </div>

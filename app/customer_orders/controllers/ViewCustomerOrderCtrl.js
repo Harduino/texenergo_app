@@ -101,13 +101,24 @@
                     customer_order:{
                         title: order.title,
                         description: order.description,
-                        partner_id: order.partner.id
+                        partner_id: order.partner.id,
+                        transportation: order.transportation_info.transportation,
+                        delivery_address: {
+                            postal_index: order.transportation_info.delivery_address.postal_index,
+                            region: order.transportation_info.delivery_address.region,
+                            city: order.transportation_info.delivery_address.city,
+                            street: order.transportation_info.delivery_address.street,
+                            house: order.transportation_info.delivery_address.house
+                        }
                     }
                 };
             serverApi.updateCustomerOrder(order.id, data, function(result){
                 if(result.status == 200 && !result.data.errors){
+                    sc.order = result.data;
                     funcFactory.showNotification("Успешно", 'Заказ '+order.number+' успешно отредактирован.',true);
-                }else funcFactory.showNotification("Неудача", 'Не удалось отредактировать заказ '+order.number,true);
+                } else {
+                    funcFactory.showNotification("Неудача", 'Не удалось отредактировать заказ '+order.number,true);
+                }
             });
         };
         
