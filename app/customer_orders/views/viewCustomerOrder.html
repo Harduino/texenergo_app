@@ -217,7 +217,7 @@
                                             <span ng-if="!order.can_edit">{{ item.quantity }}</span>
                                         </td>
                                         <td class="text-right">
-                                            <a ng-if="order.can_edit" editable-number="item.discount" onaftersave="saveProductChange({item: item, index: $index})" e-min="0" buttons="no">{{ item.discount }}</a>
+                                            <a ng-if="order.can_edit" editable-number="item.discount" onaftersave="saveProductChange({item: item, index: $index})" e-min="0" buttons="no"  uib-tooltip="{{item.discount_description}}">{{ item.discount }}</a>
                                             <span ng-if="!order.can_edit">{{ item.discount }}</span>
                                         </td>
                                         <td class="text-right">{{ item | price_net : item.quantity | currency}}</td>
