@@ -50,7 +50,7 @@
         //get current list of searched data
         this.getSearch = function(page, query, config, success, fail){
             var encoded = encodeURIComponent(query);
-            $http.get('/admin/search.json?term='+encoded+'&$skip='+(page*25)+'&$top=25', config || null).then(success, fail);
+            $http.get('/api/products/search.json?term='+encoded+'&$skip='+(page*25)+'&$top=25', config || null).then(success, fail);
         };
 
         // get product info
