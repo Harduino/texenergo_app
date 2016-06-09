@@ -92,31 +92,47 @@
                                     <form editable-form name="deliveryAddressForm" onaftersave="saveOrderInfo()">
                                         <div>
                                             <span class="postal_index">Индекс: </span>
-                                            <span editable-text="order.transportation_info.delivery_address.postal_index" e-name="name">
+                                            <span editable-text="order.transportation_info.delivery_address.postal_index"
+                                                  e-uib-typeahead="state.label for state in getDaDataSuggestions($viewValue, 'data.postal_code')"
+                                                  e-typeahead-on-select="fillBySuggestion($item)"
+                                                  e-typeahead-template-url="vcoTapeAheadTmpl.html"
+                                                  e-name="data.postal_code">
                                                 {{ order.transportation_info.delivery_address.postal_index || 'нет' }}
                                             </span>
                                         </div>
                                         <div>
                                             <span class="region">Регион: </span>
-                                            <span editable-text="order.transportation_info.delivery_address.region" e-name="name">
+                                            <span editable-text="order.transportation_info.delivery_address.region"
+                                                  e-uib-typeahead="state.label for state in getDaDataSuggestions($viewValue, 'data.region_with_type')"
+                                                  e-typeahead-on-select="fillBySuggestion($item)"
+                                                  e-typeahead-template-url="vcoTapeAheadTmpl.html"
+                                                  e-name="data.region_with_type">
                                                 {{ order.transportation_info.delivery_address.region || 'нет' }}
                                             </span>
                                         </div>
                                         <div>
                                             <span class="city">Город: </span>
-                                            <span editable-text="order.transportation_info.delivery_address.city" e-name="name">
+                                            <span editable-text="order.transportation_info.delivery_address.city"
+                                                  e-uib-typeahead="state.label for state in getDaDataSuggestions($viewValue, 'data.city')"
+                                                  e-typeahead-on-select="fillBySuggestion($item)"
+                                                  e-typeahead-template-url="vcoTapeAheadTmpl.html"
+                                                  e-name="data.city">
                                                 {{ order.transportation_info.delivery_address.city || 'нет' }}
                                             </span>
                                         </div>
                                         <div>
                                             <span class="street">Улица: </span>
-                                            <span editable-text="order.transportation_info.delivery_address.street" e-name="name">
+                                            <span editable-text="order.transportation_info.delivery_address.street"
+                                                  e-uib-typeahead="state.label for state in getDaDataSuggestions($viewValue, 'data.street')"
+                                                  e-typeahead-on-select="fillBySuggestion($item)"
+                                                  e-typeahead-template-url="vcoTapeAheadTmpl.html"
+                                                  e-name="data.street">
                                                 {{ order.transportation_info.delivery_address.street || 'нет' }}
                                             </span>
                                         </div>
                                         <div>
                                             <span class="house">Дом: </span>
-                                            <span editable-text="order.transportation_info.delivery_address.house" e-name="name">
+                                            <span editable-text="order.transportation_info.delivery_address.house" e-name="data.house">
                                                 {{ order.transportation_info.delivery_address.house || 'нет' }}
                                             </span>
                                         </div>
@@ -406,5 +422,11 @@
             <button class="btn btn-danger" type="button" ng-click="cancel()">{{config.btnCancelText}}</button>
             <button class="btn btn-primary" type="button" ng-click="ok()">{{config.btnOkText}}</button>
         </div>
+    </script>
+    <script type="text/ng-template" id="vcoTapeAheadTmpl.html">
+        <a>
+            <span ng-bind-html="match.model.label | uibTypeaheadHighlight:query"></span>
+            <div class="note" ng-bind-html="match.model.item.value"></div>
+        </a>
     </script>
 </div>

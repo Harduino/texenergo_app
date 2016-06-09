@@ -5,7 +5,7 @@
 
     "use strict";
 
-    angular.module('app.customer_orders').controller('ViewCustomerOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', '$filter', 'customerOrdersNotifications', '$uibModal', function($scope, $state, $stateParams, serverApi, funcFactory, $filter, notifications, $uibModal){
+    angular.module('app.customer_orders').controller('ViewCustomerOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', '$filter', 'customerOrdersNotifications', '$uibModal', '$parse', function($scope, $state, $stateParams, serverApi, funcFactory, $filter, notifications, $uibModal, $parse){
         var sc = $scope;
         sc.order = {};
         sc.total = 0;
@@ -435,6 +435,44 @@
                 sc.total = total;
             }
         }, true);
+
+        sc.getDaDataSuggestions = function(val, field_name){
+            return serverApi.validateViaDaData('address', {"query": val}).then(function(result){
+               return result.data.suggestions.map(function(item){
+                   return {label: $parse(field_name)(item) || val, item: item, field: field_name};
+               });
+            });
+        };
+
+        sc.fillBySuggestion = function($item){
+            var data = $item.item.data;
+
+            switch ($item.field){
+                case 'data.postal_code': {
+                    setValue('data.region_with_type', data.region_with_type);
+                    setValue('data.city', data.city);
+                    break;
+                }
+                case 'data.city' : {
+                    setValue('data.postal_code', data.postal_code);
+                    setValue('data.region_with_type', data.region_with_type);
+                    break;
+                }
+                case 'data.street' : {
+                    setValue('data.postal_code', data.postal_code);
+                    setValue('data.region_with_type', data.region_with_type);
+                    setValue('data.city', data.city);
+                    setValue('data.house', data.house);
+                    break;
+                }
+                default :  break;
+            }
+
+            //will set value into x-editable element
+            function setValue(e_name, value){
+                angular.element('[e-name="'+e_name+'"]').scope().$editable.scope.$data = value;
+            }
+        };
 
         function returnBack(){
             $state.go('app.customer_orders', {});
