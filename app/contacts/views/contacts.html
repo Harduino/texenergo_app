@@ -45,15 +45,15 @@
                 <div class="modal-body">
                     <section class="form-group">
                         <label class="control-label">Имя</label>
-                        <input type="text" ng-model="newContact.first_name" class="input-sm form-control">
+                        <input type="text" ng-model="newContact.first_name" uib-typeahead="name for name in getDaDataSuggestions('fio', $viewValue, 'value')" class="input-sm form-control">
                     </section>
                     <section class="form-group">
                         <label class="control-label">Фамилия</label>
-                        <input type="text" ng-model="newContact.last_name" class="input-sm form-control">
+                        <input type="text" ng-model="newContact.last_name" uib-typeahead="item for item in getDaDataSuggestions('fio', $viewValue, 'value')" class="input-sm form-control">
                     </section>
                     <section class="form-group">
                         <label class="control-label">Email</label>
-                        <input type="text" ng-model="newContact.email" class="input-sm form-control">
+                        <input type="text" ng-model="newContact.email" uib-typeahead="item for item in getDaDataSuggestions('email', $viewValue, 'value')" class="input-sm form-control">
                     </section>
                     <section class="form-group">
                         <label class="control-label">Партнер</label>

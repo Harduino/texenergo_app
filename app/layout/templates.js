@@ -28,5 +28,7 @@
                 '<i class="fa fa-{{item.ico}}"></i><span class="hidden-xs" ng-if="showText()">{{ item.name }}</span>'+
             '</div>'
         );
+
+        $templateCache.put('typeAhead.tmpl.html', '<a><span ng-bind-html="match.model.label | uibTypeaheadHighlight:query"></span><div class="note" ng-bind-html="match.model.item.value"></div></a>')
     }]);
 }());

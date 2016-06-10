@@ -4,7 +4,7 @@
 (function(){
 
     'use strict';
-    angular.module('app.contacts').controller('ContactsCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', function($scope, $state, $stateParams, serverApi, funcFactory){
+    angular.module('app.contacts').controller('ContactsCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', '$parse', function($scope, $state, $stateParams, serverApi, funcFactory, $parse){
         var sc = $scope;
 
         sc.visual = {
@@ -42,6 +42,15 @@
                 partner_id:''
             };
         }
+
+        sc.getDaDataSuggestions = function(type,val, field_name){
+            return serverApi.validateViaDaData(type, {"query": val}).then(function(result){
+                console.log(result);
+                return result.data.suggestions.map(function(item){
+                    return $parse(field_name)(item) || val;
+                });
+            });
+        };
 
         sc.createContact = function(){
             console.log(sc.newContact);
