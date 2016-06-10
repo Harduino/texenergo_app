@@ -359,7 +359,7 @@
 
                 sc.visual.roles = {
                     can_edit: order.can_edit,
-                    can_destroy: order.can_edit,
+                    can_destroy: order.can_destroy,
                     can_confirm: order.can_confirm
                 };
 

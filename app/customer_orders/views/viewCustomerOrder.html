@@ -91,7 +91,7 @@
                                 <div class="col-md-9" ng-if="order.can_edit">
                                     <form editable-form name="deliveryAddressForm" onaftersave="saveOrderInfo()">
                                         <div>
-                                            <span class="postal_index">Индекс: </span>
+                                            <span class="postal_index w-88-f">Индекс: </span>
                                             <span editable-text="order.transportation_info.delivery_address.postal_index"
                                                   e-uib-typeahead="state.label for state in getDaDataSuggestions($viewValue, 'data.postal_code')"
                                                   e-typeahead-on-select="fillBySuggestion($item)"
@@ -101,7 +101,7 @@
                                             </span>
                                         </div>
                                         <div>
-                                            <span class="region">Регион: </span>
+                                            <span class="region w-88-f">Регион: </span>
                                             <span editable-text="order.transportation_info.delivery_address.region"
                                                   e-uib-typeahead="state.label for state in getDaDataSuggestions($viewValue, 'data.region_with_type')"
                                                   e-typeahead-on-select="fillBySuggestion($item)"
@@ -111,7 +111,7 @@
                                             </span>
                                         </div>
                                         <div>
-                                            <span class="city">Город: </span>
+                                            <span class="city w-88-f">Город: </span>
                                             <span editable-text="order.transportation_info.delivery_address.city"
                                                   e-uib-typeahead="state.label for state in getDaDataSuggestions($viewValue, 'data.city')"
                                                   e-typeahead-on-select="fillBySuggestion($item)"
@@ -121,7 +121,7 @@
                                             </span>
                                         </div>
                                         <div>
-                                            <span class="street">Улица: </span>
+                                            <span class="street w-88-f">Улица: </span>
                                             <span editable-text="order.transportation_info.delivery_address.street"
                                                   e-uib-typeahead="state.label for state in getDaDataSuggestions($viewValue, 'data.street')"
                                                   e-typeahead-on-select="fillBySuggestion($item)"
@@ -131,12 +131,12 @@
                                             </span>
                                         </div>
                                         <div>
-                                            <span class="house">Дом: </span>
+                                            <span class="house w-88-f">Дом: </span>
                                             <span editable-text="order.transportation_info.delivery_address.house" e-name="data.house">
                                                 {{ order.transportation_info.delivery_address.house || 'нет' }}
                                             </span>
                                         </div>
-                                        <div>
+                                        <div class="padding-top-15">
                                             <button type="button" class="btn btn-default" ng-click="deliveryAddressForm.$show()" ng-show="!deliveryAddressForm.$visible">
                                                 Изменить
                                             </button>
@@ -238,7 +238,7 @@
                                         </td>
                                         <td class="text-right">{{ item | price_net : item.quantity | currency}}</td>
                                         <td>
-                                            <form-nav-buttons ng-if="visual.roles.can_destroy" data-role="visual.roles" class="btn-group" subdata="{data:item, index:$index}" data-options="visual.navTableButts" data-template="table" content-class="btn btn-xs"></form-nav-buttons>
+                                            <form-nav-buttons ng-if="item.can_destroy" data-role="item" class="btn-group" subdata="{data:item, index:$index}" data-options="visual.navTableButts" data-template="table" content-class="btn btn-xs"></form-nav-buttons>
                                         </td>
                                     </tr>
                                     <tr>

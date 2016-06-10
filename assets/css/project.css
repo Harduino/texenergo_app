@@ -819,3 +819,7 @@ td .editable-controls>input[type="number"]{
         transform: translate3d(4px, 0, 0);
     }
 }
+.w-88-f{
+    width: 88px;
+    float: left;
+}
