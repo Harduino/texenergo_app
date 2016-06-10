@@ -23,7 +23,11 @@
                 <tr ng-repeat="row in data.ordersList">
                     <td class="hidden-xs">{{$index +1}}</td>
                     <td ng-attr-title="{{row.transportation}}" class="hidden-xs">{{row.transportation[0]}}</td>
-                    <td>{{row.number}}</td>
+                    <td te-copy-to-buffer>
+                        <span te-buffer-value>
+                            {{row.number}}
+                        </span>
+                    </td>
                     <td class="hidden-xs">{{row.status}}</td>
                     <td>{{row.date | date:'dd/MM/yy HH:mm'}}</td>
                     <td>{{row.partner.name}}</td>

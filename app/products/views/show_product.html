@@ -37,10 +37,10 @@
                                 <input class="form-control" type="text">
                             </div>
                             <div class="widget-body">
-                                <div>
+                                <div te-copy-to-buffer>
                                     <b>Артикул:</b>
-                                    <span ng-if="canEditProduct()" editable-text="product.article" onaftersave="saveProduct()">{{ product.article || "Нет артикула" }}</span>
-                                    <span ng-if="!canEditProduct()">{{ product.article }}?</span>
+                                    <span ng-if="canEditProduct()" editable-text="product.article" onaftersave="saveProduct()" te-buffer-value>{{ product.article || "Нет артикула" }}</span>
+                                    <span ng-if="!canEditProduct()" te-buffer-value>{{ product.article }}?</span>
                                 </div>
                                 <div>
                                     <b>Производитель:</b>
