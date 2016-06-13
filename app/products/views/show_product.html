@@ -61,12 +61,16 @@
                                 </div>
                                 <div ng-if="canEditProduct()">
                                     <b>Снятие с производства:</b>
-                                    <a href="" ng-click="makeObsolete()" ng-if="product.obsolete.flag">
+                                    <a href="" ng-click="makeObsolete(false)" ng-if="product.obsolete.flag">
                                         Отменить снятие с производства
                                     </a>
-                                    <a href="" ng-click="makeObsolete()" ng-if="!product.obsolete.flag">
+                                    <a href="" ng-click="selectReplacementProduct()" ng-if="!product.obsolete.flag">
                                         Отметить как снятый с производства
                                     </a>
+                                </div>
+                                <div ng-if="product.obsolete.flag">
+                                    <b>С заменой на:</b>
+                                    <a ng-click="selectReplacementProduct()">{{ product.obsolete.name }}</a>
                                 </div>
                                 <div ng-show="product.manufacturer.name === 'Schneider Electric'" class="margin-top-10">
                                     <div class="form-group string optional product_lead_time">
@@ -327,5 +331,29 @@
     <div class="modal-footer">
         <button class="btn btn-danger" type="button" ng-click="cancel()">Отмена</button>
         <button class="btn btn-primary" type="button" ng-click="ok()">Добавить</button>
+    </div>
+</script>
+<script type="text/ng-template" id="spChangeReplacementProduct.tmpl.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Заменить продукт</h3>
+    </div>
+    <div class="modal-body">
+        <ui-select ui-select-infinity="pSelectConfig" ng-model="data.selectedProduct" theme="select2" reset-search-input="false" class="full-width">
+            <ui-select-match placeholder="Введите товар для замены...">{{$select.selected.name}}</ui-select-match>
+            <ui-select-choices repeat="product in data.productsList | filter:$select.search" class="search-item">
+                <div class="search-tr">
+                    <div class="search-td col-md-1">
+                        <img ng-src="{{product.image_url}}">
+                    </div>
+                    <div class="search-td col-md-7" ng-bind-html="product.name | highlight: $select.search"></div>
+                    <div class="search-td col-md-2">{{product.stock}} ед.</div>
+                    <div class="search-td col-md-2">{{product.price | currency}}</div>
+                </div>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-danger" type="button" ng-click="cancel()">Отмена</button>
+        <button class="btn btn-primary" type="button" ng-click="ok()">Заменить</button>
     </div>
 </script>

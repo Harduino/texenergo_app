@@ -154,27 +154,43 @@
                 }
             }
             return false;
-        }
+        };
 
         // Persists a product obsolete by sending request to server
-        sc.makeObsolete = function(){
+        sc.makeObsolete = function(enable, r_id){
             var product = sc.product;
             var data = {
                     product:{
                         obsolete: {
                             // Historically this one is called 'enable' on server side.
                             // Could handle and translate from 'flag' on server side, but leaving on client side until the issue escalates
-                            enable: !product.obsolete.flag
+                            enable: enable,
+                            replacement_id :r_id
                         }
                     }
                 };
             serverApi.updateProduct(product.id, data, function(result){
                 if(!result.data.errors){
-                    sc.product.obsolete.flag = !product.obsolete.flag;
+                    sc.product = result.data;
                     funcFactory.showNotification("Успешно", 'Товар '+product.name+' успешно отредактирована.',true);
                 } else {
                     funcFactory.showNotification('Не удалось отредактировать категорию '+product.name, result.data.errors);
                 }
+            });
+        };
+
+        sc.selectReplacementProduct = function(){
+            var modalInstance = $uibModal.open({
+                templateUrl: 'spChangeReplacementProduct.tmpl.html',
+                controller: 'spChangeReplacementProductModalCtrl',
+                windowClass: 'eqo-centred-modal',
+                resolve: {
+                    product : sc.product.obsolete
+                }
+            });
+
+            modalInstance.result.then(function (selectedProduct) {
+                sc.makeObsolete(true, selectedProduct.id);
             });
         }
 
@@ -202,6 +218,25 @@
         sc.ok = function () {
             $uibModalInstance.close(sc.data.selected);
         };
+        sc.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+    }]).controller("spChangeReplacementProductModalCtrl", ['$scope', '$uibModalInstance', 'serverApi', 'product', function($scope, $uibModalInstance, serverApi, product){
+        var sc = $scope;
+
+        sc.pSelectConfig = {
+            startPage: 0,
+            dataMethod: serverApi.getSearch
+        };
+        sc.data = {
+            selectedProduct: product,
+            productsList: []
+        };
+
+        sc.ok = function () {
+            $uibModalInstance.close(sc.data.selectedProduct);
+        };
+
         sc.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
