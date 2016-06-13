@@ -135,8 +135,9 @@ appConfig.sound_on = true;
                 },
                 responseError: function (rejection) {
                     var s = rejection.status;
-                    s == 401 && $location.path('sign_in');
-                    s == 403 && notifyError({status: "Ошибка", statusText: 'Не достаточно прав!'});
+                    if(s == 401) $location.path('sign_in');
+                    else if (s == 403) notifyError({status: "Ошибка", statusText: 'Не достаточно прав!'});
+                    else notifyError(rejection);
                     return $q.reject(rejection);
                 }
             };
