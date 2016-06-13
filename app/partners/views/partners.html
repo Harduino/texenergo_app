@@ -47,16 +47,128 @@
                         </label>
                     </section>
                     <section>
+                        <label class="label">КПП</label>
+                        <label class="input">
+                            <input type="text" class="input-sm" ng-model="newPartnerData.kpp">
+                        </label>
+                    </section>
+                    <section>
+                        <label class="label">Оф. наименование</label>
+                        <label class="input">
+                            <input type="text" class="input-sm" ng-model="newPartnerData.legal_name">
+                        </label>
+                    </section>
+                    <section>
                         <label class="label">Наименование</label>
                         <label class="input">
                             <input type="text" class="input-sm" ng-model="newPartnerData.name">
                         </label>
                     </section>
                     <section>
+                        <label class="label">Оф. адрес</label>
+                        <section class="p-l-15">
+                            <label class="label">Индекс:</label>
+                            <label class="input">
+                                <input type="text" ng-model="newPartnerData.legal_address.postal_index"
+                                       uib-typeahead="name.label for name in getDaDataSuggestions('address', $viewValue, 'data.postal_code')"
+                                       typeahead-on-select="fillBySuggestion($item, 'legal_address')"
+                                       typeahead-template-url="typeAhead.tmpl.html"
+                                       name="data.postal_code"
+                                       class="input-sm">
+                            </label>
+                        </section>
+                        <section class="p-l-15">
+                            <label class="label">Регион:</label>
+                            <label class="input">
+                                <input type="text" ng-model="newPartnerData.legal_address.region"
+                                       uib-typeahead="name.label for name in getDaDataSuggestions('address', $viewValue, 'data.region_with_type')"
+                                       typeahead-on-select="fillBySuggestion($item, 'legal_address')"
+                                       typeahead-template-url="typeAhead.tmpl.html"
+                                       name="data.region_with_type"
+                                       class="input-sm">
+                            </label>
+                        </section>
+                        <section class="p-l-15">
+                            <label class="label">Город:</label>
+                            <label class="input">
+                                <input type="text" ng-model="newPartnerData.legal_address.city"
+                                       uib-typeahead="name.label for name in getDaDataSuggestions('address', $viewValue, 'data.city')"
+                                       typeahead-on-select="fillBySuggestion($item, 'legal_address')"
+                                       typeahead-template-url="typeAhead.tmpl.html"
+                                       name="data.city"
+                                       class="input-sm">
+                            </label>
+                        </section>
+                        <section class="p-l-15">
+                            <label class="label">Улица:</label>
+                            <label class="input">
+                                <input type="text" ng-model="newPartnerData.legal_address.street"
+                                       uib-typeahead="name.label for name in getDaDataSuggestions('address', $viewValue, 'data.street')"
+                                       typeahead-on-select="fillBySuggestion($item, 'legal_address')"
+                                       typeahead-template-url="typeAhead.tmpl.html"
+                                       name="data.street"
+                                       class="input-sm">
+                            </label>
+                        </section>
+                        <section class="p-l-15">
+                            <label class="label">Дом:</label>
+                            <label class="input">
+                                <input type="text" ng-model="newPartnerData.legal_address.house" name="data.house" class="input-sm">
+                            </label>
+                        </section>
+                    </section>
+                    <section>
                         <label class="label">Адрес доставки</label>
-                        <label class="input">
-                            <input type="text" class="input-sm" ng-model="newPartnerData.delivery_address">
-                        </label>
+                        <section class="p-l-15">
+                            <label class="label">Индекс:</label>
+                            <label class="input">
+                                <input type="text" ng-model="newPartnerData.delivery_address.postal_index"
+                                       uib-typeahead="name.label for name in getDaDataSuggestions('address', $viewValue, 'data.postal_code')"
+                                       typeahead-on-select="fillBySuggestion($item, 'delivery_address')"
+                                       typeahead-template-url="typeAhead.tmpl.html"
+                                       name="data.postal_code"
+                                       class="input-sm">
+                            </label>
+                        </section>
+                        <section class="p-l-15">
+                            <label class="label">Регион:</label>
+                            <label class="input">
+                                <input type="text" ng-model="newPartnerData.delivery_address.region"
+                                       uib-typeahead="name.label for name in getDaDataSuggestions('address', $viewValue, 'data.region_with_type')"
+                                       typeahead-on-select="fillBySuggestion($item, 'delivery_address')"
+                                       typeahead-template-url="typeAhead.tmpl.html"
+                                       name="data.region_with_type"
+                                       class="input-sm">
+                            </label>
+                        </section>
+                        <section class="p-l-15">
+                            <label class="label">Город:</label>
+                            <label class="input">
+                                <input type="text" ng-model="newPartnerData.delivery_address.city"
+                                       uib-typeahead="name.label for name in getDaDataSuggestions('address', $viewValue, 'data.city')"
+                                       typeahead-on-select="fillBySuggestion($item, 'delivery_address')"
+                                       typeahead-template-url="typeAhead.tmpl.html"
+                                       name="data.city"
+                                       class="input-sm">
+                            </label>
+                        </section>
+                        <section class="p-l-15">
+                            <label class="label">Улица:</label>
+                            <label class="input">
+                                <input type="text" ng-model="newPartnerData.delivery_address.street"
+                                       uib-typeahead="name.label for name in getDaDataSuggestions('address', $viewValue, 'data.street')"
+                                       typeahead-on-select="fillBySuggestion($item, 'delivery_address')"
+                                       typeahead-template-url="typeAhead.tmpl.html"
+                                       name="data.street"
+                                       class="input-sm">
+                            </label>
+                        </section>
+                        <section class="p-l-15">
+                            <label class="label">Дом:</label>
+                            <label class="input">
+                                <input type="text" ng-model="newPartnerData.delivery_address.house" name="data.house" class="input-sm">
+                            </label>
+                        </section>
                     </section>
                     <section>
                         <label class="label">Телефон</label>

@@ -451,6 +451,7 @@
                 case 'data.postal_code': {
                     setValue('data.region_with_type', data.region_with_type);
                     setValue('data.city', data.city);
+                    setValue('data.city', data.street);
                     break;
                 }
                 case 'data.city' : {

@@ -823,3 +823,6 @@ td .editable-controls>input[type="number"]{
     width: 88px;
     float: left;
 }
+.p-l-15{
+    padding-left: 15px;
+}
