@@ -6,6 +6,7 @@
     "use strict";
 
     angular.module('app.customer_orders').controller('ViewCustomerOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', '$filter', 'customerOrdersNotifications', '$uibModal', '$parse', function($scope, $state, $stateParams, serverApi, funcFactory, $filter, notifications, $uibModal, $parse){
+        var _subscription;
         var sc = $scope;
         sc.order = {};
         sc.total = 0;
@@ -389,7 +390,7 @@
                 id: order.id
             };
 
-            notifications.subscribe({
+            _subscription =  notifications.subscribe({
                 channel: 'CustomerOrdersChannel',
                 customer_order_id: $stateParams.id
             }, sc.order.customer_order_contents);
@@ -573,6 +574,11 @@
                 $this.sortable( "cancel" );
             });
         }
+
+        sc.$on('$destroy', function(){
+           _subscription && _subscription.unsubscribe();
+        });
+
     }]).controller("EqoChangeCustomerOrderProductModalCtrl", ['$scope', '$uibModalInstance', 'serverApi', 'product', 'config', function($scope, $uibModalInstance, serverApi, product, config){
         var sc = $scope;
 
