@@ -109,5 +109,15 @@
                 }
             });
         };
+
+        sc.legalAddressString = function(){
+            var addr = sc.partner.legal_address;
+            return addr.postal_index + ' ' + addr.region + ' ' + addr.city + ' ' + addr.street + ' ' + addr.house;
+        }
+
+        sc.deliveryAddressString = function(){
+            var addr = sc.partner.delivery_address;
+            return addr.postal_index + ' ' + addr.region + ' ' + addr.city + ' ' + addr.street + ' ' + addr.house;
+        }
     }]);
 }());

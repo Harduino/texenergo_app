@@ -36,10 +36,11 @@
 
         function clearForm (){
             sc.newContact = {
-                first_name:'',
+                first_name: '',
                 last_name: '',
-                email:'',
-                partner_id:''
+                email: '',
+                partner_id: '',
+                mobile: ''
             };
         }
 

@@ -9,7 +9,7 @@
         var sc = $scope;
         sc.contact = {};
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack}, {type:'edit', callback: goToEdit}, {type:'refresh', callback:getContactDetails}],
+            navButtsOptions:[{type:'back', callback:returnBack}, {type:'refresh', callback:getContactDetails}],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
                 scaleColor:false,
@@ -54,25 +54,21 @@
                 }
             };
 
-            serverApi.validateViaDaData('fio', {query: contact.first_name}).then(function(result){
-                console.log(result);
-            });
+            // serverApi.validateViaDaData('fio', {query: contact.first_name}).then(function(result){
+            //     console.log(result);
+            // });
 
-//            serverApi.updateContact(contact.id, data, function(result){
-//                if(!result.data.errors){
-//                    sc.concat = result.data;
-//                    funcFactory.showNotification("Успешно", 'Контакт ' + contact.email + ' успешно отредактирован.',true);
-//                }
-//                else funcFactory.showNotification('Не удалось отредактировать контакт '+contact.email, result.data.errors);
-//            });
+           serverApi.updateContact(contact.id, data, function(result){
+               if(!result.data.errors){
+                   sc.concat = result.data;
+                   funcFactory.showNotification("Успешно", 'Контакт ' + contact.email + ' успешно отредактирован.',true);
+               }
+               else funcFactory.showNotification('Не удалось отредактировать контакт '+contact.email, result.data.errors);
+           });
         };
 
         function returnBack(){
             $state.go('app.contacts',{});
-        }
-        
-        function goToEdit(){
-            $state.go('app.contacts.view.edit',{});
         }
     }]);
 }());

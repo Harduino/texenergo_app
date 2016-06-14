@@ -39,21 +39,6 @@
                     templateUrl: '/app/contacts/views/viewContact.html'
                 }
             }
-        }).state('app.contacts.view.edit', {
-            url: '/edit',
-            data:{
-                title: 'Редактирования контакта',
-                access:{
-                    action:'edit',
-                    params:'Contact'
-                }
-            },
-            views:{
-                "content@app":{
-                    controller: 'EditContactCtrl',
-                    templateUrl: '/app/contacts/views/editContact.html'
-                }
-            }
         });
     });
 }());

@@ -56,6 +56,10 @@
                         <input type="text" ng-model="newContact.email" uib-typeahead="item for item in getDaDataSuggestions('email', $viewValue, 'value')" class="input-sm form-control">
                     </section>
                     <section class="form-group">
+                        <label class="control-label">Мобильный</label>
+                        <input type="text" ng-model="newContact.mobile" class="input-sm form-control">
+                    </section>
+                    <section class="form-group">
                         <label class="control-label">Партнер</label>
                         <ui-select  ui-select-infinity="partnerSelectConfig" ng-model="newContact.partner" theme="select2" class="td-ui-select">
                             <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
