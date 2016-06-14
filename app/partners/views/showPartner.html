@@ -25,24 +25,15 @@
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Адрес доставки:</p>
-            <p class="col-md-9" ng-if="canEditPartner()">
-                <span editable-text="partner.delivery_address" class="prod-review-title" onaftersave="savePartner()" >{{ partner.delivery_address }}</span>
-            </p>
-            <p class="col-md-9" ng-if="!canEditPartner()">{{ partner.delivery_address }}</p>
+            <p class="col-md-9">{{ deliveryAddressString }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Адрес официальный:</p>
-            <p class="col-md-9" ng-if="canEditPartner()">
-                <span editable-text="partner.legal_address" class="prod-review-title" onaftersave="savePartner()" >{{ partner.legal_address }}</span>
-            </p>
-            <p class="col-md-9" ng-if="!canEditPartner()">{{ partner.legal_address }}</p>
+            <p class="col-md-9">{{ legalAddressString() }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Телефон:</p>
-            <p class="col-md-9" ng-if="canEditPartner()">
-                <span editable-text="partner.phone" onaftersave="savePartner()" >{{ partner.phone }}</span>
-            </p>
-            <p class="col-md-9" ng-if="!canEditPartner()">{{ partner.phone }}</p>
+            <p class="col-md-9">{{ partner.phone }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Менеджер:</p>
