@@ -62,7 +62,7 @@
             switch ($item.field){
                 case 'data.postal_code': {
                     addr.region = data.region_with_type;
-                    addr.city = data.city;
+                    addr.city = (data.city || data.settlement_with_type);
                     addr.street = data.street;
                     break;
                 }
@@ -74,8 +74,26 @@
                 case 'data.street' : {
                     addr.postal_index =  data.postal_code;
                     addr.region =  data.region_with_type;
-                    addr.city = data.city;
+                    addr.city = (data.city || data.settlement_with_type);
                     addr.house = data.house;
+                    break;
+                }
+                case 'data.inn' : {
+                    sc.newPartnerData.inn = data.inn;
+                    sc.newPartnerData.kpp = data.kpp;
+                    sc.newPartnerData.legal_name = data.name.short_with_opf;
+                    sc.newPartnerData.name = data.name.short;
+                    sc.newPartnerData.ceo_name = data.management.name;
+                    sc.newPartnerData.ceo_title = data.management.post;
+                    var address = {
+                        postal_index: data.address.data.postal_code,
+                        region: data.address.data.region_with_type,
+                        city: (data.address.data.city || data.address.data.settlement_with_type),
+                        street: data.address.data.street_with_type,
+                        house: data.address.data.house
+                    }
+                    sc.newPartnerData.legal_address = address;
+                    sc.newPartnerData.delivery_address = address;
                     break;
                 }
                 default :  break;

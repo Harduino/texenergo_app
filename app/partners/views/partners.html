@@ -43,7 +43,11 @@
                     <section>
                         <label class="label">ИНН</label>
                         <label class="input">
-                            <input type="text" class="input-sm" ng-model="newPartnerData.inn">
+                            <input type="text" class="input-sm" ng-model="newPartnerData.inn"
+                              uib-typeahead="name.label for name in getDaDataSuggestions('party', $viewValue, 'data.inn')"
+                              typeahead-on-select="fillBySuggestion($item, 'inn')"
+                              typeahead-template-url="typeAhead.tmpl.html"
+                              name="data.inn">
                         </label>
                     </section>
                     <section>
