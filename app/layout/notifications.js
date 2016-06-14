@@ -26,7 +26,7 @@
                         };
                         if(typeof mixins === 'object' && mixins) m = angular.extend(m, mixins);
 
-                        CableApi.subscribe(params, m);
+                        return CableApi.subscribe(params, m);
                     };
 
                     function syncChanges(data, scopeObject){
