@@ -28,7 +28,7 @@
                     <td class="no-warp">{{item.price | currency}}</td>
                     <td>{{item.stock}}</td>
                     <td class="center-item-text">
-                        <form-nav-buttons data-role="visual.role" data-options="visual.navButtsOptions" subdata="item._id" data-template="table" content-class="btn btn-xs" class="btn-group"></form-nav-buttons>
+                        <form-nav-buttons data-role="visual.role" data-options="visual.navButtsOptions" subdata="item._id || item.id" data-template="table" content-class="btn btn-xs" class="btn-group"></form-nav-buttons>
                     </td>
                 </tr>
             </tbody>
