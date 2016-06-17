@@ -52,6 +52,7 @@ gulp.task('libs', function(){
         'assets/plugin/ui-tinymce/tinymce.js',
         'assets/plugin/x-editable/xeditable.js',
         'assets/plugin/x-editable/x-editable-custom.js',
+        'assets/plugin/ionrangeslider/js/ion.rangeSlider.min.js',
 
 
         'assets/plugin/cancan/export.js',
@@ -61,7 +62,7 @@ gulp.task('libs', function(){
         .on('error', console.warn)
         .pipe(concat('libs.js'))
         .pipe(ngAnnotate())
-        .pipe(minify())
+//        .pipe(minify())
         .pipe(gulp.dest('public/assets/javascripts/'));
 });
 gulp.task('app', function(){
@@ -91,6 +92,19 @@ gulp.task('server', function() {
         root: '',
         livereload: true,
         port: 8000
+    });
+    gulp.watch([
+        'app/*/module.js',
+        'app/layout/templates.js',
+        'app/layout/actions/*.js',
+        'app/layout/filters/filters.js',
+        'app/layout/service/services.js',
+        'assets/widgets/directives/*.js',
+        'app/*/controllers/*.js',
+        'app/*/directives/*.js',
+        'app/app.js'
+    ], function(){
+        gulp.start('app');
     });
 });
 gulp.task('default', ['app', 'libs', 'styles']);
