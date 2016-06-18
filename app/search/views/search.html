@@ -5,13 +5,13 @@
     <div class="well" ng-if="data.subSearch.human_name">
         <h1>Кажется вы искали "{{data.subSearch.human_name}}"</h1>
         <div ng-repeat="prop in data.subSearch.properties">
+            <h4 class="margin-bottom-10 margin-top-10">{{prop.human_name}}</h4>
             <div ng-if="prop.max && prop.min">
-                <h4 class="margin-bottom-10">{{prop.human_name}}</h4>
                 <input data-smart-ionslider="prop.uiElement" un-watch>
             </div>
             <div ng-if="prop.options">
-                <select ng-model="prop.val" ng-options="o in prop.options">
-                    <option value="">-- Выбирите опцию --</option>
+                <select ng-model="prop.val" ng-options="o for o in prop.options">
+                    <option value="" selected>-- Выбирите опцию --</option>
                 </select>
             </div>
         </div>

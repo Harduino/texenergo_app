@@ -6,7 +6,7 @@
 
         'use strict';
 
-        angular.module('app.search').controller('TopSearchCtrl', ['$scope', '$stateParams', '$location', '$state', 'serverApi', 'CanCan', '$uibModal', function($scope, $stateParams, $location, $state, serverApi, CanCan, $uibModal){
+        angular.module('app.search').controller('TopSearchCtrl', ['$scope', '$stateParams', '$location', '$state', 'serverApi', 'CanCan', '$uibModal', '$filter', function($scope, $stateParams, $location, $state, serverApi, CanCan, $uibModal, $filter){
             var sc = $scope;
 
             sc.data = {
@@ -47,6 +47,9 @@
                                 onFinish: function(data){
                                     item.from = data.from;
                                     item.to = data.to;
+                                },
+                                prettify: function (num){
+                                    return $filter('number')(num, 2);
                                 }
                             }
                         }
@@ -66,9 +69,10 @@
                     angular.forEach(s.properties, function(item){
                         var t = '&properties['+item.name+']';
                         if(item.hasOwnProperty('max') && item.hasOwnProperty('min')){
-                            props += t + '[min]=' + item.from + t + '[max]=' + item.to;
+                            props += t + '[min]=' + $filter('number')(item.from, 2) + t + '[max]=' + $filter('number')(item.to, 2);
                         }
                         if(item.hasOwnProperty('options')){
+                            if(item.val !== undefined)
                             props += t + '=' + item.val;
                         }
                     });
