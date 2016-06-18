@@ -11,7 +11,8 @@
 
             sc.data = {
                 searchText: decodeURIComponent($stateParams.searchString), //содержимое сроки поиска в топ меню
-                searchList: [] // массив с результатами поиска
+                searchList: [], // массив с результатами поиска
+                subSearch: {}
             };
             sc.visual = {
                 //контролы таблицы
@@ -21,6 +22,58 @@
                 ],
                 role:{
                     can_destroy: CanCan.can('Product', 'destroy')
+                }
+            };
+
+            sc.searchProduct = function(pageNumber, query, options, callback){
+                serverApi.getSearch(pageNumber, query, options, callback);
+                console.log(query);
+                serverApi.getSubSearch(query, options, function(result){
+                    console.log(result.data);
+                    sc.data.subSearch = result.data;
+                    var s = sc.data.subSearch;
+                    s.hasOwnProperty('properties') && angular.forEach(s.properties, function(item){
+                        if(item.min && item.max) {
+                            item.from = item.min * 1.2;
+                            item.to = item.max * 0.8;
+                            item.uiElement = {
+                                type: "double",
+                                min: item.min,
+                                max: item.max,
+                                from: item.from,
+                                to: item.to,
+                                grid: true,
+                                step:1,
+                                onFinish: function(data){
+                                    item.from = data.from;
+                                    item.to = data.to;
+                                }
+                            }
+                        }
+                    });
+                });
+            };
+
+            sc.searchByFunctor = function(){
+                var s = sc.data.subSearch;
+                if(s.hasOwnProperty('properties')){
+                    var props= '';
+                    angular.forEach(s.properties, function(item){
+                        var t = '&properties['+item.name+']';
+                        if(item.hasOwnProperty('max') && item.hasOwnProperty('min')){
+                            props += t + '[min]=' + item.from + t + '[max]=' + item.to;
+                        }
+                        if(item.hasOwnProperty('options')){
+                            props += t + '=' + item.val;
+                        }
+                    });
+                    serverApi.getSearchFunctor(s.name, props, function(result){
+                        console.log(result);
+                        if(result.status === 200){
+                            sc.searchProduct = angular.noop;
+                            data.searchList = result.data;
+                        }
+                    });
                 }
             };
             

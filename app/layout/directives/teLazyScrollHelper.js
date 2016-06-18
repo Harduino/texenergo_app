@@ -3,7 +3,7 @@
  * Helps init infinite-scroll by default app params
  */
 (function(){
-    angular.module('app.layout').directive('teLazyHelper', ['serverApi', '$timeout', function(serverApi, $timeout){
+    angular.module('app.layout').directive('teLazyHelper', ['serverApi', '$timeout', '$parse', function(serverApi, $timeout, $parse){
         return {
             restrict:'A',
             scope:{
@@ -18,7 +18,7 @@
                 scope.loadList = function(){
                     attrs.$set('infiniteScrollDisabled', true); //даем infiniteScroll знать что ждем загрузку данных
                     setVisualStatus(true);
-                    serverApi[attrs.serverApiMethod](pageNumber, scope.searchQuery, {}, function(result){
+                    (serverApi[attrs.serverApiMethod] || $parse(attrs.serverApiMethod)(scope.$parent))(pageNumber, scope.searchQuery, {}, function(result){
                         var stop = result.data.length == 0;
                         setVisualStatus(false, stop && pageNumber == startPage);
                         scope.list = scope.list.concat(result.data); //склеиваем уже загруженные данные и вновь прибывшие

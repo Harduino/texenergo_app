@@ -826,3 +826,8 @@ td .editable-controls>input[type="number"]{
 .p-l-15{
     padding-left: 15px;
 }
+.irs-bar, .irs-bar-edge{
+    height: 6px;
+    top: 25px;
+    background: #3276b1;
+}
