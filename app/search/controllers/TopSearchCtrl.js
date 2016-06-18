@@ -56,8 +56,13 @@
 
             sc.searchByFunctor = function(){
                 var s = sc.data.subSearch;
+
                 if(s.hasOwnProperty('properties')){
+
                     var props= '';
+
+                    sc.searchProduct = null;
+
                     angular.forEach(s.properties, function(item){
                         var t = '&properties['+item.name+']';
                         if(item.hasOwnProperty('max') && item.hasOwnProperty('min')){
@@ -70,8 +75,7 @@
                     serverApi.getSearchFunctor(s.name, props, function(result){
                         console.log(result);
                         if(result.status === 200){
-                            sc.searchProduct = angular.noop;
-                            data.searchList = result.data;
+                            sc.data.searchList = result.data;
                         }
                     });
                 }

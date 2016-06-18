@@ -57,7 +57,7 @@
             $http.get('/api/products/set_functor?term=' + query, config || null).then(success, fail);
         };
         this.getSearchFunctor = function(name, props, success, fail){
-            $http.get('/api/search_functor?functor=' + name + props).then(success, fail);
+            $http.get('/api/products/search_functor?functor=' + name + props).then(success, fail);
         };
 
         // get product info
