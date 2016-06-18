@@ -8,6 +8,10 @@
     angular.module('app.customer_orders').controller('ViewCustomerOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', '$filter', 'customerOrdersNotifications', '$uibModal', '$parse', function($scope, $state, $stateParams, serverApi, funcFactory, $filter, notifications, $uibModal, $parse){
         var _subscription;
         var sc = $scope;
+        sc.partnersList = [];
+        sc.partnerSelectConfig = {
+            dataMethod: serverApi.getPartners
+        };
         sc.order = {};
         sc.total = 0;
         sc.visual = {
@@ -103,6 +107,7 @@
                         title: order.title,
                         description: order.description,
                         partner_id: order.partner.id,
+                        issued_by_id: order.issued_by.id,
                         transportation: order.transportation_info.transportation,
                         delivery_address: {
                             postal_index: order.transportation_info.delivery_address.postal_index,
