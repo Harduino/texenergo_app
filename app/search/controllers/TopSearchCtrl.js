@@ -33,7 +33,7 @@
                     sc.data.subSearch = result.data;
                     var s = sc.data.subSearch;
                     s.hasOwnProperty('properties') && angular.forEach(s.properties, function(item){
-                        if(item.min && item.max) {
+                        if(item.hasOwnProperty('min') && item.hasOwnProperty('max')) {
                             item.from = item.min * 1.2;
                             item.to = item.max * 0.8;
                             item.uiElement = {
@@ -51,7 +51,7 @@
                                 prettify: function (num){
                                     return $filter('number')(num, 2);
                                 }
-                            }
+                            };
                         }
                     });
                 });

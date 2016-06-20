@@ -6,7 +6,7 @@
         <h1>Кажется вы искали "{{data.subSearch.human_name}}"</h1>
         <div ng-repeat="prop in data.subSearch.properties">
             <h4 class="margin-bottom-10 margin-top-10">{{prop.human_name}}</h4>
-            <div ng-if="prop.max && prop.min">
+            <div ng-if="prop.max !== undefined && prop.min !== undefined">
                 <input data-smart-ionslider="prop.uiElement" un-watch>
             </div>
             <div ng-if="prop.options">
