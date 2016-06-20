@@ -27,9 +27,7 @@
 
             sc.searchProduct = function(pageNumber, query, options, callback){
                 serverApi.getSearch(pageNumber, query, options, callback);
-                console.log(query);
                 serverApi.getSubSearch(query, options, function(result){
-                    console.log(result.data);
                     sc.data.subSearch = result.data;
                     var s = sc.data.subSearch;
                     s.hasOwnProperty('properties') && angular.forEach(s.properties, function(item){
@@ -69,15 +67,15 @@
                     angular.forEach(s.properties, function(item){
                         var t = '&properties['+item.name+']';
                         if(item.hasOwnProperty('max') && item.hasOwnProperty('min')){
-                            props += t + '[min]=' + $filter('number')(item.from, 2) + t + '[max]=' + $filter('number')(item.to, 2);
+                            props += t + '[min]=' + item.from.toFixed(2) + t + '[max]=' + item.to.toFixed(2);
                         }
                         if(item.hasOwnProperty('options')){
                             if(item.val !== undefined)
                             props += t + '=' + item.val;
                         }
                     });
+
                     serverApi.getSearchFunctor(s.name, props, function(result){
-                        console.log(result);
                         if(result.status === 200){
                             sc.data.searchList = result.data;
                         }
