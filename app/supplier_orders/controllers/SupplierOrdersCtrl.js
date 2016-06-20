@@ -41,7 +41,6 @@
         
         function createAutomatically(){
             serverApi.automaticallyCreateSupplierOrders(function(result){
-//                debugger;
                 if(!result.data.errors){
                     for(var i=0; i < result.data.supplier_orders.length; i++){
                         sc.data.ordersList.unshift(result.data.supplier_orders[i]);
@@ -63,7 +62,6 @@
                 if (ButtonPressed === "Да") {
                     serverApi.deleteSupplierOrder(data.id, function(result){
                         if(!result.data.errors){
-                            console.log(result);
                             sc.data.ordersList.splice(item.index, 1);
                             funcFactory.showNotification('Успешно', 'Заказ ' + data.number + ' удален', true);
                         } else funcFactory.showNotification('Не удалось удалить заказ ' + data.number);

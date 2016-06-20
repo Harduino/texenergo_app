@@ -53,6 +53,13 @@
             $http.get('/api/products/search.json?term='+encoded+'&$skip='+(page*25)+'&$top=25', config || null).then(success, fail);
         };
 
+        this.getSubSearch = function(query, config, success, fail){
+            $http.get('/api/products/set_functor?term=' + query, config || null).then(success, fail);
+        };
+        this.getSearchFunctor = function(name, props, success, fail){
+            $http.get('/api/products/search_functor?functor=' + name + props).then(success, fail);
+        };
+
         // get product info
         this.getProduct = function(id, success, fail){
             $http.get('/api/products/'+id +'.json').then(success, fail);
