@@ -65,7 +65,7 @@ gulp.task('libs', function(){
         .on('error', console.warn)
         .pipe(concat('libs.js'))
         .pipe(ngAnnotate())
-//        .pipe(minify())
+        .pipe(minify())
         .pipe(gulp.dest('public/assets/javascripts/'));
 });
 gulp.task('app', function(){
