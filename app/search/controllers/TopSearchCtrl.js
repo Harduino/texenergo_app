@@ -27,32 +27,34 @@
 
             sc.searchProduct = function(pageNumber, query, options, callback){
                 serverApi.getSearch(pageNumber, query, options, callback);
-                serverApi.getSubSearch(query, options, function(result){
-                    sc.data.subSearch = result.data;
-                    var s = sc.data.subSearch;
-                    s.hasOwnProperty('properties') && angular.forEach(s.properties, function(item){
-                        if(item.hasOwnProperty('min') && item.hasOwnProperty('max')) {
-                            item.from = item.min * 1.2;
-                            item.to = item.max * 0.8;
-                            item.uiElement = {
-                                type: "double",
-                                min: item.min,
-                                max: item.max,
-                                from: item.from,
-                                to: item.to,
-                                grid: true,
-                                step:1,
-                                onFinish: function(data){
-                                    item.from = data.from;
-                                    item.to = data.to;
-                                },
-                                prettify: function (num){
-                                    return $filter('number')(num, 2);
-                                }
-                            };
-                        }
+                if(CanCan.can("set_functor","Product")) {
+                    serverApi.getSubSearch(query, options, function(result){
+                        sc.data.subSearch = result.data;
+                        var s = sc.data.subSearch;
+                        s.hasOwnProperty('properties') && angular.forEach(s.properties, function(item){
+                            if(item.hasOwnProperty('min') && item.hasOwnProperty('max')) {
+                                item.from = item.min * 1.2;
+                                item.to = item.max * 0.8;
+                                item.uiElement = {
+                                    type: "double",
+                                    min: item.min,
+                                    max: item.max,
+                                    from: item.from,
+                                    to: item.to,
+                                    grid: true,
+                                    step:1,
+                                    onFinish: function(data){
+                                        item.from = data.from;
+                                        item.to = data.to;
+                                    },
+                                    prettify: function (num){
+                                        return $filter('number')(num, 2);
+                                    }
+                                };
+                            }
+                        });
                     });
-                });
+                }
             };
 
             sc.searchByFunctor = function(){
