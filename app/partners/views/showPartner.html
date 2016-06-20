@@ -1,21 +1,18 @@
 <div id="content">
-    <div class="well well-white">
+    <div class="well well-white" ng-switch="partner.can_edit">
         <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">{{visual.titles + partner.prefix}}</h2>
         <form-nav-buttons options="visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
         <hr>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Наименование:</p>
-            <p class="col-md-9" ng-if="canEditPartner()">
-                <span editable-text="partner.name" onaftersave="savePartner()" >{{ partner.name }}</span>
+            <p class="col-md-9" ng-switch-when="true">
+                <span editable-text="partner.name" onaftersave="savePartner()" >{{ partner.name || "Нет"  }}</span>
             </p>
-            <p class="col-md-9" ng-if="!canEditPartner()">{{ partner.name }}</p>
+            <p ng-switch-when="false" class="col-md-9">{{ partner.name }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Официальное наименование:</p>
-            <p class="col-md-9" ng-if="canEditPartner()">
-                <span editable-text="partner.legal_name" onaftersave="savePartner()" >{{ partner.legal_name }}</span>
-            </p>
-            <p class="col-md-9" ng-if="!canEditPartner()">{{ partner.legal_name }}</p>
+            <p class="col-md-9">{{ partner.legal_name }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">ИНН/КПП:</p>
@@ -33,7 +30,31 @@
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Телефон:</p>
-            <p class="col-md-9">{{ partner.phone }}</p>
+           <p class="col-md-9" ng-switch-when="true">
+                <span editable-text="partner.phone" onaftersave="savePartner()" >{{ partner.phone || "Нет" }}</span>
+            </p>
+            <p class="col-md-9" ng-switch-when="false">{{ partner.phone }}</p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">Email:</p>
+            <p class="col-md-9" ng-switch-when="true">
+                <span editable-text="partner.email" onaftersave="savePartner()" >{{ partner.email || "Нет" }}</span>
+            </p>
+            <p class="col-md-9" ng-switch-when="false">{{ partner.email }}</p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">Руководитель, ФИО:</p>
+            <p class="col-md-9" ng-switch-when="true">
+                <span editable-text="partner.ceo_name" onaftersave="savePartner()" >{{ partner.ceo_name || "Нет" }}</span>
+            </p>
+            <p class="col-md-9" ng-switch-when="false">{{ partner.ceo_name }}</p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">Руководитель, должность:</p>
+            <p class="col-md-9" ng-switch-when="true">
+                <span editable-text="partner.ceo_title" onaftersave="savePartner()" >{{ partner.ceo_title || "Нет" }}</span>
+            </p>
+            <p class="col-md-9" ng-switch-when="false">{{ partner.ceo_title }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Менеджер:</p>

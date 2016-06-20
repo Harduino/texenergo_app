@@ -71,7 +71,10 @@
                         legal_name: partner.legal_name,
                         delivery_address: partner.delivery_address,
                         legal_address: partner.legal_address,
-                        phone: partner.phone
+                        phone: partner.phone,
+                        email: partner.email,
+                        ceo_title: partner.ceo_title,
+                        ceo_name: partner.ceo_name
                     }
                 };
             serverApi.updatePartner(partner.id, data, function(result){
