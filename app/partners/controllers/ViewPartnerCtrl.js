@@ -4,7 +4,7 @@
  */
 (function(){
 
-    angular.module('app.partners').controller('ViewPartnerCtrl',['$scope', '$state', 'serverApi', '$stateParams', 'funcFactory', '$http', function($scope, $state, serverApi, $stateParams, funcFactory, $http){
+    angular.module('app.partners').controller('ViewPartnerCtrl',['$scope', '$state', 'serverApi', '$stateParams', 'funcFactory', '$http', '$parse', function($scope, $state, serverApi, $stateParams, funcFactory, $http, $parse){
         var sc = $scope;
         
         sc.partner = {};
@@ -26,6 +26,8 @@
         
         sc.newPerson = {
         };
+
+        sc.newBankAccount = {};
         
         serverApi.getPartnerDetails($stateParams.id, function(result){
             sc.partner = result.data;
@@ -102,5 +104,67 @@
                 }
             });
         };
+
+        sc.createBankAccount = function(){
+            $('#createBankAccountModal').modal('show');
+        };
+
+        sc.clearBankAccount = function(){
+            sc.newBankAccount = {};
+        };
+
+        sc.addBankAccount = function(){
+            var data = {
+                bank_account: sc.newBankAccount
+            };
+
+            serverApi.createBankAccount(sc.partner.id, data, function(result){
+                if(!result.data.errors){
+                    funcFactory.showNotification('Создал банковский счёт', '', true);
+                    sc.partner.bank_accounts.push(result.data);
+                    sc.clearBankAccount();
+                } else {
+                    funcFactory.showNotification('Не удалось создать банковский счёт', result.data.errors);
+                }
+            });
+        };
+
+        sc.saveBankAccount = function(data){
+            var bank_account = data.item;
+            serverApi.updateBankAccount(sc.partner.id, bank_account.id, {
+                rs: bank_account.rs,
+                ks: bank_account.ks,
+                bik: bank_account.bik,
+                bank_name: bank_account.bank_name
+            }, function(result){
+                if(!result.data.errors){
+                    for (var j = 0; j < sc.partner.bank_accounts.length; j++) {
+                        var x = sc.partner.bank_accounts[j];
+                        if (x.id === result.data.id) {
+                            sc.partner.bank_accounts[j] = angular.extend(x, result.data);
+                            funcFactory.showNotification('Успешно обновлен банковский счёт', (x.rs || ""), true);
+                            break;
+                        }
+                    }
+                }else{
+                    funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors);
+                }
+            });
+        };
+
+        sc.getDaDataSuggestions = function(type, val, field_name){
+            return serverApi.validateViaDaData(type, {"query": val}).then(function(result){
+                return result.data.suggestions.map(function(item){
+                    return {label: item.data.name.payment, item: item, field: field_name};
+                });
+            });
+        };
+
+        sc.fillBySuggestion = function($item, prop){
+            var data = $item.item.data;
+            sc.newBankAccount.bik = data.bic;
+            sc.newBankAccount.ks = data.correspondent_account;
+            sc.newBankAccount.bank_name = data.name.payment;
+        }
     }]);
 }());
