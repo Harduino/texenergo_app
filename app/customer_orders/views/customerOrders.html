@@ -61,7 +61,7 @@
                             Будет также отображаться в содержимом письма при отправке счёта.
                         </div>
                     </section>
-                    <section class="form-group" ng-if="visual.canAddPartner">
+                    <section class="form-group">
                         <label class="control-label">Партнер</label>
                         <ui-select  ui-select-infinity="partnerSelectConfig" ng-model="newOrderData.partner" theme="select2" class="td-ui-select">
                             <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
