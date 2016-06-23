@@ -58,7 +58,7 @@
                                     Продавец:
                                 </p>
                                 <div class="col-md-9" ng-switch-when="true">
-                                    <ui-select  ui-select-infinity="partnerSelectConfig" ng-model="order.issued_by" theme="select2" ng-disabled="disabled" on-select="saveOrderInfo()" style="width: 50%;">
+                                    <ui-select ui-select-infinity="partnerSelectConfig" ng-model="order.issued_by" theme="select2" ng-disabled="disabled" on-select="saveOrderInfo()" style="width: 50%;">
                                         <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
                                         <ui-select-choices repeat="partner in partnersList | filter:$select.search">
                                             <div ng-bind-html="partner.name | highlight: $select.search"></div>

@@ -66,7 +66,8 @@
                         phone: partner.phone,
                         email: partner.email,
                         ceo_name: partner.ceo_name,
-                        ceo_title: partner.ceo_title
+                        ceo_title: partner.ceo_title,
+                        invoice_conditions: partner.invoice_conditions
                     }
                 };
             serverApi.updatePartner(partner.id, data, function(result){
