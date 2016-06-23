@@ -11,7 +11,6 @@
         sc.visual = {
             navButtsOptions:[{ type: 'new', callback: createNewOrder },  {type:'refresh', callback:refresh}],
             navTableButts:[{type:'view', callback:viewCustomerOrder}, {type:'table_edit', callback:editCustomerOrder}, {type:'remove', callback:removeCustomerOrder}],
-            canAddPartner: CanCan.can('see_multiple', 'Partner'),
             titles:[window.gon.index.CustomerOrder.indexTitle]
         };
         sc.data = {

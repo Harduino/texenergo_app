@@ -31,7 +31,7 @@
                             </div>
                             <div class="row margin-top-10">
                                 <p class="col-xs-12 col-md-3 font-bold">
-                                    Название:
+                                    Свой номер:
                                 </p>
                                 <div class="col-md-9" ng-switch-when="true">
                                     <a editable-text="order.title" onaftersave="saveOrderInfo()">{{ order.title || 'Нет' }}</a>
@@ -55,12 +55,38 @@
                             </div>
                             <div class="row">
                                 <p class="col-xs-12 col-md-3 font-bold">
-                                    Партнер:
+                                    Продавец:
                                 </p>
-                                <p class="col-md-9">
+                                <div class="col-md-9" ng-switch-when="true">
+                                    <ui-select ui-select-infinity="partnerSelectConfig" ng-model="order.issued_by" theme="select2" ng-disabled="disabled" on-select="saveOrderInfo()" style="width: 50%;">
+                                        <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
+                                        <ui-select-choices repeat="partner in partnersList | filter:$select.search">
+                                            <div ng-bind-html="partner.name | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <p ng-switch-default class="col-md-9">
                                     <a ng-href="/#/partners/{{order.partner.id}}">{{order.partner.name}}</a>
                                 </p>
                             </div>
+
+                            <div class="row">
+                                <p class="col-xs-12 col-md-3 font-bold">
+                                    Покупатель:
+                                </p>
+                                <div class="col-md-9" ng-switch-when="true">
+                                    <ui-select  ui-select-infinity="partnerSelectConfig" ng-model="order.partner" theme="select2" ng-disabled="disabled" on-select="saveOrderInfo()" style="width: 50%;">
+                                        <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
+                                        <ui-select-choices repeat="partner in partnersList | filter:$select.search">
+                                            <div ng-bind-html="partner.name | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <p ng-switch-default class="col-md-9">
+                                    <a ng-href="/#/partners/{{order.partner.id}}">{{order.partner.name}}</a>
+                                </p>
+                            </div>
+
                             <div class="row">
                                 <p class="col-xs-12 col-md-3 font-bold">
                                     Статус:

@@ -23,7 +23,8 @@
             inn: '',
             name: '',
             delivery_address: '',
-            phone: ''
+            phone: '',
+            email: ''
         };
         
         sc.addNewPartner = function(){

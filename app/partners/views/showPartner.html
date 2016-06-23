@@ -1,21 +1,18 @@
 <div id="content">
-    <div class="well well-white">
+    <div class="well well-white" ng-switch="partner.can_edit">
         <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">{{visual.titles + partner.prefix}}</h2>
         <form-nav-buttons options="visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
         <hr>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Наименование:</p>
-            <p class="col-md-9" ng-if="canEditPartner()">
+            <p class="col-md-9" ng-switch-when="true">
                 <span editable-text="partner.name" onaftersave="savePartner()" >{{ partner.name }}</span>
             </p>
-            <p class="col-md-9" ng-if="!canEditPartner()">{{ partner.name }}</p>
+            <p class="col-md-9" ng-switch-default>{{ partner.name }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Официальное наименование:</p>
-            <p class="col-md-9" ng-if="canEditPartner()">
-                <span editable-text="partner.legal_name" onaftersave="savePartner()" >{{ partner.legal_name }}</span>
-            </p>
-            <p class="col-md-9" ng-if="!canEditPartner()">{{ partner.legal_name }}</p>
+            <p class="col-md-9">{{ partner.legal_name }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">ИНН/КПП:</p>
@@ -25,15 +22,43 @@
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Адрес доставки:</p>
-            <p class="col-md-9">{{ deliveryAddressString }}</p>
+            <p class="col-md-9">
+                {{ partner.delivery_address.postal_index + ' ' + partner.delivery_address.region + ' ' + partner.delivery_address.city + ' ' + partner.delivery_address.street + ' ' + partner.delivery_address.house; }}
+            </p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Адрес официальный:</p>
-            <p class="col-md-9">{{ legalAddressString() }}</p>
+            <p class="col-md-9">
+                {{ partner.legal_address.postal_index + ' ' + partner.legal_address.region + ' ' + partner.legal_address.city + ' ' + partner.legal_address.street + ' ' + partner.legal_address.house; }}
+            </p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Телефон:</p>
-            <p class="col-md-9">{{ partner.phone }}</p>
+            <p class="col-md-9" ng-switch-when="true">
+                <span editable-text="partner.phone" onaftersave="savePartner()" >{{ partner.phone || "Нет" }}</span>
+            </p>
+            <p class="col-md-9" ng-switch-default>{{ partner.phone }}</p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">Email:</p>
+            <p class="col-md-9" ng-switch-when="true">
+                <span editable-text="partner.email" onaftersave="savePartner()" >{{ partner.email || "Нет" }}</span>
+            </p>
+            <p class="col-md-9" ng-switch-default>{{ partner.email }}</p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">Руководитель:</p>
+            <p class="col-md-9" ng-switch-when="true">
+                <span editable-text="partner.ceo_name" onaftersave="savePartner()" >{{ partner.ceo_name || "Нет" }}</span>
+            </p>
+            <p class="col-md-9" ng-switch-default>{{ partner.ceo_name }}</p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">Должность:</p>
+            <p class="col-md-9" ng-switch-when="true">
+                <span editable-text="partner.ceo_title" onaftersave="savePartner()" >{{ partner.ceo_title || "Нет" }}</span>
+            </p>
+            <p class="col-md-9" ng-switch-default>{{ partner.ceo_title }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Менеджер:</p>
@@ -42,6 +67,10 @@
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Отгрузка:</p>
             <p class="col-md-9">{{ partner.transportation }}</p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">Владелец:</p>
+            <p class="col-md-9">{{ partner.owner.name || "Нет"}}</p>
         </div>
         <ul id="myTab1" class="nav nav-tabs bordered margin-top-10">
             <li class="active">
@@ -61,6 +90,9 @@
             </li>
             <li class="dropdown">
                 <a href="#s6" data-toggle="tab">Представители</a>
+            </li>
+            <li class="dropdown">
+                <a href="#s7" data-toggle="tab">Условия в счетах</a>
             </li>
         </ul>
         <div class="tab-content padding-10">
@@ -170,24 +202,36 @@
                 </table>
             </div>
             <div class="tab-pane fade" id="s5">
+                <div class="ng-scope btn btn-success" ng-click="createBankAccount()" ng-if="partner.can_edit">
+                    <i class="fa fa-plus"></i>
+                    <span class="hidden-xs ng-binding">Новый</span>
+                </div>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>Р/С</th>
+                            <th>К/С</th>
                             <th>БИК</th>
                             <th>Банк</th>
-                            <th/>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="item in partner.bank_accounts">
-                            <td>{{ item.rs }}</td>
-                            <td>{{ item.bik }}</td>
-                            <td>{{ item.bank_name }}</td>
-                            <td class="center-item-text">
-                                <div class="btn-group">
-                                    <a class="btn btn-xs btn-info" href="#/partners/{{partner.id}}/bank_accounts/{{item.id}}"><i class="fa fa-eye"></i></a>
-                                </div>
+                            <td>
+                                <a ng-switch-when="true" editable-text="item.rs" onaftersave="saveBankAccount({item: item, index: $index})" buttons="no">{{ item.rs || "Нет" }}</a>
+                                <span ng-switch-default>{{ item.rs }}</span>
+                            </td>
+                            <td>
+                                <a ng-switch-when="true" editable-text="item.ks" onaftersave="saveBankAccount({item: item, index: $index})" buttons="no">{{ item.ks || "Нет" }}</a>
+                                <span ng-switch-default>{{ item.ks }}</span>
+                            </td>
+                            <td>
+                                <a ng-switch-when="true" editable-text="item.bik" onaftersave="saveBankAccount({item: item, index: $index})" buttons="no">{{ item.bik || "Нет" }}</a>
+                                <span ng-switch-default>{{ item.bik }}</span>
+                            </td>
+                            <td>
+                                <a ng-switch-when="true" editable-text="item.bank_name" onaftersave="saveBankAccount({item: item, index: $index})" buttons="no">{{ item.bank_name || "Нет" }}</a>
+                                <span ng-switch-default>{{ item.bank_name }}</span>
                             </td>
                         </tr>
                     </tbody>
@@ -221,6 +265,9 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+            <div class="tab-pane fade" id="s7">
+                <span editable-textarea="partner.invoice_conditions" onaftersave="savePartner()">{{ partner.invoice_conditions || "Нет" }}</span>
             </div>
             <div class="modal fade" id="createPersonModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog">
@@ -280,6 +327,57 @@
                                 Отмена
                             </button>
                             <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addNewPerson()">
+                                Сохранить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="createBankAccountModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                            <h4 class="modal-title">Создать банковский счёт</h4>
+                        </div>
+                        <div class="modal-body smart-form">
+                            <section>
+                                <label class="label">БИК</label>
+                                <label class="input">
+                                    <input type="text" ng-model="newBankAccount.bik"
+                                        uib-typeahead="name.label for name in getDaDataSuggestions('bank', $viewValue, 'data.bik')"
+                                        typeahead-on-select="fillBySuggestion($item, 'bik')"
+                                        typeahead-template-url="typeAhead.tmpl.html"
+                                        name="data.bik"
+                                        class="input-sm">
+                                </label>
+                            </section>
+                            <section>
+                                <label class="label">Название банка</label>
+                                <label class="input">
+                                    <input type="text" class="input-sm" ng-model="newBankAccount.bank_name">
+                                </label>
+                            </section>
+                            <section>
+                                <label class="label">К/С</label>
+                                <label class="input">
+                                    <input type="text" class="input-sm" ng-model="newBankAccount.ks">
+                                </label>
+                            </section>
+                            <section>
+                                <label class="label">Р/С</label>
+                                <label class="input">
+                                    <input type="text" class="input-sm" ng-model="newBankAccount.rs">
+                                </label>
+                            </section>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearBankAccount()">
+                                Отмена
+                            </button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addBankAccount()">
                                 Сохранить
                             </button>
                         </div>

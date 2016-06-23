@@ -51,7 +51,7 @@
                 </div>
                 <div class="modal-body">
                     <section class="form-group">
-                        <label class="control-label">Название</label>
+                        <label class="control-label">Свой номер</label>
                         <input type="text" ng-model="newOrderData.title" class="input-sm form-control">
                     </section>
                     <section class="form-group">
@@ -61,7 +61,7 @@
                             Будет также отображаться в содержимом письма при отправке счёта.
                         </div>
                     </section>
-                    <section class="form-group" ng-if="visual.canAddPartner">
+                    <section class="form-group">
                         <label class="control-label">Партнер</label>
                         <ui-select  ui-select-infinity="partnerSelectConfig" ng-model="newOrderData.partner" theme="select2" class="td-ui-select">
                             <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>

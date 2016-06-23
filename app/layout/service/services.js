@@ -283,6 +283,14 @@
             }).then(success, fail);
         };
 
+        this.createBankAccount = function(partner_id, data, success, fail){
+            $http.post('/api/partners/' + partner_id + '/bank_accounts', data).then(success, fail);
+        }
+
+        this.updateBankAccount = function(partner_id, bank_account_id, data, success, fail){
+            $http.put('/api/partners/' + partner_id + '/bank_accounts/' + bank_account_id, data).then(success, fail);
+        };
+
         // Контакты
         this.getContacts = function(page, query, config, success, fail){
             var path = '/api/contacts?page='+page + (query ? ('&q=' + query) : '');

@@ -1,6 +1,7 @@
 /*!
 angular-xeditable - 0.1.8
 Edit-in-place for angular.js
+https://github.com/vitalets/angular-xeditable
 Build date: 2014-01-10 
 */
 /**
