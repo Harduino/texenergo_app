@@ -43,21 +43,6 @@
                     templateUrl: '/app/customer_orders/views/viewCustomerOrder.html'
                 }
             }
-        }).state('app.customer_orders.view.edit', {
-            url: '/edit',
-            data:{
-                title:'Редактирование заказа',
-                access:{
-                    action:'edit',
-                    params:'CustomerOrder'
-                }
-            },
-            views:{
-                "content@app":{
-                    controller: 'EditCustomerOrder',
-                    templateUrl: '/app/customer_orders/views/editCustomerOrder.html'
-                }
-            }
         }).state('app.customer_orders.view.logs', {
             url: '/logs',
             data:{

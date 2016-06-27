@@ -10,7 +10,7 @@
 
         sc.visual = {
             navButtsOptions:[{ type: 'new', callback: createNewOrder },  {type:'refresh', callback:refresh}],
-            navTableButts:[{type:'view', callback:viewCustomerOrder}, {type:'table_edit', callback:editCustomerOrder}, {type:'remove', callback:removeCustomerOrder}],
+            navTableButts:[{type:'view', callback:viewCustomerOrder}, {type:'remove', callback:removeCustomerOrder}],
             titles:[window.gon.index.CustomerOrder.indexTitle]
         };
         sc.data = {
@@ -57,10 +57,6 @@
 
         function viewCustomerOrder(item){
             $state.go('app.customer_orders.view', {id:item.data.id || item.data._id});
-        }
-
-        function editCustomerOrder(item){
-            $state.go('app.customer_orders.view.edit', {id:item.data.id || item.data._id});
         }
 
         function createNewOrder(){

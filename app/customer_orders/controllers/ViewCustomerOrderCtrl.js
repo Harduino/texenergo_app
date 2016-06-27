@@ -15,7 +15,7 @@
         sc.order = {};
         sc.total = 0;
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack}, {type: 'edit', callback: goEditCustomerOrder}, {type:'files', callback: showFileModal}, {type: 'send_email', callback: sendCustomerOrder}, {type: 'recalculate', callback: recalculateCustomerOrder}, {type:'logs', callback: goToLogs},
+            navButtsOptions:[{type:'back', callback:returnBack}, {type:'files', callback: showFileModal}, {type: 'send_email', callback: sendCustomerOrder}, {type: 'recalculate', callback: recalculateCustomerOrder}, {type:'logs', callback: goToLogs},
                 {type:'confirm_order', callback: confirmCustomerOrder},
                 {type:'refresh', callback:refresh}],
             chartOptions: {
@@ -487,10 +487,6 @@
         
         function goToLogs(){
             $state.go('app.customer_orders.view.logs', {});
-        }
-        
-        function goEditCustomerOrder(){
-            $state.go('app.customer_orders.view.edit', {});
         }
         
         function showFileModal(){

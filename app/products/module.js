@@ -26,24 +26,6 @@
                     templateUrl: '/app/products/views/show_product.html'
                 }
             }
-        }).state('app.product.edit', {
-            url: '/edit',
-            params: {
-                id: ''
-            },
-            data:{
-                title:'Редактирование продукта',
-                access:{
-                    action:'edit',
-                    params:'Product'
-                }
-            },
-            views:{
-                "content@app":{
-                    controller: 'EditProductCtrl',
-                    templateUrl: '/app/products/views/edit_product.html'
-                }
-            }
         }).state('app.product.partner_logs', {
             url: '/partner_logs',
             params: {
