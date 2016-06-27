@@ -10,16 +10,40 @@
 
         sc.visual = {
             navButtsOptions:[{type: 'new', callback: createNewSupplierOrder}, {type: 'automatically', callback: createAutomatically}, {type:'refresh', callback:refresh}],
-            navTableButts:[{type:'view', callback:viewOrder}, {type:'table_edit', callback:editOrder}, {type:'remove', callback:removeOrder}],
+            navTableButts:[{type:'view', callback:viewOrder}, {type:'remove', callback:removeOrder}],
             canAddPartner: CanCan.can('see_multiple', 'Partner'),
             titles:[window.gon.index.SupplierOrder.indexTitle]
         };
         sc.data = {
             ordersList:[],
-            searchQuery:$stateParams.q
+            searchQuery:$stateParams.q,
+            partnersList:[]
         };
+        sc.partnerSelectConfig ={
+            dataMethod: serverApi.getPartners
+        };
+
         sc.newOrderData = {
-            date: null
+        };
+
+        sc.clearSupplierCreateOrder = function(){
+            sc.newOrderData = {};
+        };
+
+        sc.addNewSupplierOrder = function(){
+            if(sc.newOrderData.partner && sc.newOrderData.partner)
+                sc.newOrderData.partner_id = sc.newOrderData.partner.id;
+            delete sc.newOrderData.partner;
+            serverApi.createSupplierOrder(sc.newOrderData, function(result){
+                if(!result.data.errors){
+                    sc.data.ordersList.unshift(result.data);
+                    funcFactory.showNotification('Заказ успешно добавлен', '', true);
+                    sc.clearSupplierCreateOrder();
+                    $state.go('app.supplier_orders.view', {id: result.data.id});
+                } else {
+                    funcFactory.showNotification('Не удалось создать заказ', result.data.errors);
+                }
+            });
         };
 
         function refresh(){
@@ -29,13 +53,9 @@
         function viewOrder(item){
             $state.go('app.supplier_orders.view', {id: item.data.id || item.data._id});
         }
-        
-        function editOrder(item){
-            $state.go('app.supplier_orders.view.edit', {id:item.data.id || item.data._id});
-        }
 
         function createNewSupplierOrder(){
-            sc.newOrderData.date = $filter('date')(new Date, 'dd.MM.yyyy HH:mm');
+            // sc.newOrderData.date = $filter('date')(new Date, 'dd.MM.yyyy HH:mm');
             $('#createNewOrderModal').modal('show');
         }
         

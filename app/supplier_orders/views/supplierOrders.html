@@ -45,26 +45,29 @@
                     <h4 class="modal-title">Создать новый заказ</h4>
                 </div>
                 <div class="modal-body smart-form">
-                    <section>
-                        <label class="label">Название</label>
-                        <label class="input">
-                            <input type="text" class="input-sm">
-                        </label>
+                    <section class="form-group">
+                        <label class="control-label">Номер</label>
+                        <input type="text" ng-model="newOrderData.number" class="input-sm form-control">
                     </section>
-                    <section>
-                        <label class="label">Описание</label>
-                        <label class="textarea">
-                            <textarea class="custom-scroll"></textarea>
-                        </label>
+                    <section class="form-group">
+                        <label class="control-label">Название</label>
+                        <input type="text" ng-model="newOrderData.title" class="input-sm form-control">
+                    </section>
+                    <section class="form-group">
+                        <label class="control-label">Описание</label>
+                        <textarea type="text" ng-model="newOrderData.description" class="input-sm form-control"></textarea>
                         <div class="note">
                             Будет также отображаться в содержимом письма при отправке счёта.
                         </div>
                     </section>
-                    <section>
-                        <label class="label">Дата</label>
-                        <label class="input">
-                            <input type="text" class="input-sm disabled" ng-model="newOrderData.date" ng-disabled="true">
-                        </label>
+                    <section class="form-group">
+                        <label class="control-label">Партнер</label>
+                        <ui-select  ui-select-infinity="partnerSelectConfig" ng-model="newOrderData.partner" theme="select2" class="td-ui-select">
+                            <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
+                            <ui-select-choices repeat="partner in data.partnersList | filter:$select.search">
+                                <div ng-bind-html="partner.name | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
                     </section>
                     <section>
                         <i class="fa-fw fa fa-warning"></i>
@@ -72,10 +75,10 @@
                     </section>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearCreateSupplierOrder()">
                         Отмена
                     </button>
-                    <button type="button" class="btn btn-primary">
+                    <button type="button" class="btn btn-primary" ng-click="addNewSupplierOrder()">
                         Сохранить
                     </button>
                 </div>

@@ -42,21 +42,6 @@
                     templateUrl: '/app/supplier_orders/views/viewSupplierOrder.html'
                 }
             }
-        }).state('app.supplier_orders.view.edit', {
-            url: '/edit',
-            data:{
-                title:'Редактирование заказа',
-                access:{
-                    action:'write',
-                    params:'SupplierOrder'
-                }
-            },
-            views:{
-                "content@app":{
-                    controller: 'EditSupplierOrderCtrl',
-                    templateUrl: '/app/supplier_orders/views/editSupplierOrder.html'
-                }
-            }
         });
     });
 }());
