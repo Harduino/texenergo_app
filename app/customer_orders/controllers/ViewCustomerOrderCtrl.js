@@ -15,9 +15,15 @@
         sc.order = {};
         sc.total = 0;
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack}, {type:'files', callback: showFileModal}, {type: 'send_email', callback: sendCustomerOrder}, {type: 'recalculate', callback: recalculateCustomerOrder}, {type:'logs', callback: goToLogs},
-                {type:'confirm_order', callback: confirmCustomerOrder},
-                {type:'refresh', callback:refresh}],
+            navButtsOptions:[
+                { type: 'back', callback: returnBack },
+                { type: 'command', callback: showCommandModal },
+                { type: 'send_email', callback: sendCustomerOrder },
+                { type: 'recalculate', callback: recalculateCustomerOrder },
+                { type: 'logs', callback: goToLogs },
+                { type: 'confirm_order', callback: confirmCustomerOrder },
+                { type: 'refresh', callback: refresh }
+            ],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
                 scaleColor:false,
@@ -25,7 +31,6 @@
                 lineCap:'circle',
                 size:50
             },
-            showFileModal: angular.noop,
             titles: window.gon.index.CustomerOrder.objectTitle + ': №',
             sortOpts: {
                 update: updateRowPositionView,
@@ -387,14 +392,6 @@
         }
 
         function completeInitPage(order){
-            sc.fileModalOptions={
-                url:'/api/customer_orders/'+ order.id +'/documents',
-                files: order.documents,
-                r_delete: serverApi.deleteFile,
-                view: 'customer_orders',
-                id: order.id
-            };
-
             _subscription =  notifications.subscribe({
                 channel: 'CustomerOrdersChannel',
                 customer_order_id: $stateParams.id
@@ -489,10 +486,6 @@
             $state.go('app.customer_orders.view.logs', {});
         }
         
-        function showFileModal(){
-            sc.visual.showFileModal();
-        }
-        
         function sendCustomerOrder(){
             serverApi.sendCustomerOrderInvoice($stateParams.id, function(result){
                 if(result.status == 200 && !result.data.errors) {
@@ -580,6 +573,34 @@
            _subscription && _subscription.unsubscribe();
         });
 
+        function showCommandModal(){
+            var modalInstance = $uibModal.open({
+                templateUrl: 'CommandCustomerOrderModalCtrl.tmpl.html',
+                controller: 'CommandCustomerOrderModalCtrl',
+                windowClass: 'eqo-centred-modal',
+                resolve: {
+                    config: {}
+                }
+            });
+
+            modalInstance.result.then(function (command) {
+                var data = {
+                    customer_order: {
+                        command: command
+                    }
+                }
+                serverApi.updateCommandCustomerOrder(sc.order.id, data, function(result){
+                    if(result.status == 200){
+                        sc.order = result.data;
+                        funcFactory.showNotification('Комманда выполнена', "", true);
+                    } else {
+                        funcFactory.showNotification('Не удалось переместить сторку', result.data.errors);
+                    }
+                }, function(){
+                });
+            });
+        }
+
     }]).controller("EqoChangeCustomerOrderProductModalCtrl", ['$scope', '$uibModalInstance', 'serverApi', 'product', 'config', function($scope, $uibModalInstance, serverApi, product, config){
         var sc = $scope;
 
@@ -599,6 +620,22 @@
 
         sc.ok = function () {
             $uibModalInstance.close(sc.data.selectedProduct);
+        };
+
+        sc.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+    }]).controller("CommandCustomerOrderModalCtrl", ['$scope', '$uibModalInstance', 'serverApi', 'config', function($scope, $uibModalInstance, serverApi, config){
+        var sc = $scope;
+
+        sc.config = angular.extend({
+            title: 'Использовать комманду',
+            btnOkText: 'Изменить',
+            btnCancelText: 'Отмена'
+        }, config);
+
+        sc.ok = function () {
+            $uibModalInstance.close(sc.command);
         };
 
         sc.cancel = function () {

@@ -3,9 +3,7 @@
         <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">{{visual.titles + order.number}}</h2>
         <form-nav-buttons subdata="order" data-role="order" options="visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
         <hr>
-        
     </div>
-    <file-worker data-trigger="visual.showFileModal" data-config="fileModalOptions"></file-worker>
     <section id="widget-grid" widget-grid>
         <div class="row">
             <article class="col-md-12">
@@ -443,6 +441,28 @@
                     </div>
                 </ui-select-choices>
             </ui-select>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger" type="button" ng-click="cancel()">{{config.btnCancelText}}</button>
+            <button class="btn btn-primary" type="button" ng-click="ok()">{{config.btnOkText}}</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="CommandCustomerOrderModalCtrl.tmpl.html">
+        <div class="modal-header">
+            <h3 class="modal-title">{{config.title}}</h3>
+        </div>
+        <div class="modal-body">
+            <input type="text" name="" ng-model="command" placeholder="Введите комманду">
+            <h5>сортировать_по цена</h5>
+            <p>Сортирует все товара в порядке возрастания цены</p>
+            <h5>удалить_где итого<100</h5>
+            <p>Удаляет все строки, где итого по строке меньше 100</p>
+            <h5>удалить_где остаток<1</h5>
+            <p>Удаляет все строки, где товара нет в наличии</p>
+            <h5>сортировать_по товар.артикул</h5>
+            <p>Сортирует все товары в порядке возврастания артикула</p>
+            <h5>группировать_по товар</h5>
+            <p>Объединяет дубли строк в одну строку</p>
         </div>
         <div class="modal-footer">
             <button class="btn btn-danger" type="button" ng-click="cancel()">{{config.btnCancelText}}</button>

@@ -38,7 +38,8 @@
                     at_partners:{name:'У партнёров', ico:'exchange'},
                     automatically: {name: 'Автоматически', ico: 'rocket'},
                     add: {ico: "plus", class: 'btn-success', name: "В заказ"},
-                    refresh: {ico: "refresh", name: "Обновить"}
+                    refresh: {ico: "refresh", name: "Обновить"},
+                    command: {ico: "keyboard-o", name: "Комманды"}
                 };
 
                 var btnClass = attrs.contentClass || 'btn btn-success';
