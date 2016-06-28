@@ -17,7 +17,10 @@
             <tbody>
                 <tr ng-repeat="row in logs">
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ row.action }}</td>
+                    <td>
+                        {{ row.action }}
+                        <a ng-if="row.product.id" ng-href="/#/products/{{ row.product.id }}">смотреть</a>
+                    </td>
                     <td>{{ row.date | date:'dd/MM/yy HH:mm' }}</td>
                     <td>
                         {{ row.contact.email }}

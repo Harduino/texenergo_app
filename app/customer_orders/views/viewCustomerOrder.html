@@ -244,9 +244,8 @@
                                             <span ng-repeat="message in item.messages">
                                                 <span class="badge alert-{{message.level}}" uib-tooltip="{{message.text}}">!</span>
                                             </span>
-
                                             <a ng-href="/#/products/{{ item.product.id }}" te-buffer-value>{{ item.product.name }}</a>
-                                            <i class="fa fa-search-plus blue-hover" ng-click="changeCustomerOrderProductModal(item)"></i>
+                                            <i class="blue-hover" ng-click="changeCustomerOrderProductModal(item)">заменить</i>
                                         </td>
                                         <td class="hidden-xs" te-copy-to-buffer>
                                             <span te-buffer-value>{{ item.product.article}}</span>
