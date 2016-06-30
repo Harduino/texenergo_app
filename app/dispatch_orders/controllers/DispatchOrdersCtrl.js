@@ -12,7 +12,7 @@
             navButtsOptions:[
                 {type:'refresh', callback: refresh}
             ],
-            navTableButts:[{type:'view', callback:viewOrder}, {type:'table_edit'}, {type:'remove'}],
+            navTableButts:[{type:'view', callback:viewOrder}, {type:'remove'}],
             titles:[window.gon.index.DispatchOrder.indexTitle]
         };
 
