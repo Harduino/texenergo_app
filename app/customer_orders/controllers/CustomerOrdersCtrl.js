@@ -61,6 +61,7 @@
 
         function createNewOrder(){
             sc.newOrderData.date = new Date();
+            sc.newOrderData.partner = window.gon.user.partner || null;
             $('#createNewOrderModal').modal('show');
         }
 
