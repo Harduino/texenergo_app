@@ -56,15 +56,21 @@
                                     Продавец:
                                 </p>
                                 <div class="col-md-9" ng-switch-when="true">
-                                    <ui-select ui-select-infinity="partnerSelectConfig" ng-model="order.issued_by" theme="select2" ng-disabled="disabled" on-select="saveOrderInfo()" style="width: 50%;">
-                                        <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
-                                        <ui-select-choices repeat="partner in partnersList | filter:$select.search">
-                                            <div ng-bind-html="partner.name | highlight: $select.search"></div>
-                                        </ui-select-choices>
-                                    </ui-select>
+                                    <a ng-hide="order.issued_by.x_editable_show" ng-click="order.issued_by.x_editable_show=true;" class="editable-click">{{order.issued_by.name || 'Нет'}}</a>
+                                    <div ng-if="order.issued_by.x_editable_show">
+                                        <ui-select ui-select-infinity="partnerSelectConfig" ng-model="order.issued_by" theme="select2" ng-disabled="disabled" on-select="saveOrderInfo()" style="width: 50%;">
+                                            <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
+                                            <ui-select-choices repeat="partner in partnersList | filter:$select.search">
+                                                <div ng-bind-html="partner.name | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <button type="button" class="btn btn-default" ng-click="order.issued_by.x_editable_show=false;">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </div>
                                 </div>
                                 <p ng-switch-default class="col-md-9">
-                                    <a ng-href="/#/partners/{{order.partner.id}}">{{order.partner.name}}</a>
+                                    <a ng-href="/#/partners/{{order.partner.id}}">{{order.issued_by.name}}</a>
                                 </p>
                             </div>
 
@@ -73,12 +79,18 @@
                                     Покупатель:
                                 </p>
                                 <div class="col-md-9" ng-switch-when="true">
-                                    <ui-select  ui-select-infinity="partnerSelectConfig" ng-model="order.partner" theme="select2" ng-disabled="disabled" on-select="saveOrderInfo()" style="width: 50%;">
-                                        <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
-                                        <ui-select-choices repeat="partner in partnersList | filter:$select.search">
-                                            <div ng-bind-html="partner.name | highlight: $select.search"></div>
-                                        </ui-select-choices>
-                                    </ui-select>
+                                    <a ng-hide="order.partner.x_editable_show" ng-click="order.partner.x_editable_show=true;" class="editable-click">{{order.partner.name || 'Нет'}}</a>
+                                    <div ng-if="order.partner.x_editable_show">
+                                        <ui-select  ui-select-infinity="partnerSelectConfig" ng-model="order.partner" theme="select2" ng-disabled="disabled" on-select="saveOrderInfo()" style="width: 50%;">
+                                            <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
+                                            <ui-select-choices repeat="partner in partnersList | filter:$select.search">
+                                                <div ng-bind-html="partner.name | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <button type="button" class="btn btn-default" ng-click="order.partner.x_editable_show=false;">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </div>
                                 </div>
                                 <p ng-switch-default class="col-md-9">
                                     <a ng-href="/#/partners/{{order.partner.id}}">{{order.partner.name}}</a>
