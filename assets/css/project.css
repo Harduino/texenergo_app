@@ -831,3 +831,15 @@ td .editable-controls>input[type="number"]{
     top: 25px;
     background: #3276b1;
 }
+.editable-textarea-fw ~ form.editable-textarea{
+    width: 100%;
+}
+.editable-textarea-fw ~ form.editable-textarea>.editable-controls{
+    width: 100%;
+    display: flex;
+}
+.editable-textarea-fw ~ form.editable-textarea>.editable-controls>textarea{
+    width: 100%;
+    max-width: 100%;
+    height: 100px;
+}
