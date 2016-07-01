@@ -175,8 +175,6 @@ appConfig.sound_on = true;
                         $state.transitionTo('app.dashboard', null, {reload:true});
                     }
                 }
-
-                newrelic.addPageAction('angularRouteChange', { url: $location.url() });
             }
         );
 
