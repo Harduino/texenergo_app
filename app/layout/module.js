@@ -10,7 +10,8 @@
                 abstract: true,
                 views: {
                     root: {
-                        templateUrl: '/app/layout/layout.tpl.html'
+                        templateUrl: '/app/layout/layout.tpl.html',
+                        controller: 'LayoutCtrl'
                     }
                 }
             });
@@ -32,6 +33,9 @@
         };
 
         sc.signOut = serverApi.signOut;
+
+        sc.logo = window.gon.logo_url;
+        sc.company_name = window.gon.company_name;
     }]);
 
     module.controller('LayoutNavigationCtrl', ['$scope', function(sc){

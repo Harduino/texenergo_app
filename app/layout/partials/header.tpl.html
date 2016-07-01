@@ -2,7 +2,7 @@
 <div id="logo-group">
 
     <!-- PLACE YOUR LOGO HERE -->
-    <span id="logo"> <img src="/assets/smart_admin/project/texenergo_logo.png" alt="TexEnergo"> </span>
+    <span id="logo"> <img ng-src="{{logo}}" ng-attr-alt="{{company_name}}"> </span>
     <!-- END LOGO PLACEHOLDER -->
 
     <!-- Note: The activity badge color changes when clicked and resets the number to 0
@@ -14,7 +14,7 @@
 
 
 <!-- pulled right: nav area -->
-<div class="pull-right" ng-controller="LayoutCtrl">
+<div class="pull-right">
 
     <!-- logout button -->
     <div id="logout" class="btn-header transparent pull-right">
