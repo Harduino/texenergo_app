@@ -628,6 +628,13 @@
     }]).controller("CommandCustomerOrderModalCtrl", ['$scope', '$uibModalInstance', 'serverApi', 'config', function($scope, $uibModalInstance, serverApi, config){
         var sc = $scope;
 
+
+        sc.commandsDict = [
+            'сортировать_по',
+            'сортировать_по артикул',
+            'удалить_где'
+        ];
+
         sc.config = angular.extend({
             title: 'Использовать комманду',
             btnOkText: 'Изменить',
