@@ -17,7 +17,6 @@
                 lineCap:'circle',
                 size:50
             },
-            navTableButts:[{type:'table_edit', disabled:false, callback: updateProductOfOrder}, {type:'remove', disabled:false, callback:removeProduct}],
             showFileModal: angular.noop,
             titles:window.gon.index.SupplierOrder.objectTitle + ': #'
         };

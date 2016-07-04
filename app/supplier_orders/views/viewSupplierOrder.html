@@ -136,11 +136,13 @@
                         </td>
                         <td class="text-right">
                             <a ng-if="order.can_edit" editable-number="item.quantity" onaftersave="updateProductOfOrder(item, $index, $event)" e-min="0" buttons="no">{{ item.quantity }}</a>
-                            <span ng-if="!order.can_edit">{{ item.quantity }}</span>
+                            <span ng-if="!order.can_edit">{{ item.quantity || 0}}</span>
                         </td>
                         <td class="text-right" class="hidden-xs">{{ item.price * item.quantity | currency }}</td>
                         <td class="center">
-                            <form-nav-buttons data-role="visual.roles" class="btn-group" subdata="{data:item, index:$index}" data-options="visual.navTableButts" data-template="table" content-class="btn btn-xs"></form-nav-buttons>
+                            <div ng-disabled="!item.can_destroy" ng-click="removeProduct(item)" class="ng-scope btn btn-xs btn-danger">
+                                <i class="fa fa-trash-o"></i>
+                            </div>
                         </td>
                     </tr>
                     <tr>
