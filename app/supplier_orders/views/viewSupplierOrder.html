@@ -55,14 +55,14 @@
                 Партнер:
             </p>
             <p class="col-md-9">
-                <span ng-switch-when="true">
-                    <ui-select ui-select-infinity="partnerSelectConfig" ng-model="order.partner" theme="select2" ng-disabled="disabled" on-select="saveSupplierOrderInfo()">
+                <div ng-switch-when="true">
+                    <ui-select ui-select-infinity="partnerSelectConfig" ng-model="order.partner" theme="select2" style="min-width: 250px; margin-top: -6px;" on-select="saveSupplierOrderInfo()">
                         <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
                         <ui-select-choices repeat="partner in data.partnersList | filter:$select.search">
                             <div ng-bind-html="partner.name | highlight: $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
-                </span>
+                </div>
                 <a ng-switch-default ng-href="/#/partners/{{order.partner.id}}">{{order.partner.name}}</a>
             </p>
         </div>
