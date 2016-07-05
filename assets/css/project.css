@@ -846,3 +846,6 @@ td .editable-controls>input[type="number"]{
 .select2-search{
     display: flex;
 }
+.select2-search input{
+    width: 100%!important;
+}
