@@ -134,10 +134,11 @@ appConfig.sound_on = true;
                     return $q.reject(rejection);
                 },
                 responseError: function (rejection) {
+                    console.log(rejection);
                     var s = rejection.status;
                     if(s == 401) $location.path('sign_in');
                     else if (s == 403) notifyError({status: "Ошибка", statusText: 'Не достаточно прав!'});
-                    else notifyError(rejection);
+                    else s !==-1 && notifyError(rejection);
                     return $q.reject(rejection);
                 }
             };
