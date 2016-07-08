@@ -364,27 +364,6 @@
             $http.delete('/api/'+view+'/'+view_id+'/image').then(success, fail);
         };
 
-        // Pages
-        this.getPages = function(page, query, config, success, fail){
-            var path = '/api/pages?page='+page + (query ? ('&q=' + query) : '');
-            $http.get(path, config).then(success, fail);
-        };
-        this.getPageDetails = function(id, success, fail){
-            $http.get('/api/pages/' + id).then(success, fail);
-        };
-
-        // Articles
-        this.getArticles = function(page, query, config, success, fail){
-            var path = '/api/articles?page='+page + (query ? ('&q=' + query) : '');
-            $http.get(path, config).then(success, fail);
-        };
-
-        // News
-        this.getNews = function(page, query, config, success, fail){
-            var path = '/api/news?page='+page + (query ? ('&q=' + query) : '');
-            $http.get(path, config).then(success, fail);
-        };
-
         this.signOut = function(){
             $http.delete('/users/sign_out').then(function(){
                 window.location.reload();

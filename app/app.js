@@ -78,10 +78,7 @@ appConfig.sound_on = true;
         'app.incoming_transfers',
         'app.outgoing_transfers',
         'app.receive_orders',
-        'app.products',
-        'app.articles',
-        'app.news',
-        'app.pages'
+        'app.products'
     ]);
 
     app.config(function ($provide, $httpProvider) {
