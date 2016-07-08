@@ -43,21 +43,6 @@
                     templateUrl: '/app/incoming_transfers/views/viewIncomingTransfer.html'
                 }
             }
-        }).state('app.incoming_transfers.view.edit', {
-            url: '/edit',
-            data:{
-                title:'Редактирование входящего платежа',
-                access:{
-                    action:'edit',
-                    params:'IncomingTransfer'
-                }
-            },
-            views:{
-                "content@app":{
-                    controller: 'EditIncomingTransferCtrl',
-                    templateUrl: '/app/incoming_transfers/views/editIncomingTransfer.html'
-                }
-            }
         });
     });
 }());

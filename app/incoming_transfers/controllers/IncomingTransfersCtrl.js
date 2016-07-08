@@ -13,7 +13,7 @@
                 type: 'new',
                 callback: createIncomingTransfer
             }, {type:'refresh', callback: refresh}],
-            navTableButts:[{type:'view', callback:viewIncomingTransfer}, {type:'table_edit', callback:editIncomingTransfer}, {type:'remove', callback:removeIncomingTransfer}],
+            navTableButts:[{type:'view', callback:viewIncomingTransfer}, {type:'remove', callback:removeIncomingTransfer}],
             role:{
                 can_edit: CanCan.can('edit', 'IncomingTransfer'),
                 can_destroy: CanCan.can('destroy', 'IncomingTransfer')
@@ -36,10 +36,6 @@
 
         function viewIncomingTransfer(item){
             $state.go('app.incoming_transfers.view', {id:item.data.id || item.data._id});
-        }
-
-        function editIncomingTransfer(item){
-            $state.go('app.incoming_transfers.view.edit', {id:item.data.id || item.data._id});
         }
 
         function createIncomingTransfer(){

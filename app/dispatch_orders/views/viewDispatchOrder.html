@@ -29,6 +29,23 @@
             </p>
             <p class="col-md-9">{{dispatchOrder.status}}</p>
         </div>
+
+
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Статус:
+            </p>
+            <p class="col-md-9">{{dispatchOrder.status}}</p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Номер транспортной накладной:
+            </p>
+            <div class="col-md-9">
+                {{ dispatchOrder.transportation_number || 'Нет' }}
+            </div>
+        </div>
+
     </div>
     
     <div class="well well-white" ng-if="dispatchOrder.transportation=='Самовывоз'">

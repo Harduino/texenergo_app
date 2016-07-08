@@ -452,14 +452,17 @@
 
             switch ($item.field){
                 case 'data.postal_code': {
+                    setValue('data.postal_code', data.postal_code);
                     setValue('data.region_with_type', data.region_with_type);
                     setValue('data.city', data.city);
-                    setValue('data.city', data.street);
+                    setValue('data.house', data.house);
                     break;
                 }
                 case 'data.city' : {
                     setValue('data.postal_code', data.postal_code);
                     setValue('data.region_with_type', data.region_with_type);
+                    setValue('data.city', data.city);
+                    setValue('data.house', data.house);
                     break;
                 }
                 case 'data.street' : {
