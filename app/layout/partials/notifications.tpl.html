@@ -13,6 +13,7 @@
             </em>
             <span>
               <span ng-bind-html="notification.message"></span>
+              <span ng-if="notification.extra.partner" ng-click="goToNotification('partners', notification.extra.partner.id)">смотреть</span>
               <br>
               <span clas="pull-right font-xs text-muted">
                 <abbr class="timeago" ng-title="notification.created_at" ng-bind="notification.created_at"></abbr>
