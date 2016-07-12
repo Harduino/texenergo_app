@@ -396,7 +396,8 @@
                     'Content-Type': 'application/json',
                     'Accept' : 'application/json',
                     'Authorization' : 'Token b9d1af0994c10d361ed1a354b0536f4f18ea099f'
-                }
+                },
+                withCredentials: false
             });
         }
     }]);
