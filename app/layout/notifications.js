@@ -21,7 +21,7 @@
                                 funcFactory.showNotification('Канал получения уведомлений', 'Не удалось установить соединение!');
                             },
                             received: function(data) {
-                                window.gon.user.id !== data.user_id && syncChanges(data, s);
+                                syncChanges(data, s);
                             }
                         };
                         if(typeof mixins === 'object' && mixins) m = angular.extend(m, mixins);

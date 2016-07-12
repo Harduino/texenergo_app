@@ -5,11 +5,20 @@
 
     "use strict";
 
-    angular.module('app.supplier_orders').controller('ViewSupplierOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', function($scope, $state, $stateParams, serverApi, funcFactory){
+    angular.module('app.supplier_orders').controller('ViewSupplierOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', 'supplierOrdersNotifications', function($scope, $state, $stateParams, serverApi, funcFactory, notifications){
         var sc = $scope;
-        sc.order = {};
+        
+        sc._subscription = {};  
+        
+        sc.data = {
+            supplierOrder:{},
+            partnersList: [],
+            productsList: [],
+            total:0
+        };
+
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack}, {type:'confirm_order', callback: confirmOrder}, {type:'refresh', callback:refresh}],
+            navButtsOptions:[{type:'back', callback:returnBack}, {type:'confirm_order', callback: updateStatus}, {type:'refresh', callback:refresh}],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
                 scaleColor:false,
@@ -17,45 +26,33 @@
                 lineCap:'circle',
                 size:50
             },
+            role: {},
             showFileModal: angular.noop,
             titles:window.gon.index.SupplierOrder.objectTitle + ': #'
         };
 
         sc.amontPercent = 0;
+
         sc.dispatchedPercent = 0;
-
-
-        sc.data ={
-            partnersList: [],
-            productsList: [],
-            total:0
-        };
+        
+        sc.productForAppend = {};
+        
         sc.pSelectConfig = {
             startPage: 0,
             dataMethod: serverApi.getSearch
         };
+
         sc.partnerSelectConfig = {
             dataMethod: serverApi.getPartners
         };
 
-        function refresh(){
-            serverApi.getSupplierOrderDetails($stateParams.id, function(result) {
-                var order = sc.order = result.data;
-                sc.amontPercent = funcFactory.getPercent(order.paid_amount, order.total);
-                sc.dispatchedPercent = funcFactory.getPercent(order.received_amount, order.total);
-
-                sc.visual.roles = {
-                    can_confirm: order.can_confirm
-                };
-            });
-        }
-
         serverApi.getSupplierOrderDetails($stateParams.id, function(result){
-            var order = sc.order = result.data;
+            var order = sc.data.supplierOrder = result.data;
             sc.amontPercent = funcFactory.getPercent(order.paid_amount, order.total);
             sc.dispatchedPercent = funcFactory.getPercent(order.received_amount, order.total);
 
             sc.visual.roles = {
+                can_edit: order.can_edit,
                 can_confirm: order.can_confirm
             };
 
@@ -66,10 +63,62 @@
                 view: 'supplier_orders',
                 id: order.id
             };
+
+            sc._subscription =  notifications.subscribe({
+                channel: 'SupplierOrdersChannel',
+                supplier_order_id: $stateParams.id
+            }, sc.data.supplierOrder);
+        });
+
+        function refresh(){
+            serverApi.getSupplierOrderDetails($stateParams.id, function(result) {
+                var order = sc.data.supplierOrder = result.data;
+                sc.amontPercent = funcFactory.getPercent(order.paid_amount, order.total);
+                sc.dispatchedPercent = funcFactory.getPercent(order.received_amount, order.total);
+
+                sc.visual.roles = {
+                    can_confirm: order.can_confirm
+                };
+            });
+        }
+
+        /**
+         * выбор продукта для добавления к заказу
+         */
+        sc.selectProductForAppend = function(item){
+            sc.productForAppend = item;
+            sc.productForAppend.id = item.id || item._id;
+            sc.productForAppend.quantity = 1;
+            sc.productForAppend.price = item.price;
+        };
+
+        /**
+         * Добавить продукт в список
+         */
+        sc.appendProduct = function(event){
+            var append = function(){
+                var t=sc.productForAppend,
+                    data = angular.extend(t, {product: {name:t.name, id: t.id}}),
+                    post = {
+                        product_id: t.id,
+                        quantity: t.quantity
+                    };
+                sc._subscription.send({action: "create_content", data: post });
+            };
+            if(event){
+                if(event.keyCode == 13){
+                    append();
+                }
+            } else append();
+        };
+
+        sc.$on('$destroy', function(){
+            sc._subscription.send({message: "Я нах пошёл отсюда"});
+            sc._subscription && sc._subscription.unsubscribe();
         });
 
         sc.saveSupplierOrderInfo = function(){
-            var supplierOrder = sc.order;
+            var supplierOrder = sc.data.supplierOrder;
             var data = {
                     supplier_order:{
                         title: supplierOrder.title,
@@ -100,105 +149,34 @@
         };
 
         /**
-         * выбор продукта для добавления к заказу
-         */
-        sc.selectProductForAppend = function(item){
-            sc.productForAppend = item;
-            sc.productForAppend.id = item.id || item._id;
-            sc.productForAppend.quantity = 1;
-            sc.productForAppend.price = 0;
-        };
-
-        sc.appendProduct = function(event){
-            var append = function(){
-                var t=sc.productForAppend,
-                    data = angular.extend(t, {product: {name:t.name, id: t.id}}),
-                    post = {
-                        product_id: t.id,
-                        quantity: t.quantity,
-                        price: t.price
-                    };
-
-                serverApi.addSupplierOrderProduct(sc.order.id, post,function(result){
-                    if(!result.data.errors){
-                        sc.productForAppend = {};
-                        sc.data.selectedProduct = null;
-                        sc.order.supplier_order_contents.push(angular.extend(data, result.data));
-                        funcFactory.showNotification('Успешно добавлен продукт', t.name, true);
-                        angular.element('#eso_prod_select').data().$uiSelectController.open=true;
-                    } else {
-                        funcFactory.showNotification('Не удалось добавить продукт', result.data.errors);
-                    }
-                });
-            };
-            if(event){
-                if(event.keyCode == 13){
-                    append();
-                }
-            } else append();
-        };
-
-        /**
-         * Обновляет параметры продукта включенного в заказ
-         * @param item - данные продукта
-         */
-        sc.updateProductOfOrder = updateProductOfOrder;
-
-        function updateProductOfOrder(product, index, event){
-            var update = function(){
-                var data = {
-                    quantity: product.quantity,
-                    price: product.price
-                };
-                serverApi.updateSupplierOrderProduct(sc.order.id, product.id, data, function(result){
-                    if(!result.data.errors) {
-                        var r = sc.order.supplier_order_contents[index];
-                        sc.order.supplier_order_contents[index] = angular.extend(r, result.data);
-                        funcFactory.showNotification('Успешно обновлены данные продукта', product.name, true);
-                    } else {
-                        funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors);
-                    }
-                });
-            };
-            if(event){
-                if(event.keyCode == 13){
-                    update();
-                }
-            } else {
-                update();
-            }
-        }
-
-        /**
          * Удаление продукта
          * @param item - объект с индексом продукта в листе и id
          */
-        function removeProduct(item){
-            serverApi.removeSupplierOrderProduct(sc.order.id, item.data.id, function(result){
-                if(!result.data.errors) {
-                    sc.order.supplier_order_contents.splice(item.index, 1);
-                    funcFactory.showNotification('Продукт удален:', item.data.product.name, true);
-                } else {
-                    funcFactory.showNotification('Не удалось удалить продукт', result.data.errors);
-                }
-            });
+        sc.removeProduct = function(item){
+            sc._subscription.send({action: "destroy_content", data: item});
         }
 
 
         function confirmOrder(subdata, item) {
             var data = {
-                supplier_order:{
-                    event: item.event
-                }
+                title: supplierOrder.title,
+                description: supplierOrder.description,
+                partner_id: supplierOrder.partner.id,
+                number: supplierOrder.number
             };
-            serverApi.updateStatusSupplierOrder($stateParams.id, data, function(result){
-                if(result.status == 200 && !result.data.errors) {
-                    funcFactory.showNotification("Успешно", 'Удалось ' + item.name.toLowerCase() + ' заказ', true);
-                    sc.order = result.data;
-                } else {
-                    funcFactory.showNotification("Не удалось " + item.name.toLowerCase() + ' заказ', result.data.errors);
-                }
-            });
+            sc._subscription.send({action: "update", data: data });
+        }
+
+        sc.saveProductChange = function(data) {
+            var product = data.item;
+            sc._subscription.send({action: "update_content", data: product });
+        }
+
+        function updateStatus(subdata, item) {
+            var data = {
+                event: item.event
+            };
+            sc._subscription.send({action: "update_status", data: data });
         }
         
         function goEditSupplierOrder(){
