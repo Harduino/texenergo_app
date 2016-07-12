@@ -689,13 +689,17 @@ td:hover .td-nb-btn.themed{
 }
 /* UI copy to buffer */
 .te-c-buffer-input{
-    position:absolute;
+    position: absolute;
+    pointer-events: none;
     opacity: 0;
+    z-index: -9999999;
+    max-width: 10px;
+    width: 10px;
 }
 [te-copy-to-buffer]> i.te-c-to-buffer-ico{
     position: absolute;
     opacity: 0;
-    margin-left: 10px;
+    /*margin-left: 10px;*/
     height: 20px;
     padding: 3px;
     width: 20px;
