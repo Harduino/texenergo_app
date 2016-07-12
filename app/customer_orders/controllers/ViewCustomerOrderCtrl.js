@@ -628,15 +628,48 @@
         sc.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
-    }]).controller("CommandCustomerOrderModalCtrl", ['$scope', '$uibModalInstance', 'serverApi', 'config', function($scope, $uibModalInstance, serverApi, config){
+    }]).controller("CommandCustomerOrderModalCtrl", ['$scope', '$uibModalInstance', 'serverApi', 'config', '$timeout', function($scope, $uibModalInstance, serverApi, config, $timeout){
         var sc = $scope;
 
-
-        sc.commandsDict = [
-            'сортировать_по',
-            'сортировать_по артикул',
-            'удалить_где'
+        sc.commandsLists = [
+            [
+                'сортировать_по',
+                'удалить_где'
+            ],
+            [
+                'сортировать_по артикул'
+            ]
         ];
+        sc.commandsLists.selectedList = 0;
+
+        sc.$watch('command', function(newValue, old){
+            if(newValue !== undefined){
+                var ctrl = angular.element('#vco_typeahead').data().$ngModelController;
+
+                if(newValue.lastIndexOf('§')>-1) {
+                    ctrl.$setViewValue(old);
+                }
+
+                var lists = sc.commandsLists,
+                    inputedCommand = newValue;
+
+                for(var i = 0, il= lists.length, list; i<il; i++){
+                    list = lists[i];
+                    for(var j= 0, jl=list.length, command; j<jl; j++){
+                        command = list[j];
+
+                        if(command.lastIndexOf(inputedCommand)>-1){
+                            var t = sc.commandsLists.selectedList !== i;
+                            sc.commandsLists.selectedList = i;
+                            if(t){
+                                ctrl.$setViewValue(inputedCommand + '§');
+                            }
+                            return;
+                        }
+                    }
+                }
+            }
+        });
 
         sc.config = angular.extend({
             title: 'Использовать комманду',
