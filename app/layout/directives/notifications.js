@@ -43,6 +43,11 @@
                     sc.channel.perform('delete', {id: item.id})
                     sc.notifications = _.without(sc.notifications, item);
                 };
+
+                sc.goToNotification = function(obj, id) {
+                    window.location = ("/#/" + obj + "/" + id);
+                    // $state.go('app.'+obj+'.view', id);
+                }
                 
                 // DOM
                 sc.hide = function() { sc.hidden = true  };
