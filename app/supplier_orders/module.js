@@ -48,8 +48,9 @@
     module.factory('supplierOrdersNotifications', ['notificationServiceBuilder', 'funcFactory', function(nsb, funcFactory){
         var actions = {
             // Обновить название, номер или тп по заказу
-            update: function(localObject, serverResponse){
-                var data = serverResponse.data;
+            update: function(scope, serverResponse){
+                var data = serverResponse.data,
+                    localObject = scope.data.supplierOrder;
                 if( data !== undefined) {
                     for (var i = 0; i < Object.keys(data).length; i++) {
                         var k = Object.keys(data)[i];
@@ -64,8 +65,9 @@
                 }
             },
             // Перещёлкнуть статус
-            update_status: function(localObject, serverResponse){
-                var data = serverResponse.data;
+            update_status: function(scope, serverResponse){
+                var data = serverResponse.data,
+                    localObject = scope.data.supplierOrder;
                 if( data !== undefined) {
                     localObject.status = data.status;
                     localObject.can_edit = data.can_edit;
@@ -78,10 +80,10 @@
                 }
             },
             // Обновить строку с товаром
-            update_content: function(localObject, serverResponse){
-                var data = serverResponse.data;
+            update_content: function(scope, serverResponse){
+                var data = serverResponse.data,
+                    localObject = scope.data.supplierOrder;
                 if( data !== undefined) {
-                    var row;
                     for (var i = 0; i < localObject.supplier_order_contents.length; i++) {
                         if ( localObject.supplier_order_contents[i].id !== data.id )
                             continue
@@ -96,11 +98,16 @@
                 }
             },
             // Добавить товар
-            create_content: function(localObject, serverResponse){
-                var data = serverResponse.data;
+            create_content: function(scope, serverResponse){
+                var data = serverResponse.data,
+                    localObject = scope.data.supplierOrder;
                 if( data !== undefined) {
                     localObject.supplier_order_contents.push(data);
+                    
                     funcFactory.showNotification('Успешно добавлен продукт', data.product.name, true);
+
+                    scope.productForAppend = {};
+                    scope.data.selectedProduct = null;
                     angular.element('#eso_prod_select').data().$uiSelectController.open=true;
                 } else if (serverResponse.errors !== undefined) {
                     funcFactory.showNotification("Ошибка при добавлении товара", "Номер " + localObject.number +'. ' + serverResponse.errors, false);
@@ -110,8 +117,9 @@
             },
 
             // Удалить товар
-            destroy_content: function(localObject, serverResponse){
-                var data = serverResponse.data;
+            destroy_content: function(scope, serverResponse){
+                var data = serverResponse.data,
+                    localObject = scope.data.supplierOrder;
                 if( data !== undefined) {
                     for (var i = 0; i < localObject.supplier_order_contents.length; i++) {
                         if (localObject.supplier_order_contents[i].id === data.supplier_order_content_id)

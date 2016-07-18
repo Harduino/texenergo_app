@@ -67,7 +67,7 @@
             sc._subscription =  notifications.subscribe({
                 channel: 'SupplierOrdersChannel',
                 supplier_order_id: $stateParams.id
-            }, sc.data.supplierOrder);
+            }, sc);
         });
 
         function refresh(){
