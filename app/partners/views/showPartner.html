@@ -216,7 +216,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="item in partner.bank_accounts">
+                        <tr ng-repeat="item in partner.bank_accounts" ng-switch="partner.can_edit">
                             <td>
                                 <a ng-switch-when="true" editable-text="item.rs" onaftersave="saveBankAccount({item: item, index: $index})" buttons="no">{{ item.rs || "Нет" }}</a>
                                 <span ng-switch-default>{{ item.rs }}</span>

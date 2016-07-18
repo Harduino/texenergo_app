@@ -103,7 +103,7 @@
                     localObject = scope.data.supplierOrder;
                 if( data !== undefined) {
                     localObject.supplier_order_contents.push(data);
-                    
+
                     funcFactory.showNotification('Успешно добавлен продукт', data.product.name, true);
 
                     scope.productForAppend = {};
