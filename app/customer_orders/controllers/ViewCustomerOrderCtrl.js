@@ -5,7 +5,7 @@
 
     "use strict";
 
-    angular.module('app.customer_orders').controller('ViewCustomerOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', '$filter', 'customerOrdersNotifications', '$uibModal', '$parse', function($scope, $state, $stateParams, serverApi, funcFactory, $filter, notifications, $uibModal, $parse){
+    angular.module('app.customer_orders').controller('ViewCustomerOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', '$filter', 'customerOrdersNotifications', '$uibModal', '$parse', '$timeout', function($scope, $state, $stateParams, serverApi, funcFactory, $filter, notifications, $uibModal, $parse, $timeout){
         var _subscription;
         var sc = $scope;
         sc.partnersList = [];
@@ -225,6 +225,10 @@
             sc.productForAppend = item;
             sc.productForAppend.id = item.id || item._id;
             sc.productForAppend.quantity = 0;
+
+            $timeout(function(){
+                angular.element('#append_product_quantity').focus();
+            }, 10);
         };
 
         /**

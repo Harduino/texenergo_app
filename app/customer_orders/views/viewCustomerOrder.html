@@ -237,7 +237,7 @@
                                         <td>{{productForAppend.article}}</td>
                                         <td>{{productForAppend | price_net | currency}}</td>
                                         <td>
-                                            <input id="append_product_quantity" class="form-control table-input" ng-model="productForAppend.quantity" model-filter="{min:0}" filter-name="te_number" ng-attr-placeholder="{{'доступно ' + productForAppend.stock +' шт.'}}" type="text" ng-init="focusOnProduct()">
+                                            <input id="append_product_quantity" class="form-control table-input" ng-model="productForAppend.quantity" model-filter="{min:0}" filter-name="te_number" ng-attr-placeholder="{{'доступно ' + productForAppend.stock +' шт.'}}" type="text">
                                             <div class="note">
                                                 <i class="fa fa-exclamation-triangle"></i><span class="font-sm">{{' доступно ' + productForAppend.stock +' шт.'}}</span>
                                             </div>
