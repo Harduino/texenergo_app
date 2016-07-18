@@ -5,7 +5,7 @@
 
     "use strict";
 
-    angular.module('app.supplier_orders').controller('ViewSupplierOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', 'supplierOrdersNotifications', function($scope, $state, $stateParams, serverApi, funcFactory, notifications){
+    angular.module('app.supplier_orders').controller('ViewSupplierOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', 'supplierOrdersNotifications', '$filter', function($scope, $state, $stateParams, serverApi, funcFactory, notifications, $filter){
         var sc = $scope;
         
         sc._subscription = {};  
@@ -45,6 +45,21 @@
         sc.partnerSelectConfig = {
             dataMethod: serverApi.getPartners
         };
+
+        /**
+         * следим за изменеиями в коллекции (включая свойства коллекции) при изменении пересчитываем total
+         */
+        sc.$watch('data.supplierOrder.supplier_order_contents', function(values){
+            if(values){
+                var total = 0;
+
+                values.map(function(item){
+                    total += $filter('price_net')(item, item.quantity);
+                });
+
+                sc.data.supplierOrder.total = total;
+            }
+        }, true);
 
         serverApi.getSupplierOrderDetails($stateParams.id, function(result){
             var order = sc.data.supplierOrder = result.data;
@@ -113,7 +128,7 @@
         };
 
         sc.$on('$destroy', function(){
-            sc._subscription.send({message: "Я нах пошёл отсюда"});
+            sc._subscription.send({message: "Я нах пошёл отсюда"});// мило :)
             sc._subscription && sc._subscription.unsubscribe();
         });
 
@@ -154,7 +169,7 @@
          */
         sc.removeProduct = function(item){
             sc._subscription.send({action: "destroy_content", data: item});
-        }
+        };
 
 
         function confirmOrder(subdata, item) {
@@ -170,7 +185,7 @@
         sc.saveProductChange = function(data) {
             var product = data.item;
             sc._subscription.send({action: "update_content", data: product });
-        }
+        };
 
         function updateStatus(subdata, item) {
             var data = {
