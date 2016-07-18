@@ -110,7 +110,7 @@
                         <td>{{ productForAppend.name }}</td>
                         <td>{{ productForAppend.article }}</td>
                         <td>
-                            <input id="append_product_price" class="form-control table-input" ng-model="productForAppend.price" model-filter="{min:0}" filter-name="te_number" type="text" ng-init="focusOnProduct()">
+                            <input id="append_product_price" class="form-control table-input" ng-model="productForAppend.price" model-filter="{min:0, number: true}" filter-name="te_number" type="text" ng-init="focusOnProduct()">
                         </td>
                         <td>
                             <input id="append_product_quantity" class="form-control table-input" ng-model="productForAppend.quantity" model-filter="{min:0}" filter-name="te_number" type="text" ng-init="focusOnProduct()">
@@ -131,7 +131,7 @@
                         </td>
                         <td class="hidden-xs">{{ item.product.article}}</td>
                         <td class="text-right">
-                            <a ng-if="data.supplierOrder.can_edit" editable-number="item.price" onaftersave="saveProductChange({item: item, index: $index})" buttons="no">{{ item.price }}</a>
+                            <a ng-if="data.supplierOrder.can_edit" editable-number="item.price" e-step="0.01" onaftersave="saveProductChange({item: item, index: $index})" buttons="no">{{ item.price }}</a>
                             <span ng-if="!data.supplierOrder.can_edit">{{ item.price }}</span>
                         </td>
                         <td class="text-right">

@@ -79,7 +79,7 @@
                 }
 
                 function createConfirmOrderControls(data, button, btnList){
-                    var events = data.events;
+                    var events = data ? data.events : null;
                     events && angular.isArray(events) && events.map(function(item){
                         var btn= angular.extend(item, button);
                         btnList.push(btn);
