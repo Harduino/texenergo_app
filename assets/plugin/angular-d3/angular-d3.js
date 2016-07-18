@@ -136,10 +136,12 @@
                         tooltip.style('display', 'block').html(config.tooltip(d, i));
                         var width = $t.outerWidth(),
                             height = $t.outerHeight(),
-                            offsetOfCircle = $(this).offset();
+                            bodyRect = document.body.getBoundingClientRect(),
+                            elemRect = this.getBoundingClientRect(),
+                            offsetOfCircle = {top:elemRect.top - bodyRect.top, left: elemRect.left - bodyRect.left};
 
                         tooltip.style("left", (offsetOfCircle.left - width/2 + 10 * scale) + "px")
-                            .style("top", (offsetOfCircle.top - height - 5) + "px");
+                            .style("top", (offsetOfCircle.top + height/2 + (10 * scale)) + "px");
                     }).on("mouseout", function() {
                         tooltip.style('display', 'none');
                     });

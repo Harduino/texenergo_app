@@ -29,7 +29,8 @@
                 scaleColor:false,
                 lineWidth:5,
                 lineCap:'circle',
-                size:50
+                size:50,
+                tooltip: true
             },
             titles: window.gon.index.CustomerOrder.objectTitle + ': №',
             sortOpts: {
