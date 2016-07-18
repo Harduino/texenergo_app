@@ -49,7 +49,7 @@
                 if(attrs.subdata ){
                     scope.$watch('subdata', function(value){
                         value && Object.keys(Object(value)).length>0 && buildButtons();
-                    })
+                    });
                 } else buttons = roles = null;
 
                 function buildButtons(){

@@ -69,9 +69,12 @@
                 var data = serverResponse.data,
                     localObject = scope.data.supplierOrder;
                 if( data !== undefined) {
-                    localObject.status = data.status;
-                    localObject.can_edit = data.can_edit;
-                    localObject.events = data.events;
+                    scope.$apply(function(){
+                        localObject.status = data.status;
+                        localObject.can_edit = data.can_edit;
+                        localObject.events = data.events;
+                        scope.data.supplierOrder = angular.extend({}, localObject);
+                    });
                     funcFactory.showNotification("Обновил заказ", "Номер " + localObject.number +'.', true);
                 } else if (serverResponse.errors !== undefined) {
                     funcFactory.showNotification("Ошибка при обновлении заказа", "Номер " + localObject.number +'. ' + serverResponse.errors, false);
