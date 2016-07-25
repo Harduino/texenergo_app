@@ -10,7 +10,7 @@
         var sc = $scope;
 
         sc.visual = {
-            navButtsOptions:[{type:'edit', callback: goToEdit}, {type:'show', callback: goToProduct}],
+            navButtsOptions:[{type:'show', callback: goToProduct}],
             navTableButts:[{type:'remove', callback:removePartnerLog}]
         };
 
@@ -26,10 +26,6 @@
         serverApi.getProductPartnerLogs($stateParams.id, function(result){
             sc.partner_logs = result.data;
         });
-
-        function goToEdit(){
-            $state.go('app.product.edit', $stateParams);
-        }
 
         function goToProduct(){
             $state.go('app.product', $stateParams);

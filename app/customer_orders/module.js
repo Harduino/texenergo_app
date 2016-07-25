@@ -64,24 +64,30 @@
     module.factory('customerOrdersNotifications', ['notificationServiceBuilder', 'funcFactory', function(nsb, funcFactory){
         var actions = {
             create: function(productsList, row){
-                var data = row.data[0];
-                productsList.push(data);
-                funcFactory.showNotification("Добавлен продукт", data.product.name + ' добавлен другим пользователем.', true);
+                if (row.user_id != gon.user.id) {
+                    var data = row.data[0];
+                    productsList.push(data);
+                    funcFactory.showNotification("Добавлен продукт", data.product.name + ' добавлен другим пользователем.', true);
+                }
             },
             update: function(productsList, row){
-                var datas = row.data;
-                for (var i = 0; i < datas.length; i++) {
-                    var data = datas[i];
-                    var ind = nsb.getIndexByProperty(productsList, data, 'id');
-                    if(ind>-1) productsList[ind] = data;
-                    funcFactory.showNotification("Обновлена информация по продукту", data.product.name +' обновлен другим пользователем.', true);
+                if (row.user_id != gon.user.id) {
+                    var datas = row.data;
+                    for (var i = 0; i < datas.length; i++) {
+                        var data = datas[i];
+                        var ind = nsb.getIndexByProperty(productsList, data, 'id');
+                        if(ind>-1) productsList[ind] = data;
+                        funcFactory.showNotification("Обновлена информация по продукту", data.product.name +' обновлен другим пользователем.', true);
+                    }
                 }
             },
             destroy: function(productsList, row){
-                var data = row.data;
-                var ind = nsb.getIndexByProperty(productsList, data, 'id');
-                if(ind>-1) productsList.splice(ind, 1);
-                funcFactory.showNotification("Удален продукт", 'Продукт удален другим пользователем.');
+                if (row.user_id != gon.user.id) {
+                    var data = row.data;
+                    var ind = nsb.getIndexByProperty(productsList, data, 'id');
+                    if(ind>-1) productsList.splice(ind, 1);
+                    funcFactory.showNotification("Удален продукт", 'Продукт удален другим пользователем.');
+                }
             }
         };
 

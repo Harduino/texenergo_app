@@ -22,7 +22,7 @@
                 Номер:
             </p>
             <div class="col-md-9" ng-switch-when="true">
-                <a editable-textarea="data.supplierOrder.number" onaftersave="saveOrderInfo()">{{ data.supplierOrder.number || 'Нет' }}</a>
+                <a editable-textarea="data.supplierOrder.number" onaftersave="saveSupplierOrderInfo()">{{ data.supplierOrder.number || 'Нет' }}</a>
             </div>
             <p ng-switch-default class="col-md-9">{{ data.supplierOrder.number }}</p>
         </div>
@@ -31,7 +31,7 @@
                 Название:
             </p>
             <div class="col-md-9" ng-switch-when="true">
-                <a editable-textarea="data.supplierOrder.title" onaftersave="saveOrderInfo()">{{ data.supplierOrder.title || 'Нет' }}</a>
+                <a editable-textarea="data.supplierOrder.title" onaftersave="saveSupplierOrderInfo()">{{ data.supplierOrder.title || 'Нет' }}</a>
             </div>
             <p ng-switch-default class="col-md-9">{{data.supplierOrder.title}}</p>
         </div>
