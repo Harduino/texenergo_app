@@ -24,15 +24,24 @@
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Партнёр:</p>
             <div class="col-md-9" ng-switch-when="true">
-                <ui-select  ui-select-infinity="partnerSelectConfig" ng-model="contact.partner" theme="select2" on-select="saveContact()" style="width: 50%;">
-                    <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
-                    <ui-select-choices repeat="partner in data.partnersList | filter:$select.search">
-                        <div ng-bind-html="partner.name | highlight: $select.search"></div>
-                    </ui-select-choices>
-                </ui-select>
+                <a ng-hide="contact.partner.x_editable_show" ng-click="contact.partner.x_editable_show=true;" class="editable-click">{{contact.partner.name || 'Нет'}}</a>
+                <div ng-if="contact.partner.x_editable_show">
+                    <ui-select  ui-select-infinity="partnerSelectConfig" ng-model="contact.partner" theme="select2" ng-disabled="disabled" on-select="saveContact()" style="width: 50%;">
+                        <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="partner in data.partnersList | filter:$select.search">
+                            <div ng-bind-html="partner.name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                    <button type="button" class="btn btn-default" ng-click="contact.partner.x_editable_show=false;">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                    <button ng-click="goToPartner()" type="button" class="btn btn-default">
+                        <span class="fa fa-eye"></span>
+                    </button>
+                </div>
             </div>
             <p class="col-md-9" ng-switch-default>
-                <a ng-href="#/partners/{{ contact.partner.id }}">
+                <a ng-href="/#/partners/{{ contact.partner.id }}">
                     {{ contact.partner.name }}
                 </a>
             </p>

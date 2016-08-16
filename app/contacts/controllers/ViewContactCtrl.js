@@ -67,6 +67,10 @@
            });
         };
 
+        sc.goToPartner = function() {
+            $state.go('app.partners.view', {id: (sc.contact.partner.id || sc.contact.partner._id)})
+        }
+
         function returnBack(){
             $state.go('app.contacts',{});
         }

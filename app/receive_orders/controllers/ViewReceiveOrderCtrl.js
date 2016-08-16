@@ -100,6 +100,10 @@
             })
         };
 
+        sc.goToPartner = function() {
+            $state.go('app.partners.view', {id: (sc.receiveOrder.partner.id || sc.receiveOrder.partner._id)})
+        }
+
         function deleteContentsProduct(item){
             var data = item.data;
             serverApi.deleteReceiveOrderContents(sc.receiveOrder.id, data.id, function(result){

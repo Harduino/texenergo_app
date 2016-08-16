@@ -593,6 +593,10 @@
            _subscription && _subscription.unsubscribe();
         });
 
+        sc.goToPartner = function() {
+            $state.go('app.partners.view', {id: sc.order.partner.id})
+        }
+
         function showCommandModal(){
             var modalInstance = $uibModal.open({
                 templateUrl: 'CommandCustomerOrderModalCtrl.tmpl.html',
