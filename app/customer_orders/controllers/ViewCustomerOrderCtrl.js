@@ -203,6 +203,18 @@
             });
         };
 
+        sc.productDetailsModal = function(row) {
+            var modalInstance = $uibModal.open({
+                templateUrl: 'eqoProductDetailsModal.tmpl.html',
+                controller: 'EqoProductDetailsModalCtrl',
+                windowClass: 'eqo-centred-modal',
+                resolve: {
+                    row: row,
+                    config: {}
+                }
+            });
+        };
+
         sc.selectPosition = function($event, item){
             if($event.shiftKey){
 
@@ -628,6 +640,24 @@
 
         sc.ok = function () {
             $uibModalInstance.close(sc.data.selectedProduct);
+        };
+
+        sc.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+    }]).controller("EqoProductDetailsModalCtrl", ['$scope', '$uibModalInstance', 'config', 'row', function($scope, $uibModalInstance, config, row){
+        var sc = $scope;
+
+        sc.row = row;
+
+        sc.config = angular.extend({
+            title: 'Подробнее по строке',
+            btnOkText: "Понятно",
+            btnCancelText: 'Закрыть'
+        }, config);
+
+        sc.ok = function () {
+            $uibModalInstance.close();
         };
 
         sc.cancel = function () {

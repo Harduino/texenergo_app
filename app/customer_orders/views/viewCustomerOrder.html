@@ -41,7 +41,7 @@
                                     Описание:
                                 </p>
                                 <div class="col-md-9" ng-switch-when="true">
-                                    <a editable-textarea="order.description" onaftersave="saveOrderInfo()">{{ order.description || 'Нет' }}</a>
+                                    <pre><a editable-textarea="order.description" onaftersave="saveOrderInfo()">{{ order.description || 'Нет' }}</a></pre>
                                 </div>
                                 <p ng-switch-default class="col-md-9">{{order.description}}</p>
                             </div>
@@ -253,11 +253,12 @@
                                     <tr ng-repeat='item in order.customer_order_contents' class="order-items" ng-click="selectPosition($event, item)" ng-class="{selected: item.selected}">
                                         <td class="hidden-xs">{{ $index + 1 }}</td>
                                         <td te-copy-to-buffer hidden-buttons>
-                                            <span ng-repeat="message in item.messages">
-                                                <span class="badge alert-{{message.level}}" uib-tooltip="{{message.text}}">!</span>
+                                            <span ng-if="item.messages.length > 0">
+                                                <span class="badge alert-danger" ng-click="productDetailsModal(item)">!</span>
                                             </span>
                                             <a ng-href="/#/products/{{ item.product.id }}" te-buffer-value>{{ item.product.name }}</a>
                                             <i class="blue-hover" ng-if="item.can_edit" ng-click="changeCustomerOrderProductModal(item)">заменить</i>
+                                            <i class="blue-hover" ng-click="productDetailsModal(item)">подробно</i>
                                         </td>
                                         <td class="hidden-xs" te-copy-to-buffer>
                                             <span te-buffer-value>{{ item.product.article}}</span>
@@ -475,6 +476,44 @@
             <p>Сортирует все товары в порядке возврастания артикула</p>
             <h5>группировать_по товар</h5>
             <p>Объединяет дубли строк в одну строку</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger" type="button" ng-click="cancel()">{{config.btnCancelText}}</button>
+            <button class="btn btn-primary" type="button" ng-click="ok()">{{config.btnOkText}}</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="eqoProductDetailsModal.tmpl.html">
+        <div class="modal-header">
+            <h3 class="modal-title">{{config.title}}</h3>
+        </div>
+        <div class="modal-body">
+            <div class="row" ng-if="row.query_original">
+                <p class="col-xs-12 col-md-3 font-bold">
+                    Запрос:
+                </p>
+                <p class="col-md-9">
+                    {{ row.query_original }}
+                </p>
+            </div>
+            <div class="row" ng-if="row.discount_description">
+                <p class="col-xs-12 col-md-3 font-bold">
+                    Описание скидки:
+                </p>
+                <p class="col-md-9">
+                    <pre>{{ row.discount_description }}</pre>
+                </p>
+            </div>
+            <div class="row" ng-if="row.messages.length > 0">
+                <p class="col-xs-12 col-md-3 font-bold">
+                    Сообщения:
+                </p>
+                <p class="col-md-9">
+                    <div ng-repeat="message in row.messages">
+                        <span class="badge alert-{{message.level}}">!</span>
+                        {{ message.text }}
+                    </div>
+                </p>
+            </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-danger" type="button" ng-click="cancel()">{{config.btnCancelText}}</button>
