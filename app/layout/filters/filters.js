@@ -32,6 +32,7 @@
             var value = 0;
             if(item.hasOwnProperty('price')){
                 value = item.price * (item.hasOwnProperty('discount') ?  (1 - item.discount/100) : 1);
+                value = Math.round(value * 100) / 100;
                 if(multiplier>=0) value*=multiplier;
             }
             return value;
