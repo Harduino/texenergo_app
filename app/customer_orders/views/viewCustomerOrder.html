@@ -189,9 +189,8 @@
                                             </span>
                                         </div>
                                     </form>
-                                    <!--a editable-text="order.transportation_info.delivery_address" onaftersave="saveOrderInfo()">{{ order.transportation_info.delivery_address || 'Нет' }}</a-->
                                 </div>
-                                <p ng-if="!order.can_edit" class="col-md-9">{{order.transportation_info.delivery_address}}</p>
+                                <p ng-if="!order.can_edit" class="col-md-9">{{order.transportation_info.delivery_address.postal_index || "Индекс"}} {{order.transportation_info.delivery_address.region || "Регион"}} {{order.transportation_info.delivery_address.city || "Город"}} {{order.transportation_info.delivery_address.street || "Улица"}} {{order.transportation_info.delivery_address.house || "Дом"}}</p>
                             </div>
                         </div>
                     </div>
