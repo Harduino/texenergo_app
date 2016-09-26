@@ -143,21 +143,21 @@
         function returnBack(){
             $state.go('app.incoming_transfers',{});
         }
-        
+
         function showFileModal(){
             sc.visual.showFileModal();
         }
-        
+
         function goToEditIncomingTransfer(){
-            $state.go('app.incoming_transfers.view.edit', $stateParams)  
+            $state.go('app.incoming_transfers.view.edit', $stateParams)
         }
-        
+
         function viewDocument(item){
             if (item.data.hasOwnProperty('customer_order')) {
-                $state.go('app.customer_orders.view', {id: item.data.customer_order.id});    
+                $state.go('app.customer_orders.view', {id: item.data.customer_order.id});
             }
             if (item.data.hasOwnProperty('incoming_transfer')) {
-                $state.go('app.incoming_transfer.view', {id: item.data.incoming_transfer.id});    
+                $state.go('app.incoming_transfer.view', {id: item.data.incoming_transfer.id});
             }
         }
     }]);

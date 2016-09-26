@@ -45,4 +45,12 @@
             }
         });
     });
+
+    module.filter('f_incomingT', function(){
+        return function(item){
+            if(item)
+                return item.hasOwnProperty('incoming_code') ? '<i class="fa fa-rub" title="Платеж"></i> ' + item.incoming_code : '<i class="fa fa-book" title="Заказ"></i> ' + item.number;
+            else return '';
+        };
+    });
 }());
