@@ -13,7 +13,7 @@ window.appConfig = {};
 
 appConfig.menu_speed = 200;
 
-appConfig.serverUrl = 'http://' + (window.location.host.match(/localhost|127\.0\.0\.1/) == null ? 'www.texenergo.com' : 'localhost:3000');
+appConfig.serverUrl = (window.location.host.match(/localhost|127\.0\.0\.1/) == null ? 'https://www.texenergo.com' : 'http://localhost:3000');
 
 //console.log(appConfig.serverUrl);
 

@@ -42,21 +42,6 @@
                     templateUrl: '/app/receive_orders/views/viewReceiveOrder.html'
                 }
             }
-        }).state('app.receive_orders.view.edit', {
-            url:'/edit',
-            data:{
-                title: 'Редактирование поступления',
-                access:{
-                    action:'edit',
-                    params:'ReceiveOrder'
-                }
-            },
-            views:{
-                "content@app":{
-                    controller: 'EditReceiveOrderCtrl',
-                    templateUrl: '/app/receive_orders/views/editReceiveOrder.html'
-                }
-            }
         });
     });
 }());

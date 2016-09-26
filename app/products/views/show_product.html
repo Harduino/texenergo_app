@@ -283,11 +283,23 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="item in product.product_orders">
+                                        <tr ng-switch="item.type" ng-repeat="item in product.product_orders">
                                             <td>{{ item.date | date:'dd/MM/yy HH:mm' }}</td>
-                                            <td><a href="/#/{{ item.type=='DispatchOrder' ? 'dispatch_orders' : 'receive_orders' }}/{{ item.id }}">{{ item.number || "Б/Н" }}</a></td>
+                                            <td>
+                                                <a ng-switch-when="DispatchOrder" href="/#/dispatch_orders/{{ item.id }}">
+                                                    {{ item.number || "Б/Н" }}
+                                                </a>
+                                                <a ng-switch-when="ReceiveOrder" href="/#/receive_orders/{{ item.id }}">
+                                                    {{ item.number || "Б/Н" }}
+                                                </a>
+                                                <a ng-switch-when="AssemblyOrder" href="/#/assembly_orders/{{ item.id }}">
+                                                    {{ item.number || "Б/Н" }}
+                                                </a>
+                                            </td>
                                             <td>{{ item.status }}</td>
-                                            <td class="{{ item.type=='DispatchOrder' ? 'danger' : 'success' }}">{{ item.quantity }}</td>
+                                            <td ng-switch-when="DispatchOrder" class="danger">{{ Math.abs(item.quantity) }}</td>
+                                            <td ng-switch-when="ReceiveOrder" class="success">{{ Math.abs(item.quantity) }}</td>
+                                            <td ng-switch-when="AssemblyOrder" class="warning">{{ item.quantity }}</td>
                                         </tr>
                                     </tbody>
                                 </table>

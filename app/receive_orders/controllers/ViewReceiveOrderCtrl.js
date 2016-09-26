@@ -9,7 +9,7 @@
         var sc = $scope;
         sc.receiveOrder = {};
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack}, {type:'edit', callback: goEditReceiveOrder}, {type:'refresh', callback:getReceiveOrderDetails}],
+            navButtsOptions:[{type:'back', callback:returnBack}, {type:'refresh', callback:getReceiveOrderDetails}],
             navTableButts:[{type:'remove', callback:deleteContentsProduct}],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
