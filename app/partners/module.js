@@ -41,6 +41,21 @@
                     templateUrl: '/app/partners/views/showPartner.html'
                 }
             }
+        }).state('app.partners.view.logs', {
+            url: '/logs',
+            data:{
+                title:'История партнёра',
+                access:{
+                    action:'logs',
+                    params:'Partner'
+                }
+            },
+            views:{
+                "content@app":{
+                    controller: 'LogsPartnerCtrl',
+                    templateUrl: '/app/partners/views/logsPartner.html'
+                }
+            }
         });
     });
 

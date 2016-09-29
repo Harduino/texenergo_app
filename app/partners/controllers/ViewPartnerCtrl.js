@@ -10,7 +10,11 @@
         sc.partner = {};
         
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack}, {type:'files'}],
+            navButtsOptions:[
+                { type: 'back', callback: returnBack },
+                { type: 'logs', callback: goToLogs },
+                { type: 'refresh', callback: refresh }
+            ],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
                 scaleColor:false,
@@ -59,17 +63,19 @@
         sc.savePartner = function(){
             var partner = sc.partner;
             var data = {
-                    partner:{
-                        name: partner.name,
-                        // delivery_address: partner.delivery_address,
-                        // legal_address: partner.legal_address,
-                        phone: partner.phone,
-                        email: partner.email,
-                        ceo_name: partner.ceo_name,
-                        ceo_title: partner.ceo_title,
-                        invoice_conditions: partner.invoice_conditions
-                    }
-                };
+                partner:{
+                    name: partner.name,
+                    kpp: partner.kpp,
+                    delivery_address: partner.delivery_address,
+                    legal_address: partner.legal_address,
+                    phone: partner.phone,
+                    email: partner.email,
+                    ceo_name: partner.ceo_name,
+                    ceo_title: partner.ceo_title,
+                    invoice_conditions: partner.invoice_conditions
+                }
+            };
+            debugger;
             serverApi.updatePartner(partner.id, data, function(result){
                 if(result.status == 200 && !result.data.errors){
                     funcFactory.showNotification("Успешно", 'Категория ' + partner.name + ' успешно отредактирована.', true);
@@ -166,6 +172,16 @@
             sc.newBankAccount.bik = data.bic;
             sc.newBankAccount.ks = data.correspondent_account;
             sc.newBankAccount.bank_name = data.name.payment;
+        }
+
+        function refresh(){
+            serverApi.getPartnerDetails($stateParams.id, function(result) {
+                sc.partner = result.data;
+            });
+        }
+
+        function goToLogs(){
+            $state.go('app.partners.view.logs', {});
         }
     }]);
 }());

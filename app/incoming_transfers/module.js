@@ -43,6 +43,21 @@
                     templateUrl: '/app/incoming_transfers/views/viewIncomingTransfer.html'
                 }
             }
+        }).state('app.incoming_transfers.view.logs', {
+            url: '/logs',
+            data:{
+                title:'История поступления',
+                access:{
+                    action:'logs',
+                    params:'IncomingTransfer'
+                }
+            },
+            views:{
+                "content@app":{
+                    controller: 'LogsIncomingTransferCtrl',
+                    templateUrl: '/app/incoming_transfers/views/logsIncomingTransfer.html'
+                }
+            }
         });
     });
 

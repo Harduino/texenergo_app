@@ -42,6 +42,21 @@
                     templateUrl: '/app/receive_orders/views/viewReceiveOrder.html'
                 }
             }
+        }).state('app.receive_orders.view.logs', {
+            url: '/logs',
+            data:{
+                title:'История поступления',
+                access:{
+                    action:'logs',
+                    params:'ReceiveOrder'
+                }
+            },
+            views:{
+                "content@app":{
+                    controller: 'LogsReceiveOrderCtrl',
+                    templateUrl: '/app/receive_orders/views/logsReceiveOrder.html'
+                }
+            }
         });
     });
 }());

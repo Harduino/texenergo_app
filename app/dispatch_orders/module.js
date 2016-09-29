@@ -42,6 +42,21 @@
                     templateUrl: '/app/dispatch_orders/views/viewDispatchOrder.html'
                 }
             }
+        }).state('app.dispatch_orders.view.logs', {
+            url: '/logs',
+            data:{
+                title:'История списания',
+                access:{
+                    action:'logs',
+                    params:'DispatchOrder'
+                }
+            },
+            views:{
+                "content@app":{
+                    controller: 'LogsDispatchOrderCtrl',
+                    templateUrl: '/app/dispatch_orders/views/logsDispatchOrder.html'
+                }
+            }
         });
     });
 }());

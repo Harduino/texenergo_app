@@ -9,8 +9,11 @@
         var sc = $scope;
         sc.incomingTransfer = {};
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack}, {type: 'edit', callback: goToEditIncomingTransfer}, {type:'files', callback: showFileModal},
-                {type:'refresh', callback: refresh}],
+            navButtsOptions:[
+                { type: 'back', callback:returnBack },
+                { type: 'logs', callback: goToLogs },
+                { type: 'refresh', callback: refresh }
+            ],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
                 scaleColor:false,
@@ -144,14 +147,6 @@
             $state.go('app.incoming_transfers',{});
         }
 
-        function showFileModal(){
-            sc.visual.showFileModal();
-        }
-
-        function goToEditIncomingTransfer(){
-            $state.go('app.incoming_transfers.view.edit', $stateParams)
-        }
-
         function viewDocument(item){
             if (item.data.hasOwnProperty('customer_order')) {
                 $state.go('app.customer_orders.view', {id: item.data.customer_order.id});
@@ -159,6 +154,10 @@
             if (item.data.hasOwnProperty('incoming_transfer')) {
                 $state.go('app.incoming_transfer.view', {id: item.data.incoming_transfer.id});
             }
+        }
+
+        function goToLogs(){
+            $state.go('app.incoming_transfers.view.logs', {});
         }
     }]);
 }());

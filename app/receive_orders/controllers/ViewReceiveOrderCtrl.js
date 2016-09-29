@@ -9,7 +9,11 @@
         var sc = $scope;
         sc.receiveOrder = {};
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack}, {type:'refresh', callback:getReceiveOrderDetails}],
+            navButtsOptions:[
+                { type: 'back', callback:returnBack },
+                { type: 'logs', callback: goToLogs },
+                { type: 'refresh', callback:getReceiveOrderDetails }
+            ],
             navTableButts:[{type:'remove', callback:deleteContentsProduct}],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
@@ -138,9 +142,9 @@
         function returnBack(){
             $state.go('app.receive_orders',{});
         }
-        
-        function goEditReceiveOrder(){
-            $state.go('app.receive_orders.view.edit', $stateParams)
+
+        function goToLogs(){
+            $state.go('app.receive_orders.view.logs', {});
         }
     }]);
 }());

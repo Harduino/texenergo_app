@@ -235,6 +235,9 @@
         this.deleteIncomingTransfer = function(transfer_id, success, fail){
             $http.delete('/api/incoming_transfers/' + transfer_id).then(success, fail);
         };
+        this.getIncomingTransferLogs = function(id, success, fail){
+            $http.get('/api/incoming_transfers/' + id + '/logs').then(success, fail);
+        };
 
         // Исходящие платежи
         this.getOutgoingTransfers = function(page, query, config, success, fail){
@@ -270,6 +273,9 @@
         };
         this.createPartner = function(data, success, fail){
             $http.post('/api/partners/', data).then(success, fail);
+        };
+        this.getPartnerLogs = function(id, success, fail){
+            $http.get('/api/partners/' + id + '/logs').then(success, fail);
         };
 
         // Представители партнёра
@@ -320,6 +326,9 @@
         this.updateStatusDispatchOrder = function(id, data, success, fail){
             $http.put('/api/dispatch_orders/' + id + '/update_status', data).then(success, fail);
         };
+        this.getDispatchOrderLogs = function(id, success, fail){
+            $http.get('/api/dispatch_orders/' + id + '/logs').then(success, fail);
+        };
 
         // ReceiveOrder
         this.getReceiveOrders = function(page, query, config, success, fail){
@@ -349,6 +358,9 @@
         };
         this.deleteReceiveOrder = function(receive_order_id, success, fail){
             $http.delete('/api/receive_orders/' + receive_order_id).then(success, fail);
+        };
+        this.getReceiveOrderLogs = function(id, success, fail){
+            $http.get('/api/receive_orders/' + id + '/logs').then(success, fail);
         };
 
         //Lead time

@@ -16,8 +16,9 @@
                 { type: 'upd_form_pdf', callback: openDispatchOrderPdf },
                 { type: 'label_pdf', callback: openLabelPdf },
                 { type: 'packing_list_pdf', callback: openPackingListPdf },
-                { type: 'confirm_order', callback: updateStatusDispatchOrder},
-                {type:'refresh', callback: getDispatchOrderDetails}
+                { type: 'confirm_order', callback: updateStatusDispatchOrder },
+                { type: 'refresh', callback: getDispatchOrderDetails },
+                { type: 'logs', callback: goToLogs }
             ],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
@@ -114,6 +115,10 @@
                     funcFactory.showNotification("Не удалось " + item.name.toLowerCase() + ' заказ', result.data.errors);
                 }
             });
+        }
+
+        function goToLogs(){
+            $state.go('app.dispatch_orders.view.logs', {});
         }
     }]);
 }());

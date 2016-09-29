@@ -1,0 +1,35 @@
+<div id="content">
+    <div class="row">
+        <big-breadcrumbs items="['История поступления']" data-icon="book" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+    </div>
+    <div class="well">
+        <form-nav-buttons options="visual.navButtsOptions" class="btn-group"></form-nav-buttons>
+        <hr>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Что</th>
+                    <th>Когда</th>
+                    <th>Кто</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="row in logs">
+                    <td>{{ $index + 1 }}</td>
+                    <td>
+                        {{ row.action }}
+                        <a ng-if="row.product.id" ng-href="/#/products/{{ row.product.id }}">смотреть</a>
+                    </td>
+                    <td>{{ row.date | date:'dd/MM/yy HH:mm' }}</td>
+                    <td>
+                        {{ row.contact.email }}
+                        <span ng-show="contact.user_ip">
+                            {{ contact.user_ip }}
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -17,20 +17,63 @@
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">ИНН/КПП:</p>
             <p class="col-md-9">
-                <span>{{ partner.inn | innKpp : partner.kpp }}</span>
+                <span>{{ partner.inn }} /</span>
+                <span editable-text="partner.kpp" onaftersave="savePartner()" >{{ partner.kpp || "Нет" }}</span>
             </p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Адрес доставки:</p>
-            <p class="col-md-9">
-                {{ partner.delivery_address.postal_index + ' ' + partner.delivery_address.region + ' ' + partner.delivery_address.city + ' ' + partner.delivery_address.street + ' ' + partner.delivery_address.house; }}
-            </p>
+            <span class="col-md-9">
+                <form editable-form name="editableForm" onaftersave="savePartner()">
+                    <span editable-text="partner.delivery_address.postal_index" e-placeholder="Индекс" e-name="postal_index" e-required>{{ partner.delivery_address.postal_index || 'Нет' }}</span>
+                    <span editable-text="partner.delivery_address.region" e-placeholder="Регион" e-name="region" e-required>{{ partner.delivery_address.region || 'Нет' }}</span>
+                    <span editable-text="partner.delivery_address.city" e-placeholder="Город" e-name="city" e-required>{{ partner.delivery_address.city || 'Нет' }}</span>
+                    <span editable-text="partner.delivery_address.street" e-placeholder="Улица" e-name="street" e-required>{{ partner.delivery_address.street || 'Нет' }}</span>
+                    <span editable-text="partner.delivery_address.house" e-placeholder="Дом" e-name="house" e-required>{{ partner.delivery_address.house || 'Нет' }}</span>
+                    <span class="buttons">
+                        <!-- button to show form -->
+                        <span type="button" ng-click="editableForm.$show()" ng-show="!editableForm.$visible">
+                            Изменить
+                        </span>
+                        <!-- buttons to submit / cancel form -->
+                        <span ng-show="editableForm.$visible">
+                            <button type="submit" class="btn btn-primary" ng-disabled="editableForm.$waiting">
+                                Сохранить
+                            </button>
+                            <span type="button" class="btn btn-default" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()">
+                                Отменить
+                            </span>
+                        </span>
+                    </span>
+                </form>
+            </span>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Адрес официальный:</p>
-            <p class="col-md-9">
-                {{ partner.legal_address.postal_index + ' ' + partner.legal_address.region + ' ' + partner.legal_address.city + ' ' + partner.legal_address.street + ' ' + partner.legal_address.house; }}
-            </p>
+            <span class="col-md-9">
+                <form editable-form name="editableForm" onaftersave="savePartner()">
+                    <span editable-text="partner.legal_address.postal_index" e-placeholder="Индекс" e-name="postal_index" e-required>{{ partner.legal_address.postal_index || 'Нет' }}</span>
+                    <span editable-text="partner.legal_address.region" e-placeholder="Регион" e-name="region" e-required>{{ partner.legal_address.region || 'Нет' }}</span>
+                    <span editable-text="partner.legal_address.city" e-placeholder="Город" e-name="city" e-required>{{ partner.legal_address.city || 'Нет' }}</span>
+                    <span editable-text="partner.legal_address.street" e-placeholder="Улица" e-name="street" e-required>{{ partner.legal_address.street || 'Нет' }}</span>
+                    <span editable-text="partner.legal_address.house" e-placeholder="Дом" e-name="house" e-required>{{ partner.legal_address.house || 'Нет' }}</span>
+                    <span class="buttons">
+                        <!-- button to show form -->
+                        <span type="button" ng-click="editableForm.$show()" ng-show="!editableForm.$visible">
+                            Изменить
+                        </span>
+                        <!-- buttons to submit / cancel form -->
+                        <span ng-show="editableForm.$visible">
+                            <button type="submit" class="btn btn-primary" ng-disabled="editableForm.$waiting">
+                                Сохранить
+                            </button>
+                            <span type="button" class="btn btn-default" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()">
+                                Отменить
+                            </span>
+                        </span>
+                    </span>
+                </form>
+            </span>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Телефон:</p>
