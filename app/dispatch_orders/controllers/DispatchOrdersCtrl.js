@@ -10,10 +10,13 @@
 
         sc.visual = {
             navButtsOptions:[
-                {type:'refresh', callback: refresh}
+                { type: 'refresh', callback: refresh }
             ],
-            navTableButts:[{type:'view', callback:viewOrder}, {type:'remove'}],
-            titles:[window.gon.index.DispatchOrder.indexTitle]
+            navTableButts: [
+                { type: 'view', callback: viewOrder },
+                { type: 'remove' }
+            ],
+            titles: ["Списания"]
         };
 
         sc.data = {

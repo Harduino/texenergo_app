@@ -141,19 +141,7 @@
         };
 
         sc.canEditProduct = function(){
-            for(var i=0; i < gon.ability.rules.length; i++) {
-                if(gon.ability.rules[i].subjects[0]==="Product") {
-                    for (var j = 0; j <= gon.ability.rules[i].actions.length; j++) {
-                        if (gon.ability.rules[j].actions[j]==="update") {
-                            return true;
-                        }
-                    }
-                }
-                if(gon.ability.rules[i].subjects[0]==="all") {
-                    return true;
-                }
-            }
-            return false;
+            return window.gon.user.email.match("texenergo.com") != null;
         };
 
         // Persists a product obsolete by sending request to server

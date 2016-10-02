@@ -9,7 +9,10 @@
         var sc = $scope;
         sc.catalogue = {};
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack},{type:'edit', callback:editCatalogue}],
+            navButtsOptions:[
+                { type: 'back', callback: returnBack },
+                { type: 'edit', callback: editCatalogue }
+            ],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
                 scaleColor:false,

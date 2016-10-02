@@ -28,7 +28,7 @@
                 size:50
             },
             showFileModal: angular.noop,
-            titles: window.gon.index.DispatchOrder.objectTitle + ': #'
+            titles: 'Списание: №'
         };
 
         sc.amontPercent = 0;

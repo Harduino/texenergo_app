@@ -12,7 +12,11 @@
                 type: 'new',
                 callback: function(){}
             }],
-            navTableButts:[{type:'view', callback: viewCatalogue}, {type:'table_edit', callback: editCatalogue}, {type:'remove', callback: removeCatalogue}]
+            navTableButts:[
+                { type: 'view', callback: viewCatalogue },
+                { type: 'table_edit', callback: editCatalogue },
+                { type: 'remove', callback: removeCatalogue }
+            ]
         };
         sc.data = {
             cataloguesList:[],

@@ -297,8 +297,8 @@
                                                 </a>
                                             </td>
                                             <td>{{ item.status }}</td>
-                                            <td ng-switch-when="DispatchOrder" class="danger">{{ Math.abs(item.quantity) }}</td>
-                                            <td ng-switch-when="ReceiveOrder" class="success">{{ Math.abs(item.quantity) }}</td>
+                                            <td ng-switch-when="DispatchOrder" class="danger">{{ item.quantity }}</td>
+                                            <td ng-switch-when="ReceiveOrder" class="success">{{ item.quantity }}</td>
                                             <td ng-switch-when="AssemblyOrder" class="warning">{{ item.quantity }}</td>
                                         </tr>
                                     </tbody>

@@ -9,9 +9,14 @@
         var sc = $scope;
 
         sc.visual = {
-            navButtsOptions:[{type: 'new', callback: createPartner}],
-            navTableButts:[{type:'view', callback:viewPartner}, {type:'remove'}],
-            titles:[window.gon.index.Partner.indexTitle]
+            navButtsOptions: [
+                { type: 'new', callback: createPartner }
+            ],
+            navTableButts: [
+                { type: 'view', callback: viewPartner },
+                { type: 'remove' }
+            ],
+            titles: ["Партнёры"]
         };
         
         sc.data = {

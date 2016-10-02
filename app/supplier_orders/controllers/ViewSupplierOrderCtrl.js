@@ -28,7 +28,7 @@
             },
             role: {},
             showFileModal: angular.noop,
-            titles:window.gon.index.SupplierOrder.objectTitle + ': #'
+            titles: 'Заказ поставщику: №'
         };
 
         sc.amontPercent = 0;

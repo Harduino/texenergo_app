@@ -6,7 +6,10 @@
         var sc = $scope;
         sc.logs = {};
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack}, {type: 'show', callback: goToShow}],
+            navButtsOptions:[
+                { type: 'back', callback: returnBack },
+                { type: 'show', callback: goToShow }
+            ],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
                 scaleColor:false,

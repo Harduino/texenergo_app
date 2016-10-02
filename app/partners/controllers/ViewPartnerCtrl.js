@@ -22,7 +22,7 @@
                 lineCap:'circle',
                 size:50
             },
-            titles: window.gon.index.Partner.objectTitle + ': ',
+            titles: 'Партнёр: ',
             roles: {
                 can_edit: sc.partner.can_edit
             }

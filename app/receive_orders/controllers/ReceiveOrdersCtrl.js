@@ -9,13 +9,19 @@
         var sc = $scope;
 
         sc.visual = {
-            navButtsOptions:[{ type: 'new', callback: createNewOrder }, {type:'refresh', callback:refresh}],
-            navTableButts:[{type:'view', callback:viewReceiveOrder}, {type:'table_edit', callback:editReceiveOrder}, {type:'remove', callback:deleteReceiveOrder}],
+            navButtsOptions:[
+                { type: 'new', callback: createNewOrder },
+                { type: 'refresh', callback: refresh}
+            ],
+            navTableButts:[
+                { type: 'view', callback: viewReceiveOrder },
+                { type: 'remove', callback: deleteReceiveOrder }
+            ],
             role:{
                 can_edit: CanCan.can('edit', 'ReceiveOrder'),
                 can_destroy: CanCan.can('destroy', 'ReceiveOrder')
             },
-            titles: [window.gon.index.ReceiveOrder.indexTitle]
+            titles: ["Поступления"]
         };
 
         sc.data = {
@@ -65,9 +71,7 @@
         function viewReceiveOrder(item){
            $state.go('app.receive_orders.view', {id:item.data.id || item.data._id});
         }
-        function editReceiveOrder(item){
-           $state.go('app.receive_orders.view.edit', {id:item.data.id || item.data._id});
-        }
+
         function deleteReceiveOrder(item){
             $.SmartMessageBox({
                 title: "Удалить заказ?",

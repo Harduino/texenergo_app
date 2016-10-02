@@ -32,7 +32,7 @@
                 size:50,
                 tooltip: true
             },
-            titles: window.gon.index.CustomerOrder.objectTitle + ': №',
+            titles: 'Заказ клиента: №',
             sortOpts: {
                 update: updateRowPositionView,
                 items: "> .order-items"

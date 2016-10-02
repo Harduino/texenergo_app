@@ -15,70 +15,70 @@
                 <a data-ui-sref="app.dashboard" title="Рабочий стол"><i class="fa fa-lg fa-fw fa-home"></i> <span
                         class="menu-item-parent">Рабочий стол</span></a>
             </li>
-            <li data-menu-collapse ng-show="index.Catalogue || index.Manufacturer || index.PdfCatalogue">
+            <li data-menu-collapse>
                 <a href="#"><i class="fa fa-lg fa-fw fa-briefcase"></i> <span class="menu-item-parent">Каталог</span></a>
                 <ul>
-                    <li data-ui-sref-active="active" ng-if="index.Catalogue">
-                        <a data-ui-sref="app.catalogues" ng-bind="index.Catalogue.indexTitle"></a>
+                    <li data-ui-sref-active="active">
+                        <a data-ui-sref="app.catalogues">Каталоги</a>
                     </li>
-                    <li data-ui-sref-active="active" ng-if="index.Manufacturer">
-                        <a data-ui-sref="app.manufacturers" ng-bind="index.Manufacturer.indexTitle"></a>
+                    <li data-ui-sref-active="active">
+                        <a data-ui-sref="app.manufacturers">Производители</a>
                     </li>
-                    <li data-ui-sref-active="active" ng-if="index.PdfCatalogue">
-                        <a data-ui-sref="app.pdf_catalogues" ng-bind="index.PdfCatalogue.indexTitle"></a>
+                    <li data-ui-sref-active="active">
+                        <a data-ui-sref="app.pdf_catalogues">PDF Каталоги</a>
                     </li>
                 </ul>
             </li>
-            <li data-menu-collapse ng-show="index.CustomerOrder || index.SupplierOrder || index.QuotationOrder">
+            <li data-menu-collapse>
                 <a href="#"><i class="fa fa-lg fa-fw fa-book"></i> <span class="menu-item-parent">Заказы</span></a>
                 <ul>
-                    <li data-ui-sref-active="active" ng-if="index.CustomerOrder">
-                        <a data-ui-sref="app.customer_orders" ng-bind="index.CustomerOrder.indexTitle"></a>
+                    <li data-ui-sref-active="active">
+                        <a data-ui-sref="app.customer_orders">Заказы клиентов</a>
                     </li>
-                    <li data-ui-sref-active="active" ng-if="index.SupplierOrder">
-                        <a data-ui-sref="app.supplier_orders" ng-bind="index.SupplierOrder.indexTitle"></a>
+                    <li data-ui-sref-active="active">
+                        <a data-ui-sref="app.supplier_orders">Заказы поставщикам</a>
                     </li>
-                    <li data-ui-sref-active="active" ng-if="index.QuotationOrder">
-                        <a data-ui-sref="app.quotation_orders" ng-bind="index.QuotationOrder.indexTitle"></a>
+                    <li data-ui-sref-active="active">
+                        <a data-ui-sref="app.quotation_orders">Производственные ордера</a>
                     </li>
                 </ul>
             </li>
-            <li data-menu-collapse ng-show="index.DispatchOrder || index.ReceiveOrder">
+            <li data-menu-collapse>
                 <a href="#"><i class="fa fa-lg fa-fw fa-road"></i> <span class="menu-item-parent">Движения</span></a>
                 <ul>
-                    <li data-ui-sref-active="active" ng-if="index.ReceiveOrder">
-                        <a data-ui-sref="app.receive_orders" ng-bind="index.ReceiveOrder.indexTitle"></a>
+                    <li data-ui-sref-active="active">
+                        <a data-ui-sref="app.receive_orders">Поступления</a>
                     </li>
-                    <li data-ui-sref-active="active" ng-if="index.DispatchOrder">
-                        <a data-ui-sref="app.dispatch_orders" ng-bind="index.DispatchOrder.indexTitle"></a>
+                    <li data-ui-sref-active="active">
+                        <a data-ui-sref="app.dispatch_orders">Списания</a>
                     </li>
                 </ul>
             </li>
-            <li data-menu-collapse ng-show="index.IncomingTransfer || index.OutgoingTransfer">
+            <li data-menu-collapse>
                 <a href="#">
                     <i class="fa fa-lg fa-fw fa-rub"></i>
                     <span class="menu-item-parent">Денежные средства</span>
                 </a>
                 <ul>
-                    <li data-ui-sref-active="active" ng-if="index.IncomingTransfer">
-                        <a data-ui-sref="app.incoming_transfers" ng-bind="index.IncomingTransfer.indexTitle"></a>
+                    <li data-ui-sref-active="active">
+                        <a data-ui-sref="app.incoming_transfers">Входящие платежи</a>
                     </li>
-                    <li data-ui-sref-active="active" ng-if="index.OutgoingTransfer">
-                        <a data-ui-sref="app.outgoing_transfers" ng-bind="index.OutgoingTransfer.indexTitle"></a>
+                    <li data-ui-sref-active="active">
+                        <a data-ui-sref="app.outgoing_transfers">Исходящие платежи</a>
                     </li>
                 </ul>
             </li>
-            <li data-menu-collapse ng-show="index.Contact || index.Partner">
+            <li data-menu-collapse>
                 <a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">Пользователи</span></a>
                 <ul>
-                    <li data-ui-sref-active="active" ng-if="index.Partner">
+                    <li data-ui-sref-active="active">
                         <a data-ui-sref="app.partners">
-                            <i class="fa fa-lg fa-fw fa-male"></i> <span class="menu-item-parent" ng-bind="index.Partner.indexTitle"></span>
+                            <i class="fa fa-lg fa-fw fa-male"></i> <span class="menu-item-parent">Партнёры</span>
                         </a>
                     </li>
-                    <li data-ui-sref-active="active" ng-if="index.Contact">
+                    <li data-ui-sref-active="active">
                         <a data-ui-sref="app.contacts">
-                            <i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent" ng-bind="index.Contact.indexTitle"></span>
+                            <i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Контакты</span>
                         </a>
                     </li>
                 </ul>

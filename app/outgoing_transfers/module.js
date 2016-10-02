@@ -42,21 +42,6 @@
                     templateUrl: '/app/outgoing_transfers/views/viewOutgoingTransfer.html'
                 }
             }
-        }).state('app.outgoing_transfers.view.edit', {
-            url: '/edit',
-            data:{
-                title:'Редактирование исходящего платежа',
-                access:{
-                    action:'edit',
-                    params:'OutgoingTransfer'
-                }
-            },
-            views:{
-                "content@app":{
-                    controller: 'EditOutgoingTransferCtrl',
-                    templateUrl: '/app/outgoing_transfers/views/EditOutgoingTransfer.html'
-                }
-            }
         });
     });
 }());

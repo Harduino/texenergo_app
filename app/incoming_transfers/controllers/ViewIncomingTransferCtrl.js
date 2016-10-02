@@ -23,7 +23,7 @@
             },
             showFileModal: angular.noop,
             navTableButts:[{type:'view', callback: viewDocument}, {type:'remove', callback:removeOrder}],
-            titles: window.gon.index.IncomingTransfer.objectTitle + ': # ',
+            titles: 'Входящий платеж: №',
             roles: {
                 can_destroy: true,
                 can_edit: CanCan.can('edit', 'IncomingTransfer')

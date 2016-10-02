@@ -9,7 +9,10 @@
         var sc = $scope;
         sc.outgoingTransfer = {};
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack}, {type:'files', callback:showFileModal}, {type:'refresh', callback:refresh}],
+            navButtsOptions:[
+                { type:'back', callback: returnBack },
+                { type:'refresh', callback: refresh }
+            ],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
                 scaleColor:false,
@@ -18,7 +21,7 @@
                 size:50
             },
             showFileModal: angular.noop,
-            titles: window.gon.index.OutgoingTransfer.objectTitle + ' #'
+            titles: 'Исходящий платёж: '
         };
 
         function refresh(){

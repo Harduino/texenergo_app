@@ -17,7 +17,7 @@
                 lineCap:'circle',
                 size:50
             },
-            titles: window.gon.index.Contact.objectTitle + ': ',
+            titles: 'Контакт: ',
             roles: {
                 can_edit: CanCan.can('edit', 'Contact')
             }

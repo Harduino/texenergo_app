@@ -23,7 +23,7 @@
                 size:50
             },
             showFileModal: angular.noop,
-            titles: window.gon.index.ReceiveOrder.objectTitle + ': #',
+            titles: 'Поступление: №',
             roles: {
                 can_destroy: CanCan.can('edit', 'ReceiveOrder')
             }

@@ -13,12 +13,14 @@
                 type: 'new',
                 callback: createOutgoingTransfer
             }, {type:'refresh', callback:refresh}],
-            navTableButts:[{type:'view', callback:viewOutgoingTransfer}, {type:'table_edit', callback:editOutgoingTransfer}, {type:'remove', callback:removeOutgoingTransfer}],
-            role:{
+            navTableButts: [
+                { type:'view', callback: viewOutgoingTransfer },
+                { type:'remove', callback:removeOutgoingTransfer}],
+            role: {
                 can_edit: CanCan.can('edit', 'OutgoingTransfer'),
                 can_destroy: CanCan.can('destroy', 'OutgoingTransfer')
             },
-            titles:[window.gon.index.OutgoingTransfer.indexTitle]
+            titles: ["Исходящий платёж"]
         };
         sc.data = {
             outgoingTransfersList:[],
@@ -35,10 +37,6 @@
 
         function viewOutgoingTransfer(item){
             $state.go('app.outgoing_transfers.view', {id:item.data.id || item.data._id});
-        }
-
-        function editOutgoingTransfer(item){
-            $state.go('app.outgoing_transfers.view.edit', {id:item.data.id || item.data._id});
         }
 
         function createOutgoingTransfer(){

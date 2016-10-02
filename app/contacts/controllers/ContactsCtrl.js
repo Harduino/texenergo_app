@@ -8,9 +8,14 @@
         var sc = $scope;
 
         sc.visual = {
-            navButtsOptions:[{type: 'new', callback: openCreateContactForm}],
-            navTableButts:[{type:'view', callback:viewContact}, {type:'table_edit', callback:editContact}, {type:'remove'}],
-            titles:[window.gon.index.Contact.indexTitle]
+            navButtsOptions: [
+                { type: 'new', callback: openCreateContactForm }
+            ],
+            navTableButts: [
+                { type: 'view', callback: viewContact },
+                { type: 'remove' }
+            ],
+            titles: ["Контакты"]
         };
         sc.data = {
             contactsList:[],
@@ -23,10 +28,6 @@
 
         function viewContact(data){
             $state.go('app.contacts.view', {id:data.id || data._id});
-        }
-
-        function editContact(data){
-            $state.go('app.contacts.view.edit', {id:data.id || data._id});
         }
 
         function openCreateContactForm(){

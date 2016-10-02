@@ -9,9 +9,15 @@
         var sc = $scope;
 
         sc.visual = {
-            navButtsOptions:[{ type: 'new', callback: createNewOrder },  {type:'refresh', callback:refresh}],
-            navTableButts:[{type:'view', callback:viewCustomerOrder}, {type:'remove', callback:removeCustomerOrder}],
-            titles:[window.gon.index.CustomerOrder.indexTitle]
+            navButtsOptions: [
+                { type: 'new', callback: createNewOrder },
+                { type: 'refresh', callback: refresh }
+            ],
+            navTableButts:[
+                { type:'view', callback: viewCustomerOrder },
+                { type:'remove', callback: removeCustomerOrder }
+            ],
+            titles: ["Заказы клиентов"]
         };
         sc.data = {
             ordersList:[],

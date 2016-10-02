@@ -12,7 +12,7 @@
             navButtsOptions:[{type: 'new', callback: createNewSupplierOrder}, {type: 'automatically', callback: createAutomatically}, {type:'refresh', callback:refresh}],
             navTableButts:[{type:'view', callback:viewOrder}, {type:'remove', callback:removeOrder}],
             canAddPartner: CanCan.can('see_multiple', 'Partner'),
-            titles:[window.gon.index.SupplierOrder.indexTitle]
+            titles: ["Заказы поставщикам"]
         };
         sc.data = {
             ordersList:[],

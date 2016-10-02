@@ -9,16 +9,19 @@
         var sc = $scope;
 
         sc.visual = {
-            navButtsOptions:[{
-                type: 'new',
-                callback: createIncomingTransfer
-            }, {type:'refresh', callback: refresh}],
-            navTableButts:[{type:'view', callback:viewIncomingTransfer}, {type:'remove', callback:removeIncomingTransfer}],
+            navButtsOptions:[
+                { type: 'new', callback: createIncomingTransfer },
+                { type: 'refresh', callback: refresh }
+            ],
+            navTableButts:[
+                { type: 'view', callback: viewIncomingTransfer },
+                { type: 'remove', callback: removeIncomingTransfer }
+            ],
             role:{
                 can_edit: CanCan.can('edit', 'IncomingTransfer'),
                 can_destroy: CanCan.can('destroy', 'IncomingTransfer')
             },
-            titles:[window.gon.index.IncomingTransfer.indexTitle]
+            titles: ["Входящие платежи"]
         };
         sc.data = {
             incomingTransfersList:[],
