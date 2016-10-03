@@ -47,7 +47,7 @@
             sc.uploader.url = 'http://www.texenergo.com/api/products/'+ product.id +'/image';
         }
 
-        sc.getLeadTime = function(id, quantity){
+        sc.getLeadTime = function(id, quantity, event){
             if(event.keyCode == 13){
                 serverApi.getLeadTime(id, quantity, function(result){
                     var info = result.data.lead_time_info;
