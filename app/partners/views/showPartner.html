@@ -24,7 +24,7 @@
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Адрес доставки:</p>
             <span class="col-md-9">
-                <form editable-form name="editableForm" onaftersave="savePartner()">
+                <form editable-form name="editableFormDelivery" onaftersave="savePartner()">
                     <span editable-text="partner.delivery_address.postal_index" e-placeholder="Индекс" e-name="postal_index" e-required>{{ partner.delivery_address.postal_index || 'Нет' }}</span>
                     <span editable-text="partner.delivery_address.region" e-placeholder="Регион" e-name="region" e-required>{{ partner.delivery_address.region || 'Нет' }}</span>
                     <span editable-text="partner.delivery_address.city" e-placeholder="Город" e-name="city" e-required>{{ partner.delivery_address.city || 'Нет' }}</span>
@@ -32,15 +32,15 @@
                     <span editable-text="partner.delivery_address.house" e-placeholder="Дом" e-name="house" e-required>{{ partner.delivery_address.house || 'Нет' }}</span>
                     <span class="buttons">
                         <!-- button to show form -->
-                        <span type="button" ng-click="editableForm.$show()" ng-show="!editableForm.$visible">
+                        <span type="button" ng-click="editableFormDelivery.$show()" ng-show="!editableFormDelivery.$visible">
                             Изменить
                         </span>
                         <!-- buttons to submit / cancel form -->
-                        <span ng-show="editableForm.$visible">
-                            <button type="submit" class="btn btn-primary" ng-disabled="editableForm.$waiting">
+                        <span ng-show="editableFormDelivery.$visible">
+                            <button type="submit" class="btn btn-primary" ng-disabled="editableFormDelivery.$waiting">
                                 Сохранить
                             </button>
-                            <span type="button" class="btn btn-default" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()">
+                            <span type="button" class="btn btn-default" ng-disabled="editableFormDelivery.$waiting" ng-click="editableFormDelivery.$cancel()">
                                 Отменить
                             </span>
                         </span>
@@ -51,7 +51,7 @@
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Адрес официальный:</p>
             <span class="col-md-9">
-                <form editable-form name="editableForm" onaftersave="savePartner()">
+                <form editable-form name="editableFormLegal" onaftersave="savePartner()">
                     <span editable-text="partner.legal_address.postal_index" e-placeholder="Индекс" e-name="postal_index" e-required>{{ partner.legal_address.postal_index || 'Нет' }}</span>
                     <span editable-text="partner.legal_address.region" e-placeholder="Регион" e-name="region" e-required>{{ partner.legal_address.region || 'Нет' }}</span>
                     <span editable-text="partner.legal_address.city" e-placeholder="Город" e-name="city" e-required>{{ partner.legal_address.city || 'Нет' }}</span>
@@ -59,15 +59,15 @@
                     <span editable-text="partner.legal_address.house" e-placeholder="Дом" e-name="house" e-required>{{ partner.legal_address.house || 'Нет' }}</span>
                     <span class="buttons">
                         <!-- button to show form -->
-                        <span type="button" ng-click="editableForm.$show()" ng-show="!editableForm.$visible">
+                        <span type="button" ng-click="editableFormLegal.$show()" ng-show="!editableFormLegal.$visible">
                             Изменить
                         </span>
                         <!-- buttons to submit / cancel form -->
-                        <span ng-show="editableForm.$visible">
-                            <button type="submit" class="btn btn-primary" ng-disabled="editableForm.$waiting">
+                        <span ng-show="editableFormLegal.$visible">
+                            <button type="submit" class="btn btn-primary" ng-disabled="editableFormLegal.$waiting">
                                 Сохранить
                             </button>
-                            <span type="button" class="btn btn-default" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()">
+                            <span type="button" class="btn btn-default" ng-disabled="editableFormLegal.$waiting" ng-click="editableFormLegal.$cancel()">
                                 Отменить
                             </span>
                         </span>
