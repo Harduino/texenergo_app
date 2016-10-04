@@ -84,6 +84,7 @@ gulp.task('app', function(){
         'app/*/controllers/*.js',
         'app/*/directives/*.js',
         'assets/plugin/angular-d3/angular-d3.js',
+        'app/app.api.js',
         'app/app.js'
     ])
         .on('error', console.warn)
@@ -108,6 +109,7 @@ gulp.task('server', function() {
         'assets/widgets/directives/*.js',
         'app/*/controllers/*.js',
         'app/*/directives/*.js',
+        'app/app.api.js',
         'app/app.js'
     ], function(){
         gulp.start('app');

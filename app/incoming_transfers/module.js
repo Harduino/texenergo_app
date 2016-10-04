@@ -63,9 +63,10 @@
 
     module.filter('f_incomingT', function(){
         return function(item){
-            if(item)
-                return item.hasOwnProperty('incoming_code') ? '<i class="fa fa-rub" title="Платеж"></i> ' + item.incoming_code : '<i class="fa fa-book" title="Заказ"></i> ' + item.number;
-            else return '';
+            if(item){
+                return item.hasOwnProperty('incoming_code') || (item.hasOwnProperty('type') && item.type.search(/transfer/gi)>-1) ? '<i class="fa fa-rub" title="Платеж"></i> Платёж ' + (item.incoming_code || item.number) : '<i class="fa fa-book" title="Заказ"></i> Заказ ' + item.number;
+            }
+            return '';
         };
     });
 }());

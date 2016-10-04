@@ -61,6 +61,7 @@ appConfig.sound_on = true;
         // Permissions
         'cancan.export',
         // App
+        'app.api',
         'app.layout',
         'login',
         'app.templates',

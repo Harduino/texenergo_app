@@ -67,10 +67,10 @@
                     defers = [$q.defer(),$q.defer()];//requests defers
                 serverApi.getCustomerOrders(page, query, {timeout:canceler1.promise}, function(result){
                     defers[0].resolve(checkStatus(result));
-                });
+                }, null, sc.incomingTransfer.partner.id);
                 serverApi.getOutgoingTransfers(page, query, {timeout:canceler2.promise}, function(result){
                     defers[1].resolve(checkStatus(result));
-                });
+                }, null, sc.incomingTransfer.partner.id);
                 //cancel both requests
                 config.timeout.then(function(){
                     canceler1.resolve();
@@ -83,6 +83,15 @@
                     data = result[0].concat(result[1]);//concat results
                     success({data:data});
                 });
+            }
+        };
+
+        sc.onOrderSelect = function(){
+            var order = sc.data.orderForAppend;
+            if(order.hasOwnProperty('type') && order.type.search(/transfer/gi)>-1){
+                order.total = new Number(order.amount);
+            }else{
+                order.amount = new Number(order.total);
             }
         };
 
@@ -131,6 +140,13 @@
                 }
             });
         }
+
+        sc.getMax = function(){
+            var total = sc.data.orderForAppend.total,
+                remaining_amount = sc.incomingTransfer.remaining_amount;
+
+            return total > remaining_amount ? remaining_amount : total;
+        };
 
         sc.$watch('incomingTransfer.money_to_orders', function(val){
             if(val){
