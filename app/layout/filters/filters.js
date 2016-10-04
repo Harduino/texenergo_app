@@ -41,13 +41,19 @@
 
     module.filter('te_number', function(){
         return function(value, params){
+
             var strValue = (value || '').toString(),
-                typeIsNumber = params.hasOwnProperty('number');
-            if(strValue === '' || (typeIsNumber && strValue.indexOf('.')==strValue.length-1 || typeIsNumber && strValue[strValue.length-1] == '0'))
+                typeIsNumber = params.hasOwnProperty('number'),
+                dotIndex = strValue.indexOf('.'),
+                lastCharIndex = strValue.length-1;
+
+            if(strValue === '' || (typeIsNumber && (dotIndex==lastCharIndex || (dotIndex>-1 && strValue.lastIndexOf('0') == lastCharIndex)))){
                 return value;
+            }
             var v  = (params.hasOwnProperty('number') ? parseFloat : parseInt)(value || 0) || 0;
             if(params.hasOwnProperty('min') && v<params.min) return params.min;
             if(params.hasOwnProperty('max') && v>params.max) return params.max;
+            
             return v;
         }
     });
