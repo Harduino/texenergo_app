@@ -23,7 +23,6 @@
         };
 
         serverApi.getCatalogueDetails($stateParams.id, function(result){
-            console.log(result.data);
             sc.catalogue = result.data;
             sc.catalogue.description = $sce.trustAsHtml(result.data.description);
         });

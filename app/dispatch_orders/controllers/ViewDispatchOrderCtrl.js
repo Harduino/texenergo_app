@@ -56,7 +56,6 @@
 
         function getDispatchOrderDetails(){
             serverApi.getDispatchOrderDetails($stateParams.id, function(result){
-                console.log(result.data);
 
                 var dispatchOrder = sc.dispatchOrder = result.data;
                 sc.amontPercent = funcFactory.getPercent(dispatchOrder.paid_amount, dispatchOrder.total);

@@ -32,7 +32,6 @@
 
         function getContactDetails(){
             serverApi.getContactDetails($stateParams.id, function(result){
-                console.log(result.data);
                 sc.contact = result.data;
             });
         }
@@ -53,10 +52,6 @@
                     mobile: contact.mobile
                 }
             };
-
-            // serverApi.validateViaDaData('fio', {query: contact.first_name}).then(function(result){
-            //     console.log(result);
-            // });
 
            serverApi.updateContact(contact.id, data, function(result){
                if(!result.data.errors){

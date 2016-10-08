@@ -44,8 +44,6 @@
         }
 
         serverApi.getIncomingTransferDetails($stateParams.id, function(result){
-            console.log(result.data);
-
             var transfer = sc.incomingTransfer = result.data;
             sc.fileModalOptions={
                 url:'/api/incoming_transfers/'+ transfer.id +'/documents',

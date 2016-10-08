@@ -15,8 +15,6 @@ appConfig.menu_speed = 200;
 
 appConfig.serverUrl = (window.location.host.match(/localhost|127\.0\.0\.1/) == null ? 'https://www.texenergo.com' : 'http://localhost:3000');
 
-//console.log(appConfig.serverUrl);
-
 appConfig.smartSkin = "smart-style-0";
 
 appConfig.skins = [
@@ -132,7 +130,6 @@ appConfig.sound_on = true;
                     return $q.reject(rejection);
                 },
                 responseError: function (rejection) {
-                    console.log(rejection);
                     var s = rejection.status;
                     if(s == 401) $location.path('sign_in');
                     else if (s == 403) notifyError({status: "Ошибка", statusText: 'Не достаточно прав!'});

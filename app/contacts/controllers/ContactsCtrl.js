@@ -47,7 +47,6 @@
 
         sc.getDaDataSuggestions = function(type,val, field_name){
             return serverApi.validateViaDaData(type, {"query": val}).then(function(result){
-                console.log(result);
                 return result.data.suggestions.map(function(item){
                     return $parse(field_name)(item) || val;
                 });
@@ -55,7 +54,6 @@
         };
 
         sc.createContact = function(){
-            console.log(sc.newContact);
             var data = sc.newContact;
             if(data.partner) data.partner_id = data.partner.id;
             delete data.partner;
