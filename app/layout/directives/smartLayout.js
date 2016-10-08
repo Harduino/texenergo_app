@@ -81,7 +81,6 @@
                     deltaY = appViewHeight - calcHeight;
                     if (Math.abs(deltaX) || Math.abs(deltaY) || forceResizeTrigger) {
 
-                        //console.log('exec', calcWidth, calcHeight);
                         $rootScope.$broadcast('$smartContentResize', {
                             width: calcWidth,
                             height: calcHeight,
@@ -137,7 +136,6 @@
                 }
 
                 $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-                    //console.log(1, '$stateChangeStart', event, toState, toParams, fromState, fromParams);
 
                     handleHtmlId(toState);
                     detachOnResize();
@@ -146,17 +144,14 @@
                 // initialized with 1 cause we came here with one $viewContentLoading request
                 var viewContentLoading = 1;
                 $rootScope.$on('$viewContentLoading', function (event, viewConfig) {
-                    //console.log(2, '$viewContentLoading', event, viewConfig);
                     viewContentLoading++;
                 });
 
                 $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-                    //console.log(3, '$stateChangeSuccess', event, toState, toParams, fromState, fromParams);
                     forceResizeTrigger = true;
                 });
 
                 $rootScope.$on('$viewContentLoaded', function (event) {
-                    //console.log(4, '$viewContentLoaded', event);
                     viewContentLoading--;
 
                     if (viewContentLoading == 0 && initialized) {

@@ -20,7 +20,6 @@
         };
 
         serverApi.getManufacturerDetails($stateParams.id, function(result){
-            console.log(result.data);
             sc.manufacturer = result.data;
             sc.manufacturer.description = $sce.trustAsHtml(result.data.description);
         });

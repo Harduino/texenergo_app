@@ -9,9 +9,14 @@
         var sc = $scope;
 
         sc.visual = {
-            navButtsOptions:[{ type: 'new', callback: createNewQuotationOrderModal }, {type:'refresh', callback:refresh}],
-            navTableButts:[{type:'table_edit', callback:editQuotationOrder}],
-            titles:[window.gon.index.QuotationOrder.indexTitle]
+            navButtsOptions:[
+                { type: 'new', callback: createNewQuotationOrderModal },
+                { type: 'refresh', callback: refresh }
+            ],
+            navTableButts: [
+                { type: 'table_edit', callback: editQuotationOrder }
+            ],
+            titles: ["Производственные ордера"]
         };
         
         sc.data = {

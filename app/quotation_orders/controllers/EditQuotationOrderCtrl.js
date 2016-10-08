@@ -476,7 +476,6 @@
         });
 
         sc.getQuotationSchemaInstance = function(instance){
-            console.log(instance);
             _quotationSchemaInstance = instance;
         };
 

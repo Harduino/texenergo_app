@@ -31,8 +31,6 @@
         }
 
         serverApi.getOutgoingTransferDetails($stateParams.id, function(result){
-            console.log(result.data);
-
             var transfer = sc.outgoingTransfer = result.data;
             sc.fileModalOptions={
                 url:'/api/outgoing_transfers/'+ transfer.id +'/documents',

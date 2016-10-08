@@ -178,7 +178,6 @@
                             data = JSON.parse(file.xhr.response); // parse response string
                         }catch(e){
                             data = {};
-                            console.log(e);
                         }finally{
                             if(data.id && !data.errors){
                                 file.id = data.id; // append id to file
