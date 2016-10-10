@@ -92,7 +92,8 @@ gulp.task('app', function(){
         'app/*/directives/*.js',
         'assets/plugin/angular-d3/angular-d3.js',
         'app/app.api.js',
-        'app/app.js'
+        'app/app.js',
+        'app/app.config.js'
     ])
         .on('error', console.warn)
         .pipe(concat('app-modules.js'))
@@ -117,7 +118,8 @@ gulp.task('server', function() {
         'app/*/controllers/*.js',
         'app/*/directives/*.js',
         'app/app.api.js',
-        'app/app.js'
+        'app/app.js',
+        'app/app.config.js'
     ], function(){
         gulp.start('app');
     });
