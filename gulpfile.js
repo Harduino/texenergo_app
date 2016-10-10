@@ -41,6 +41,13 @@ gulp.task('libs', function(){
         'assets/plugin/angular-sanitize/angular-sanitize.min.js',
         'assets/plugin/angular-animate/angular-animate.min.js',
         'assets/plugin/angular-cookies/angular-cookies.min.js',
+
+        //Auth0
+        'assets/plugin/auth0-lock/build/lock.min.js',
+        'assets/plugin/angular-lock/dist/angular-lock.min.js',
+        'assets/plugin/angular-jwt/dist/angular-jwt.min.js',
+        //
+
         'assets/plugin/angular-bootstrap/ui-bootstrap-tpls-1.3.3.min.js',
         'assets/plugin/angular-file-upload/angular-file-upload.js',
         
