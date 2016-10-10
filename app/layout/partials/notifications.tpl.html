@@ -3,7 +3,7 @@
     <i class="fa fa-user"></i>
     <b class="badge ng-binding ng-cloak" ng-bind="notifications.length"></b>
   </span>
-  <div class="ajax-dropdown" style='display: block' ng-hide='hidden'>
+  <div class="ajax-dropdown" ng-hide='hidden'>
     <div class="ajax-notifications custom-scroll">
       <ul class="notification-body">
         <li ng-repeat="notification in notifications" ng-click="markAsSeen(notification)" class="notification" ng-class="{seen: notification.seen, type: notification.type}" ng-class="notification.level">

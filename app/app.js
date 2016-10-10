@@ -93,11 +93,20 @@ appConfig.sound_on = true;
         'Abilities',
         '$location',
         'lock',
-        function ($rootScope, $state, $stateParams, CanCan, Abilities, $location, lock) {
+        'authService',
+        function ($rootScope, $state, $stateParams, CanCan, Abilities, $location, lock, authService) {
 
             console.log('app running');
             $rootScope.$state = $state;
             $rootScope.$stateParams = $stateParams;
+
+            // Intercept the hash that comes back from authentication
+            // to ensure the `authenticated` event fires
+            lock.interceptHash();
+
+            authService.registerAuthenticationListener();
+
+            authService.login();//for test
 
             //scroll page top if page not search
 //            $rootScope.$on('$stateChangeSuccess', function(){
