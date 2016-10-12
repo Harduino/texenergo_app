@@ -8,7 +8,7 @@
             restrict: 'E',
             
             link: function(sc, element, attrs) {
-                sc.notifications = window.gon.notifications;
+                sc.notifications = [];//window.gon.notifications;
                 sc.hidden = true;
                 
                 // Deal with a private channel
