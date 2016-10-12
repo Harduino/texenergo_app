@@ -16,7 +16,10 @@
 
         lockProvider.init({
             clientID: 'cO4FFzRFn4JkByDDy2kCWAFKNdC37BcW',
-            domain: 'texenergo.eu.auth0.com'
+            domain: 'texenergo.eu.auth0.com',
+            options: {
+                language: 'ru'
+            }
         });
 
         // Intercept http calls.
