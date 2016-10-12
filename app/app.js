@@ -90,13 +90,9 @@ appConfig.sound_on = true;
     app.run(['$rootScope',
         '$state',
         '$stateParams',
-        'CanCan',
-        'Abilities',
-        '$location',
         'lock',
         'authService',
-        'authManager',
-        function ($rootScope, $state, $stateParams, CanCan, Abilities, $location, lock, authService, authManager) {
+        function ($rootScope, $state, $stateParams, lock, authService) {
 
             $rootScope.$state = $state;
             $rootScope.$stateParams = $stateParams;
