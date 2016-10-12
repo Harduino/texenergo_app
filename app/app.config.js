@@ -20,7 +20,7 @@
         });
 
         // Intercept http calls.
-        $provide.factory('ErrorHttpInterceptor', ['$q', '$rootScope', '$location', function ($q, $rootScope, $location) {
+        $provide.factory('ErrorHttpInterceptor', ['$q', '$rootScope', '$location', 'authService', function ($q, $rootScope, $location, authService) {
             var errorCounter = 0;
             function notifyError(rejection){
                 $.bigBox({
@@ -42,6 +42,7 @@
                     var url = encodeURI(config.url);
                     var re  = /http/;
                     config.url = (config.method == 'GET' && url.indexOf('html')>-1) || url.match(re) !== null  ? url : appConfig.serverUrl + url;
+                    config.headers.Authorization = "Bearer " + authService.token;
                     setInload(true);
                     return config;
                 },

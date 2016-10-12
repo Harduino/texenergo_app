@@ -110,14 +110,13 @@ appConfig.sound_on = true;
             console.log('token', authService.token);
 
             //scroll page top if page not search
-//            $rootScope.$on('$stateChangeSuccess', function(){
-//                if($state.current.name !== "app.search")angular.element('body').scrollTop(0);
-//            });
+            $rootScope.$on('$stateChangeSuccess', function(){
+                if($state.current.name !== "app.search")angular.element('body').scrollTop(0);
+            });
 
             //checking permissions of state while navigating
             $rootScope.$on('$stateChangeStart',
                 function (event, toState, toParams, fromState, fromParams) {
-                    console.log('start change state');
 
                     if(!authService.token && toState.name !== 'login'){
                         event.preventDefault();
