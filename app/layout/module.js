@@ -53,7 +53,7 @@
     }]);
 
     module.controller('LayoutNavigationCtrl', ['$scope', function(sc){
-        sc.index = window.gon.index;
+//        sc.index = window.gon.index;
     }]);
 
     return module;
