@@ -5,7 +5,6 @@
     var module = angular.module('app.layout', ['ui.router', 'app.templates']);
 
     module.config(function ($stateProvider, $urlRouterProvider) {
-        console.log('provider inited');
         $stateProvider
             .state('app', {
                 abstract: true,
@@ -24,7 +23,6 @@
     });
 
     module.controller('LayoutCtrl', ['$scope', '$state', 'serverApi', function($scope, $state, serverApi){
-        console.log('layout controller inited');
         var sc = $scope;
         sc.searchText = '';
         //выполняем поиск по клику на кнопку в топ меню

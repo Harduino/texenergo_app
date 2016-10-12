@@ -5,7 +5,6 @@
     var app = angular.module('app');
 
     app.config(function ($provide, $httpProvider, lockProvider) {
-        console.log('app configurated');
         //CSRF
         $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content');
         // satisfy request.xhr? check on server-side

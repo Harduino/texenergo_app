@@ -48,6 +48,7 @@ appConfig.sound_on = true;
         'ngCookies',
         'ngAnimate',
         'ui.router',
+        'ngStorage',
         'ui.bootstrap',
         'infinite-scroll',
         'ui.select',
@@ -94,9 +95,9 @@ appConfig.sound_on = true;
         '$location',
         'lock',
         'authService',
-        function ($rootScope, $state, $stateParams, CanCan, Abilities, $location, lock, authService) {
+        'authManager',
+        function ($rootScope, $state, $stateParams, CanCan, Abilities, $location, lock, authService, authManager) {
 
-            console.log('app running');
             $rootScope.$state = $state;
             $rootScope.$stateParams = $stateParams;
 
@@ -106,7 +107,7 @@ appConfig.sound_on = true;
 
             authService.registerAuthenticationListener();
 
-            authService.login();//for test
+            console.log('token', authService.token);
 
             //scroll page top if page not search
 //            $rootScope.$on('$stateChangeSuccess', function(){
@@ -114,9 +115,15 @@ appConfig.sound_on = true;
 //            });
 
             //checking permissions of state while navigating
-//            $rootScope.$on('$stateChangeStart',
-//                function (event, toState, toParams, fromState, fromParams) {
-//
+            $rootScope.$on('$stateChangeStart',
+                function (event, toState, toParams, fromState, fromParams) {
+                    console.log('start change state');
+
+                    if(!authService.token && toState.name !== 'login'){
+                        event.preventDefault();
+                        $state.transitionTo('login', null, {reload:true});
+                    }
+
 //                    if(toState.name !== 'login' && !window.gon) {
 //                        event.preventDefault();
 //                        Abilities.getGon(toState.name, toParams);
@@ -131,8 +138,8 @@ appConfig.sound_on = true;
 //                            $state.transitionTo('app.dashboard', null, {reload:true});
 //                        }
 //                    }
-//                }
-//            );
+                }
+            );
 //
 //            $location.$$path === '' &&  $state.go('app.dashboard');
     }]);
