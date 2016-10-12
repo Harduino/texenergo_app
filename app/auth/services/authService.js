@@ -2,7 +2,11 @@
  * Created by Egor Lobanov on 10.10.16.
  */
 (function(){
-    angular.module('login').service('authService', ['$rootScope', 'lock', function($rootScope, lock){
+    angular.module('login').service('authService', ['$rootScope', 'lock', '$localStorage', 'authManager', function($rootScope, lock, $localStorage, authManager){
+
+
+        var token = $localStorage.id_token,
+            profile = $localStorage.profile;
 
         function login(){
             lock.show();
@@ -10,9 +14,8 @@
 
         function registerAuthenticationListener(){
             lock.on('authenticated', function(authResult) {
-                console.log(authResult);
-//                localStorage.setItem('id_token', authResult.idToken);
-//                authManager.authenticate();
+                console.log('auth result', authResult);
+                token = $localStorage.id_token = authResult.idToken;
 
                 lock.getProfile(authResult.idToken, function(error, profile) {
                     console.log(profile);
@@ -20,13 +23,19 @@
                         console.log(error);
                     }
 
-//                    localStorage.setItem('profile', JSON.stringify(profile));
+                    $localStorage.profile = profile;
 //                    $rootScope.$broadcast('userProfileSet', profile);
                 });
             });
         }
 
         return {
+            get token(){
+                return token;
+            },
+            get profile(){
+                return profile
+            },
             login: login,
             registerAuthenticationListener: registerAuthenticationListener
         }
