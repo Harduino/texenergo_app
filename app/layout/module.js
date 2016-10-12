@@ -24,7 +24,7 @@
 
     module.controller('LayoutCtrl', ['$scope', '$state', 'serverApi', 'authService', function($scope, $state, serverApi, authService){
         var sc = $scope,
-            profile = authService.profile;
+            profile = authService.profile || {};
 
         console.log('profile', profile);
 
@@ -34,7 +34,13 @@
             $state.go('app.search', {searchString: sc.searchText, page:0});
         };
 
-        sc.signOut = serverApi.signOut;
+        sc.signOut = function(){
+            authService.logout();
+            window.location.reload();
+//            serverApi.signOut(function(){
+//
+//            });
+        };
 
 //        sc.logo = window.gon.logo_url;
 //        sc.company_name = window.gon.company_name;

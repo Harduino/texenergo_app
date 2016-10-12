@@ -2,7 +2,7 @@
  * Created by Egor Lobanov on 10.10.16.
  */
 (function(){
-    angular.module('login').service('authService', ['$rootScope', 'lock', '$localStorage', 'authManager', function($rootScope, lock, $localStorage, authManager){
+    angular.module('login').service('authService', ['$rootScope', 'lock', '$localStorage', function($rootScope, lock, $localStorage){
 
 
         var token = $localStorage.id_token,
@@ -10,6 +10,13 @@
 
         function login(){
             lock.show();
+        }
+
+        function logout(){
+            token = null;
+            profile = null;
+            $localStorage.id_token = null;
+            $localStorage.profile = null;
         }
 
         function registerAuthenticationListener(){
@@ -36,6 +43,7 @@
             get profile(){
                 return profile
             },
+            logout: logout,
             login: login,
             registerAuthenticationListener: registerAuthenticationListener
         }
