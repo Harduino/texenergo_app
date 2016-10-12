@@ -18,6 +18,14 @@
             clientID: 'cO4FFzRFn4JkByDDy2kCWAFKNdC37BcW',
             domain: 'texenergo.eu.auth0.com',
             options: {
+                theme: {
+                    logo: '/assets/smart_admin/project/texenergo_logo.png',
+                    primaryColor: 'rgb(240,125,27)'
+                },
+                languageDictionary: {
+                    title: ""
+                },
+                closable: false,
                 language: 'ru'
             }
         });
