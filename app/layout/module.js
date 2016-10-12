@@ -37,9 +37,6 @@
         sc.signOut = function(){
             authService.logout();
             window.location.reload();
-//            serverApi.signOut(function(){
-//
-//            });
         };
 
 //        sc.logo = window.gon.logo_url;

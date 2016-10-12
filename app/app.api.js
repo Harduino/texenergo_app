@@ -343,9 +343,6 @@
             $http.delete('/api/'+view+'/'+view_id+'/image').then(success, fail);
         };
 
-        o.signOut = function(success){
-            $http.delete('/users/sign_out').then(success);
-        };
         o.signIn = function(data, success, fail){
             $http.post('/users/sign_in', data).then(success, fail);
         };
