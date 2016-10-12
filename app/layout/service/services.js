@@ -76,19 +76,14 @@
     /**
      * Subscribe to Rails Websocket server channels
      */
-    module.service('CableApi', ['Abilities', function(Abilities) {
-        var _this = this;
+    module.service('CableApi', [function() {
+        var _this = this,
+            ws = window.location.host.match(/localhost|127\.0\.0\.1/) ? 'ws://localhost:3000/ws' : 'ws://www.texenergo.com/ws';
 
-        window.gon ? getConsumer() : Abilities.ready.then(function(){
-            getConsumer();
-        });
+        _this.consumer = new ActionCable.Consumer(ws);
 
         this.subscribe = function(channel, callbacks) {
             return _this.consumer.subscriptions.create(channel, callbacks);
         };
-
-        function getConsumer (){
-            _this.consumer = new ActionCable.Consumer(window.gon.websocket_url);
-        }
     }]);
 }());
