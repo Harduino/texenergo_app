@@ -7,7 +7,11 @@
             restrict: 'A',
             templateUrl: '/app/auth/directives/login-info.tpl.html',
             link: function(scope){
-                scope.user = authService.profile;
+                scope.user = authService;
+
+//                scope.$on('userProfileSet', function(event, profile){
+//
+//                })
             }
         }
     });

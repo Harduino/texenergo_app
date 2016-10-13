@@ -6,13 +6,16 @@
 
 
         var o = this,
-            _token = $localStorage.id_token;
+            _token = $localStorage.id_token,
+            _profile = $localStorage.profile;
 
         Object.defineProperty(this, 'token', {get: function(){
             return _token;
         }});
 
-        o.profile = $localStorage.profile;
+        Object.defineProperty(this, 'profile', {get: function(){
+            return _profile;
+        }});
 
         o.login = function(){
             lock.show();
@@ -20,7 +23,7 @@
 
         o.logout = function(){
             _token = null;
-            o.profile = null;
+            _profile = null;
             $localStorage.id_token = null;
             $localStorage.profile = null;
         };
@@ -36,7 +39,7 @@
                         console.log(error);
                     }
 
-                    o.profile = $localStorage.profile = profile;
+                    _profile = $localStorage.profile = profile;
 //                    $rootScope.$broadcast('userProfileSet', profile);
                 });
             });
