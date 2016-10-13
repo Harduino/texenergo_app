@@ -60,6 +60,9 @@
             sc.searchByFunctor = function(){
                 var s = sc.data.subSearch;
 
+                if (yaCounter7987369 != undefined)
+                    yaCounter7987369.reachGoal("FunctorUsed")
+
                 if(s.hasOwnProperty('properties')){
 
                     var props= '';
