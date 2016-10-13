@@ -39,8 +39,8 @@
             window.location.reload();
         };
 
-//        sc.logo = window.gon.logo_url;
-//        sc.company_name = window.gon.company_name;
+        sc.logo = 'assets/img/logo.png';
+        sc.company_name = 'Texenergo';
 
         var yaParams = { current_user: profile.email };
         if (window.location.hostname.match(/texenergo/) != undefined) {
