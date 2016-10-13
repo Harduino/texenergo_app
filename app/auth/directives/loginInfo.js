@@ -1,15 +1,13 @@
 (function(){
     "use strict";
 
-    angular.module('app.layout').directive('loginInfo', function(User){
+    angular.module('app.layout').directive('loginInfo', function(authService){
 
         return {
             restrict: 'A',
             templateUrl: '/app/auth/directives/login-info.tpl.html',
             link: function(scope){
-                User.initialized.then(function(){
-                    scope.user = User;
-                });
+                scope.user = authService.profile;
             }
         }
     });

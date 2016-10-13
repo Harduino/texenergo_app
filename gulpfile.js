@@ -82,7 +82,6 @@ gulp.task('app', function(){
     gulp.src([
         'app/layout/notifications.js',
         'app/*/module.js',
-        'app/auth/models/User.js',
         'app/auth/directives/loginInfo.js',
         'app/*/services/*.js',
         'app/layout/templates.js',
@@ -113,7 +112,6 @@ gulp.task('server', function() {
     gulp.watch([
         'app/*/module.js',
         'app/layout/templates.js',
-        'app/auth/models/User.js',
         'app/auth/directives/loginInfo.js',
         'app/*/services/*.js',
         'app/layout/actions/*.js',

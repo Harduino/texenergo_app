@@ -5,24 +5,30 @@
     angular.module('login').service('authService', ['$rootScope', 'lock', '$localStorage', function($rootScope, lock, $localStorage){
 
 
-        var token = $localStorage.id_token,
-            profile = $localStorage.profile;
+        var o = this,
+            _token = $localStorage.id_token;
 
-        function login(){
+        Object.defineProperty(this, 'token', {get: function(){
+            return _token;
+        }});
+
+        o.profile = $localStorage.profile;
+
+        o.login = function(){
             lock.show();
-        }
+        };
 
-        function logout(){
-            token = null;
-            profile = null;
+        o.logout = function(){
+            _token = null;
+            o.profile = null;
             $localStorage.id_token = null;
             $localStorage.profile = null;
-        }
+        };
 
-        function registerAuthenticationListener(){
+        o.registerAuthenticationListener = function(){
             lock.on('authenticated', function(authResult) {
                 console.log('auth result', authResult);
-                token = $localStorage.id_token = authResult.idToken;
+                _token = $localStorage.id_token = authResult.idToken;
 
                 lock.getProfile(authResult.idToken, function(error, profile) {
                     console.log(profile);
@@ -30,22 +36,10 @@
                         console.log(error);
                     }
 
-                    $localStorage.profile = profile;
+                    o.profile = $localStorage.profile = profile;
 //                    $rootScope.$broadcast('userProfileSet', profile);
                 });
             });
-        }
-
-        return {
-            get token(){
-                return token;
-            },
-            get profile(){
-                return profile
-            },
-            logout: logout,
-            login: login,
-            registerAuthenticationListener: registerAuthenticationListener
-        }
+        };
     }]);
 }());
