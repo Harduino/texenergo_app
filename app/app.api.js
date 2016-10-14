@@ -278,6 +278,9 @@
         o.updateContact = function(id, data, success, fail){
             $http.put('/api/contacts/' + id, data).then(success, fail);
         };
+        o.attachToPartner = function(data, success, fail){
+            $http.put('/api/contacts/attach_to_partner', data).then(success, fail);
+        }
 
         // DispatchOrder
         o.getDispatchOrders = function(page, query, config, success, fail){
