@@ -12,8 +12,6 @@
 <!-- MAIN PANEL -->
 <div id="main" role="main">
 
-
-
     <!-- RIBBON -->
     <div id="ribbon">
 
@@ -25,8 +23,17 @@
 
     </div>
     <!-- END RIBBON -->
-
-
+    
+    <div class="alert alert-danger fade in" ng-if="user.profile.user_metadata.partner.id === undefined">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <strong>Внимание!</strong> Вы не привязаны ни к одной фирме.
+        <input style="color: black;" type="text" name="fname" ng-model="innToAttach" placeholder="ИНН">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="attachContact()">
+            Привязать
+        </button>
+    </div>
     <div data-smart-router-animation-wrap="content content@app" data-wrap-for="#content">
         <div data-ui-view="content" data-autoscroll="false"></div>
     </div>
