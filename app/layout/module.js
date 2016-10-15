@@ -26,8 +26,6 @@
         var sc = $scope,
             profile = authService.profile || {};
 
-        console.log('profile', profile);
-
         sc.searchText = '';
         //выполняем поиск по клику на кнопку в топ меню
         sc.executeSearch = function(){
@@ -36,7 +34,7 @@
 
         sc.signOut = function(){
             authService.logout();
-            window.location.reload();
+//            window.location.reload();
         };
 
         sc.logo = 'assets/img/logo.png';

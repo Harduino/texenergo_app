@@ -7,7 +7,9 @@
 
         var o = this,
             _token = $localStorage.id_token,
-            _profile = $localStorage.profile;
+            _profile,
+            authDomain = 'texenergo.eu.auth0.com';
+
 
         Object.defineProperty(this, 'token', {get: function(){
             return _token;
@@ -17,15 +19,16 @@
             return _profile;
         }});
 
+        //Get profile if token in storage;
+        _token && getProfile(_token);
+
         o.login = function(){
             lock.show();
         };
 
         o.logout = function(){
-            _token = null;
-            _profile = null;
             $localStorage.id_token = null;
-            $localStorage.profile = null;
+            window.location = 'https://' + authDomain + '/v2/logout?client_id=' + _profile.clientID;
         };
 
         o.registerAuthenticationListener = function(){
@@ -33,16 +36,22 @@
                 console.log('auth result', authResult);
                 _token = $localStorage.id_token = authResult.idToken;
 
-                lock.getProfile(authResult.idToken, function(error, profile) {
-                    console.log(profile);
-                    if (error) {
-                        console.log(error);
-                    }
-
-                    _profile = $localStorage.profile = profile;
-//                    $rootScope.$broadcast('userProfileSet', profile);
-                });
+                getProfile(authResult.idToken);
             });
         };
+
+        /**
+         * Get profile from Auth0
+         */
+        function getProfile(idToken){
+            lock.getProfile(idToken, function(error, profile) {
+                console.log(profile);
+                if (error) {
+                    console.log(error);
+                }
+
+                _profile = profile;
+            });
+        }
     }]);
 }());
