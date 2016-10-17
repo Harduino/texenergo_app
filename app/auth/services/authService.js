@@ -2,7 +2,7 @@
  * Created by Egor Lobanov on 10.10.16.
  */
 (function(){
-    angular.module('login').service('authService', ['$rootScope', 'lock', '$localStorage', function($rootScope, lock, $localStorage){
+    angular.module('login').service('authService', ['$rootScope', 'lock', '$localStorage', 'jwtHelper', function($rootScope, lock, $localStorage, jwtHelper){
 
 
         var o = this,
@@ -12,15 +12,15 @@
 
 
         Object.defineProperty(this, 'token', {get: function(){
-            return _token;
+            return $localStorage.id_token;
         }});
 
         Object.defineProperty(this, 'profile', {get: function(){
             return _profile;
         }});
 
-        //Get profile if token in storage;
-        _token && getProfile(_token);
+        //Get profile if token in storage and not expired;
+        if(_token && !jwtHelper.isTokenExpired(_token))getProfile(_token);
 
         o.login = function(){
             lock.show();

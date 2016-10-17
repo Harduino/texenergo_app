@@ -92,7 +92,8 @@ appConfig.sound_on = true;
         '$stateParams',
         'lock',
         'authService',
-        function ($rootScope, $state, $stateParams, lock, authService) {
+        'jwtHelper',
+        function ($rootScope, $state, $stateParams, lock, authService, jwtHelper) {
 
             $rootScope.$state = $state;
             $rootScope.$stateParams = $stateParams;
@@ -114,7 +115,8 @@ appConfig.sound_on = true;
             $rootScope.$on('$stateChangeStart',
                 function (event, toState, toParams, fromState, fromParams) {
 
-                    if(!authService.token && toState.name !== 'login'){
+                    var token = authService.token;
+                    if(!token && toState.name !== 'login' && jwtHelper.isTokenExpired(token)){
                         event.preventDefault();
                         $state.transitionTo('login', null, {reload:true});
                     }
