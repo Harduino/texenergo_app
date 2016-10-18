@@ -850,3 +850,9 @@ td .editable-controls>input[type="number"]{
 .select2-search input{
     width: 100%!important;
 }
+.auth0-lock.auth0-lock form.auth0-lock-widget{
+    width: 338px;
+}
+.auth0-lock.auth0-lock .auth0-lock-header-welcome{
+    padding-top: 24px;
+}

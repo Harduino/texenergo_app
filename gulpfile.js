@@ -41,6 +41,14 @@ gulp.task('libs', function(){
         'assets/plugin/angular-sanitize/angular-sanitize.min.js',
         'assets/plugin/angular-animate/angular-animate.min.js',
         'assets/plugin/angular-cookies/angular-cookies.min.js',
+        'assets/plugin/ngstorage/ngStorage.min.js',
+
+        //Auth0
+        'assets/plugin/auth0-lock/build/lock.min.js',
+        'assets/plugin/angular-lock/dist/angular-lock.min.js',
+        'assets/plugin/angular-jwt/dist/angular-jwt.min.js',
+        //
+
         'assets/plugin/angular-bootstrap/ui-bootstrap-tpls-1.3.3.min.js',
         'assets/plugin/angular-file-upload/angular-file-upload.js',
         
@@ -74,8 +82,8 @@ gulp.task('app', function(){
     gulp.src([
         'app/layout/notifications.js',
         'app/*/module.js',
-        'app/auth/models/User.js',
         'app/auth/directives/loginInfo.js',
+        'app/*/services/*.js',
         'app/layout/templates.js',
         'app/layout/actions/*.js',
         'app/layout/filters/filters.js',
@@ -85,7 +93,8 @@ gulp.task('app', function(){
         'app/*/directives/*.js',
         'assets/plugin/angular-d3/angular-d3.js',
         'app/app.api.js',
-        'app/app.js'
+        'app/app.js',
+        'app/app.config.js'
     ])
         .on('error', console.warn)
         .pipe(concat('app-modules.js'))
@@ -103,6 +112,8 @@ gulp.task('server', function() {
     gulp.watch([
         'app/*/module.js',
         'app/layout/templates.js',
+        'app/auth/directives/loginInfo.js',
+        'app/*/services/*.js',
         'app/layout/actions/*.js',
         'app/layout/filters/filters.js',
         'app/layout/service/services.js',
@@ -110,7 +121,8 @@ gulp.task('server', function() {
         'app/*/controllers/*.js',
         'app/*/directives/*.js',
         'app/app.api.js',
-        'app/app.js'
+        'app/app.js',
+        'app/app.config.js'
     ], function(){
         gulp.start('app');
     });

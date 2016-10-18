@@ -1,12 +1,8 @@
 <div id="content">
-    <div class="well well-white" ng-switch="visual.roles.can_edit">
+    <div class="well well-white" ng-switch="contact.can_edit">
         <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">{{visual.titles + contact.email }}</h2>
         <form-nav-buttons options="visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
         <hr>
-        <div class="row margin-top-10">
-            <p class="col-xs-12 col-md-3 font-bold">Последний раз зашёл:</p>
-            <p class="col-md-9">{{ contact.last_sign_in_at | date:'dd MMMM yy' }}</p>
-        </div>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Имя:</p>
             <p class="col-md-9" ng-switch-when="true">

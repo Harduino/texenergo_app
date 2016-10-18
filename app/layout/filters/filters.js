@@ -53,7 +53,7 @@
             var v  = (params.hasOwnProperty('number') ? parseFloat : parseInt)(value || 0) || 0;
             if(params.hasOwnProperty('min') && v<params.min) return params.min;
             if(params.hasOwnProperty('max') && v>params.max) return params.max;
-            
+
             return v;
         }
     });

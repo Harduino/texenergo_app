@@ -8,7 +8,7 @@
             restrict: 'E',
             
             link: function(sc, element, attrs) {
-                sc.notifications = window.gon.notifications;
+                sc.notifications = [];//window.gon.notifications;
                 sc.hidden = true;
                 
                 // Deal with a private channel
@@ -47,7 +47,7 @@
                 sc.goToNotification = function(obj, id) {
                     window.location = ("/#/" + obj + "/" + id);
                     // $state.go('app.'+obj+'.view', id);
-                }
+                };
                 
                 // DOM
                 sc.hide = function() { sc.hidden = true  };

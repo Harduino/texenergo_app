@@ -140,10 +140,6 @@
             });
         };
 
-        sc.canEditProduct = function(){
-            return window.gon.user.email.match("texenergo.com") != null;
-        };
-
         // Persists a product obsolete by sending request to server
         sc.makeObsolete = function(enable, r_id){
             var product = sc.product;

@@ -1,0 +1,14 @@
+{
+  "name": "texenergo",
+  "version": "1.0.0",
+  "dependencies": {
+      "angular-jwt": "latest",
+      "auth0-lock": "latest",
+      "angular-lock": "latest",
+      "ngstorage": "latest"
+  },
+  "analytics": false,
+  "resolutions": {
+    "angular": "1.4.8"
+  }
+}
