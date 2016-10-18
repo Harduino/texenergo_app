@@ -28,7 +28,8 @@
 
         o.logout = function(){
             $localStorage.id_token = null;
-            window.location = 'https://' + authDomain + '/v2/logout?client_id=' + _profile.clientID;
+            $localStorage.profile = null;
+            window.location = 'https://' + authDomain + '/v2/logout?returnTo=http://app.texenergo.com&client_id=' + _profile.clientID;
         };
 
         o.registerAuthenticationListener = function(){
