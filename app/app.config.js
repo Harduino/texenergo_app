@@ -51,9 +51,10 @@
             return {
                 request: function(config){
                     var url = encodeURI(config.url);
-                    var re  = /http/;
-                    config.url = (config.method == 'GET' && url.indexOf('html')>-1) || url.match(re) !== null  ? url : appConfig.serverUrl + url;
-                    config.headers.Authorization = "Bearer " + authService.token;
+                    var re  = /http|html/,
+                        dadataMatcher = url.match(/dadata/g);
+                    config.url = ((config.method == 'GET' &&  url.match(re) !== null) || dadataMatcher !== null)  ? url : appConfig.serverUrl + url;
+                    dadataMatcher == null && (config.headers.Authorization = "Bearer " + authService.token);
                     setInload(true);
                     return config;
                 },
