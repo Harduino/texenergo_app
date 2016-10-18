@@ -125,9 +125,15 @@
                     localObject = scope.data.supplierOrder;
                 if( data !== undefined) {
                     for (var i = 0; i < localObject.supplier_order_contents.length; i++) {
-                        if (localObject.supplier_order_contents[i].id === data.supplier_order_content_id)
+                        if (localObject.supplier_order_contents[i].id === data.supplier_order_content_id) {
+                            var t = localObject.supplier_order_contents[i];
                             localObject.supplier_order_contents.splice(i, 1);
-                        funcFactory.showNotification('Успешно удалил строку', "", true); 
+                            funcFactory.showNotification(
+                                'Успешно удалил строку',
+                                ('Товар '+ t.product.name + ', кол-во ' + t.quantity + ' ед.'),
+                                true
+                            );
+                        }
                     }
                 } else if (serverResponse.errors !== undefined) {
                     funcFactory.showNotification("Ошибка при удалении строки", serverResponse.errors, false);
