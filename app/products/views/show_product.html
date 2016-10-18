@@ -6,10 +6,10 @@
         <div class="row">
             <div class="col-xs-12 col-md-12">
                 <div>
-                    <h2 ng-if="canEditProduct()" editable-text="product.name" onaftersave="saveProduct()" class="txt-color-blueDark semi-bold prod-review-title display-inline">
+                    <h2 ng-if="product.can_edit" editable-text="product.name" onaftersave="saveProduct()" class="txt-color-blueDark semi-bold prod-review-title display-inline">
                         {{ product.name }}
                     </h2>
-                    <h2 ng-if="!canEditProduct()" class="txt-color-blueDark semi-bold prod-review-title display-inline">
+                    <h2 ng-if="!product.can_edit" class="txt-color-blueDark semi-bold prod-review-title display-inline">
                         {{product.name}}
                     </h2>
                     <span ng-if="product.obsolete.flag" class="text-danger">
@@ -39,27 +39,29 @@
                             <div class="widget-body">
                                 <div te-copy-to-buffer>
                                     <b>Артикул:</b>
-                                    <span ng-if="canEditProduct()" editable-text="product.article" onaftersave="saveProduct()" te-buffer-value>{{ product.article || "Нет артикула" }}</span>
-                                    <span ng-if="!canEditProduct()" te-buffer-value>{{ product.article }}?</span>
+                                    <span ng-if="product.can_edit" editable-text="product.article" onaftersave="saveProduct()" te-buffer-value>{{ product.article || "Нет артикула" }}</span>
+                                    <span ng-if="!product.can_edit" te-buffer-value>{{ product.article }}?</span>
                                 </div>
                                 <div>
                                     <b>Производитель:</b>
-                                    <span ng-if="!canEditProduct()">{{ product.manufacturer.name }}</span>
-                                    <a ng-if="canEditProduct()" class="editable-click" ng-click="changeManufacturer()">{{product.manufacturer.name}}</a>
+                                    <span ng-if="!product.can_edit">{{ product.manufacturer.name }}</span>
+                                    <a ng-if="product.can_edit" class="editable-click" ng-click="changeManufacturer()">{{product.manufacturer.name}}</a>
                                 </div>
                                 <div>
-                                    <b>Цена:</b>
-                                    {{ product.price | currency}}
+                                    <b>
+                                        Цена<span uib-tooltip="РЦП - Рекомендуемая Цена Продажи">*</span>:
+                                    </b>
+                                    {{ product.price | currency }}
                                 </div>
                                 <div >
                                     <b>Остаток:</b>
-                                    {{ canEditProduct() ? product.stock : product.stock_with_mfk }}
+                                    {{ product.can_edit ? product.stock : product.stock_with_mfk }}
                                 </div>
-                                <div ng-if="canEditProduct()">
+                                <div ng-if="product.can_edit">
                                     <b>Остаток у МФК:</b>
                                     {{ product.stock_with_mfk - product.stock }}
                                 </div>
-                                <div ng-if="canEditProduct()">
+                                <div ng-if="product.can_edit">
                                     <b>Снятие с производства:</b>
                                     <a href="" ng-click="makeObsolete(false)" ng-if="product.obsolete.flag">
                                         Отменить снятие с производства
@@ -87,8 +89,8 @@
                         <header><h2>Фото</h2></header>
                         <div>
                             <div class="widget-body">
-                                <img  ng-if="!canEditProduct()" class="img-thumbnail" ng-src="{{ product.image_url }}" img-error="http://cdn.texenergo.com/no_image.png" style="max-height: 200px; max-width: 200px;">
-                                <div ng-if="canEditProduct()" class="full-width product-thumb" nv-file-drop=""  uploader="uploader" filters="queueLimit">
+                                <img  ng-if="!product.can_edit" class="img-thumbnail" ng-src="{{ product.image_url }}" img-error="http://cdn.texenergo.com/no_image.png" style="max-height: 200px; max-width: 200px;">
+                                <div ng-if="product.can_edit" class="full-width product-thumb" nv-file-drop=""  uploader="uploader" filters="queueLimit">
                                     <div ng-show="uploader.isHTML5" class="well my-drop-zone" nv-file-over="" uploader="uploader">
                                         <img class="thumbnail no-padding" ng-src="{{product.image_url}}" img-error="/assets/smart_admin/no_image.png" style="max-height: 200px; max-width: 200px;">
                                     </div>
@@ -112,10 +114,10 @@
                     <div id="show-product-3" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false" data-widget-collapsed="true">
                         <header><h2>Описание</h2></header>
                         <div>
-                            <div ng-if="!canEditProduct()" class="widget-body">
+                            <div ng-if="!product.can_edit" class="widget-body">
                                 <div ng-bind-html="product.description"></div>
                             </div>
-                            <div  ng-if="canEditProduct()" style="padding-bottom: 10px;">
+                            <div  ng-if="product.can_edit" style="padding-bottom: 10px;">
                                 <div style="display: flex; flex-direction: row; justify-content: flex-end;">
                                     <button class="btn btn-success" ng-click="saveProduct()">Сохранить</button>
                                 </div>
@@ -132,7 +134,7 @@
                                 <input class="form-control" type="text">
                             </div>
                             <div class="widget-body">
-                                <button ng-if="canEditProduct()" class="btn btn-success right" ng-click="changeCatalogues()">Изменить</button>
+                                <button ng-if="product.can_edit" class="btn btn-success right" ng-click="changeCatalogues()">Изменить</button>
                                 <div class="dd">
                                     <ol class="dd-list">
                                         <li class="dd-item" ng-repeat="catalogue in product.catalogues">

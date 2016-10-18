@@ -51,7 +51,7 @@
                 </tr>
             </thead>
             <tbody>
-            <tr ng-if="visual.roles.can_destroy">
+            <tr ng-if="receiveOrder.can_edit">
                 <td></td>
                 <td>
                     <ui-select id="vro_prod_select"  ui-select-infinity="productSelectConf" ng-model="data.productForAppend" theme="select2" class="td-ui-select" style="max-width: 310px;" on-select="onSelectProduct($item)">
