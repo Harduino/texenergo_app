@@ -71,11 +71,12 @@
         }
         
         function openDispatchOrderPdf(){
-            var pdfUrl = "http://localhost:3000/api/dispatch_orders/" + sc.dispatchOrder.id + ".pdf";
-            $http.get(pdfUrl).then(function(result){
-
+            var pdfUrl = "http://www.texenergo.com/api/dispatch_orders/" + sc.dispatchOrder.id + ".pdf";
+            $http.get(pdfUrl, {headers: {'Accept': 'application/pdf; charset=utf-8', 'Content-Type': 'application/pdf; charset=utf-8'}}).then(function(result){
+                window.open('data:application/pdf; charset=utf-8,' +
+                    encodeURIComponent(result.data), '_blank');
             });
-//            window.open(pdfUrl, '_blank');
+
         }
         
         function openLabelPdf(){

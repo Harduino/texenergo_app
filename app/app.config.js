@@ -51,8 +51,8 @@
             return {
                 request: function(config){
                     var url = encodeURI(config.url);
-                    var re  = /http/;
-                    config.url = (config.method == 'GET' && url.indexOf('html')>-1) || url.match(re) !== null  ? url : appConfig.serverUrl + url;
+                    var re  = /http|html/;
+                    config.url = (config.method == 'GET' && url.match(re) !== null)  ? url : appConfig.serverUrl + url;
                     config.headers.Authorization = "Bearer " + authService.token;
                     setInload(true);
                     return config;

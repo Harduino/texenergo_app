@@ -23,8 +23,8 @@
 
     </div>
     <!-- END RIBBON -->
-    
-    <div class="alert alert-danger fade in" ng-if="user.profile.user_metadata.partner.id === undefined">
+
+    <div class="alert alert-danger fade in"  ng-if="user.profile && user.profile.user_metadata.partner.id === undefined">
         <button class="close" data-dismiss="alert">
             ×
         </button>
