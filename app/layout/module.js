@@ -27,7 +27,6 @@
             profile = authService.profile || {};
 
         sc.searchText = '';
-        sc.innToAttach = '';
 
         //выполняем поиск по клику на кнопку в топ меню
         sc.executeSearch = function(){
@@ -37,21 +36,6 @@
         sc.signOut = function(){
             authService.logout();
 //            window.location.reload();
-        };
-
-        sc.attachContact = function(){
-            var data = {
-                partner_inn: "7733662390"
-            }
-            console.log("before");
-            serverApi.attachToPartner(data, function(result){
-                if(!result.data.errors){
-                    sc.concat = result.data;
-                    funcFactory.showNotification("Успешно", 'Контакт ' + contact.email + ' успешно отредактирован.',true);
-                }
-                else funcFactory.showNotification('Не удалось отредактировать контакт '+contact.email, result.data.errors);
-            });
-            console.log("after");
         };
 
         sc.logo = 'assets/img/logo.png';
