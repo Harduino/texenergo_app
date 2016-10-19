@@ -116,7 +116,7 @@ appConfig.sound_on = true;
                 function (event, toState, toParams, fromState, fromParams) {
 
                     var token = authService.token;
-                    if(!token && toState.name !== 'login' && jwtHelper.isTokenExpired(token)){
+                    if((!token || jwtHelper.isTokenExpired(token)) && toState.name !== 'login'){
                         event.preventDefault();
                         $state.transitionTo('login', null, {reload:true});
                     }

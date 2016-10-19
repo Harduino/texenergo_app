@@ -364,7 +364,7 @@
         };
 
         o.validateViaDaData = function(type, data){
-            var url = 'https://suggestions.dadata.ru/suggestions/4_1/rs/suggest/' + type;
+            var url = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/' + type;
             return $http.post(url, data, {
                 headers: {
                     'Content-Type': 'application/json',

@@ -5,7 +5,7 @@
 
     'use strict';
 
-    angular.module('app.customer_orders').controller('CustomerOrdersCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory', function($scope, $state, $stateParams, serverApi, CanCan, funcFactory){
+    angular.module('app.customer_orders').controller('CustomerOrdersCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory', 'authService', function($scope, $state, $stateParams, serverApi, CanCan, funcFactory, authService){
         var sc = $scope;
 
         sc.visual = {
@@ -67,7 +67,7 @@
 
         function createNewOrder(){
             sc.newOrderData.date = new Date();
-            sc.newOrderData.partner = window.gon.user.partner || null;
+            sc.newOrderData.partner = authService.profile.user_metadata.partner || null;
             $('#createNewOrderModal').modal('show');
         }
 
