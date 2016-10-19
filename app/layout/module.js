@@ -18,9 +18,8 @@
         $urlRouterProvider
             .otherwise(function($injector){
                 var authService= $injector.get('authService'),
-                    jwtHelper = $injector.get('jwtHelper'),
                     token = authService.token;
-                if(!token || jwtHelper.isTokenExpired(token)){
+                if(!token || authService.isTokenExpired(token)){
                     return '/sign_in'
                 }
                 return '/dashboard';

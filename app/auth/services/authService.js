@@ -41,6 +41,12 @@
             });
         };
 
+        o.isTokenExpired = function(token){
+            var expired = jwtHelper.isTokenExpired(token);
+            expired && ($localStorage.id_token = null);
+            return expired;
+        };
+
         /**
          * Get profile from Auth0
          */
