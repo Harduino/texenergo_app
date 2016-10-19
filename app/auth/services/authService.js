@@ -6,17 +6,17 @@
 
 
         var o = this,
-            _token = $localStorage.id_token,
+            _token = $localStorage.id_token || null,
             _profile,
             authDomain = 'texenergo.eu.auth0.com';
 
 
         Object.defineProperty(this, 'token', {get: function(){
-            return $localStorage.id_token;
+            return $localStorage.id_token || null;
         }});
 
         Object.defineProperty(this, 'profile', {get: function(){
-            return _profile;
+            return _profile || {};
         }});
 
         //Get profile if token in storage and not expired;

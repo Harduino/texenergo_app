@@ -104,8 +104,6 @@ appConfig.sound_on = true;
 
             authService.registerAuthenticationListener();
 
-            console.log('token', authService.token);
-
             //scroll page top if page not search
             $rootScope.$on('$stateChangeSuccess', function(){
                 if($state.current.name !== "app.search")angular.element('body').scrollTop(0);
