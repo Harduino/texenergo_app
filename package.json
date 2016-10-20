@@ -15,5 +15,12 @@
   },
   "homepage": "https://github.com/marzhaev/texenergo_app",
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-connect": "^5.0.0",
+    "gulp-csso": "^2.0.0",
+    "gulp-minify": "0.0.14",
+    "gulp-ng-annotate": "^2.0.0"
+  }
 }
