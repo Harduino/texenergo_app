@@ -1,3 +1,5 @@
+'use strict';
+
 var gulp = require('gulp'),
     csso = require('gulp-csso'),
     minify = require('gulp-minify'),
@@ -27,6 +29,7 @@ gulp.task('styles', function() {
     .pipe(csso())
     .pipe(gulp.dest('public/assets/stylesheets/'));
 });
+
 gulp.task('libs', function(){
     //js
     gulp.src([
@@ -78,6 +81,7 @@ gulp.task('libs', function(){
         .pipe(minify())
         .pipe(gulp.dest('public/assets/javascripts/'));
 });
+
 gulp.task('app', function(){
     gulp.src([
         'app/layout/notifications.js',
@@ -103,6 +107,7 @@ gulp.task('app', function(){
         .pipe(gulp.dest('public/assets/javascripts/'))
         .pipe(connect.reload());
 });
+
 gulp.task('server', function() {
     connect.server({
         root: '',
@@ -127,4 +132,7 @@ gulp.task('server', function() {
         gulp.start('app');
     });
 });
+
+gulp.task('serve', ['app', 'libs', 'styles', 'server']);
+
 gulp.task('default', ['app', 'libs', 'styles']);
