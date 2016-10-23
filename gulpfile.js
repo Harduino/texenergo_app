@@ -1,11 +1,11 @@
 'use strict';
 
 var gulp = require('gulp'),
+    concat = require('gulp-concat'),
+    connect = require('gulp-connect'),
     csso = require('gulp-csso'),
     minify = require('gulp-minify'),
-    concat = require('gulp-concat'),
-    ngAnnotate = require('gulp-ng-annotate'),
-    connect = require('gulp-connect');
+    ngAnnotate = require('gulp-ng-annotate');
 
 gulp.task('styles', function() {
     //css
@@ -30,9 +30,17 @@ gulp.task('styles', function() {
     .pipe(gulp.dest('public/assets/stylesheets/'));
 });
 
+var buildJs = function(destinationFileName, files) {
+    return gulp.src(files, {base: 'src'})
+        .on('error', console.warn)
+        .pipe(concat(destinationFileName))
+        .pipe(ngAnnotate())
+        .pipe(minify())
+        .pipe(gulp.dest('public/assets/javascripts/'));
+};
+
 gulp.task('libs', function(){
-    //js
-    gulp.src([
+    buildJs('libs.js', [
         'assets/plugin/jquery/dist/jquery-3.0.0.min.js',
         'assets/plugin/bootstrap/dist/js/bootstrap.min.js',
         'assets/plugin/jquery-ui/jquery-ui.min.js',
@@ -74,16 +82,11 @@ gulp.task('libs', function(){
         'assets/plugin/cancan/export.js',
         'assets/plugin/cable/cable.js',
         'assets/plugin/cancan/export-angular.js'
-    ])
-        .on('error', console.warn)
-        .pipe(concat('libs.js'))
-        .pipe(ngAnnotate())
-        .pipe(minify())
-        .pipe(gulp.dest('public/assets/javascripts/'));
+    ]);
 });
 
 gulp.task('app', function(){
-    gulp.src([
+    buildJs('app-modules.js', [
         'app/layout/notifications.js',
         'app/*/module.js',
         'app/auth/directives/loginInfo.js',
@@ -100,11 +103,6 @@ gulp.task('app', function(){
         'app/app.js',
         'app/app.config.js'
     ])
-        .on('error', console.warn)
-        .pipe(concat('app-modules.js'))
-        .pipe(ngAnnotate())
-        .pipe(minify())
-        .pipe(gulp.dest('public/assets/javascripts/'))
         .pipe(connect.reload());
 });
 
