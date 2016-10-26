@@ -25,6 +25,11 @@ function aws_cloudfront_invalidate
 # Exit immediately if a command exits with a non-zero status
 set -e 
 
+# Install required dependencies.
+npm install -g bower gulp
+npm install
+bower install
+
 # Concatenate and minify any JS and CSS files.
 gulp
 
