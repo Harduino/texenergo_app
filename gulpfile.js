@@ -87,6 +87,7 @@ gulp.task('libs', function(){
 
 gulp.task('app', function(){
     buildJs('app-modules.js', [
+        'app/env/production.js',
         'app/layout/notifications.js',
         'app/*/module.js',
         'app/auth/directives/loginInfo.js',

@@ -46,7 +46,8 @@
         });
 
         function setFileUploadOptions(product){
-            sc.uploader.url = 'https://v2.texenergo.com/api/products/' + product.id + '/image?token=' + $localStorage.id_token;
+            sc.uploader.url = window.APP_ENV.REMOTE_API_HTTP_BASE_URL + '/products/' + product.id + '/image?token=' +
+                $localStorage.id_token;
         }
 
         sc.getLeadTime = function(id, quantity, event){

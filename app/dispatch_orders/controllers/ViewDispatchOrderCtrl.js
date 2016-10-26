@@ -68,20 +68,22 @@
         function returnBack(){
             $state.go('app.dispatch_orders',{});
         }
+
+        function openPdf(path) {
+            window.open(window.APP_ENV.REMOTE_API_HTTP_BASE_URL + '/dispatch_orders/' + sc.dispatchOrder.id + path +
+                '.pdf?token=' + $localStorage.id_token, '_blank');
+        }
         
         function openDispatchOrderPdf(){
-            var pdfUrl = "http://v2.texenergo.com/api/dispatch_orders/" + sc.dispatchOrder.id + ".pdf?token=" + $localStorage.id_token;
-            window.open(pdfUrl, '_blank');
+            openPdf('');
         }
         
         function openLabelPdf(){
-            var pdfUrl = "http://v2.texenergo.com/api/dispatch_orders/" + sc.dispatchOrder.id + "/label.pdf?token=" + $localStorage.id_token;
-            window.open(pdfUrl, '_blank');
+            openPdf('/label');
         }
         
         function openPackingListPdf(){
-            var pdfUrl = "http://v2.texenergo.com/api/dispatch_orders/" + sc.dispatchOrder.id + "/packing_list.pdf?token=" + $localStorage.id_token;
-            window.open(pdfUrl, '_blank');
+            openPdf('/packing_list');
         }
         
         sc.saveChosenPerson = function(){
