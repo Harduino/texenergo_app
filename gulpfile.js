@@ -60,8 +60,8 @@ gulp.task('libs', function(){
         'assets/plugin/angular-jwt/dist/angular-jwt.min.js',
         //
 
-        'assets/plugin/angular-bootstrap/ui-bootstrap-tpls-1.3.3.min.js',
-        'assets/plugin/angular-file-upload/angular-file-upload.js',
+        'assets/plugin/angular-bootstrap/ui-bootstrap-tpls.min.js',
+        'assets/plugin/angular-file-upload/dist/angular-file-upload.js',
         
         'assets/plugin/ui-select/select.min.js',
         'assets/plugin/fastclick/lib/fastclick.js',
@@ -73,7 +73,7 @@ gulp.task('libs', function(){
         'app/smartadmin-plugin/smartwidgets/jarvis.widget.js',
         'assets/plugin/infinite-scroll/ng-infinite-scroll.js',
         'assets/plugin/easy-pie-chart/angular.easypiechart.min.js',
-        'assets/plugin/ui-tinymce/tinymce.js',
+        'assets/plugin/angular-ui-tinymce/src/tinymce.js',
         'assets/plugin/x-editable/xeditable.js',
         'assets/plugin/x-editable/x-editable-custom.js',
         'assets/plugin/ion-rangeslider/js/ion.rangeSlider.min.js',
