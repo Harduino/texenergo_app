@@ -1,6 +1,11 @@
 'use strict';
 
-window.APP_ENV = {REMOTE_API_HTTP_BASE_URL: 'https://v2.texenergo.com/api'};
+window.APP_ENV = {
+    APP_BASE_URL: 'http://app.texenergo.com',
+    PROTOCOL: 'https',
+    REMOTE_API_HTTP_BASE_URL: 'https://v2.texenergo.com/api',
+    TEXENERGO_COM_API_HTTP_BASE_URL: 'http://www.texenergo.com/api'
+};
 
 if(window.location.host.match(/localhost|127\.0\.0\.1/) == null) {
     window.APP_ENV.API_HTTP_BASE_URL = 'https://v2.texenergo.com/api';

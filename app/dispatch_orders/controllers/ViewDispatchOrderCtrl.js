@@ -49,7 +49,8 @@
         });
         
         function setFileUploadOptions(dispatch_order){
-            sc.uploader.url = 'http://www.texenergo.com/api/dispatch_order/'+ dispatch_order.id +'/documents';
+            sc.uploader.url = window.APP_ENV.TEXENERGO_COM_API_HTTP_BASE_URL + '/dispatch_order/' + dispatch_order.id +
+                '/documents';
         }
 
         getDispatchOrderDetails();

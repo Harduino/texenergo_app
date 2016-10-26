@@ -119,7 +119,8 @@
         }
 
         function setFileUploadOptions(receive_order){
-            sc.uploader.url = 'http://www.texenergo.com/api/receive_orders/'+ receive_order.id +'/documents';
+            sc.uploader.url = window.APP_ENV.TEXENERGO_COM_API_HTTP_BASE_URL + '/receive_orders/' + receive_order.id +
+                '/documents';
         }
 
         getReceiveOrderDetails();
