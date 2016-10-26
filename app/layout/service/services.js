@@ -79,7 +79,7 @@
     module.service('CableApi', ['$localStorage', function($localStorage) {
         var token = ($localStorage.id_token || "").replace(/\"/g,"");
         var _this = this,
-            ws = window.location.host.match(/localhost|127\.0\.0\.1/) ? 'ws://localhost:3000/ws' : 'ws://v2.texenergo.com/ws';
+            ws = window.location.host.match(/localhost|127\.0\.0\.1/) ? 'ws://localhost:3000/ws' : 'wss://v2.texenergo.com/ws';
 
         if (token !== undefined) ws = ws + '?token=' + token;
         _this.consumer = new ActionCable.Consumer(ws);

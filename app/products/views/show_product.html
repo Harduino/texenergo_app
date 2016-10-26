@@ -40,7 +40,7 @@
                                 <div te-copy-to-buffer>
                                     <b>Артикул:</b>
                                     <span ng-if="product.can_edit" editable-text="product.article" onaftersave="saveProduct()" te-buffer-value>{{ product.article || "Нет артикула" }}</span>
-                                    <span ng-if="!product.can_edit" te-buffer-value>{{ product.article }}?</span>
+                                    <span ng-if="!product.can_edit" te-buffer-value>{{ product.article }}</span>
                                 </div>
                                 <div>
                                     <b>Производитель:</b>

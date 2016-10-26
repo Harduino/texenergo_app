@@ -61,17 +61,17 @@
         });
     });
 
-    module.factory('customerOrdersNotifications', ['notificationServiceBuilder', 'funcFactory', function(nsb, funcFactory){
+    module.factory('customerOrdersNotifications', ['notificationServiceBuilder', 'funcFactory', '$localStorage', function(nsb, funcFactory, $localStorage){
         var actions = {
             create: function(productsList, row){
-                if (row.user_id != gon.user.id) {
+                if ($localStorage.profile && ($localStorage.profile.contact_id != gon.user.id)) {
                     var data = row.data[0];
                     productsList.push(data);
                     funcFactory.showNotification("Добавлен продукт", data.product.name + ' добавлен другим пользователем.', true);
                 }
             },
             update: function(productsList, row){
-                if (row.user_id != gon.user.id) {
+                if ($localStorage.profile && ($localStorage.profile.contact_id != gon.user.id)) {
                     var datas = row.data;
                     for (var i = 0; i < datas.length; i++) {
                         var data = datas[i];
@@ -82,7 +82,7 @@
                 }
             },
             destroy: function(productsList, row){
-                if (row.user_id != gon.user.id) {
+                if ($localStorage.profile && ($localStorage.profile.contact_id != gon.user.id)) {
                     var data = row.data;
                     var ind = nsb.getIndexByProperty(productsList, data, 'id');
                     if(ind>-1) productsList.splice(ind, 1);

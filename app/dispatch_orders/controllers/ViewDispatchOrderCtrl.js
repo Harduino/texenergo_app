@@ -5,7 +5,7 @@
 
     "use strict";
 
-    angular.module('app.dispatch_orders').controller('ViewDispatchOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', 'FileUploader', '$http', function($scope, $state, $stateParams, serverApi, funcFactory, FileUploader, $http){
+    angular.module('app.dispatch_orders').controller('ViewDispatchOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', 'FileUploader', '$http', '$localStorage', function($scope, $state, $stateParams, serverApi, funcFactory, FileUploader, $http, $localStorage){
         var _pattern = /\/?#/;
 
         var sc = $scope;
@@ -70,20 +70,17 @@
         }
         
         function openDispatchOrderPdf(){
-            var pdfUrl = "http://localhost:3000/api/dispatch_orders/" + sc.dispatchOrder.id + ".pdf";
-            $http.get(pdfUrl).then(function(result){
-
-            });
-//            window.open(pdfUrl, '_blank');
+            var pdfUrl = "http://v2.texenergo.com/api/dispatch_orders/" + sc.dispatchOrder.id + ".pdf?token=" + $localStorage.id_token;
+            window.open(pdfUrl, '_blank');
         }
         
         function openLabelPdf(){
-            var pdfUrl = "http://www.texenergo.com/api/dispatch_orders/" + sc.dispatchOrder.id + "/label.pdf";
+            var pdfUrl = "http://v2.texenergo.com/api/dispatch_orders/" + sc.dispatchOrder.id + "/label.pdf?token=" + $localStorage.id_token;
             window.open(pdfUrl, '_blank');
         }
         
         function openPackingListPdf(){
-            var pdfUrl = "http://www.texenergo.com/api/dispatch_orders/" + sc.dispatchOrder.id + "/packing_list.pdf";
+            var pdfUrl = "http://v2.texenergo.com/api/dispatch_orders/" + sc.dispatchOrder.id + "/packing_list.pdf?token=" + $localStorage.id_token;
             window.open(pdfUrl, '_blank');
         }
         

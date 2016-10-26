@@ -6,12 +6,14 @@
 
     'use strict';
 
-    angular.module('app.products').controller('ProductCtrl', ['$scope', '$stateParams', 'serverApi', '$state', 'funcFactory', '$uibModal', 'CanCan', 'FileUploader', function($scope, $stateParams, serverApi, $state, funcFactory, $uibModal, CanCan, FileUploader){
+    angular.module('app.products').controller('ProductCtrl', ['$scope', '$stateParams', 'serverApi', '$state', 'funcFactory', '$uibModal', 'CanCan', 'FileUploader', '$localStorage', function($scope, $stateParams, serverApi, $state, funcFactory, $uibModal, CanCan, FileUploader, $localStorage){
         var sc = $scope;
 
         sc.visual = {
-            navButtsOptions:[{type:'edit', callback: goToEdit}, {type:'logs', callback: goToPartnerLogs},
-                {type:'add', callback:appendProductToCustomerOrder}
+            navButtsOptions:[
+                { type: 'edit', callback: goToEdit },
+                { type: 'logs', callback: goToPartnerLogs },
+                { type: 'add', callback: appendProductToCustomerOrder }
             ],
             roles: {can_edit: CanCan.can('edit', 'Product')}
         };
@@ -44,7 +46,7 @@
         });
 
         function setFileUploadOptions(product){
-            sc.uploader.url = 'http://www.texenergo.com/api/products/'+ product.id +'/image';
+            sc.uploader.url = 'https://v2.texenergo.com/api/products/' + product.id + '/image?token=' + $localStorage.id_token;
         }
 
         sc.getLeadTime = function(id, quantity, event){
