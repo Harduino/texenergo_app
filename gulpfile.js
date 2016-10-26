@@ -106,12 +106,15 @@ gulp.task('app', function(){
         .pipe(connect.reload());
 });
 
-gulp.task('server', function() {
+gulp.task('launch', function() {
     connect.server({
         root: '',
         livereload: true,
         port: 8000
     });
+});
+
+gulp.task('watch', function() {
     gulp.watch([
         'app/*/module.js',
         'app/layout/templates.js',
@@ -131,6 +134,6 @@ gulp.task('server', function() {
     });
 });
 
+gulp.task('server', ['launch', 'watch']);
 gulp.task('serve', ['app', 'libs', 'styles', 'server']);
-
 gulp.task('default', ['app', 'libs', 'styles']);
