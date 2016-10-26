@@ -16,7 +16,14 @@
     "angular-ui-router": "0.2.11",
     "angular-ui-tinymce": "0.0.11",
     "auth0-lock": "latest",
-    "ngstorage": "latest"
+    "bootstrap": "3.3.1",
+    "fastclick": "1.0.3",
+    "ion.rangeSlider": "ionrangeslider#2.1.4",
+    "jquery": "3.0.0",
+    "json3": "3.3.2",
+    "lodash": "2.4.1",
+    "ngstorage": "latest",
+    "tinymce": "4.3.1"
   },
   "analytics": false,
   "resolutions": {

@@ -20,8 +20,8 @@ gulp.task('styles', function() {
         'assets/css/project.css',
         'assets/css/select.min.css',
         'assets/plugin/x-editable/xeditable.css',
-        'assets/plugin/ion-rangeslider/css/normalize.css',
-        'assets/plugin/ion-rangeslider/css/ion.rangeSlider.css'
+        'assets/plugin/ion.rangeSlider/css/normalize.css',
+        'assets/plugin/ion.rangeSlider/css/ion.rangeSlider.css'
 
     ])
     .on('error', console.log)
@@ -41,7 +41,7 @@ var buildJs = function(destinationFileName, files) {
 
 gulp.task('libs', function(){
     buildJs('libs.js', [
-        'assets/plugin/jquery/dist/jquery-3.0.0.min.js',
+        'assets/plugin/jquery/dist/jquery.min.js',
         'assets/plugin/bootstrap/dist/js/bootstrap.min.js',
         'assets/plugin/jquery-ui/jquery-ui.min.js',
         'assets/plugin/jquery-ui/datepicker-locale.js',
@@ -76,7 +76,7 @@ gulp.task('libs', function(){
         'assets/plugin/angular-ui-tinymce/src/tinymce.js',
         'assets/plugin/x-editable/xeditable.js',
         'assets/plugin/x-editable/x-editable-custom.js',
-        'assets/plugin/ion-rangeslider/js/ion.rangeSlider.min.js',
+        'assets/plugin/ion.rangeSlider/js/ion.rangeSlider.min.js',
 
 
         'assets/plugin/cancan/export.js',
