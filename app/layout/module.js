@@ -16,7 +16,7 @@
                 }
             });
         $urlRouterProvider
-            .otherwise(function($injector, p){
+            .otherwise(function($injector){
                 var authService= $injector.get('authService'),
                     token = authService.token,
                     session = $injector.get('$sessionStorage'),

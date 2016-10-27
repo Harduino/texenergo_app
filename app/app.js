@@ -93,7 +93,8 @@ appConfig.sound_on = true;
         'lock',
         'authService',
         '$sessionStorage',
-        function ($rootScope, $state, $stateParams, lock, authService, $sessionStorage) {
+        '$location',
+        function ($rootScope, $state, $stateParams, lock, authService, $sessionStorage, $location) {
 
             $rootScope.$state = $state;
             $rootScope.$stateParams = $stateParams;
@@ -117,7 +118,7 @@ appConfig.sound_on = true;
                     if((!token || authService.isTokenExpired(token)) && toState.name !== 'login'){
                         event.preventDefault();
                         //remember url return to
-                        $sessionStorage.returnToUrl = toState.url;
+                        $sessionStorage.returnToUrl = $location.$$path;
                         $state.transitionTo('login', null, {reload:true});
                     }
 
