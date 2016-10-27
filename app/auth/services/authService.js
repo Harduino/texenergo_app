@@ -39,6 +39,8 @@
                 _token = $localStorage.id_token = authResult.idToken;
 
                 getProfile(authResult.idToken);
+
+                $rootScope.$emit('authenticated');
             });
         };
 

@@ -16,13 +16,17 @@
                 }
             });
         $urlRouterProvider
-            .otherwise(function($injector){
+            .otherwise(function($injector, p){
                 var authService= $injector.get('authService'),
-                    token = authService.token;
+                    token = authService.token,
+                    session = $injector.get('$sessionStorage'),
+                    returnToUrl = session.returnToUrl;
+
                 if(!token || authService.isTokenExpired(token)){
                     return '/sign_in'
                 }
-                return '/dashboard';
+
+                return returnToUrl || '/dashboard';
             });
 
     });
