@@ -1,6 +1,7 @@
 'use strict';
 
 var gulp = require('gulp'),
+    babel = require('gulp-babel'),
     concat = require('gulp-concat'),
     connect = require('gulp-connect'),
     csso = require('gulp-csso'),
@@ -33,6 +34,7 @@ gulp.task('styles', function() {
 var buildJs = function(destinationFileName, files) {
     return gulp.src(files, {base: 'src'})
         .on('error', console.warn)
+        .pipe(babel({presets: ['es2015']}))
         .pipe(concat(destinationFileName))
         .pipe(ngAnnotate())
         .pipe(minify())
