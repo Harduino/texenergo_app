@@ -5,6 +5,7 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     connect = require('gulp-connect'),
     csso = require('gulp-csso'),
+    gulpif = require('gulp-if'),
     minify = require('gulp-minify'),
     ngAnnotate = require('gulp-ng-annotate');
 
@@ -31,10 +32,10 @@ gulp.task('styles', function() {
     .pipe(gulp.dest('public/assets/stylesheets/'));
 });
 
-var buildJs = function(destinationFileName, files) {
+var buildJs = function(destinationFileName, files, skipES6) {
     return gulp.src(files, {base: 'src'})
         .on('error', console.warn)
-        .pipe(babel({presets: ['es2015']}))
+        .pipe( gulpif(!skipES6, babel({presets: ['es2015']})) )
         .pipe(concat(destinationFileName))
         .pipe(ngAnnotate())
         .pipe(minify())
@@ -84,7 +85,7 @@ gulp.task('libs', function(){
         'assets/plugin/cancan/export.js',
         'assets/plugin/cable/cable.js',
         'assets/plugin/cancan/export-angular.js'
-    ]);
+    ], true);
 });
 
 gulp.task('app', function(){
