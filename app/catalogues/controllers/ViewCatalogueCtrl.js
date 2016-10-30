@@ -1,38 +1,27 @@
-/**
- * Created by Egor Lobanov on 15.11.15.
- */
-(function(){
+class ViewCatalogueCtrl {
+    constructor($scope, $state, $stateParams, serverApi, $sce) {
+        $scope.catalogue = {};
 
-    "use strict";
-
-    angular.module('app.catalogues').controller('ViewCatalogueCtrl', ['$scope', '$state', '$stateParams', 'serverApi', '$sce', function($scope, $state, $stateParams, serverApi, $sce){
-        var sc = $scope;
-        sc.catalogue = {};
-        sc.visual = {
+        $scope.visual = {
             navButtsOptions:[
-                { type: 'back', callback: returnBack },
-                { type: 'edit', callback: editCatalogue }
+                {type: 'back', callback: () => $state.go('app.catalogues', {})},
+                {type: 'edit', callback: () => $state.go('app.catalogues.view.edit', $stateParams)}
             ],
             chartOptions: {
-                barColor:'rgb(103,135,155)',
-                scaleColor:false,
-                lineWidth:5,
-                lineCap:'circle',
-                size:50
+                barColor: 'rgb(103,135,155)',
+                    scaleColor: false,
+                    lineWidth: 5,
+                    lineCap: 'circle',
+                    size: 50
             }
         };
 
-        serverApi.getCatalogueDetails($stateParams.id, function(result){
-            sc.catalogue = result.data;
-            sc.catalogue.description = $sce.trustAsHtml(result.data.description);
+        serverApi.getCatalogueDetails($stateParams.id, result => {
+            $scope.catalogue = result.data;
+            $scope.catalogue.description = $sce.trustAsHtml(result.data.description);
         });
+    }
+}
 
-        function returnBack(){
-            $state.go('app.catalogues',{});
-        }
-        
-        function editCatalogue(){
-            $state.go('app.catalogues.view.edit',$stateParams);
-        }
-    }]);
-}());
+ViewCatalogueCtrl.$inject = ['$scope', '$state', '$stateParams', 'serverApi', '$sce'];
+angular.module('app.catalogues').controller('ViewCatalogueCtrl', ViewCatalogueCtrl);
