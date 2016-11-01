@@ -61,6 +61,7 @@ appConfig.sound_on = true;
 
         //Auth0
         'auth0.lock',
+        'auth0.lockPasswordless',
         'angular-jwt',
         
         // Permissions

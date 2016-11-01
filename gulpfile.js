@@ -57,6 +57,8 @@ gulp.task('libs', function(){
         //Auth0
         'assets/plugin/auth0-lock/build/lock.min.js',
         'assets/plugin/angular-lock/dist/angular-lock.min.js',
+        'assets/plugin/auth0-lock-passwordless/build/lock-passwordless.min.js',
+        'assets/plugin/angular-lock-passwordless/dist/angular-lock-passwordless.min.js',
         'assets/plugin/angular-jwt/dist/angular-jwt.min.js',
         //
 

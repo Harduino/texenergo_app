@@ -44,7 +44,6 @@
 
         sc.signOut = function(){
             authService.logout();
-//            window.location.reload();
         };
 
         sc.logo = 'assets/img/logo.png';

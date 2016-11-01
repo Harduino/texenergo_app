@@ -2,10 +2,11 @@
   "name": "texenergo",
   "version": "1.0.0",
   "dependencies": {
-      "angular-jwt": "latest",
-      "auth0-lock": "latest",
-      "angular-lock": "latest",
-      "ngstorage": "latest"
+      "angular-jwt":                "latest",
+      "auth0-lock":                 "latest",
+      "angular-lock":               "latest",
+      "angular-lock-passwordless":  "latest",
+      "ngstorage":                  "latest"
   },
   "analytics": false,
   "resolutions": {

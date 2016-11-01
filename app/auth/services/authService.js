@@ -2,7 +2,10 @@
  * Created by Egor Lobanov on 10.10.16.
  */
 (function(){
-    angular.module('login').service('authService', ['$rootScope', 'lock', '$localStorage', 'jwtHelper', function($rootScope, lock, $localStorage, jwtHelper){
+
+    angular.module('login').service('authService', ['$rootScope', 'lock', '$localStorage', 'jwtHelper', 'lockPasswordless', '$location', authService]);
+
+    function authService ($rootScope, lock, $localStorage, jwtHelper, lockPasswordless, $location){
 
 
         var o = this,
@@ -23,7 +26,28 @@
         if(_token && !jwtHelper.isTokenExpired(_token))getProfile(_token);
 
         o.login = function(){
-            lock.show();
+//            lock.show();
+            lockPasswordless.emailcode(function(error, profile, id_token) {
+                if (error) {
+                    alert("Error: " + error);
+                    return 0;
+                }
+
+                _token = $localStorage.id_token = id_token;
+
+                _profile = profile;
+
+                var url = $location.$$absUrl,
+                    sharpIndex = url.indexOf('#');
+
+                if (sharpIndex > -1){
+                    url = url.slice(0, sharpIndex);
+                }
+
+                window.location = url;
+
+                lockPasswordless.close();
+            });
         };
 
         o.logout = function(){
@@ -63,5 +87,5 @@
                 _profile = profile;
             });
         }
-    }]);
+    }
 }());
