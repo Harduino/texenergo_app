@@ -57,8 +57,31 @@
          * Use paswordless authorization instead of standard
          */
         o.logInPaswordless = function(){
+            const options = {
+                icon: 'assets/img/logo.png',
+                dict: {
+                    code: {
+                        codeInputPlaceholder: "Ваш код",
+                        footerText: "",
+                        headerText: "Проверьте почту ({email})<br />Вы получили сообщение от нас<br />с вашим кодом."
+                    },
+                    confirmation: {
+                        success: "Вы вошли в систему."
+                    },
+                    email: {
+                        emailInputPlaceholder: "yours@example.com",
+                        footerText: "",
+                        headerText: "Введите ваш email, что бы войти или зарегистрируйтесь."
+                    },
+                    title: "",
+                    welcome: "Добро пожаловать {name}!"
+                },
+                gravatar: false,
+                primaryColor: 'rgb(240,125,27)'
+            };
+
 //            lock.hide();
-            lockPasswordless.emailcode(function(error, profile, id_token) {
+            lockPasswordless.emailcode(options, function(error, profile, id_token) {
                 if (error) {
                     alert("Error: " + error);
                     return 0;

@@ -17,6 +17,7 @@
             clientID: 'cO4FFzRFn4JkByDDy2kCWAFKNdC37BcW',
             domain: 'texenergo.eu.auth0.com',
             options: {
+                avatar:null,
                 theme: {
                     logo: 'assets/img/logo.png',
                     primaryColor: 'rgb(240,125,27)'
