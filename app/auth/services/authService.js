@@ -26,28 +26,7 @@
         if(_token && !jwtHelper.isTokenExpired(_token))getProfile(_token);
 
         o.login = function(){
-//            lock.show();
-            lockPasswordless.emailcode(function(error, profile, id_token) {
-                if (error) {
-                    alert("Error: " + error);
-                    return 0;
-                }
-
-                _token = $localStorage.id_token = id_token;
-
-                _profile = profile;
-
-                var url = $location.$$absUrl,
-                    sharpIndex = url.indexOf('#');
-
-                if (sharpIndex > -1){
-                    url = url.slice(0, sharpIndex);
-                }
-
-                window.location = url;
-
-                lockPasswordless.close();
-            });
+            lock.show();
         };
 
         o.logout = function(){
@@ -72,6 +51,34 @@
             var expired = jwtHelper.isTokenExpired(token);
             expired && ($localStorage.id_token = null);
             return expired;
+        };
+
+        /**
+         * Use paswordless authorization instead of standard
+         */
+        o.logInPaswordless = function(){
+//            lock.hide();
+            lockPasswordless.emailcode(function(error, profile, id_token) {
+                if (error) {
+                    alert("Error: " + error);
+                    return 0;
+                }
+
+                _token = $localStorage.id_token = id_token;
+
+                _profile = profile;
+
+                var url = $location.$$absUrl,
+                    sharpIndex = url.indexOf('#');
+
+                if (sharpIndex > -1){
+                    url = url.slice(0, sharpIndex);
+                }
+
+                window.location = url;
+
+                lockPasswordless.close();
+            });
         };
 
         /**

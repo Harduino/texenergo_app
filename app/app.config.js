@@ -25,7 +25,8 @@
                     title: ""
                 },
                 closable: false,
-                language: 'ru'
+                language: 'ru',
+                container: 'lock'
             }
         };
 
