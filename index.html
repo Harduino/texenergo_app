@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us" class="no-js">
     <head>
-
         <meta charset="utf-8">
         <title>Texenergo App</title>
         <meta name="description" content="">
@@ -25,11 +24,12 @@
         <link rel="apple-touch-icon" sizes="152x152" href="https://cdn.texenergo.com/site/images/touch-icon-ipad-retina.png">
     </head>
 
-    <body ng-app="app" data-smart-device-detect
+    <body data-smart-device-detect
           data-smart-fast-click
           data-smart-layout
           data-smart-page-title="Texenergo" class="fixed-header">
 
+        <ng2-app></ng2-app>
         <div data-ui-view="root"  data-autoscroll="false"></div>
 
         <!--[if lt IE 7]>
@@ -41,8 +41,20 @@
         <script src="/assets/plugin/json3/lib/json3.min.js"></script>
         <![endif]-->
 
-        <script src="/public/assets/javascripts/libs.js"></script>
-        <script src="/public/assets/javascripts/app-modules.js"></script>
+        <script src="/public/assets/javascripts/libs-min.js"></script>
+        <!-- Долго жмет его, поэтому отдельным запрсом-->
+        <!-- <script src="/assets/plugin/tinymce/tinymce.min.js"></script> -->
+        <script src="/public/assets/javascripts/app-modules-min.js"></script>
+
+        <script src="node_modules/core-js/client/shim.min.js"></script>
+        <script src="node_modules/zone.js/dist/zone.js"></script>
+        <script src="node_modules/reflect-metadata/Reflect.js"></script>
+        <script src="node_modules/systemjs/dist/system.src.js"></script>
+        <script src="systemjs.config.js"></script>
+        <script>
+          System.import('app')
+            .catch(function(err){ console.error(err); });
+        </script>
     </body>
     <script type="text/javascript">
         if ('serviceWorker' in navigator) {
