@@ -1,4 +1,6 @@
 .idea
+ng2/**/*.js
+ng2/**/*.js.map
 
 node_modules
 
