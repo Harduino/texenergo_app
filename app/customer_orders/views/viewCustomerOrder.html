@@ -41,7 +41,7 @@
                                     Описание:
                                 </p>
                                 <div class="col-md-9" ng-switch-when="true">
-                                    <pre><a editable-textarea="order.description" onaftersave="saveOrderInfo()">{{ order.description || 'Нет' }}</a></pre>
+                                    <pre class="full-editable-area"><a editable-textarea="order.description" onaftersave="saveOrderInfo()">{{ order.description || 'Нет' }}</a></pre>
                                 </div>
                                 <p ng-switch-default class="col-md-9">{{order.description}}</p>
                             </div>

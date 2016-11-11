@@ -888,3 +888,32 @@ td .editable-controls>input[type="number"]{
     background-image: url("https://habrastorage.org/getpro/habr/company/d01/e8d/859/d01e8d85973a08ea7d4248f3d4a4456e.png");
     background-size: contain;
 }
+.full-editable-area{
+    padding: 10px;
+    overflow: hidden;
+    overflow-y: auto;
+    height: 100px;
+    font-family: "Open Sans", Arial, Helvetica, sans-serif;
+}
+.full-editable-area>[editable-textarea]{
+    word-break: normal;
+    white-space: normal;
+}
+.full-editable-area>form{
+    height: 100%;
+    display: flex;
+    flex: 100 1 0%;
+    flex-direction: row;
+}
+.full-editable-area>form>.editable-controls.form-group{
+    flex: 100;
+    display: flex;
+    flex-direction: row;
+}
+.full-editable-area>form>.editable-controls.form-group>textarea.editable-input.form-control{
+    width: 100%;
+    max-width: 100%;
+    white-space: normal;
+    word-break: normal;
+    font-size: 13px;
+}
