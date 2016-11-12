@@ -11,3 +11,5 @@ public/assets/javascripts/libs-min.js
 public/assets/javascripts/libs.js
 
 public/assets/stylesheets/app-styles.css
+
+bower_components
