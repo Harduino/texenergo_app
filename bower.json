@@ -4,6 +4,7 @@
   "dependencies": {
       "angular-jwt":                "latest",
       "auth0-lock":                 "latest",
+      "auth0-lock-passwordless":    "latest",
       "angular-lock":               "latest",
       "angular-lock-passwordless":  "latest",
       "ngstorage":                  "latest"

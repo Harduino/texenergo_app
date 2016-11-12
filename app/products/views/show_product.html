@@ -59,7 +59,7 @@
                                 </div>
                                 <div ng-if="product.can_edit">
                                     <b>Остаток у МФК:</b>
-                                    {{ product.stock_with_mfk - product.stock }}
+                                    {{ (product.stock_with_mfk - product.stock) < 0 ? 0 : (product.stock_with_mfk - product.stock) }}
                                 </div>
                                 <div ng-if="product.can_edit">
                                     <b>Снятие с производства:</b>
