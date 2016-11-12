@@ -396,11 +396,11 @@ a[data-toggle="tab"]{
     width: 100%;
     height: 100%;
     position: absolute;
-    -webkit-filter: blur(5px);
-    -moz-filter: blur(5px);
-    -o-filter: blur(5px);
-    -ms-filter: blur(5px);
-    filter: blur(5px);
+    /*-webkit-filter: blur(5px);*/
+    /*-moz-filter: blur(5px);*/
+    /*-o-filter: blur(5px);*/
+    /*-ms-filter: blur(5px);*/
+    /*filter: blur(5px);*/
 }
 .txt-logo-orange{
     color: rgb(241, 125, 27);
@@ -854,5 +854,66 @@ td .editable-controls>input[type="number"]{
     width: 338px;
 }
 .auth0-lock.auth0-lock .auth0-lock-header-welcome{
-    padding-top: 24px;
+    padding-top: 8px;
+}
+.login-back>.back-overflow{
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+}
+.go-to-passwordless{
+    position: absolute;
+    right: 25px;
+    top: 25px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.go-to-passwordless>i{
+    color: #ffffff;
+    font-size: 18px;
+}
+.go-to-passwordless:hover>i{
+    opacity: 0.7;
+}
+#lock{
+    padding: 45px;
+    height: 100%;
+    overflow: scroll;
+}
+.auth0-lock-social-button[data-provider^=oauth2] .auth0-lock-social-button-icon{
+    background-image: url("https://habrastorage.org/getpro/habr/company/d01/e8d/859/d01e8d85973a08ea7d4248f3d4a4456e.png");
+    background-size: contain;
+}
+.full-editable-area{
+    padding: 10px;
+    overflow: hidden;
+    overflow-y: auto;
+    height: 100px;
+    font-family: "Open Sans", Arial, Helvetica, sans-serif;
+}
+.full-editable-area>[editable-textarea]{
+    word-break: normal;
+    white-space: normal;
+}
+.full-editable-area>form{
+    height: 100%;
+    display: flex;
+    flex: 100 1 0%;
+    flex-direction: row;
+}
+.full-editable-area>form>.editable-controls.form-group{
+    flex: 100;
+    display: flex;
+    flex-direction: row;
+}
+.full-editable-area>form>.editable-controls.form-group>textarea.editable-input.form-control{
+    width: 100%;
+    max-width: 100%;
+    white-space: normal;
+    word-break: normal;
+    font-size: 13px;
 }

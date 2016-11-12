@@ -18,11 +18,15 @@
         $urlRouterProvider
             .otherwise(function($injector){
                 var authService= $injector.get('authService'),
-                    token = authService.token;
+                    token = authService.token,
+                    session = $injector.get('$sessionStorage'),
+                    returnToUrl = session.returnToUrl;
+
                 if(!token || authService.isTokenExpired(token)){
                     return '/sign_in'
                 }
-                return '/dashboard';
+
+                return returnToUrl || '/dashboard';
             });
 
     });
@@ -40,7 +44,6 @@
 
         sc.signOut = function(){
             authService.logout();
-//            window.location.reload();
         };
 
         sc.logo = 'assets/img/logo.png';

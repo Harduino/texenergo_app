@@ -2,7 +2,6 @@
  * Created by Egor Lobanov on 04.10.16.
  */
 (function(){
-
     var module = angular.module('app.api', []);
     /**
      * Service send requests to server and return response into callback function

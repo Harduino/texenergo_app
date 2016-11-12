@@ -2,7 +2,10 @@
  * Created by Egor Lobanov on 10.10.16.
  */
 (function(){
-    angular.module('login').service('authService', ['$rootScope', 'lock', '$localStorage', 'jwtHelper', function($rootScope, lock, $localStorage, jwtHelper){
+
+    angular.module('login').service('authService', ['$rootScope', 'lock', '$localStorage', 'jwtHelper', 'lockPasswordless', '$location', authService]);
+
+    function authService ($rootScope, lock, $localStorage, jwtHelper, lockPasswordless, $location){
 
 
         var o = this,
@@ -39,6 +42,8 @@
                 _token = $localStorage.id_token = authResult.idToken;
 
                 getProfile(authResult.idToken);
+
+                $rootScope.$emit('authenticated');
             });
         };
 
@@ -46,6 +51,57 @@
             var expired = jwtHelper.isTokenExpired(token);
             expired && ($localStorage.id_token = null);
             return expired;
+        };
+
+        /**
+         * Use paswordless authorization instead of standard
+         */
+        o.logInPaswordless = function(){
+            const options = {
+                icon: 'assets/img/logo.png',
+                dict: {
+                    code: {
+                        codeInputPlaceholder: "Ваш код",
+                        footerText: "",
+                        headerText: "Проверьте почту ({email})<br />Вы получили сообщение от нас<br />с вашим кодом."
+                    },
+                    confirmation: {
+                        success: "Вы вошли в систему."
+                    },
+                    email: {
+                        emailInputPlaceholder: "yours@example.com",
+                        footerText: "",
+                        headerText: "Введите ваш email, что бы войти или зарегистрируйтесь."
+                    },
+                    title: "",
+                    welcome: "Добро пожаловать {name}!"
+                },
+                gravatar: false,
+                primaryColor: 'rgb(240,125,27)'
+            };
+
+//            lock.hide();
+            lockPasswordless.emailcode(options, function(error, profile, id_token) {
+                if (error) {
+                    alert("Error: " + error);
+                    return 0;
+                }
+
+                _token = $localStorage.id_token = id_token;
+
+                _profile = profile;
+
+                var url = $location.$$absUrl,
+                    sharpIndex = url.indexOf('#');
+
+                if (sharpIndex > -1){
+                    url = url.slice(0, sharpIndex);
+                }
+
+                window.location = url;
+
+                lockPasswordless.close();
+            });
         };
 
         /**
@@ -61,5 +117,5 @@
                 _profile = profile;
             });
         }
-    }]);
+    }
 }());
