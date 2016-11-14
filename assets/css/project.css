@@ -885,7 +885,7 @@ td .editable-controls>input[type="number"]{
     overflow: scroll;
 }
 .auth0-lock-social-button[data-provider^=oauth2] .auth0-lock-social-button-icon{
-    background-image: url("https://habrastorage.org/getpro/habr/company/d01/e8d/859/d01e8d85973a08ea7d4248f3d4a4456e.png");
+    background-image: url("https://habrastorage.org/getpro/habr/company/d01/e8d/859/d01e8d85973a08ea7d4248f3d4a4456e.png")!important;
     background-size: contain;
 }
 .full-editable-area{
