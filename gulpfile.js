@@ -68,18 +68,18 @@ gulp.task('libs', function(){
         'bower_components/angular-file-upload/dist/angular-file-upload.js',
         
         'assets/plugin/ui-select/select.min.js',
-        'assets/plugin/fastclick/lib/fastclick.js',
+        'bower_components/fastclick/lib/fastclick.js',
         'assets/plugin/chartjs/chart.min.js',
         'assets/plugin/dropzone/downloads/dropzone.min.js',
-        'assets/plugin/lodash/dist/lodash.min.js',
+        'bower_components/lodash/dist/lodash.min.js',
         'app/smartadmin-plugin/notification/SmartNotification.min.js',
         'app/smartadmin-plugin/smartwidgets/jarvis.widget.js',
         'assets/plugin/infinite-scroll/ng-infinite-scroll.js',
         'assets/plugin/easy-pie-chart/angular.easypiechart.min.js',
-        'assets/plugin/angular-ui-tinymce/src/tinymce.js',
+        'bower_components/angular-ui-tinymce/src/tinymce.js',
         'assets/plugin/x-editable/xeditable.js',
         'assets/plugin/x-editable/x-editable-custom.js',
-        'assets/plugin/ion.rangeSlider/js/ion.rangeSlider.min.js',
+        'bower_components/ion.rangeSlider/js/ion.rangeSlider.min.js',
 
         // Consider remove both cancan below
         'assets/plugin/cancan/export.js',
