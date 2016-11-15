@@ -23,9 +23,7 @@
             },
             views:{
                 "content@app": {
-                    controller: 'CataloguesCtrl',
-                    controllerAs: 'cataloguesCtrl',
-                    templateUrl: '/app/catalogues/views/catalogues.html'
+                    template: '<catalogues></catalogues>'
                 }
             }
         }).state('app.catalogues.view', {

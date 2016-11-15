@@ -42,4 +42,9 @@ class CataloguesCtrl {
 }
 
 CataloguesCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
-angular.module('app.catalogues').controller('CataloguesCtrl', CataloguesCtrl);
+
+angular.module('app.catalogues').component('catalogues', {
+    templateUrl: '/app/catalogues/components/catalogues/catalogues.html',
+    controller: CataloguesCtrl,
+    controllerAs: 'cataloguesCtrl'
+});
