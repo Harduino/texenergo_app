@@ -24,6 +24,7 @@
             views:{
                 "content@app": {
                     controller: 'CataloguesCtrl',
+                    controllerAs: 'cataloguesCtrl',
                     templateUrl: '/app/catalogues/views/catalogues.html'
                 }
             }
