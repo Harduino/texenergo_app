@@ -21,7 +21,7 @@
     </div>
     <div class="well">
         <h1>Результаты поиска "{{data.searchText}}"</h1>
-        <table class="table table-bordered table-hover" infinite-scroll infinite-scroll-disabled="false" te-lazy-helper data-list="data.searchList" data-search-query="data.searchText" data-server-api-method="searchProduct" data-start-page="0">
+        <table class="table table-bordered" infinite-scroll infinite-scroll-disabled="false" te-lazy-helper data-list="data.searchList" data-search-query="data.searchText" data-server-api-method="searchProduct" data-start-page="0">
             <thead>
                 <tr>
                     <th class="hidden-xs"></th>
@@ -33,9 +33,9 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
-                <tr ng-repeat="item in data.searchList">
-                    <td class="hidden-xs"><img ng-src="{{item.image_url}}" style="max-heigth: 40px; max-width: 40px;" class="img img-responsive" img-error="http://cdn.texenergo.com/no_image.png"></img></td>
+            <tbody id="top_search_table_body">
+                <tr ng-repeat="item in data.searchList" ng-class="{selected: $index === selectedRowIndex}" ng-click="selectRow($index)" class="cursor-pointer">
+                    <td class="hidden-xs"><img ng-src="{{item.image_url}}" style="max-heigth: 40px; max-width: 40px;" class="img img-responsive" img-error="http://cdn.texenergo.com/no_image.png"></td>
                     <td te-copy-to-buffer><a ng-href="/#/products/{{item.id || item._id}}" class="black" te-buffer-value>{{item.article}}</a></td>
                     <td te-copy-to-buffer>
                         <span class="badge alert-danger" ng-if="item.obsolete" uib-tooltip="Оборудование снято с производства">!</span>

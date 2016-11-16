@@ -768,7 +768,7 @@ td .editable-controls>input[type="number"]{
     overflow-y: auto;
 }
 .table-bordered tr.selected{
-    background-color: #ecf3f8;
+    background-color: #ecf3f8!important;
 }
 .order-items.ui-sortable-helper{
     height: auto!important;
