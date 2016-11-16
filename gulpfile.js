@@ -5,13 +5,13 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     connect = require('gulp-connect'),
     csso = require('gulp-csso'),
+    expect = require('gulp-expect-file'),
     gulpif = require('gulp-if'),
     minify = require('gulp-minify'),
     ngAnnotate = require('gulp-ng-annotate');
 
 gulp.task('styles', function() {
-    //css
-    gulp.src([
+    var files = [
         'assets/css/bootstrap.min.css',
         'assets/css/font-awesome.min.css',
         'assets/css/smartadmin-production-plugins.min.css',
@@ -25,15 +25,19 @@ gulp.task('styles', function() {
         'assets/plugin/ion.rangeSlider/css/normalize.css',
         'assets/plugin/ion.rangeSlider/css/ion.rangeSlider.css'
 
-    ])
-    .on('error', console.log)
-    .pipe(concat('app-styles.css'))
-    .pipe(csso())
-    .pipe(gulp.dest('public/assets/stylesheets/'));
+    ];
+
+    gulp.src(files)
+        .pipe(expect(files))
+        .on('error', console.log)
+        .pipe(concat('app-styles.css'))
+        .pipe(csso())
+        .pipe(gulp.dest('public/assets/stylesheets/'));
 });
 
 var buildJs = function(destinationFileName, files, skipES6) {
     return gulp.src(files, {base: 'src'})
+        .pipe(expect(files))
         .on('error', console.warn)
         .pipe( gulpif(!skipES6, babel({presets: ['es2015']})) )
         .pipe(concat(destinationFileName))
@@ -110,6 +114,7 @@ gulp.task('app', function(){
         'app/layout/service/services.js',
         'assets/widgets/directives/*.js',
         'app/*/controllers/*.js',
+        'app/*/components/*/*.js',
         'app/*/directives/*.js',
         'assets/plugin/angular-d3/angular-d3.js',
         'app/app.api.js',
