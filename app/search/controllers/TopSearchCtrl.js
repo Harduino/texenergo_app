@@ -125,17 +125,18 @@
              */
             function navigateInTable (event){
 
-                const up = "ArrowUp";
+                const up = 38;
                 const enter = 13;
-                const matcher = /ArrowUp|ArrowDown/;
-                var key = event.key,
+                const escape = 27;
+                const down = 40;
+                var key = event.keyCode,
                     list = sc.data.searchList,
                     _window = angular.element(window),
                     scrollTop = _window.scrollTop(),
                     outerHeight = _window.outerHeight() + scrollTop;
 
 
-                if(key.match(matcher)!== null && list.length>0){
+                if((key === up || key === down) && list.length>0){
                     //select row first time
                     if(sc.selectedRowIndex<0){
                         sc.selectedRowIndex = 0;
@@ -158,10 +159,14 @@
                         }
                     }
                     //on hit Enter
-                }else if(event.keyCode === enter && list.length>0 && sc.selectedRowIndex > -1){
+                }else if(key === enter && list.length>0 && sc.selectedRowIndex > -1){
 
                     var selectedRow = list[sc.selectedRowIndex];
                     viewProduct(selectedRow._id || selectedRow.id);
+
+                    // on Escape blur input
+                } else if(key === escape && event.target.localName === 'input'){
+                    event.target.blur();
                 }
             }
 

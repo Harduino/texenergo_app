@@ -88,60 +88,48 @@ appConfig.sound_on = true;
         'app.products'
     ]);
 
-    app.run(['$rootScope',
+    app.run(appRun);
+
+    appRun.$inject = [
+        '$rootScope',
         '$state',
         '$stateParams',
         'lock',
         'authService',
         '$sessionStorage',
-        '$location',
-        function ($rootScope, $state, $stateParams, lock, authService, $sessionStorage, $location) {
+        '$location'
+    ];
 
-            $rootScope.$state = $state;
-            $rootScope.$stateParams = $stateParams;
+    function appRun ($rootScope, $state, $stateParams, lock, authService, $sessionStorage, $location) {
 
-            // Intercept the hash that comes back from authentication
-            // to ensure the `authenticated` event fires
-            lock.interceptHash();
+        $rootScope.$state = $state;
+        $rootScope.$stateParams = $stateParams;
 
-            authService.registerAuthenticationListener();
+        // Intercept the hash that comes back from authentication
+        // to ensure the `authenticated` event fires
+        lock.interceptHash();
 
-            //scroll page top if page not search
-            $rootScope.$on('$stateChangeSuccess', function(){
-                if($state.current.name !== "app.search")angular.element('body').scrollTop(0);
-            });
+        authService.registerAuthenticationListener();
 
-            //checking permissions of state while navigating
-            $rootScope.$on('$stateChangeStart',
-                function (event, toState, toParams, fromState, fromParams) {
+        //scroll page top if page not search
+        $rootScope.$on('$stateChangeSuccess', function(){
+            if($state.current.name !== "app.search")angular.element('body').scrollTop(0);
+        });
 
-                    var token = authService.token;
-                    if((!token || authService.isTokenExpired(token)) && toState.name !== 'login'){
-                        event.preventDefault();
-                        //remember url return to
-                        $sessionStorage.returnToUrl = $location.$$path;
-                        $state.transitionTo('login', null, {reload:true});
-                    }
+        //checking permissions of state while navigating
+        $rootScope.$on('$stateChangeStart',
+            function (event, toState, toParams, fromState, fromParams) {
 
-//                    if(toState.name !== 'login' && !window.gon) {
-//                        event.preventDefault();
-//                        Abilities.getGon(toState.name, toParams);
-//                        return 0;
-//                    }
-//
-//                    var access = (toState.data || {}).access;
-//                    if(access){
-//                        var can = CanCan.can(access.action, access.params);
-//                        if(!can) {
-//                            event.preventDefault();
-//                            $state.transitionTo('app.dashboard', null, {reload:true});
-//                        }
-//                    }
+                var token = authService.token;
+                if((!token || authService.isTokenExpired(token)) && toState.name !== 'login'){
+                    event.preventDefault();
+                    //remember url return to
+                    $sessionStorage.returnToUrl = $location.$$path;
+                    $state.transitionTo('login', null, {reload:true});
                 }
-            );
-//
-//            $location.$$path === '' &&  $state.go('app.dashboard');
-    }]);
+            }
+        );
+    }
 
     Array.prototype.swapItemByindex = function(currentIndex, newIndex){
         var item = this.splice(currentIndex,1)[0];
