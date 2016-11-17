@@ -20,8 +20,20 @@
                         console.info("Канал получения уведомлений. Не удалось установить соединение!")
                     },
                     received: function(data) {
-                        sc.notifications.unshift(data);
-                        sc.$apply();
+                        var notifications = sc.notifications;
+
+                        //check if message in list
+                        for(var i=sc.notifications.length-1; i>-1; i--){
+                            //check by id
+                            if(data.id === notifications[i].id){
+                                return 0;
+                            }
+                        }
+
+                        //add to list
+                        notifications.unshift(data);
+                        !sc.$$phase && sc.$apply();
+
                         $.smallBox({
                             title: "Уведомление",
                             content: "Вам пришло новое уведомление",

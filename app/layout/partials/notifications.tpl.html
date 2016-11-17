@@ -6,7 +6,7 @@
   <div class="ajax-dropdown" style="display: block" ng-hide='hidden'>
     <div class="ajax-notifications custom-scroll">
       <ul class="notification-body">
-        <li ng-repeat="notification in notifications" ng-click="markAsSeen(notification)" class="notification" ng-class="{seen: notification.seen, type: notification.type}" ng-class="notification.level">
+        <li ng-repeat="notification in notifications track by notification.id" ng-click="markAsSeen(notification)" class="notification" ng-class="{seen: notification.seen, type: notification.type}" ng-class="notification.level">
           <span class="padding-10">
             <em class="badge padding-5 no-border-radius bg-color-blueLight pull-left margin-right-5">
               <i class="fa fa-fw fa-2x" ng-class="[!notification.seen ? 'fa-' + notification.level : '', {'fa-trash-o': notification.seen}]" ng-attr-title="{{notification.level}}" ng-click="markAsDeleted(notification)"></i>
