@@ -58,7 +58,7 @@
                     var url = encodeURI(config.url);
                     var re  = /http|html/,
                         dadataMatcher = url.match(/dadata/g);
-                    config.url = ((config.method == 'GET' &&  url.match(re) !== null) || dadataMatcher !== null)  ? url : appConfig.serverUrl + url;
+                    config.url = (url.match(re) !== null || dadataMatcher !== null)  ? url : appConfig.serverUrl + url;
                     dadataMatcher == null && (config.headers.Authorization = "Bearer " + authService.token);
                     setInload(true);
                     return config;

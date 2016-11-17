@@ -86,6 +86,8 @@ gulp.task('libs', function(){
         'assets/plugin/cable/cable.js',
         'assets/plugin/cancan/export-angular.js',
         'bower_components/tinymce/tinymce.min.js',
+        'bower_components/tinymce/plugins/*/plugin.js',
+        'bower_components/tinymce/themes/modern/theme.js'
     ], true);
 });
 

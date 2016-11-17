@@ -26,7 +26,6 @@
         };
 
         sc.uploader = new FileUploader({
-            withCredentials: true,
             queueLimit: 1,
             onCompleteItem: function(fileItem, response, status, headers) {
                 if(status===200){
