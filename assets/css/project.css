@@ -300,6 +300,9 @@ textarea{
     resize: none;
 }
 .notifications-pane .notification.seen {opacity: 0.5}
+.notification-body{
+    padding: 0 3px;
+}
 a.dz-download{
     background-image: -webkit-linear-gradient(top, #38c56f 0, #389154 100%);
     border-radius: 2px;
