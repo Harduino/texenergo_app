@@ -51,7 +51,10 @@
         </div>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Email:</p>
-            <p class="col-md-9">{{ contact.email }}</p>
+            <p class="col-md-9" ng-switch-when="true">
+                <a editable-text="contact.email" buttons="no" onaftersave="saveContact()">{{ contact.email }}</a>
+            </p>
+            <p ng-switch-default class="col-md-9">{{ contact.email }}</p>
         </div>
         <div class="row margin-top-10" ng-switch-when="true">
             <p class="col-xs-12 col-md-3 font-bold">Не высылать email-ы:</p>

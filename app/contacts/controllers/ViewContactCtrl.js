@@ -49,7 +49,8 @@
                     last_name: contact.last_name,
                     do_not_email: contact.do_not_email,
                     partner_id: contact.partner.id,
-                    mobile: contact.mobile
+                    mobile: contact.mobile,
+                    email: contact.email
                 }
             };
 

@@ -1,53 +1,50 @@
-/**
- * Created by Egor Lobanov on 07.11.15.
- */
-(function(){
-
-    'use strict';
-
-    angular.module('app.catalogues').controller('CataloguesCtrl', ['$scope', '$state', '$stateParams', 'serverApi', '$filter', 'funcFactory', function($scope, $state, $stateParams, serverApi, $filter, funcFactory){
-        var sc = $scope;
-        sc.visual = {
-            navButtsOptions:[{
-                type: 'new',
-                callback: function(){}
-            }],
+class CataloguesCtrl {
+    constructor($scope, $state, $stateParams, serverApi, funcFactory) {
+        $scope.visual = {
+            navButtsOptions:[
+                {
+                    type: 'new',
+                    callback: () => {}
+                }
+            ],
             navTableButts:[
-                { type: 'view', callback: viewCatalogue },
-                { type: 'table_edit', callback: editCatalogue },
-                { type: 'remove', callback: removeCatalogue }
+                {
+                    type: 'view',
+                    callback: data => $state.go('app.catalogues.view', {id:data.id || data._id})
+                },
+                {
+                    type: 'table_edit',
+                    callback: data => $state.go('app.catalogues.view.edit', {id: (data.id || data._id)})
+                },
+                {
+                    type: 'remove',
+                    callback: data => {
+                        $.SmartMessageBox({
+                            title: 'Удалить категорию?',
+                            content: 'Вы действительно хотите удалить категорию ' + data.name,
+                            buttons: '[Нет][Да]'
+                        }, ButtonPressed => {
+                            if(ButtonPressed === 'Да') {
+                                serverApi.deleteCatalogue(data.id, result => {
+                                    if(!result.data.errors) {
+                                        $scope.data.cataloguesList.splice(data.index,1);
+                                        funcFactory.showNotification('Категория ' + data.name + ' успешно удалена.', '',
+                                            true);
+                                    } else {
+                                        funcFactory.showNotification('Не удалось удалить категорию ' + data.name,
+                                            result.data.errors);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
             ]
         };
-        sc.data = {
-            cataloguesList:[],
-            searchQuery:$stateParams.q
-        };
 
-        function viewCatalogue(data){
-            $state.go('app.catalogues.view', {id:data.id || data._id});
-        }
-        
-        function editCatalogue(data){
-            $state.go('app.catalogues.view.edit', {id: (data.id || data._id)});
-        }
+        $scope.data = {cataloguesList: [], searchQuery: $stateParams.q};
+    }
+}
 
-        function removeCatalogue(data){
-            $.SmartMessageBox({
-                title: "Удалить категорию?",
-                content: "Вы действительно хотите удалить категорию " + data.name,
-                buttons: '[Нет][Да]'
-            }, function (ButtonPressed) {
-                if (ButtonPressed === "Да") {
-                    serverApi.deleteCatalogue(data.id, function(result){
-                        if(!result.data.errors){
-                            sc.data.cataloguesList.splice(data.index,1);
-                            funcFactory.showNotification('Категория ' + data.name + ' успешно удалена.', '', true);
-                        } else {
-                            funcFactory.showNotification('Не удалось удалить категорию ' + data.name, result.data.errors);
-                        }
-                    });
-                }
-            });
-        }
-    }]);
-}());
+CataloguesCtrl.$inject = ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory'];
+angular.module('app.catalogues').controller('CataloguesCtrl', CataloguesCtrl);

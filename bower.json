@@ -2,15 +2,33 @@
   "name": "texenergo",
   "version": "1.0.0",
   "dependencies": {
-      "angular-jwt":                "latest",
-      "auth0-lock":                 "latest",
-      "auth0-lock-passwordless":    "latest",
-      "angular-lock":               "latest",
-      "angular-lock-passwordless":  "latest",
-      "ngstorage":                  "latest"
+    "angular": "1.5.8",
+    "angular-animate": "1.5.8",
+    "angular-bootstrap": "1.3.3",
+    "angular-cookies": "1.5.8",
+    "angular-couch-potato": "0.1.1",
+    "angular-file-upload": "2.2.0",
+    "angular-jwt": "latest",
+    "angular-lock": "latest",
+    "angular-lock-passwordless": "latest",
+    "angular-sanitize": "1.5.8",
+    "angular-ui-router": "0.2.11",
+    "angular-ui-tinymce": "0.0.11",
+    "auth0-lock": "latest",
+    "auth0-lock-passwordless": "latest",
+    "bootstrap": "3.3.1",
+    "d3": "3.5.17",
+    "fastclick": "1.0.3",
+    "ion.rangeSlider": "ionrangeslider#2.1.4",
+    "jquery": "3.0.0",
+    "jquery-ui": "latest",
+    "json3": "3.3.2",
+    "lodash": "2.4.1",
+    "ngstorage": "latest",
+    "tinymce": "4.3.1"
   },
   "analytics": false,
   "resolutions": {
-    "angular": "1.4.8"
+    "angular": "1.5.8"
   }
 }

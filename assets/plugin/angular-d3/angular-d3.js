@@ -7,7 +7,7 @@
     var module = angular.module('angular.d3', []);
 
     module.directive('forceLayoutGraph', [function(){
-        var colors = d3.scale.category20().range();
+        var colors = d3.schemeCategory20;
         var defaultConfig = {
             d3:{
                 size: [400, 400],

@@ -1,9 +1,11 @@
 'use strict';
 
 var gulp = require('gulp'),
+    babel = require('gulp-babel'),
     concat = require('gulp-concat'),
     connect = require('gulp-connect'),
     csso = require('gulp-csso'),
+    gulpif = require('gulp-if'),
     minify = require('gulp-minify'),
     ngAnnotate = require('gulp-ng-annotate');
 
@@ -20,8 +22,8 @@ gulp.task('styles', function() {
         'assets/css/project.css',
         'assets/css/select.min.css',
         'assets/plugin/x-editable/xeditable.css',
-        'assets/plugin/ion-rangeslider/css/normalize.css',
-        'assets/plugin/ion-rangeslider/css/ion.rangeSlider.css'
+        'assets/plugin/ion.rangeSlider/css/normalize.css',
+        'assets/plugin/ion.rangeSlider/css/ion.rangeSlider.css'
 
     ])
     .on('error', console.log)
@@ -30,9 +32,10 @@ gulp.task('styles', function() {
     .pipe(gulp.dest('public/assets/stylesheets/'));
 });
 
-var buildJs = function(destinationFileName, files) {
+var buildJs = function(destinationFileName, files, skipES6) {
     return gulp.src(files, {base: 'src'})
         .on('error', console.warn)
+        .pipe( gulpif(!skipES6, babel({presets: ['es2015']})) )
         .pipe(concat(destinationFileName))
         .pipe(ngAnnotate())
         .pipe(minify())
@@ -41,50 +44,49 @@ var buildJs = function(destinationFileName, files) {
 
 gulp.task('libs', function(){
     buildJs('libs.js', [
-        'assets/plugin/jquery/dist/jquery-3.0.0.min.js',
-        'assets/plugin/bootstrap/dist/js/bootstrap.min.js',
-        'assets/plugin/jquery-ui/jquery-ui.min.js',
-        'assets/plugin/jquery-ui/datepicker-locale.js',
-        'assets/plugin/d3/d3.min.js',
-        'assets/plugin/angular/angular.min.js',
+        'bower_components/jquery/dist/jquery.min.js',
+        'bower_components/bootstrap/dist/js/bootstrap.min.js',
+        'bower_components/jquery-ui/jquery-ui.min.js',
+        'assets/js/datepicker-locale.js',
+        'bower_components/d3/d3.min.js',
+        'bower_components/angular/angular.min.js',
         'assets/plugin/i18n/*.js',
-        'assets/plugin/angular-ui-router/release/angular-ui-router.min.js',
-        'assets/plugin/angular-sanitize/angular-sanitize.min.js',
-        'assets/plugin/angular-animate/angular-animate.min.js',
-        'assets/plugin/angular-cookies/angular-cookies.min.js',
-        'assets/plugin/ngstorage/ngStorage.min.js',
+        'bower_components/angular-ui-router/release/angular-ui-router.min.js',
+        'bower_components/angular-sanitize/angular-sanitize.min.js',
+        'bower_components/angular-animate/angular-animate.min.js',
+        'bower_components/angular-cookies/angular-cookies.min.js',
+        'bower_components/ngstorage/ngStorage.min.js',
 
         //Auth0
-        'assets/plugin/auth0-lock/build/lock.min.js',
-        'assets/plugin/angular-lock/dist/angular-lock.min.js',
-        'assets/plugin/auth0-lock-passwordless/build/lock-passwordless.min.js',
-        'assets/plugin/angular-lock-passwordless/dist/angular-lock-passwordless.min.js',
-        'assets/plugin/angular-jwt/dist/angular-jwt.min.js',
-        //
+        'bower_components/auth0-lock/build/lock.min.js',
+        'bower_components/angular-lock/dist/angular-lock.min.js',
+        'bower_components/auth0-lock-passwordless/build/lock-passwordless.min.js',
+        'bower_components/angular-lock-passwordless/dist/angular-lock-passwordless.min.js',
+        'bower_components/angular-jwt/dist/angular-jwt.min.js',
 
-        'assets/plugin/angular-bootstrap/ui-bootstrap-tpls-1.3.3.min.js',
-        'assets/plugin/angular-file-upload/angular-file-upload.js',
+        'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+        'bower_components/angular-file-upload/dist/angular-file-upload.js',
         
         'assets/plugin/ui-select/select.min.js',
-        'assets/plugin/fastclick/lib/fastclick.js',
+        'bower_components/fastclick/lib/fastclick.js',
         'assets/plugin/chartjs/chart.min.js',
         'assets/plugin/dropzone/downloads/dropzone.min.js',
-        'assets/plugin/lodash/dist/lodash.min.js',
-        // 'app/smartadmin-plugin/*/*.js',
+        'bower_components/lodash/dist/lodash.min.js',
         'app/smartadmin-plugin/notification/SmartNotification.min.js',
         'app/smartadmin-plugin/smartwidgets/jarvis.widget.js',
         'assets/plugin/infinite-scroll/ng-infinite-scroll.js',
         'assets/plugin/easy-pie-chart/angular.easypiechart.min.js',
-        'assets/plugin/ui-tinymce/tinymce.js',
+        'bower_components/angular-ui-tinymce/src/tinymce.js',
         'assets/plugin/x-editable/xeditable.js',
         'assets/plugin/x-editable/x-editable-custom.js',
-        'assets/plugin/ion-rangeslider/js/ion.rangeSlider.min.js',
+        'bower_components/ion.rangeSlider/js/ion.rangeSlider.min.js',
 
-
+        // Consider remove both cancan below
         'assets/plugin/cancan/export.js',
         'assets/plugin/cable/cable.js',
-        'assets/plugin/cancan/export-angular.js'
-    ]);
+        'assets/plugin/cancan/export-angular.js',
+        'bower_components/tinymce/tinymce.min.js',
+    ], true);
 });
 
 gulp.task('app', function(){
