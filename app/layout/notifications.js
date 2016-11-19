@@ -5,46 +5,51 @@
     /**
      * Build notification service for module
      */
-    angular.module('services.notifications', [])
-        .service('notificationServiceBuilder', ['CableApi', 'funcFactory', function(CableApi, funcFactory){
+    var module = angular.module('services.notifications', []);
 
-            this.build = function(serviceModule, name, actions, mixins){
+    module.service('notificationServiceBuilder', notificationServiceBuilder);
 
-                return new function(){
+    notificationServiceBuilder.$inject = ['CableApi', 'funcFactory'];
 
-                    this.subscribe = function(params, scopeObject){
+    function notificationServiceBuilder (CableApi, funcFactory){
 
-                        var s = scopeObject;// property of controller scope, that waiting for changes
+        this.build = function(serviceModule, name, actions, mixins){
 
-                        var m = {
-                            rejected: function(){
-                                funcFactory.showNotification('Канал получения уведомлений', 'Не удалось установить соединение!');
-                            },
-                            received: function(data) {
-                                syncChanges(data, s);
-                            }
-                        };
-                        if(typeof mixins === 'object' && mixins) m = angular.extend(m, mixins);
+            return new function(){
 
-                        return CableApi.subscribe(params, m);
+                this.subscribe = function(params, scopeObject){
+
+                    var s = scopeObject;// property of controller scope, that waiting for changes
+
+                    var m = {
+                        rejected: function(){
+                            funcFactory.showNotification('Канал получения уведомлений', 'Не удалось установить соединение!');
+                        },
+                        received: function(data) {
+                            syncChanges(data, s);
+                        }
                     };
+                    if(typeof mixins === 'object' && mixins) m = angular.extend(m, mixins);
 
-                    function syncChanges(data, scopeObject){
-                        actions[data.action] && actions[data.action](scopeObject, data);
-                    }
-
+                    return CableApi.subscribe(params, m);
                 };
-            };
 
-            this.getIndexByProperty = function(list, item, prop){
-                var ind = -1;
-                for(var i=list.length; i--;){
-                    if(list[i][prop] === item[prop]){
-                        ind = i;
-                        break;
-                    }
+                function syncChanges(data, scopeObject){
+                    actions[data.action] && actions[data.action](scopeObject, data);
                 }
-                return ind;
+
             };
-        }]);
+        };
+
+        this.getIndexByProperty = function(list, item, prop){
+            var ind = -1;
+            for(var i=list.length; i--;){
+                if(list[i][prop] === item[prop]){
+                    ind = i;
+                    break;
+                }
+            }
+            return ind;
+        };
+    }
 }());

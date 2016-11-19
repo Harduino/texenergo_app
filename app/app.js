@@ -97,10 +97,11 @@ appConfig.sound_on = true;
         'lock',
         'authService',
         '$sessionStorage',
-        '$location'
+        '$location',
+        'CableApi'
     ];
 
-    function appRun ($rootScope, $state, $stateParams, lock, authService, $sessionStorage, $location) {
+    function appRun ($rootScope, $state, $stateParams, lock, authService, $sessionStorage, $location, CableApi) {
 
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
@@ -127,8 +128,27 @@ appConfig.sound_on = true;
                     $sessionStorage.returnToUrl = $location.$$path;
                     $state.transitionTo('login', null, {reload:true});
                 }
+
+                sendState(toState, fromState);
             }
         );
+
+        function sendState(toState, fromState){
+
+            //find notifications channel;
+            angular.forEach(CableApi.consumer.subscriptions.subscriptions, function(subscription){
+
+                const channelName = 'NotificationsChannel';
+
+                if(JSON.parse(subscription.identifier).channel === channelName){
+                    subscription.send({
+                        type:'state_change',
+                        toState: toState,
+                        fromState: fromState
+                    });
+                }
+            });
+        }
     }
 
     Array.prototype.swapItemByindex = function(currentIndex, newIndex){
