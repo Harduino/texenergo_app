@@ -31,7 +31,7 @@
            return {
                plugins : 'advlist autolink link image lists charmap preview textcolor colorpicker code',
                toolbar1: 'insertfile undo redo | preview code | styleselect | bold italic | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-               language: 'ru',
+               language_url: 'assets/js/langs/ru.js',
                menubar:false
            };
        };

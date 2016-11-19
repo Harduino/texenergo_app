@@ -76,7 +76,6 @@ gulp.task('libs', function(){
         'app/smartadmin-plugin/smartwidgets/jarvis.widget.js',
         'assets/plugin/infinite-scroll/ng-infinite-scroll.js',
         'assets/plugin/easy-pie-chart/angular.easypiechart.min.js',
-        'bower_components/angular-ui-tinymce/src/tinymce.js',
         'assets/plugin/x-editable/xeditable.js',
         'assets/plugin/x-editable/x-editable-custom.js',
         'bower_components/ion.rangeSlider/js/ion.rangeSlider.min.js',
@@ -85,10 +84,17 @@ gulp.task('libs', function(){
         'assets/plugin/cancan/export.js',
         'assets/plugin/cable/cable.js',
         'assets/plugin/cancan/export-angular.js',
+
+        //TinyMCE
         'bower_components/tinymce/tinymce.min.js',
         'bower_components/tinymce/plugins/*/plugin.js',
-        'bower_components/tinymce/themes/modern/theme.js'
+        'bower_components/tinymce/themes/modern/theme.js',
+        'bower_components/angular-ui-tinymce/src/tinymce.js'
     ], true);
+
+    gulp.src(['bower_components/tinymce-dist/skins/**'])
+        .on('error', console.warn)
+        .pipe(gulp.dest('public/assets/javascripts/skins/'));
 });
 
 gulp.task('app', function(){
