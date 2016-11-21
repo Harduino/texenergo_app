@@ -85,8 +85,28 @@
         _this.consumer = new ActionCable.Consumer(ws);
 
 
-        this.subscribe = function(channel, callbacks) {
+        _this.subscribe = function(channel, callbacks) {
             return _this.consumer.subscriptions.create(channel, callbacks);
         };
+
+        /**
+         * Getting consumer subscription by channel name
+         * @param channelName
+         * @returns {*} - ActionCable subscription, or null if subscription not found.
+         */
+        _this.getSubscription = function(channelName){
+            //find subscription
+            const subscriptions = _this.consumer.subscriptions.subscriptions;
+
+            for(var i= 0, il = subscriptions.length, subscription; i<il; i++){
+                subscription = subscriptions[i];
+
+                //check channel name into json string (identifier)
+                if(JSON.parse(subscription.identifier).channel === channelName){
+                    return subscription;
+                }
+            }
+            return null;
+        }
     }]);
 }());

@@ -133,20 +133,16 @@ appConfig.sound_on = true;
             }
         );
 
+        //send user state into notification channel
         function sendState(toState, fromState){
+            const channelName = 'NotificationsChannel';
 
-            //find notifications channel;
-            angular.forEach(CableApi.consumer.subscriptions.subscriptions, function(subscription){
-
-                const channelName = 'NotificationsChannel';
-
-                if(JSON.parse(subscription.identifier).channel === channelName){
-                    subscription.send({
-                        type:'state_change',
-                        toState: toState,
-                        fromState: fromState
-                    });
-                }
+            var subscription  = CableApi.getSubscription(channelName);
+            //if subscription not null send data
+            subscription && subscription.send({
+                type:'state_change',
+                toState: toState,
+                fromState: fromState
             });
         }
     }
