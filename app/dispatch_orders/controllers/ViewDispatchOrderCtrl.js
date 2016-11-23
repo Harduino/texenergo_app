@@ -71,7 +71,7 @@
         }
 
         function openPdf(path) {
-            window.open(window.APP_ENV.REMOTE_API_HTTP_BASE_URL + '/dispatch_orders/' + sc.dispatchOrder.id + path +
+            window.open(window.APP_ENV.TEXENERGO_COM_API_HTTP_BASE_URL + '/dispatch_orders/' + sc.dispatchOrder.id + path +
                 '.pdf?token=' + $localStorage.id_token, '_blank');
         }
         

@@ -5,7 +5,7 @@
 
     "use strict";
 
-    angular.module('app.supplier_orders').controller('ViewSupplierOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', 'supplierOrdersNotifications', '$filter', function($scope, $state, $stateParams, serverApi, funcFactory, notifications, $filter){
+    angular.module('app.supplier_orders').controller('ViewSupplierOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', 'supplierOrdersNotifications', '$filter', '$localStorage', function($scope, $state, $stateParams, serverApi, funcFactory, notifications, $filter, $localStorage){
         var sc = $scope;
         
         sc._subscription = {};  
@@ -18,7 +18,12 @@
         };
 
         sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack}, {type:'confirm_order', callback: updateStatus}, {type:'refresh', callback:refresh}],
+            navButtsOptions:[
+                { type: 'back', callback: returnBack },
+                { type: 'confirm_order', callback: updateStatus },
+                { type: 'txt_export', callback: openSupplierOrderTxt },
+                { type: 'refresh', callback: refresh }
+            ],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
                 scaleColor:false,
@@ -95,6 +100,11 @@
                     can_confirm: order.can_confirm
                 };
             });
+        }
+
+        function openSupplierOrderTxt() {
+            window.open(window.APP_ENV.TEXENERGO_COM_API_HTTP_BASE_URL + '/supplier_orders/' + sc.data.supplierOrder.id +
+                '.txt?token=' + $localStorage.id_token, '_blank');
         }
 
         /**

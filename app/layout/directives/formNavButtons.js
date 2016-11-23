@@ -33,6 +33,7 @@
                     table_edit:{ico:'pencil', class:'btn-default', role:'can_edit', disabled:true},
                     back:{name:'К списку', ico:'arrow-left'},
                     upd_form_pdf:{name:'УПД', ico:'file-pdf-o'},
+                    txt_export: {name: "Текст", ico: 'file-text'},
                     label_pdf:{name:'Бирка', ico:'truck'},
                     packing_list_pdf:{name:'Упаковочный лист', ico:'list-ol'},
                     at_partners:{name:'У партнёров', ico:'exchange'},
