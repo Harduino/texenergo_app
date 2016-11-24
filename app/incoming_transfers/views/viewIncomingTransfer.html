@@ -33,7 +33,7 @@
 
     <div class="well well-white">
         <div class="margin-bottom-10 m-r-10">Свободно средств: {{incomingTransfer.remaining_amount | currency}}</div>
-        <table class="table table-bordered margin-top-10" ng-if="visual.roles.can_edit && incomingTransfer.remaining_amount>0">
+        <table class="table table-bordered margin-top-10" ng-if="incomingTransfer.can_edit && incomingTransfer.remaining_amount>0">
             <thead>
             <tr>
                 <th>Заказ клиента/Исходящий платеж</th>

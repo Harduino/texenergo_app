@@ -16,7 +16,7 @@
         //get current list of searched data
         o.getSearch = function(page, query, config, success, fail){
             var encoded = encodeURIComponent(query);
-            $http.get('/products/search.json?term='+encoded+'&$skip='+(page*25)+'&$top=25', config || null).then(success, fail);
+            $http.get('/products/search?term='+encoded+'&$skip='+(page*25)+'&$top=25', config || null).then(success, fail);
         };
 
         o.getSubSearch = function(query, config, success, fail){
@@ -28,13 +28,13 @@
 
         // get product info
         o.getProduct = function(id, success, fail){
-            $http.get('/products/'+id +'.json').then(success, fail);
+            $http.get('/products/' + id).then(success, fail);
         };
         o.updateProduct = function(id, data, success, fail){
             $http.put('/products/' + id, data).then(success, fail);
         };
         o.getProductPartnerLogs = function(id, success, fail){
-            $http.get('/products/'+id +'/partner_logs.json').then(success, fail);
+            $http.get('/products/'+id +'/partner_logs').then(success, fail);
         };
         o.deleteProductPartnerLog = function(product_id, log_id, success, fail){
             $http.delete('/products/'+product_id+'/partner_logs/' + log_id).then(success, fail);
