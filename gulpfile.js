@@ -22,8 +22,8 @@ gulp.task('styles', function() {
         'assets/css/project.css',
         'assets/css/select.min.css',
         'assets/plugin/x-editable/xeditable.css',
-        'assets/plugin/ion.rangeSlider/css/normalize.css',
-        'assets/plugin/ion.rangeSlider/css/ion.rangeSlider.css'
+        'bower_components/ion.rangeSlider/css/normalize.css',
+        'bower_components/ion.rangeSlider/css/ion.rangeSlider.css'
 
     ];
 
