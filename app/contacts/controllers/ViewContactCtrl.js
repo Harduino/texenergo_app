@@ -1,48 +1,40 @@
 /**
  * Created by Mikhail Arzhaev on 26.11.15.
  */
-(function(){
+(function() {
+    'use strict';
 
-    "use strict";
+    angular.module('app.contacts').controller('ViewContactCtrl', ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory', function($state, $stateParams, serverApi, CanCan, funcFactory) {
+        var self = this;
+        this.contact = {};
+        this.data = {partnersList: []};
+        this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
 
-    angular.module('app.contacts').controller('ViewContactCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory', function($scope, $state, $stateParams, serverApi, CanCan, funcFactory){
-        var sc = $scope;
-        sc.contact = {};
-        sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack}, {type:'refresh', callback:getContactDetails}],
-            chartOptions: {
-                barColor:'rgb(103,135,155)',
-                scaleColor:false,
-                lineWidth:5,
-                lineCap:'circle',
-                size:50
-            },
-            titles: 'Контакт: ',
-            roles: {
-                can_edit: CanCan.can('edit', 'Contact')
-            }
-        };
-        sc.data = {
-            partnersList: []
-        };
-
-        sc.partnerSelectConfig ={
-            dataMethod: serverApi.getPartners
-        };
-
-        function getContactDetails(){
-            serverApi.getContactDetails($stateParams.id, function(result){
-                sc.contact = result.data;
+        var getContactDetails = function () {
+            serverApi.getContactDetails($stateParams.id, function(result) {
+                self.contact = result.data;
             });
-        }
+        };
+
+        this.visual = {
+            navButtsOptions:[
+                {type:'back', callback: function() {
+                    $state.go('app.contacts',{});
+                }},
+                {type:'refresh', callback: getContactDetails}
+            ],
+            chartOptions: {barColor:'rgb(103,135,155)', scaleColor:false, lineWidth:5, lineCap:'circle', size:50},
+            titles: 'Контакт: ',
+            roles: {can_edit: CanCan.can('edit', 'Contact')}
+        };
 
         getContactDetails();
 
         /**
          * Обновляем информацию по контакту
          */
-        sc.saveContact = function(){
-            var contact = sc.contact;
+        this.saveContact = function(){
+            var contact = self.contact;
             var data = {
                 contact:{
                     first_name: contact.first_name,
@@ -54,21 +46,18 @@
                 }
             };
 
-           serverApi.updateContact(contact.id, data, function(result){
-               if(!result.data.errors){
-                   sc.concat = result.data;
-                   funcFactory.showNotification("Успешно", 'Контакт ' + contact.email + ' успешно отредактирован.',true);
+           serverApi.updateContact(contact.id, data, function(result) {
+               if(!result.data.errors) {
+                   self.concat = result.data;
+                   funcFactory.showNotification("Успешно", 'Контакт ' + contact.email + ' успешно отредактирован.', true);
+               } else {
+                   funcFactory.showNotification('Не удалось отредактировать контакт ' + contact.email, result.data.errors);
                }
-               else funcFactory.showNotification('Не удалось отредактировать контакт '+contact.email, result.data.errors);
            });
         };
 
-        sc.goToPartner = function() {
-            $state.go('app.partners.view', {id: (sc.contact.partner.id || sc.contact.partner._id)})
-        }
-
-        function returnBack(){
-            $state.go('app.contacts',{});
-        }
+        this.goToPartner = function() {
+            $state.go('app.partners.view', {id: (self.contact.partner.id || self.contact.partner._id)})
+        };
     }]);
 }());

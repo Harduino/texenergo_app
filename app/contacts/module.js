@@ -25,6 +25,7 @@ angular.module('app.contacts', ['ui.router']).config($stateProvider => {
         views:{
             "content@app":{
                 controller: 'ViewContactCtrl',
+                controllerAs: 'viewContactCtrl',
                 templateUrl: '/app/contacts/views/viewContact.html'
             }
         }
