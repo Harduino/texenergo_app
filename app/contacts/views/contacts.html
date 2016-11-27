@@ -1,12 +1,16 @@
 <div id="content">
     <div class="row">
-        <big-breadcrumbs items="visual.titles" data-icon="group" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+        <big-breadcrumbs items="contactsCtrl.visual.titles"
+                         data-icon="group" class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        </big-breadcrumbs>
     </div>
     <div class="well">
-        <form-nav-buttons options="visual.navButtsOptions" class="btn-group"></form-nav-buttons>
+        <form-nav-buttons options="contactsCtrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
         <hr>
-        <orders-filter data-search-query="data.searchQuery" data-to-state="app.contacts"></orders-filter>
-        <table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false" te-lazy-helper data-list="data.contactsList" data-search-query="data.searchQuery" data-server-api-method="getContacts">
+        <orders-filter data-search-query="contactsCtrl.data.searchQuery" data-to-state="app.contacts"></orders-filter>
+        <table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"
+               data-list="contactsCtrl.data.contactsList" data-search-query="contactsCtrl.data.searchQuery"
+               te-lazy-helper data-server-api-method="getContacts">
             <thead>
                 <tr>
                     <th>#</th>
@@ -18,14 +22,16 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="row in data.contactsList">
+                <tr ng-repeat="row in contactsCtrl.data.contactsList">
                     <td>{{$index +1}}</td>
                     <td>{{row.email}}</td>
                     <td>{{row.first_name}}</td>
                     <td>{{row.last_name}}</td>
                     <td>{{row.partner.name}}</td>
                     <td class="center-item-text">
-                        <form-nav-buttons data-role="row" class="btn-group" data-options="visual.navTableButts" subdata="row" data-template="table" content-class="btn btn-xs"></form-nav-buttons>
+                        <form-nav-buttons data-role="row" class="btn-group" subdata="row" data-template="table"
+                                          content-class="btn btn-xs" data-options="contactsCtrl.visual.navTableButts">
+                        </form-nav-buttons>
                     </td>
                 </tr>
             </tbody>
@@ -44,36 +50,43 @@
                 </div>
                 <div class="modal-body">
                     <section class="form-group">
-                        <label class="control-label">Имя</label>
-                        <input type="text" ng-model="newContact.first_name" uib-typeahead="name for name in getDaDataSuggestions('fio', $viewValue, 'value')" class="input-sm form-control">
+                        <label class="control-label" for="newContact.first_name">Имя</label>
+                        <input uib-typeahead="name for name in contactsCtrl.getSuggestions('fio', $viewValue, 'value')"
+                               type="text" ng-model="contactsCtrl.newContact.first_name" class="input-sm form-control"
+                               id="newContact.first_name" />
                     </section>
                     <section class="form-group">
-                        <label class="control-label">Фамилия</label>
-                        <input type="text" ng-model="newContact.last_name" uib-typeahead="item for item in getDaDataSuggestions('fio', $viewValue, 'value')" class="input-sm form-control">
+                        <label class="control-label" for="newContact.last_name">Фамилия</label>
+                        <input uib-typeahead="item for item in contactsCtrl.getSuggestions('fio', $viewValue, 'value')"
+                               type="text" ng-model="contactsCtrl.newContact.last_name" class="input-sm form-control"
+                               id="newContact.last_name" />
                     </section>
                     <section class="form-group">
-                        <label class="control-label">Email</label>
-                        <input type="text" ng-model="newContact.email" uib-typeahead="item for item in getDaDataSuggestions('email', $viewValue, 'value')" class="input-sm form-control">
+                        <label class="control-label" for="newContact.email">Email</label>
+                        <input uib-typeahead="item for item in contactsCtrl.getSuggestions('email', $viewValue, 'value')"
+                               type="text" ng-model="contactsCtrl.newContact.email" class="input-sm form-control"
+                               id="newContact.email" />
                     </section>
                     <section class="form-group">
-                        <label class="control-label">Мобильный</label>
-                        <input type="text" ng-model="newContact.mobile" class="input-sm form-control">
+                        <label class="control-label" for="newContact.mobile">Мобильный</label>
+                        <input type="text" ng-model="contactsCtrl.newContact.mobile" class="input-sm form-control"
+                               id="newContact.mobile" />
                     </section>
                     <section class="form-group">
                         <label class="control-label">Партнер</label>
-                        <ui-select  ui-select-infinity="partnerSelectConfig" ng-model="newContact.partner" theme="select2" class="td-ui-select">
+                        <ui-select  ui-select-infinity="contactsCtrl.partnerSelectConfig" theme="select2"
+                                    class="td-ui-select" ng-model="contactsCtrl.newContact.partner">
                             <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
-                            <ui-select-choices repeat="partner in data.partnersList | filter:$select.search">
+                            <ui-select-choices repeat="partner in contactsCtrl.data.partnersList|filter:$select.search">
                                 <div ng-bind-html="partner.name | highlight: $select.search"></div>
                             </ui-select-choices>
                         </ui-select>
                     </section>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                        Отмена
-                    </button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="createContact()">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"
+                            ng-click="contactsCtrl.createContact()">
                         Сохранить
                     </button>
                 </div>
