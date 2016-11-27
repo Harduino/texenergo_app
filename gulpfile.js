@@ -106,7 +106,7 @@ gulp.task('app', function(){
         'app/env/production.js',
         'app/layout/notifications.js',
         'app/*/module.js',
-        'app/auth/directives/loginInfo.js',
+        'app/auth/components/login-info/login-info.js',
         'app/*/services/*.js',
         'app/layout/templates.js',
         'app/layout/actions/*.js',
@@ -136,7 +136,7 @@ gulp.task('watch', function() {
     gulp.watch([
         'app/*/module.js',
         'app/layout/templates.js',
-        'app/auth/directives/loginInfo.js',
+        'app/auth/components/login-info/login-info.js',
         'app/*/services/*.js',
         'app/layout/actions/*.js',
         'app/layout/filters/filters.js',
