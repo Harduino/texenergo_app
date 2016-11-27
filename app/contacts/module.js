@@ -10,9 +10,7 @@ angular.module('app.contacts', ['ui.router']).config($stateProvider => {
         },
         views:{
             "content@app": {
-                controller: 'ContactsCtrl',
-                controllerAs: 'contactsCtrl',
-                templateUrl: '/app/contacts/views/contacts.html'
+                template: '<contacts></contacts>'
             }
         }
     }).state('app.contacts.view', {
