@@ -3,9 +3,7 @@ angular.module('login', ['ui.router']).config(['$stateProvider', $stateProvider 
         url: '/sign_in',
         views: {
             root: {
-                controller: 'LoginCtrl',
-                controllerAs: 'loginCtrl',
-                templateUrl: '/app/auth/views/login.html'
+                template: '<login></login>'
             }
         }
     });

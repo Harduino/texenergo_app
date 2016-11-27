@@ -10,4 +10,9 @@ class LoginCtrl {
 }
 
 LoginCtrl.$inject = ['authService'];
-angular.module('login').controller('LoginCtrl', LoginCtrl);
+
+angular.module('login').component('login', {
+    controller: LoginCtrl,
+    controllerAs: 'loginCtrl',
+    templateUrl: '/app/auth/components/login/login.html'
+});
