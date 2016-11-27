@@ -1,13 +1,13 @@
-/**
- * Created by Egor Lobanov on 31.01.16.
- * Controller of Sign in page
- */
-(function(){
-    angular.module('login').controller('loginCtrl', ['authService', function(authService) {
+class LoginCtrl {
+    constructor(authService) {
+        this.authService = authService;
         authService.login();
+    }
 
-        this.goToPaswordless = function() {
-            authService.logInPaswordless();
-        };
-    }]);
-}());
+    goToPaswordless() {
+        this.authService.logInPaswordless();
+    }
+}
+
+LoginCtrl.$inject = ['authService'];
+angular.module('login').controller('LoginCtrl', LoginCtrl);
