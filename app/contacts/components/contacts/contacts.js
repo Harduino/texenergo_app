@@ -1,6 +1,6 @@
 class ContactsCtrl {
     constructor($state, $stateParams, serverApi, funcFactory, $parse) {
-        var self = this;
+        let self = this;
         this.serverApi = serverApi;
         this.funcFactory = funcFactory;
         this.$parse = $parse;
@@ -27,7 +27,7 @@ class ContactsCtrl {
     }
 
     getSuggestions(type, val, field) {
-        var self = this;
+        let self = this;
 
         return this.serverApi.validateViaDaData(type, {query: val}).then(result => {
             return result.data.suggestions.map(item => {
@@ -42,7 +42,7 @@ class ContactsCtrl {
         }
 
         delete this.newContact.partner;
-        var self = this;
+        let self = this;
 
         this.serverApi.createContact(data, res => {
             if(!res.data.errors) {
