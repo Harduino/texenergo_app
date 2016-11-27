@@ -1,22 +1,12 @@
-/**
- * Created by Egor Lobanov on 29.01.16.
- * Module for login page.
- */
-(function(){
-
-    'use strict';
-
-    var module = angular.module('login', ['ui.router']);
-
-    module.config(['$stateProvider', function($stateProvider){
-        $stateProvider.state('login', {
-            url: '/sign_in',
-            views: {
-                root: {
-                    controller: 'loginCtrl',
-                    templateUrl: '/app/auth/views/login.html'
-                }
+angular.module('login', ['ui.router']).config(['$stateProvider', $stateProvider => {
+    $stateProvider.state('login', {
+        url: '/sign_in',
+        views: {
+            root: {
+                controller: 'loginCtrl',
+                controllerAs: 'loginCtrl',
+                templateUrl: '/app/auth/views/login.html'
             }
-        });
-    }]);
-}());
+        }
+    });
+}]);

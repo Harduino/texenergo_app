@@ -3,12 +3,11 @@
  * Controller of Sign in page
  */
 (function(){
-    angular.module('login').controller('loginCtrl', ['authService', '$scope', function(authService, sc){
-
+    angular.module('login').controller('loginCtrl', ['authService', function(authService) {
         authService.login();
 
-        sc.goToPaswordless = function(){
+        this.goToPaswordless = function() {
             authService.logInPaswordless();
-        }
+        };
     }]);
 }());
