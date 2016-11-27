@@ -1,26 +1,19 @@
-/**
- * Created by Mikhail Arzhaev on 26.11.15.
- */
-(function() {
-    'use strict';
-
-    angular.module('app.contacts').controller('ViewContactCtrl', ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory', function($state, $stateParams, serverApi, CanCan, funcFactory) {
-        var self = this;
+class ViewContactCtrl {
+    constructor($state, $stateParams, serverApi, CanCan, funcFactory) {
         this.contact = {};
         this.data = {partnersList: []};
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
 
-        var getContactDetails = function () {
-            serverApi.getContactDetails($stateParams.id, function(result) {
-                self.contact = result.data;
-            });
-        };
+        this.$state = $state;
+        this.serverApi = serverApi;
+        this.funcFactory = funcFactory;
+
+        let self = this;
+        let getContactDetails = () => serverApi.getContactDetails($stateParams.id, res => self.contact = res.data);
 
         this.visual = {
             navButtsOptions:[
-                {type:'back', callback: function() {
-                    $state.go('app.contacts',{});
-                }},
+                {type:'back', callback: () => $state.go('app.contacts', {})},
                 {type:'refresh', callback: getContactDetails}
             ],
             chartOptions: {barColor:'rgb(103,135,155)', scaleColor:false, lineWidth:5, lineCap:'circle', size:50},
@@ -29,35 +22,37 @@
         };
 
         getContactDetails();
+    }
 
-        /**
-         * Обновляем информацию по контакту
-         */
-        this.saveContact = function(){
-            var contact = self.contact;
-            var data = {
-                contact:{
-                    first_name: contact.first_name,
-                    last_name: contact.last_name,
-                    do_not_email: contact.do_not_email,
-                    partner_id: contact.partner.id,
-                    mobile: contact.mobile,
-                    email: contact.email
-                }
-            };
+    saveContact() {
+        let contact = this.contact;
+        let self = this;
 
-           serverApi.updateContact(contact.id, data, function(result) {
-               if(!result.data.errors) {
-                   self.concat = result.data;
-                   funcFactory.showNotification("Успешно", 'Контакт ' + contact.email + ' успешно отредактирован.', true);
-               } else {
-                   funcFactory.showNotification('Не удалось отредактировать контакт ' + contact.email, result.data.errors);
-               }
-           });
+        let data = {
+            contact:{
+                first_name: contact.first_name,
+                last_name: contact.last_name,
+                do_not_email: contact.do_not_email,
+                partner_id: contact.partner.id,
+                mobile: contact.mobile,
+                email: contact.email
+            }
         };
 
-        this.goToPartner = function() {
-            $state.go('app.partners.view', {id: (self.contact.partner.id || self.contact.partner._id)})
-        };
-    }]);
-}());
+        serverApi.updateContact(contact.id, data, res => {
+            if(!res.data.errors) {
+                self.concat = res.data;
+                self.funcFactory.showNotification("Успешно", 'Контакт ' + contact.email + ' успешно отредактирован.', true);
+            } else {
+                self.funcFactory.showNotification('Не удалось отредактировать контакт ' + contact.email, res.data.errors);
+            }
+        });
+    }
+
+    goToPartner() {
+        this.$state.go('app.partners.view', {id: (this.contact.partner.id || this.contact.partner._id)})
+    }
+}
+
+ViewContactCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory'];
+angular.module('app.contacts').controller('ViewContactCtrl', ViewContactCtrl);
