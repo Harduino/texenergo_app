@@ -1,18 +1,13 @@
-(function(){
-    "use strict";
+class LoginInfoCtrl {
+    constructor(authService) {
+        this.user = authService;
+    }
+}
 
-    angular.module('app.layout').directive('loginInfo', function(authService){
+LoginInfoCtrl.$inject = ['authService'];
 
-        return {
-            restrict: 'A',
-            templateUrl: '/app/auth/directives/login-info.tpl.html',
-            link: function(scope){
-                scope.user = authService;
-
-//                scope.$on('userProfileSet', function(event, profile){
-//
-//                })
-            }
-        }
-    });
-}());
+angular.module('app.layout').component('loginInfo', {
+    templateUrl: '/app/auth/directives/login-info.tpl.html',
+    controller: LoginInfoCtrl,
+    controllerAs: 'loginInfo'
+});
