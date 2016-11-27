@@ -55,4 +55,9 @@ class ViewContactCtrl {
 }
 
 ViewContactCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory'];
-angular.module('app.contacts').controller('ViewContactCtrl', ViewContactCtrl);
+
+angular.module('app.contacts').component('viewContact', {
+    controller: ViewContactCtrl,
+    controllerAs: 'viewContactCtrl',
+    templateUrl: '/app/contacts/components/view-contact/view-contact.html'
+});
