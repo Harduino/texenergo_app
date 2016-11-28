@@ -106,6 +106,8 @@ appConfig.sound_on = true;
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
 
+        const channelName = 'NotificationsChannel';
+
         // Intercept the hash that comes back from authentication
         // to ensure the `authenticated` event fires
         lock.interceptHash();
@@ -129,20 +131,22 @@ appConfig.sound_on = true;
                     $state.transitionTo('login', null, {reload:true});
                 }
 
-                sendState(toState, fromState);
+                sendState(toState, toParams, fromState, fromParams);
             }
         );
 
         //send user state into notification channel
-        function sendState(toState, fromState){
-            const channelName = 'NotificationsChannel';
+        function sendState(toState, toParams, fromState, fromParams){
 
             var subscription  = CableApi.getSubscription(channelName);
             //if subscription not null send data
             subscription && subscription.send({
                 type:'state_change',
+                toSource: $state.$current.source,
                 toState: toState,
-                fromState: fromState
+                toParams: toParams,
+                fromState: fromState,
+                fromParams: fromParams
             });
         }
     }
