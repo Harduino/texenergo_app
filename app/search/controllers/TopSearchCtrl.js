@@ -63,7 +63,7 @@
                 var s = sc.data.subSearch;
 
                 if (yaCounter7987369 != undefined)
-                    yaCounter7987369.reachGoal("FunctorUsed")
+                    yaCounter7987369.reachGoal("FunctorUsed", {current_user: ''})
 
                 if(s.hasOwnProperty('properties')){
 
