@@ -1,5 +1,5 @@
 class ContactsCtrl {
-    constructor($state, $stateParams, serverApi, funcFactory, $parse) {
+    constructor($state, serverApi, funcFactory, $parse) {
         let self = this;
         this.serverApi = serverApi;
         this.funcFactory = funcFactory;
@@ -22,7 +22,7 @@ class ContactsCtrl {
             titles: ["Контакты"]
         };
 
-        this.data = {contactsList:[], searchQuery: $stateParams.q, partnersList: []};
+        this.data = {contactsList:[], searchQuery: this.query, partnersList: []};
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
     }
 
@@ -55,10 +55,11 @@ class ContactsCtrl {
     }
 }
 
-ContactsCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', '$parse'];
+ContactsCtrl.$inject = ['$state', 'serverApi', 'funcFactory', '$parse'];
 
 angular.module('app.contacts').component('contacts', {
     controller: ContactsCtrl,
     controllerAs: 'contactsCtrl',
+    bindings: {query: '<'},
     templateUrl: '/app/contacts/components/contacts/contacts.html'
 });
