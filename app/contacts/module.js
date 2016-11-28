@@ -24,7 +24,10 @@ angular.module('app.contacts', ['ui.router']).config($stateProvider => {
         },
         views:{
             "content@app":{
-                template: '<view-contact></view-contact>'
+                template: '<view-contact contact-id="$resolve.contactId"></view-contact>',
+                resolve: {
+                    contactId: ['$stateParams', $stateParams => $stateParams.id]
+                }
             }
         }
     });
