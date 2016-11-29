@@ -1,32 +1,19 @@
-/**
- * Created by Egor Lobanov on 08.11.15.
- */
-(function(){
-
-    'use strict';
-
-    angular.module('app.dispatch_orders').controller('DispatchOrdersCtrl', ['$state', '$stateParams', function($state, $stateParams) {
+class DispatchOrdersCtrl {
+    constructor($state, $stateParams) {
         this.visual = {
             navButtsOptions:[
-                {
-                    type: 'refresh',
-                    callback: function() {
-                        $state.go('app.dispatch_orders', {}, {reload:true});
-                    }
-                }
+                {type: 'refresh', callback: () => $state.go('app.dispatch_orders', {}, {reload:true})}
             ],
             navTableButts: [
-                {
-                    type: 'view',
-                    callback: function(id) {
-                        $state.go('app.dispatch_orders.view', {id:id});
-                    }
-                },
+                {type: 'view', callback: (id) => $state.go('app.dispatch_orders.view', {id: id})},
                 {type: 'remove'}
             ],
-            titles: ["Списания"]
+            titles: ['Списания']
         };
 
         this.data = {ordersList:[], searchQuery: $stateParams.q};
-    }]);
-}());
+    }
+}
+
+DispatchOrdersCtrl.$inkect = ['$state', '$stateParams'];
+angular.module('app.dispatch_orders').controller('DispatchOrdersCtrl', DispatchOrdersCtrl);
