@@ -85,4 +85,9 @@ class CustomerOrdersCtrl {
 }
 
 CustomerOrdersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', 'authService'];
-angular.module('app.customer_orders').controller('CustomerOrdersCtrl', CustomerOrdersCtrl);
+
+angular.module('app.customer_orders').component('customerOrders', {
+    controller: CustomerOrdersCtrl,
+    controllerAs: 'customerOrdersCtrl',
+    templateUrl: '/app/customer_orders/components/customer-orders/customer-orders.html'
+});

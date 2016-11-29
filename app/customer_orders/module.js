@@ -24,9 +24,7 @@
             },
             views:{
                 "content@app": {
-                    controller: 'CustomerOrdersCtrl',
-                    controllerAs: 'customerOrdersCtrl',
-                    templateUrl: '/app/customer_orders/views/customerOrders.html'
+                    template: '<customer-orders></customer-orders>'
                 }
             }
         }).state('app.customer_orders.view', {
