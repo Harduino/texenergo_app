@@ -1,63 +1,50 @@
-/**
- * Created by Mikhail Arzhaev on 20.11.15.
- * Модуль страницы категорий товаров для каталога
- */
-
-(function () {
-
-    "use strict";
-    var module = angular.module('app.manufacturers', ['ui.router']);
-
-    module.config(function ($stateProvider) {
-        $stateProvider.state('app.manufacturers', {
-            url: '/manufacturers?q',
-            data:{
-                title: 'Производители',
-                access:{
-                    action:'index',
-                    params:'Manufacturers'
-                }
-            },
-            params:{
-              q:''
-            },
-            views:{
-                "content@app": {
-                    controller: 'ManufacturersCtrl',
-                    controllerAs: 'manufacturersCtrl',
-                    templateUrl: '/app/manufacturers/views/manufacturers.html'
-                }
+angular.module('app.manufacturers', ['ui.router']).config($stateProvider => {
+    $stateProvider.state('app.manufacturers', {
+        url: '/manufacturers?q',
+        data:{
+            title: 'Производители',
+            access:{
+                action:'index',
+                params:'Manufacturers'
             }
-        }).state('app.manufacturers.view', {
-            url: '/:id',
-            data:{
-                title: 'Просмотр производителя',
-                access:{
-                    action:'read',
-                    params:'Manufacturers'
-                }
-            },
-            views:{
-                "content@app":{
-                    controller: 'ViewManufacturerCtrl',
-                    templateUrl: '/app/manufacturers/views/viewManufacturer.html'
-                }
+        },
+        params:{
+          q:''
+        },
+        views:{
+            "content@app": {
+                template: '<manufacturers></manufacturers>'
             }
-        }).state('app.manufacturers.view.edit', {
-            url: '/edit',
-            data:{
-                title:'Редактирование производителя',
-                access:{
-                    action:'edit',
-                    params:'Manufacturer'
-                }
-            },
-            views:{
-                "content@app":{
-                    controller: 'EditManufacturerCtrl',
-                    templateUrl: '/app/manufacturers/views/editManufacturer.html'
-                }
+        }
+    }).state('app.manufacturers.view', {
+        url: '/:id',
+        data:{
+            title: 'Просмотр производителя',
+            access:{
+                action:'read',
+                params:'Manufacturers'
             }
-        });
+        },
+        views:{
+            "content@app":{
+                controller: 'ViewManufacturerCtrl',
+                templateUrl: '/app/manufacturers/views/viewManufacturer.html'
+            }
+        }
+    }).state('app.manufacturers.view.edit', {
+        url: '/edit',
+        data:{
+            title:'Редактирование производителя',
+            access:{
+                action:'edit',
+                params:'Manufacturer'
+            }
+        },
+        views:{
+            "content@app":{
+                controller: 'EditManufacturerCtrl',
+                templateUrl: '/app/manufacturers/views/editManufacturer.html'
+            }
+        }
     });
-}());
+});
