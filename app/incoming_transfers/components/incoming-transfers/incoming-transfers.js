@@ -49,4 +49,9 @@ class IncomingTransfersCtrl {
 }
 
 IncomingTransfersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory'];
-angular.module('app.incoming_transfers').controller('IncomingTransfersCtrl', IncomingTransfersCtrl);
+
+angular.module('app.incoming_transfers').component('incomingTransfers', {
+    controller: IncomingTransfersCtrl,
+    controllerAs: 'incomingTransfersCtrl',
+    templateUrl: '/app/incoming_transfers/components/incoming-transfers/incoming-transfers.html'
+});
