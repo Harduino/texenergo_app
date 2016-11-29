@@ -1,18 +1,16 @@
-/**
- * Created by Egor Lobanov on 07.11.15.
- */
-(function(){
+class CustomerOrdersCtrl {
+    constructor($state, $stateParams, serverApi, funcFactory, authService) {
+        let self = this;
 
-    'use strict';
-
-    angular.module('app.customer_orders').controller('CustomerOrdersCtrl', ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory', 'authService', function($state, $stateParams, serverApi, CanCan, funcFactory, authService){
-        var self = this;
+        this.$state = $state;
+        this.serverApi= serverApi;
+        this.funcFactory = funcFactory;
 
         this.visual = {
             navButtsOptions: [
                 {
                     type: 'new',
-                    callback: function() {
+                    callback: () => {
                         self.newOrderData.date = new Date();
                         self.newOrderData.partner = authService.profile.user_metadata.partner || null;
                         $('#createNewOrderModal').modal('show');
@@ -20,28 +18,24 @@
                 },
                 {
                     type: 'refresh',
-                    callback: function() {
-                        $state.go('app.customer_orders', {}, {reload: true});
-                    }
+                    callback: () => $state.go('app.customer_orders', {}, {reload: true})
                 }
             ],
             navTableButts:[
                 {
                     type:'view',
-                    callback: function(item) {
-                        $state.go('app.customer_orders.view', {id:item.data.id || item.data._id});
-                    }
+                    callback: (item) => $state.go('app.customer_orders.view', {id:item.data.id || item.data._id})
                 },
                 {
                     type:'remove',
-                    callback: function(item) {
+                    callback: item => {
                         $.SmartMessageBox({
                             title: 'Удалить заказ?',
                             content: 'Вы действительно хотите удалить заказ ' + item.data.number,
                             buttons: '[Нет][Да]'
-                        }, function (ButtonPressed) {
+                        }, ButtonPressed => {
                             if (ButtonPressed === 'Да') {
-                                serverApi.deleteCustomerOrder(item.data.id, function(result){
+                                serverApi.deleteCustomerOrder(item.data.id, result => {
                                     if(!result.data.errors){
                                         self.data.ordersList.splice(item.index,1);
                                         funcFactory.showNotification('Заказ ' + item.data.number + ' успешно удален.',
@@ -61,31 +55,34 @@
 
         this.data = {ordersList:[], partnersList:[], searchQuery:$stateParams.q};
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
-
-        this.addNewOrder = function() {
-            if(self.newOrderData.partner && self.newOrderData.partner) {
-                self.newOrderData.partner_id = self.newOrderData.partner.id;
-            }
-
-            delete self.newOrderData.date;// delete forbidden property
-            delete self.newOrderData.partner;
-
-            serverApi.createCustomerOrder(self.newOrderData, function(result){
-                if(!result.data.errors) {
-                    self.data.ordersList.unshift(result.data);
-                    funcFactory.showNotification('Заказ успешно добавлен', '', true);
-                    self.clearCreateOrder();
-                    $state.go('app.customer_orders.view', {id: result.data.id});
-                } else {
-                    funcFactory.showNotification('Не удалось создать заказ', result.data.errors);
-                }
-            });
-        };
-
-        this.clearCreateOrder = function(){
-            self.newOrderData = {date: null, title:'', description:'', partner_id: '', request_original:''};
-        };
-
         this.clearCreateOrder();
-    }]);
-}());
+    }
+
+    addNewOrder() {
+        if(this.newOrderData.partner && this.newOrderData.partner) {
+            this.newOrderData.partner_id = this.newOrderData.partner.id;
+        }
+
+        delete this.newOrderData.date;// delete forbidden property
+        delete this.newOrderData.partner;
+        let self = this;
+
+        this.serverApi.createCustomerOrder(this.newOrderData, result => {
+            if(!result.data.errors) {
+                self.data.ordersList.unshift(result.data);
+                self.funcFactory.showNotification('Заказ успешно добавлен', '', true);
+                self.clearCreateOrder();
+                self.$state.go('app.customer_orders.view', {id: result.data.id});
+            } else {
+                self.funcFactory.showNotification('Не удалось создать заказ', result.data.errors);
+            }
+        });
+    }
+
+    clearCreateOrder() {
+        this.newOrderData = {date: null, title:'', description:'', partner_id: '', request_original:''};
+    }
+}
+
+CustomerOrdersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', 'authService'];
+angular.module('app.customer_orders').controller('CustomerOrdersCtrl', CustomerOrdersCtrl);
