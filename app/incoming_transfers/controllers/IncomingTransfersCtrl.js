@@ -1,45 +1,27 @@
-/**
- * Created by Egor Lobanov on 07.11.15.
- */
-(function(){
-
-    'use strict';
-
-    angular.module('app.incoming_transfers').controller('IncomingTransfersCtrl', ['$state', '$stateParams', 'serverApi', '$filter', 'CanCan', 'funcFactory', function($state, $stateParams, serverApi, $filter, CanCan, funcFactory) {
-        var self = this;
+class IncomingTransfersCtrl {
+    constructor($state, $stateParams, serverApi, CanCan, funcFactory) {
+        let self = this;
 
         this.visual = {
             navButtsOptions:[
-                {
-                    type: 'new',
-                    callback: function() {
-                        self.newTransferConfig.showForm();
-                    }
-                },
-                {
-                    type: 'refresh',
-                    callback: function() {
-                        $state.go('app.incoming_transfers', {}, {reload: true});
-                    }
-                }
+                {type: 'new', callback: () => self.newTransferConfig.showForm()},
+                {type: 'refresh', callback: () => $state.go('app.incoming_transfers', {}, {reload: true})}
             ],
             navTableButts:[
                 {
                     type: 'view',
-                    callback: function(item) {
-                        $state.go('app.incoming_transfers.view', {id: item.data.id || item.data._id});
-                    }
+                    callback: item => $state.go('app.incoming_transfers.view', {id: item.data.id || item.data._id})
                 },
                 {
                     type: 'remove',
-                    callback: function(item) {
+                    callback: item => {
                         $.SmartMessageBox({
                             title: 'Удалить входящий платёж?',
                             content: 'Вы действительно хотите удалить входящий платёж ' + item.data.number,
                             buttons: '[Нет][Да]'
-                        }, function (ButtonPressed) {
+                        }, ButtonPressed => {
                             if (ButtonPressed === 'Да') {
-                                serverApi.deleteIncomingTransfer(item.data.id, function(result) {
+                                serverApi.deleteIncomingTransfer(item.data.id, result => {
                                     if(!result.data.errors) {
                                         self.data.incomingTransfersList.splice(item.index, 1);
                                         funcFactory.showNotification('Платеж ' + item.data.number + ' успешно удален.',
@@ -63,5 +45,8 @@
 
         this.data = {incomingTransfersList:[], searchQuery: $stateParams.q};
         this.newTransferConfig = {createMethod: serverApi.createIncomingTransfer, showForm: angular.noop};
-    }]);
-}());
+    }
+}
+
+IncomingTransfersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory'];
+angular.module('app.incoming_transfers').controller('IncomingTransfersCtrl', IncomingTransfersCtrl);
