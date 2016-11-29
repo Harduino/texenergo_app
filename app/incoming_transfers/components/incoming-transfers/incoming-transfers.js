@@ -1,5 +1,5 @@
 class IncomingTransfersCtrl {
-    constructor($state, $stateParams, serverApi, CanCan, funcFactory) {
+    constructor($state, serverApi, CanCan, funcFactory) {
         let self = this;
 
         this.visual = {
@@ -43,15 +43,16 @@ class IncomingTransfersCtrl {
             titles: ['Входящие платежи']
         };
 
-        this.data = {incomingTransfersList:[], searchQuery: $stateParams.q};
+        this.data = {incomingTransfersList:[], searchQuery: this.query};
         this.newTransferConfig = {createMethod: serverApi.createIncomingTransfer, showForm: angular.noop};
     }
 }
 
-IncomingTransfersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory'];
+IncomingTransfersCtrl.$inject = ['$state', 'serverApi', 'CanCan', 'funcFactory'];
 
 angular.module('app.incoming_transfers').component('incomingTransfers', {
     controller: IncomingTransfersCtrl,
     controllerAs: 'incomingTransfersCtrl',
+    bindings: {query: '<'},
     templateUrl: '/app/incoming_transfers/components/incoming-transfers/incoming-transfers.html'
 });
