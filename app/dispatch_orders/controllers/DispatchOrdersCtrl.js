@@ -5,31 +5,28 @@
 
     'use strict';
 
-    angular.module('app.dispatch_orders').controller('DispatchOrdersCtrl', ['$scope', '$state', '$stateParams', 'serverApi', function($scope, $state, $stateParams, serverApi){
-        var sc = $scope;
-
-        sc.visual = {
+    angular.module('app.dispatch_orders').controller('DispatchOrdersCtrl', ['$state', '$stateParams', function($state, $stateParams) {
+        this.visual = {
             navButtsOptions:[
-                { type: 'refresh', callback: refresh }
+                {
+                    type: 'refresh',
+                    callback: function() {
+                        $state.go('app.dispatch_orders', {}, {reload:true});
+                    }
+                }
             ],
             navTableButts: [
-                { type: 'view', callback: viewOrder },
-                { type: 'remove' }
+                {
+                    type: 'view',
+                    callback: function(id) {
+                        $state.go('app.dispatch_orders.view', {id:id});
+                    }
+                },
+                {type: 'remove'}
             ],
             titles: ["Списания"]
         };
 
-        sc.data = {
-            ordersList:[],
-            searchQuery:$stateParams.q
-        };
-
-        function refresh (){
-            $state.go('app.dispatch_orders', {}, {reload:true});
-        }
-
-        function viewOrder(id){
-            $state.go('app.dispatch_orders.view', {id:id});
-        }
+        this.data = {ordersList:[], searchQuery: $stateParams.q};
     }]);
 }());

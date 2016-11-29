@@ -24,6 +24,7 @@
             views:{
                 "content@app": {
                     controller: 'DispatchOrdersCtrl',
+                    controllerAs: 'dispatchOrdersCtrl',
                     templateUrl: '/app/dispatch_orders/views/dispatch_orders.html'
                 }
             }
