@@ -1,43 +1,33 @@
-/**
- * Created by Mikhail Arzhaev on 20.11.15.
- */
-(function(){
-
-    'use strict';
-
-    angular.module('app.manufacturers').controller('ManufacturersCtrl', ['$state', '$stateParams', 'serverApi', 'funcFactory', function($state, $stateParams, serverApi, funcFactory){
-        var self = this;
+class ManufacturersCtrl {
+    constructor($state, $stateParams, serverApi, funcFactory) {
+        let self = this;
 
         this.visual = {
             navButtsOptions:[
-                {type: 'new', callback: function(){}}
+                {type: 'new', callback: angular.noop}
             ],
             navTableButts:[
                 {
                     type: 'view',
-                    callback: function(item) {
-                        $state.go('app.manufacturers.view', {id:item.data.id || item.data._id});
-                    }
+                    callback: item => $state.go('app.manufacturers.view', {id: item.data.id || item.data._id})
                 },
                 {
                     type: 'table_edit',
-                    callback: function(item) {
-                        $state.go('app.manufacturers.view.edit', {id:item.data.id || item.data._id});
-                    }
+                    callback: item => $state.go('app.manufacturers.view.edit', {id: item.data.id || item.data._id})
                 },
                 {
                     type: 'remove',
-                    callback: function(item) {
-                        var data = item.data;
+                    callback: item => {
+                        let data = item.data;
 
                         $.SmartMessageBox({
                             title: 'Удалить производителя?',
-                            content: "Вы действительно хотите удалить производителя " + data.name,
+                            content: 'Вы действительно хотите удалить производителя ' + data.name,
                             buttons: '[Нет][Да]'
-                        }, function (ButtonPressed) {
-                            if (ButtonPressed === "Да") {
-                                serverApi.deleteManufacturer(data.id, function(result) {
-                                    if(!result.data.errors){
+                        }, ButtonPressed => {
+                            if (ButtonPressed === 'Да') {
+                                serverApi.deleteManufacturer(data.id, result => {
+                                    if(!result.data.errors) {
                                         self.data.manufacturersList.splice(item.index,1);
                                         funcFactory.showNotification('Производитель ' + data.name + ' успешно удален.',
                                             '', true);
@@ -53,6 +43,9 @@
             ]
         };
 
-        this.data = {manufacturersList:[], searchQuery:$stateParams.q};
-    }]);
-}());
+        this.data = {manufacturersList:[], searchQuery: $stateParams.q};
+    }
+}
+
+ManufacturersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
+angular.module('app.manufacturers').controller('ManufacturersCtrl', ManufacturersCtrl);
