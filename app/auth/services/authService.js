@@ -109,6 +109,7 @@ class AuthService {
                 console.log(error);
             }
 
+            self.$localStorage.profile = profile;
             self._profile = profile;
         });
     }
