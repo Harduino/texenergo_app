@@ -25,6 +25,7 @@
             views:{
                 "content@app": {
                     controller: 'IncomingTransfersCtrl',
+                    controllerAs: 'incomingTransfersCtrl',
                     templateUrl: '/app/incoming_transfers/views/transfers.html'
                 }
             }
