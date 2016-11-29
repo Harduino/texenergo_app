@@ -24,6 +24,7 @@
             views:{
                 "content@app": {
                     controller: 'ManufacturersCtrl',
+                    controllerAs: 'manufacturersCtrl',
                     templateUrl: '/app/manufacturers/views/manufacturers.html'
                 }
             }
