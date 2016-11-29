@@ -25,6 +25,7 @@
             views:{
                 "content@app": {
                     controller: 'CustomerOrdersCtrl',
+                    controllerAs: 'customerOrdersCtrl',
                     templateUrl: '/app/customer_orders/views/customerOrders.html'
                 }
             }
