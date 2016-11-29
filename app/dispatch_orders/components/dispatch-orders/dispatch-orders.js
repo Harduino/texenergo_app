@@ -15,5 +15,10 @@ class DispatchOrdersCtrl {
     }
 }
 
-DispatchOrdersCtrl.$inkect = ['$state', '$stateParams'];
-angular.module('app.dispatch_orders').controller('DispatchOrdersCtrl', DispatchOrdersCtrl);
+DispatchOrdersCtrl.$inject = ['$state', '$stateParams'];
+
+angular.module('app.dispatch_orders').component('dispatchOrders', {
+    controller: DispatchOrdersCtrl,
+    controllerAs: 'dispatchOrdersCtrl',
+    templateUrl: '/app/dispatch_orders/components/dispatch-orders/dispatch-orders.html'
+});
