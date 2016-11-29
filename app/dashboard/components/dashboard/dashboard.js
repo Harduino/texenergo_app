@@ -18,4 +18,9 @@ class DashboardCtrl {
 }
 
 DashboardCtrl.$inject = ['serverApi'];
-angular.module('app.dashboard').controller('DashboardCtrl', DashboardCtrl);
+
+angular.module('app.dashboard').component('dashboard', {
+    controller: DashboardCtrl,
+    controllerAs: 'dashboardCtrl',
+    templateUrl: '/app/dashboard/components/dashboard/dashboard.html'
+});
