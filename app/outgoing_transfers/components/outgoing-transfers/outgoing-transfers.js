@@ -1,5 +1,5 @@
 class OutgoingTransfersCtrl {
-    constructor($state, $stateParams, serverApi, CanCan, funcFactory) {
+    constructor($state, serverApi, CanCan, funcFactory) {
         let self = this;
 
         this.visual = {
@@ -43,12 +43,12 @@ class OutgoingTransfersCtrl {
             titles: ['Исходящий платёж']
         };
 
-        this.data = {outgoingTransfersList:[], searchQuery: $stateParams.q};
+        this.data = {outgoingTransfersList:[], searchQuery: this.query};
         this.newTransferConfig = {createMethod: serverApi.createOutgoingTransfer, showForm: angular.noop};
     }
 }
 
-OutgoingTransfersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory'];
+OutgoingTransfersCtrl.$inject = ['$state', 'serverApi', 'CanCan', 'funcFactory'];
 
 angular.module('app.outgoing_transfers').component('outgoingTransfers', {
     controller: OutgoingTransfersCtrl,
