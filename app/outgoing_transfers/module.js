@@ -13,7 +13,8 @@ angular.module('app.outgoing_transfers', ['ui.router']).config($stateProvider =>
         },
         views:{
             "content@app": {
-                template: '<outgoing-transfers></outgoing-transfers>'
+                template: '<outgoing-transfers query="$resolve.query"></outgoing-transfers>',
+                resolve: {query: ['$stateParams', $stateParams => $stateParams.q]}
             }
         }
     }).state('app.outgoing_transfers.view', {

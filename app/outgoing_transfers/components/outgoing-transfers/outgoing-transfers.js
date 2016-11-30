@@ -53,5 +53,6 @@ OutgoingTransfersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'CanCan'
 angular.module('app.outgoing_transfers').component('outgoingTransfers', {
     controller: OutgoingTransfersCtrl,
     controllerAs: 'outgoingTransfersCtrl',
+    bindings: {query: '<'},
     templateUrl: '/app/outgoing_transfers/components/outgoing-transfers/outgoing-transfers.html'
 });
