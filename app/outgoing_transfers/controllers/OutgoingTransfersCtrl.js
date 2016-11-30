@@ -1,44 +1,27 @@
-/**
- * Created by Egor Lobanov on 07.11.15.
- */
-(function() {
-    'use strict';
-
-    angular.module('app.outgoing_transfers').controller('OutgoingTransfersCtrl', ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory', function($state, $stateParams, serverApi, CanCan, funcFactory){
-        var self = this;
+class OutgoingTransfersCtrl {
+    constructor($state, $stateParams, serverApi, CanCan, funcFactory) {
+        let self = this;
 
         this.visual = {
             navButtsOptions:[
-                {
-                    type: 'new',
-                    callback: function() {
-                        self.newTransferConfig.showForm();
-                    }
-                },
-                {
-                    type:'refresh',
-                    callback: function() {
-                        $state.go('app.outgoing_transfers', {}, {reload: true});
-                    }
-                }
+                {type: 'new', callback: () => self.newTransferConfig.showForm()},
+                {type:'refresh', callback: () => $state.go('app.outgoing_transfers', {}, {reload: true})}
             ],
             navTableButts: [
                 {
                     type:'view',
-                    callback: function(item) {
-                        $state.go('app.outgoing_transfers.view', {id: item.data.id || item.data._id});
-                    }
+                    callback: item => $state.go('app.outgoing_transfers.view', {id: item.data.id || item.data._id})
                 },
                 {
                     type:'remove',
-                    callback: function(item) {
+                    callback: item => {
                         $.SmartMessageBox({
-                            title: "Удалить исходящий платёж?",
-                            content: "Вы действительно хотите удалить исходящий платёж " + item.data.number,
+                            title: 'Удалить исходящий платёж?',
+                            content: 'Вы действительно хотите удалить исходящий платёж ' + item.data.number,
                             buttons: '[Нет][Да]'
-                        }, function (ButtonPressed) {
-                            if (ButtonPressed === "Да") {
-                                serverApi.deleteOutgoingTransfer(item.data.id, function(result) {
+                        }, ButtonPressed => {
+                            if (ButtonPressed === 'Да') {
+                                serverApi.deleteOutgoingTransfer(item.data.id, result => {
                                     if(!result.data.errors) {
                                         self.data.outgoingTransfersList.splice(item.index, 1);
                                         funcFactory.showNotification('Исходящий платёж', 'Вы удалили исходящий платёж '
@@ -57,10 +40,13 @@
                 can_edit: CanCan.can('edit', 'OutgoingTransfer'),
                 can_destroy: CanCan.can('destroy', 'OutgoingTransfer')
             },
-            titles: ["Исходящий платёж"]
+            titles: ['Исходящий платёж']
         };
 
         this.data = {outgoingTransfersList:[], searchQuery: $stateParams.q};
         this.newTransferConfig = {createMethod: serverApi.createOutgoingTransfer, showForm: angular.noop};
-    }]);
-}());
+    }
+}
+
+OutgoingTransfersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory'];
+angular.module('app.outgoing_transfers').controller('OutgoingTransfersCtrl', OutgoingTransfersCtrl);
