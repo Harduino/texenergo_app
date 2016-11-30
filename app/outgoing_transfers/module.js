@@ -24,6 +24,7 @@
             views:{
                 "content@app": {
                     controller: 'OutgoingTransfersCtrl',
+                    controllerAs: 'outgoingTransfersCtrl',
                     templateUrl: '/app/outgoing_transfers/views/transfers.html'
                 }
             }
