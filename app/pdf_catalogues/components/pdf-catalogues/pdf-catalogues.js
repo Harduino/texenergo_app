@@ -1,5 +1,5 @@
 class PdfCataloguesCtrl {
-    constructor($state, $stateParams, serverApi, CanCan, funcFactory) {
+    constructor($state, serverApi, CanCan, funcFactory) {
         let self = this;
 
         this.visual = {
@@ -40,14 +40,15 @@ class PdfCataloguesCtrl {
             }
         };
 
-        this.data = {pdfCataloguesList: [], searchQuery: $stateParams.q};
+        this.data = {pdfCataloguesList: [], searchQuery: this.query};
     }
 }
 
-PdfCataloguesCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory'];
+PdfCataloguesCtrl.$inject = ['$state', 'serverApi', 'CanCan', 'funcFactory'];
 
 angular.module('app.pdf_catalogues').component('pdfCatalogues', {
     controller: PdfCataloguesCtrl,
     controllerAs: 'pdfCataloguesCtrl',
+    bindings: {query: '<'},
     templateUrl: '/app/pdf_catalogues/components/pdf-catalogues/pdf-catalogues.html'
 });
