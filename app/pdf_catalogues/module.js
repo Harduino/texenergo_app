@@ -24,6 +24,7 @@
             views:{
                 "content@app": {
                     controller: 'PdfCataloguesCtrl',
+                    controllerAs: 'pdfCataloguesCtrl',
                     templateUrl: '/app/pdf_catalogues/views/pdf_catalogues.html'
                 }
             }

@@ -1,13 +1,16 @@
 <div id="content">
     <div class="row">
-        <big-breadcrumbs items="['PDF Каталоги']" data-icon="book" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+        <big-breadcrumbs items="['PDF Каталоги']" data-icon="book" class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        </big-breadcrumbs>
     </div>
     <div class="well">
-        <form-nav-buttons options="visual.navButtsOptions" class="btn-group"></form-nav-buttons>
+        <form-nav-buttons options="pdfCataloguesCtrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
         <hr>
-        <orders-filter data-search-query="data.searchQuery" data-to-state="app.pdf_catalogues"></orders-filter>
-        <table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false" te-lazy-helper data-list="data.pdfCataloguesList"
-               data-search-query="data.searchQuery" data-server-api-method="getPdfCatalogues">
+        <orders-filter data-search-query="pdfCataloguesCtrl.data.searchQuery" data-to-state="app.pdf_catalogues">
+        </orders-filter>
+        <table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"
+               te-lazy-helper data-list="pdfCataloguesCtrl.data.pdfCataloguesList"
+               data-search-query="pdfCataloguesCtrl.data.searchQuery" data-server-api-method="getPdfCatalogues">
             <thead>
                 <tr>
                     <th>#</th>
@@ -16,11 +19,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="row in data.pdfCataloguesList">
+                <tr ng-repeat="row in pdfCataloguesCtrl.data.pdfCataloguesList">
                     <td>{{ $index + 1 }}</td>
                     <td>{{ row.title }}</td>
                     <td class="center-item-text">
-                        <form-nav-buttons data-role="visual.role" class="btn-group" data-options="visual.navTableButts" subdata="{data:row, index:$index}" data-template="table" content-class="btn btn-xs"></form-nav-buttons>
+                        <form-nav-buttons data-role="pdfCataloguesCtrl.visual.role" data-template="table"
+                                          data-options="pdfCataloguesCtrl.visual.navTableButts" class="btn-group"
+                                          subdata="{data:row, index:$index}" content-class="btn btn-xs">
+                        </form-nav-buttons>
                     </td>
                 </tr>
             </tbody>
