@@ -44,7 +44,7 @@ class ContactsCtrl {
         delete this.newContact.partner;
         let self = this;
 
-        this.serverApi.createContact(data, res => {
+        this.serverApi.createContact(self.newContact, res => {
             if(!res.data.errors) {
                 self.data.contactsList.unshift(res.data);
                 self.funcFactory.showNotification('Успешно', 'Контакт ' +  res.data.email + ' добавлен в список', true);
