@@ -1,48 +1,35 @@
-/**
- * Created by Egor Lobanov on 07.11.15.
- * Модуль страницы заказов
- */
-(function () {
-
-    "use strict";
-
-    var module = angular.module('app.outgoing_transfers', ['ui.router']);
-
-    module.config(function ($stateProvider) {
-        $stateProvider.state('app.outgoing_transfers', {
-            url: '/outgoing_transfers?q',
-            data:{
-                title: 'Исходящие платежи',
-                access:{
-                    action:'index',
-                    params:'OutgoingTransfer'
-                }
-            },
-            params:{
-                q:''
-            },
-            views:{
-                "content@app": {
-                    controller: 'OutgoingTransfersCtrl',
-                    controllerAs: 'outgoingTransfersCtrl',
-                    templateUrl: '/app/outgoing_transfers/views/transfers.html'
-                }
+angular.module('app.outgoing_transfers', ['ui.router']).config($stateProvider => {
+    $stateProvider.state('app.outgoing_transfers', {
+        url: '/outgoing_transfers?q',
+        data:{
+            title: 'Исходящие платежи',
+            access:{
+                action:'index',
+                params:'OutgoingTransfer'
             }
-        }).state('app.outgoing_transfers.view', {
-            url: '/:id',
-            data:{
-                title: 'Просмотр исходящего платежа',
-                access:{
-                    action:'read',
-                    params:'OutgoingTransfer'
-                }
-            },
-            views:{
-                "content@app":{
-                    controller: 'ViewOutgoingTransferCtrl',
-                    templateUrl: '/app/outgoing_transfers/views/viewOutgoingTransfer.html'
-                }
+        },
+        params:{
+            q:''
+        },
+        views:{
+            "content@app": {
+                template: '<outgoing-transfers></outgoing-transfers>'
             }
-        });
+        }
+    }).state('app.outgoing_transfers.view', {
+        url: '/:id',
+        data:{
+            title: 'Просмотр исходящего платежа',
+            access:{
+                action:'read',
+                params:'OutgoingTransfer'
+            }
+        },
+        views:{
+            "content@app":{
+                controller: 'ViewOutgoingTransferCtrl',
+                templateUrl: '/app/outgoing_transfers/views/viewOutgoingTransfer.html'
+            }
+        }
     });
-}());
+});
