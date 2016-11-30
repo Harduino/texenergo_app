@@ -1,5 +1,5 @@
 class ViewContactCtrl {
-    constructor($state, serverApi, CanCan, funcFactory) {
+    constructor($state, serverApi, funcFactory) {
         this.contact = {};
         this.data = {partnersList: []};
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
@@ -17,8 +17,7 @@ class ViewContactCtrl {
                 {type:'refresh', callback: getContactDetails}
             ],
             chartOptions: {barColor:'rgb(103,135,155)', scaleColor:false, lineWidth:5, lineCap:'circle', size:50},
-            titles: 'Контакт: ',
-            roles: {can_edit: CanCan.can('edit', 'Contact')}
+            titles: 'Контакт: '
         };
 
         getContactDetails();
@@ -35,11 +34,12 @@ class ViewContactCtrl {
                 do_not_email: contact.do_not_email,
                 partner_id: contact.partner.id,
                 mobile: contact.mobile,
-                email: contact.email
+                email: contact.email,
+                procurement_emails: contact.procurement_emails
             }
         };
 
-        serverApi.updateContact(contact.id, data, res => {
+        this.serverApi.updateContact(contact.id, data, res => {
             if(!res.data.errors) {
                 self.concat = res.data;
                 self.funcFactory.showNotification("Успешно", 'Контакт ' + contact.email + ' успешно отредактирован.', true);
@@ -54,7 +54,7 @@ class ViewContactCtrl {
     }
 }
 
-ViewContactCtrl.$inject = ['$state', 'serverApi', 'CanCan', 'funcFactory'];
+ViewContactCtrl.$inject = ['$state', 'serverApi', 'funcFactory'];
 
 angular.module('app.contacts').component('viewContact', {
     controller: ViewContactCtrl,

@@ -85,6 +85,14 @@
                 </a>
             </p>
         </div>
+        <div class="row margin-top-10" ng-switch-when="true">
+            <p class="col-xs-12 col-md-3 font-bold">Отправка заказов поставщика:</p>
+            <p class="col-md-9">
+                <a editable-checkbox="viewContactCtrl.contact.procurement_emails" onaftersave="viewContactCtrl.saveContact()">
+                    {{viewContactCtrl.contact.procurement_emails && 'Высылать!' || 'Не высылать'}}
+                </a>
+            </p>
+        </div>
     </div>
     <ul class="nav nav-tabs bordered" id="myTab1">
         <li class="active"><a data-toggle="tab" href="#s1">Просмотренные товары</a></li>
