@@ -21,6 +21,7 @@
             navButtsOptions:[
                 { type: 'back', callback: returnBack },
                 { type: 'confirm_order', callback: updateStatus },
+                { type: 'send_email', callback: sendSupplierOrderRFQ },
                 { type: 'txt_export', callback: openSupplierOrderTxt },
                 { type: 'refresh', callback: refresh }
             ],
@@ -105,6 +106,18 @@
         function openSupplierOrderTxt() {
             window.open(window.APP_ENV.TEXENERGO_COM_API_HTTP_BASE_URL + '/supplier_orders/' + sc.data.supplierOrder.id +
                 '.txt?token=' + $localStorage.id_token, '_blank');
+        }
+
+        function sendSupplierOrderRFQ(){
+            serverApi.sendSupplierOrderRFQ($stateParams.id, function(result){
+                if(result.status == 200 && !result.data.errors) {
+                    funcFactory.showNotification("Успешно", 'Заказ успешно отправлен.', true);
+                } else if (result.status == 200 && result.data.errors) {
+                    funcFactory.showNotification("Неудача", result.data.errors, true);
+                } else {
+                    funcFactory.showNotification("Неудача", 'Ошибка при попытке отправить заказ.', true);
+                }
+            });
         }
 
         /**

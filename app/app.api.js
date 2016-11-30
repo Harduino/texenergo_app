@@ -120,6 +120,9 @@
         o.updateSupplierOrder = function(id, data, success, fail){
             $http.put('/supplier_orders/' + id, data).then(success, fail);
         };
+        o.sendSupplierOrderRFQ = function(id, success, fail){
+            $http.put('/supplier_orders/' + id + '/send_rfq').then(success, fail);
+        };
         o.addSupplierOrderProduct = function(id, data, success, fail){
             $http.post('/supplier_orders/'+id+'/supplier_order_contents', data).then(success, fail);
         };
