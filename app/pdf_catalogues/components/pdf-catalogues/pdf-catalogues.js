@@ -45,4 +45,9 @@ class PdfCataloguesCtrl {
 }
 
 PdfCataloguesCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory'];
-angular.module('app.pdf_catalogues').controller('PdfCataloguesCtrl', PdfCataloguesCtrl);
+
+angular.module('app.pdf_catalogues').component('pdfCatalogues', {
+    controller: PdfCataloguesCtrl,
+    controllerAs: 'pdfCataloguesCtrl',
+    templateUrl: '/app/pdf_catalogues/components/pdf-catalogues/pdf-catalogues.html'
+});
