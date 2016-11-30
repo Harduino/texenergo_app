@@ -89,4 +89,9 @@ class ReceiveOrdersCtrl {
 }
 
 ReceiveOrdersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory'];
-angular.module('app.receive_orders').controller('ReceiveOrdersCtrl', ReceiveOrdersCtrl);
+
+angular.module('app.receive_orders').component('receiveOrders', {
+    controller: ReceiveOrdersCtrl,
+    controllerAs: 'receiveOrdersCtrl',
+    templateUrl: '/app/receive_orders/components/receive-orders/receive-orders.html'
+});
