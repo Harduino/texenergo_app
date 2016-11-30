@@ -3,7 +3,6 @@
  * Модуль страницы движения
  */
 (function () {
-
     "use strict";
 
     var module = angular.module('app.receive_orders', ['ui.router']);
@@ -24,6 +23,7 @@
             views:{
                 "content@app": {
                     controller: 'ReceiveOrdersCtrl',
+                    controllerAs: 'receiveOrdersCtrl',
                     templateUrl: '/app/receive_orders/views/receive_orders.html'
                 }
             }
@@ -32,7 +32,7 @@
             data:{
                 title: 'Просмотр поступления',
                 access:{
-                    action:'read',
+                    action: 'read',
                     params:'ReceiveOrder'
                 }
             },
