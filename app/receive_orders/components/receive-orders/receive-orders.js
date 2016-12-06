@@ -1,5 +1,5 @@
 class ReceiveOrdersCtrl {
-    constructor($state, serverApi, CanCan, funcFactory) {
+    constructor($state, $stateParams, serverApi, CanCan, funcFactory) {
         let self = this;
 
         this.$state = $state;
@@ -56,7 +56,7 @@ class ReceiveOrdersCtrl {
             titles: ['Поступления']
         };
 
-        this.data = {ordersList:[], partnersList:[], searchQuery: this.query};
+        this.data = {ordersList:[], partnersList:[], searchQuery: $stateParams.q};
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
         this.newOrderData = {};
     }
@@ -88,11 +88,10 @@ class ReceiveOrdersCtrl {
     }
 }
 
-ReceiveOrdersCtrl.$inject = ['$state', 'serverApi', 'CanCan', 'funcFactory'];
+ReceiveOrdersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory'];
 
 angular.module('app.receive_orders').component('receiveOrders', {
     controller: ReceiveOrdersCtrl,
     controllerAs: 'receiveOrdersCtrl',
-    bindings: {query: '<'},
     templateUrl: '/app/receive_orders/components/receive-orders/receive-orders.html'
 });

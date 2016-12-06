@@ -1,5 +1,5 @@
 class ViewContactCtrl {
-    constructor($state, serverApi, funcFactory) {
+    constructor($state, $stateParams, serverApi, funcFactory) {
         this.contact = {};
         this.data = {partnersList: []};
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
@@ -9,7 +9,7 @@ class ViewContactCtrl {
         this.funcFactory = funcFactory;
 
         let self = this;
-        let getContactDetails = () => serverApi.getContactDetails(self.contactId, res => self.contact = res.data);
+        let getContactDetails = () => serverApi.getContactDetails($stateParams.id, res => self.contact = res.data);
 
         this.visual = {
             navButtsOptions:[
@@ -54,11 +54,10 @@ class ViewContactCtrl {
     }
 }
 
-ViewContactCtrl.$inject = ['$state', 'serverApi', 'funcFactory'];
+ViewContactCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
 
 angular.module('app.contacts').component('viewContact', {
     controller: ViewContactCtrl,
     controllerAs: 'viewContactCtrl',
-    bindings: {contactId: '<'},
     templateUrl: '/app/contacts/components/view-contact/view-contact.html'
 });

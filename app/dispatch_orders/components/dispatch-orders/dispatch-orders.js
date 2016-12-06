@@ -1,5 +1,5 @@
 class DispatchOrdersCtrl {
-    constructor($state) {
+    constructor($state, $stateParams) {
         this.visual = {
             navButtsOptions:[
                 {type: 'refresh', callback: () => $state.go('app.dispatch_orders', {}, {reload:true})}
@@ -11,15 +11,14 @@ class DispatchOrdersCtrl {
             titles: ['Списания']
         };
 
-        this.data = {ordersList:[], searchQuery: this.query};
+        this.data = {ordersList:[], searchQuery: $stateParams.q};
     }
 }
 
-DispatchOrdersCtrl.$inject = ['$state'];
+DispatchOrdersCtrl.$inject = ['$state', '$stateParams'];
 
 angular.module('app.dispatch_orders').component('dispatchOrders', {
     controller: DispatchOrdersCtrl,
     controllerAs: 'dispatchOrdersCtrl',
-    bindings: {query: '<'},
     templateUrl: '/app/dispatch_orders/components/dispatch-orders/dispatch-orders.html'
 });

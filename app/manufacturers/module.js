@@ -13,8 +13,7 @@ angular.module('app.manufacturers', ['ui.router']).config($stateProvider => {
         },
         views:{
             "content@app": {
-                template: '<manufacturers query="$resolve.query"></manufacturers>',
-                resolve: {query: ['$stateParams', $stateParams => $stateParams.q]}
+                template: '<manufacturers></manufacturers>'
             }
         }
     }).state('app.manufacturers.view', {

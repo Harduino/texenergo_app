@@ -13,8 +13,7 @@ angular.module('app.dispatch_orders', ['ui.router']).config($stateProvider => {
         },
         views:{
             "content@app": {
-                template: '<dispatch-orders query="$resolve.query"></dispatch-orders>',
-                resolve: {query: ['$stateParams', $stateParams => $stateParams.q]}
+                template: '<dispatch-orders></dispatch-orders>'
             }
         }
     }).state('app.dispatch_orders.view', {
