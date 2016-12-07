@@ -53,8 +53,14 @@
             if(event.keyCode == 13){
                 serverApi.getLeadTime(id, quantity, function(result){
                     var info = result.data.lead_time_info;
-                    if (yaCounter7987369 != undefined)
-                        yaCounter7987369.reachGoal("SeLeadTime", {current_user: ''})
+                    if (yaCounter7987369 != undefined) {
+                        var yaParams = {};
+                        if ($localStorage && $localStorage.profile && $localStorage.profile.user_metadata) {
+                            yaParams.user_email = $localStorage.profile.user_metadata.email;
+                            yaParams.user_id = $localStorage.profile.user_metadata.contact_id;
+                        }
+                        yaCounter7987369.reachGoal("SeLeadTime", yaParams)
+                    }
                     funcFactory.showNotification(
                         info.obsolete ? "Снят с производства" : "Успешно",
                         'Тариф: ' + info.price_tarif + " руб., Скидка: " + info.discount + "%, Закупка: " + info.cost + " руб., Срок поставки: " + info.delivery_date + ", Мин. кол-во: " + info.quantity_min + ", Остаток у Шнейдера: " + info.schneider_stock,

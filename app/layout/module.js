@@ -31,7 +31,7 @@
 
     });
 
-    module.controller('LayoutCtrl', ['$scope', '$state', 'serverApi', 'authService', function($scope, $state, serverApi, authService){
+    module.controller('LayoutCtrl', ['$scope', '$state', 'serverApi', 'authService', '$localStorage', function($scope, $state, serverApi, authService, $localStorage){
         var sc = $scope,
             profile = authService.profile || {};
 
@@ -49,8 +49,12 @@
         sc.logo = 'assets/img/logo.png';
         sc.company_name = 'Texenergo';
 
-        var yaParams = { current_user: profile.email };
         if (window.location.hostname.match(/texenergo/) != undefined) {
+            var yaParams = {};
+            if ($localStorage && $localStorage.profile && $localStorage.profile.user_metadata) {
+                yaParams.user_email = $localStorage.profile.user_metadata.email;
+                yaParams.user_id = $localStorage.profile.user_metadata.contact_id;
+            }
             (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter7987369 = new Ya.Metrika({ id:7987369, webvisor:true, trackHash:true, params:window.yaParams||{ } }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

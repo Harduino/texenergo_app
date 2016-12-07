@@ -12,7 +12,7 @@ class CustomerOrdersCtrl {
                     type: 'new',
                     callback: () => {
                         self.newOrderData.date = new Date();
-                        self.newOrderData.partner = authService.profile.user_metadata.partner || null;
+                        self.newOrderData.partner = (authService.profile.user_metadata && authService.profile.user_metadata.partner) || null;
                         $('#createNewOrderModal').modal('show');
                     }
                 },

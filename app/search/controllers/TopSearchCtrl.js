@@ -6,7 +6,7 @@
 
         'use strict';
 
-        angular.module('app.search').controller('TopSearchCtrl', ['$scope', '$stateParams', '$location', '$state', 'serverApi', 'CanCan', '$uibModal', '$filter', function(sc, $stateParams, $location, $state, serverApi, CanCan, $uibModal, $filter){
+        angular.module('app.search').controller('TopSearchCtrl', ['$scope', '$stateParams', '$location', '$state', 'serverApi', 'CanCan', '$uibModal', '$filter', '$localStorage', function(sc, $stateParams, $location, $state, serverApi, CanCan, $uibModal, $filter, $localStorage){
 
             sc.data = {
                 searchText: decodeURIComponent($stateParams.searchString), //содержимое сроки поиска в топ меню
@@ -62,8 +62,14 @@
             sc.searchByFunctor = function(){
                 var s = sc.data.subSearch;
 
-                if (yaCounter7987369 != undefined)
-                    yaCounter7987369.reachGoal("FunctorUsed", {current_user: ''})
+                if (yaCounter7987369 != undefined){
+                    yaParams = {};
+                    if ($localStorage && $localStorage.profile && $localStorage.profile.user_metadata) {
+                        yaParams.user_email = $localStorage.profile.user_metadata.email;
+                        yaParams.user_id = $localStorage.profile.user_metadata.contact_id;
+                    }
+                    yaCounter7987369.reachGoal("FunctorUsed", yaParams)
+                }
 
                 if(s.hasOwnProperty('properties')){
 
