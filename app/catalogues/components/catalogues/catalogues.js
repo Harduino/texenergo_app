@@ -1,7 +1,8 @@
 class CataloguesCtrl {
-    constructor($state, serverApi, funcFactory) {
+    constructor($state, $stateParams, serverApi, funcFactory) {
         var vm = this;
         vm.cataloguesList = [];
+        vm.searchQuery = $stateParams.q;
         vm.navButtsOptions = [{type: 'new', callback: () => {}}];
 
         vm.navTableButts = [
@@ -40,11 +41,10 @@ class CataloguesCtrl {
     }
 }
 
-CataloguesCtrl.$inject = ['$state', 'serverApi', 'funcFactory'];
+CataloguesCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
 
 angular.module('app.catalogues').component('catalogues', {
+    templateUrl: '/app/catalogues/components/catalogues/catalogues.html',
     controller: CataloguesCtrl,
-    controllerAs: 'cataloguesCtrl',
-    bindings: {searchQuery: '<'},
-    templateUrl: '/app/catalogues/components/catalogues/catalogues.html'
+    controllerAs: 'cataloguesCtrl'
 });

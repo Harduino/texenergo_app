@@ -15,8 +15,7 @@ angular.module('app.incoming_transfers', ['ui.router'])
             },
             views:{
                 "content@app": {
-                    template: '<incoming-transfers query="$resolve.query"></incoming-transfers>',
-                    resolve: {query: ['$stateParams', $stateParams => $stateParams.q]}
+                    template: '<incoming-transfers></incoming-transfers>'
                 }
             }
         }).state('app.incoming_transfers.view', {

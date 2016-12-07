@@ -1,5 +1,5 @@
 class ManufacturersCtrl {
-    constructor($state, serverApi, funcFactory) {
+    constructor($state, $stateParams, serverApi, funcFactory) {
         let self = this;
 
         this.visual = {
@@ -43,15 +43,14 @@ class ManufacturersCtrl {
             ]
         };
 
-        this.data = {manufacturersList:[], searchQuery: this.query};
+        this.data = {manufacturersList:[], searchQuery: $stateParams.q};
     }
 }
 
-ManufacturersCtrl.$inject = ['$state', 'serverApi', 'funcFactory'];
+ManufacturersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
 
 angular.module('app.manufacturers').component('manufacturers', {
     controller: ManufacturersCtrl,
     controllerAs: 'manufacturersCtrl',
-    bindings: {query: '<'},
     templateUrl: '/app/manufacturers/components/manufacturers/manufacturers.html'
 });

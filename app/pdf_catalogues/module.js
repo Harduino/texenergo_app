@@ -13,8 +13,7 @@ angular.module('app.pdf_catalogues', ['ui.router']).config($stateProvider => {
         },
         views:{
             "content@app": {
-                template: '<pdf-catalogues query="$resolve.query"></pdf-catalogues>',
-                resolve: {query: ['$stateParams', $stateParams => $stateParams.q]}
+                template: '<pdf-catalogues></pdf-catalogues>'
             }
         }
     }).state('app.pdf_catalogues.view', {

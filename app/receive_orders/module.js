@@ -13,8 +13,7 @@ angular.module('app.receive_orders', ['ui.router']).config($stateProvider => {
         },
         views:{
             "content@app": {
-                template: '<receive-orders query="$resolve.query"></receive-orders>',
-                resolve: {query: ['$stateParams', $stateParams => $stateParams.q]}
+                template: '<receive-orders></receive-orders>'
             }
         }
     }).state('app.receive_orders.view', {

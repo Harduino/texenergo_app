@@ -1,5 +1,5 @@
 class CustomerOrdersCtrl {
-    constructor($state, serverApi, funcFactory, authService) {
+    constructor($state, $stateParams, serverApi, funcFactory, authService) {
         let self = this;
 
         this.$state = $state;
@@ -53,7 +53,7 @@ class CustomerOrdersCtrl {
             titles: ['Заказы клиентов']
         };
 
-        this.data = {ordersList:[], partnersList:[], searchQuery: this.query};
+        this.data = {ordersList:[], partnersList:[], searchQuery:$stateParams.q};
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
         this.clearCreateOrder();
     }
@@ -84,11 +84,10 @@ class CustomerOrdersCtrl {
     }
 }
 
-CustomerOrdersCtrl.$inject = ['$state', 'serverApi', 'funcFactory', 'authService'];
+CustomerOrdersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', 'authService'];
 
 angular.module('app.customer_orders').component('customerOrders', {
     controller: CustomerOrdersCtrl,
     controllerAs: 'customerOrdersCtrl',
-    bindings: {query: '<'},
     templateUrl: '/app/customer_orders/components/customer-orders/customer-orders.html'
 });

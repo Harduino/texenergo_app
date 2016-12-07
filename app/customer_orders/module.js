@@ -24,8 +24,7 @@
             },
             views:{
                 "content@app": {
-                    template: '<customer-orders query="$resolve.query"></customer-orders>',
-                    resolve: {query: ['$stateParams', $stateParams => $stateParams.q]}
+                    template: '<customer-orders></customer-orders>'
                 }
             }
         }).state('app.customer_orders.view', {

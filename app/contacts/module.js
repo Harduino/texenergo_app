@@ -10,8 +10,7 @@ angular.module('app.contacts', ['ui.router']).config($stateProvider => {
         },
         views:{
             "content@app": {
-                template: '<contacts query="$resolve.query"></contacts>',
-                resolve: {query: ['$stateParams', $stateParams => $stateParams.q]}
+                template: '<contacts></contacts>'
             }
         }
     }).state('app.contacts.view', {
@@ -25,8 +24,7 @@ angular.module('app.contacts', ['ui.router']).config($stateProvider => {
         },
         views:{
             "content@app":{
-                template: '<view-contact contact-id="$resolve.contactId"></view-contact>',
-                resolve: {contactId: ['$stateParams', $stateParams => $stateParams.id]}
+                template: '<view-contact></view-contact>'
             }
         }
     });
