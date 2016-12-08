@@ -1,26 +1,19 @@
-/**
- * Created by Mikhail Arzhaev on 19.11.15.
- */
-(function(){
-    'use strict';
-
-    angular.module('app.supplier_orders').controller('SupplierOrdersCtrl', ['$state', '$stateParams', 'serverApi', '$filter', 'CanCan', 'funcFactory', function($state, $stateParams, serverApi, $filter, CanCan, funcFactory){
-        var self = this;
+class SupplierOrdersCtrl {
+    constructor($state, $stateParams, serverApi, CanCan, funcFactory) {
+        let self = this;
+        this.$state = $state;
+        this.funcFactory = funcFactory;
+        this.serverApi = serverApi;
 
         this.visual = {
             navButtsOptions: [
-                {
-                    type: 'new',
-                    callback: function() {
-                        $('#createNewOrderModal').modal('show');
-                    }
-                },
+                {type: 'new', callback: () => $('#createNewOrderModal').modal('show')},
                 {
                     type: 'automatically',
-                    callback: function() {
-                        serverApi.automaticallyCreateSupplierOrders(function(result){
+                    callback: () => {
+                        serverApi.automaticallyCreateSupplierOrders(result => {
                             if(!result.data.errors){
-                                for(var i = 0; i < result.data.supplier_orders.length; i++) {
+                                for(let i = 0; i < result.data.supplier_orders.length; i++) {
                                     self.data.ordersList.unshift(result.data.supplier_orders[i]);
                                 }
 
@@ -31,32 +24,25 @@
                         });
                     }
                 },
-                {
-                    type:'refresh',
-                    callback: function() {
-                        $state.go('app.supplier_orders', {}, {reload:true});
-                    }
-                }
+                {type:'refresh', callback: () => $state.go('app.supplier_orders', {}, {reload:true})}
             ],
             navTableButts: [
                 {
                     type:'view',
-                    callback: function(item) {
-                        $state.go('app.supplier_orders.view', {id: item.data.id || item.data._id});
-                    }
+                    callback: item => $state.go('app.supplier_orders.view', {id: item.data.id || item.data._id})
                 },
                 {
                     type:'remove',
-                    callback: function(item) {
-                        var data = item.data;
+                    callback: item => {
+                        let data = item.data;
 
                         $.SmartMessageBox({
-                            title: "Удалить заказ?",
-                            content: "Вы действительно хотите удалить заказ " + data.number,
+                            title: 'Удалить заказ?',
+                            content: 'Вы действительно хотите удалить заказ ' + data.number,
                             buttons: '[Нет][Да]'
-                        }, function (ButtonPressed) {
-                            if (ButtonPressed === "Да") {
-                                serverApi.deleteSupplierOrder(data.id, function(result){
+                        }, ButtonPressed => {
+                            if (ButtonPressed === 'Да') {
+                                serverApi.deleteSupplierOrder(data.id, result => {
                                     if(result.data.errors) {
                                         funcFactory.showNotification('Не удалось удалить заказ ' + data.number);
                                     } else {
@@ -70,33 +56,38 @@
                 }
             ],
             canAddPartner: CanCan.can('see_multiple', 'Partner'),
-            titles: ["Заказы поставщикам"]
+            titles: ['Заказы поставщикам']
         };
 
         this.data = {ordersList: [], searchQuery: $stateParams.q, partnersList: []};
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
         this.newOrderData = {};
+    }
 
-        this.clearSupplierCreateOrder = function() {
-            self.newOrderData = {};
-        };
+    clearSupplierCreateOrder() {
+        this.newOrderData = {};
+    }
 
-        this.addNewSupplierOrder = function(){
-            if(self.newOrderData.partner && self.newOrderData.partner) {
-                self.newOrderData.partner_id = self.newOrderData.partner.id;
+    addNewSupplierOrder() {
+        if(this.newOrderData.partner && this.newOrderData.partner) {
+            this.newOrderData.partner_id = this.newOrderData.partner.id;
+        }
+
+        delete this.newOrderData.partner;
+        let self = this;
+
+        this.serverApi.createSupplierOrder(this.newOrderData, result => {
+            if(!result.data.errors){
+                self.data.ordersList.unshift(result.data);
+                self.funcFactory.showNotification('Заказ успешно добавлен', '', true);
+                self.clearSupplierCreateOrder();
+                self.$state.go('app.supplier_orders.view', {id: result.data.id});
+            } else {
+                self.funcFactory.showNotification('Не удалось создать заказ', result.data.errors);
             }
-            delete self.newOrderData.partner;
+        });
+    };
+}
 
-            serverApi.createSupplierOrder(self.newOrderData, function(result){
-                if(!result.data.errors){
-                    self.data.ordersList.unshift(result.data);
-                    funcFactory.showNotification('Заказ успешно добавлен', '', true);
-                    self.clearSupplierCreateOrder();
-                    $state.go('app.supplier_orders.view', {id: result.data.id});
-                } else {
-                    funcFactory.showNotification('Не удалось создать заказ', result.data.errors);
-                }
-            });
-        };
-    }]);
-}());
+SupplierOrdersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory'];
+angular.module('app.supplier_orders').controller('SupplierOrdersCtrl', SupplierOrdersCtrl);
