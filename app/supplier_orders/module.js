@@ -24,6 +24,7 @@
             views:{
                 "content@app": {
                     controller: 'SupplierOrdersCtrl',
+                    controllerAs: 'supplierOrdersCtrl',
                     templateUrl: '/app/supplier_orders/views/supplierOrders.html'
                 }
             }
@@ -54,8 +55,7 @@
                 if( data !== undefined) {
                     for (var i = 0; i < Object.keys(data).length; i++) {
                         var k = Object.keys(data)[i];
-                        var v = data[k];
-                        localObject[k] = v;
+                        localObject[k] = data[k];
                     }
                     funcFactory.showNotification("Обновил заказ", "Номер " + localObject.number +'.', true);
                 } else if (serverResponse.errors !== undefined) {
@@ -88,8 +88,10 @@
                     localObject = scope.data.supplierOrder;
                 if( data !== undefined) {
                     for (var i = 0; i < localObject.supplier_order_contents.length; i++) {
-                        if ( localObject.supplier_order_contents[i].id !== data.id )
-                            continue
+                        if(localObject.supplier_order_contents[i].id !== data.id) {
+                            continue;
+                        }
+
                         localObject.supplier_order_contents[i] = data;
                         break;
                     }

@@ -1,13 +1,17 @@
 <div id="content">
     <div class="row">
-        <big-breadcrumbs items="visual.titles" data-icon="book" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+        <big-breadcrumbs items="supplierOrdersCtrl.visual.titles" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"
+                         data-icon="book">
+        </big-breadcrumbs>
     </div>
     <div class="well">
-        <form-nav-buttons options="visual.navButtsOptions" class="btn-group"></form-nav-buttons>
+        <form-nav-buttons options="supplierOrdersCtrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
         <hr>
-        <orders-filter data-search-query="data.searchQuery" data-to-state="app.supplier_orders"></orders-filter>
-        <table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false" te-lazy-helper data-list="data.ordersList"
-               data-search-query="data.searchQuery" data-server-api-method="getSupplierOrders">
+        <orders-filter data-search-query="supplierOrdersCtrl.data.searchQuery" data-to-state="app.supplier_orders">
+        </orders-filter>
+        <table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"
+               data-list="supplierOrdersCtrl.data.ordersList" data-search-query="supplierOrdersCtrl.data.searchQuery"
+               te-lazy-helper data-server-api-method="getSupplierOrders">
             <thead>
                 <tr>
                     <th>#</th>
@@ -20,7 +24,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="row in data.ordersList">
+                <tr ng-repeat="row in supplierOrdersCtrl.data.ordersList">
                     <td>{{$index +1}}</td>
                     <td>{{row.number}}</td>
                     <td>{{row.status}}</td>
@@ -28,7 +32,10 @@
                     <td>{{row.partner.name}}</td>
                     <td>{{row.total | currency}}</td>
                     <td class="center-item-text">
-                        <form-nav-buttons data-role="row" class="btn-group" data-options="visual.navTableButts" subdata="{data:row, index:$index}" data-template="table" content-class="btn btn-xs"></form-nav-buttons>
+                        <form-nav-buttons data-options="supplierOrdersCtrl.visual.navTableButts" data-role="row"
+                                          subdata="{data:row, index:$index}" data-template="table" class="btn-group"
+                                          content-class="btn btn-xs">
+                        </form-nav-buttons>
                     </td>
                 </tr>
             </tbody>
@@ -46,25 +53,28 @@
                 </div>
                 <div class="modal-body">
                     <section class="form-group">
-                        <label class="control-label">Номер</label>
-                        <input type="text" ng-model="newOrderData.number" class="input-sm form-control">
+                        <label class="control-label" for="supplier-order-number">Номер</label>
+                        <input type="text" ng-model="supplierOrdersCtrl.newOrderData.number"
+                               class="input-sm form-control" id="supplier-order-number">
                     </section>
                     <section class="form-group">
-                        <label class="control-label">Название</label>
-                        <input type="text" ng-model="newOrderData.title" class="input-sm form-control">
+                        <label class="control-label" for="supplier-order-title">Название</label>
+                        <input type="text" ng-model="supplierOrdersCtrl.newOrderData.title"
+                               class="input-sm form-control" id="supplier-order-title">
                     </section>
                     <section class="form-group">
-                        <label class="control-label">Описание</label>
-                        <textarea type="text" ng-model="newOrderData.description" class="input-sm form-control"></textarea>
-                        <div class="note">
-                            Будет также отображаться в содержимом письма при отправке счёта.
-                        </div>
+                        <label class="control-label" for="supplier-order-description">Описание</label>
+                        <textarea type="text" ng-model="supplierOrdersCtrl.newOrderData.description"
+                                  class="input-sm form-control" id="supplier-order-description">
+                        </textarea>
+                        <div class="note">Будет также отображаться в содержимом письма при отправке счёта.</div>
                     </section>
                     <section class="form-group">
                         <label class="control-label">Партнер</label>
-                        <ui-select  ui-select-infinity="partnerSelectConfig" ng-model="newOrderData.partner" theme="select2" class="td-ui-select">
+                        <ui-select  ui-select-infinity="supplierOrdersCtrl.partnerSelectConfig" class="td-ui-select"
+                                    ng-model="supplierOrdersCtrl.newOrderData.partner" theme="select2">
                             <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
-                            <ui-select-choices repeat="partner in data.partnersList | filter:$select.search">
+                            <ui-select-choices repeat="partner in supplierOrdersCtrl.data.partnersList|filter:$select.search">
                                 <div ng-bind-html="partner.name | highlight: $select.search"></div>
                             </ui-select-choices>
                         </ui-select>
@@ -75,10 +85,11 @@
                     </section>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearCreateSupplierOrder()">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"
+                            ng-click="supplierOrdersCtrl.clearSupplierCreateOrder()">
                         Отмена
                     </button>
-                    <button type="button" class="btn btn-primary" ng-click="addNewSupplierOrder()">
+                    <button type="button" class="btn btn-primary" ng-click="supplierOrdersCtrl.addNewSupplierOrder()">
                         Сохранить
                     </button>
                 </div>
