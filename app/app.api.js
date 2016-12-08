@@ -280,6 +280,9 @@
         o.updateContact = function(id, data, success, fail){
             $http.put('/contacts/' + id, data).then(success, fail);
         };
+        o.generateApiTokenContact = function(id, data, success, fail){
+            $http.put('/contacts/' + id + '/generate_api_token').then(success, fail);
+        };
 
         // DispatchOrder
         o.getDispatchOrders = function(page, query, config, success, fail){

@@ -41,7 +41,7 @@ class ViewContactCtrl {
 
         this.serverApi.updateContact(contact.id, data, res => {
             if(!res.data.errors) {
-                self.concat = res.data;
+                self.contact = res.data;
                 self.funcFactory.showNotification("Успешно", 'Контакт ' + contact.email + ' успешно отредактирован.', true);
             } else {
                 self.funcFactory.showNotification('Не удалось отредактировать контакт ' + contact.email, res.data.errors);
@@ -52,6 +52,23 @@ class ViewContactCtrl {
     goToPartner() {
         this.$state.go('app.partners.view', {id: (this.contact.partner.id || this.contact.partner._id)})
     }
+
+    generateApiToken() {
+        let contact = this.contact;
+        let self = this;
+
+        let data = {};
+
+        this.serverApi.generateApiTokenContact(contact.id, data, res => {
+            if (!res.data.errors) {
+                self.contact = res.data;
+                self.funcFactory.showNotification("Успешно", 'Контакт ' + contact.email + '. Сгенерирован новый токен.', true);
+            } else {
+                self.funcFactory.showNotification('Не удалось сгенерировать токен для ' + contact.email, res.data.errors);
+            }
+        });
+    }
+
 }
 
 ViewContactCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];

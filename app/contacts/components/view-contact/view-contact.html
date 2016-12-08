@@ -93,6 +93,13 @@
                 </a>
             </p>
         </div>
+        <div class="row margin-top-10" ng-if="viewContactCtrl.contact.can_api_token">
+            <p class="col-xs-12 col-md-3 font-bold">Ключ API:</p>
+            <p class="col-md-9">
+                {{ viewContactCtrl.contact.api_token || "Надо сгенерировать ключ"}}
+                <a ng-click="viewContactCtrl.generateApiToken()">(сгенерировать)</a>
+            </p>
+        </div>
     </div>
     <ul class="nav nav-tabs bordered" id="myTab1">
         <li class="active"><a data-toggle="tab" href="#s1">Просмотренные товары</a></li>
