@@ -23,9 +23,7 @@
             },
             views:{
                 "content@app": {
-                    controller: 'SupplierOrdersCtrl',
-                    controllerAs: 'supplierOrdersCtrl',
-                    templateUrl: '/app/supplier_orders/views/supplierOrders.html'
+                    template: '<supplier-orders></supplier-orders>'
                 }
             }
         }).state('app.supplier_orders.view', {

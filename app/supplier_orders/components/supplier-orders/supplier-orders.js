@@ -90,4 +90,9 @@ class SupplierOrdersCtrl {
 }
 
 SupplierOrdersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory'];
-angular.module('app.supplier_orders').controller('SupplierOrdersCtrl', SupplierOrdersCtrl);
+
+angular.module('app.supplier_orders').component('supplierOrders', {
+    controller: SupplierOrdersCtrl,
+    controllerAs: 'supplierOrdersCtrl',
+    templateUrl: '/app/supplier_orders/components/supplier-orders/supplier-orders.html'
+});
