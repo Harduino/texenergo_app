@@ -49,10 +49,6 @@ class ReceiveOrdersCtrl {
                     }
                 }
             ],
-            role:{
-                can_edit: CanCan.can('edit', 'ReceiveOrder'),
-                can_destroy: CanCan.can('destroy', 'ReceiveOrder')
-            },
             titles: ['Поступления']
         };
 

@@ -64,7 +64,12 @@
                     </section>
                     <section class="form-group">
                         <label class="control-label">Дата</label>
-                        <div class="form-control">{{receiveOrdersCtrl.newOrderData.date|date:'dd.MM.yyyy HH:mm'}}</div>
+                        <div class="input-group">
+                            <input type="text" ng-model="receiveOrdersCtrl.newOrderData.date" class="full-width input-sm form-control" style="position: initial;">
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </span>
+                        </div>
                     </section>
                     <section class="form-group">
                         <label class="control-label" for="new-order-number">Номер накладной</label>
