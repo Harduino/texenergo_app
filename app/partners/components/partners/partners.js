@@ -111,4 +111,9 @@ class PartnersCtrl {
 }
 
 PartnersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', '$parse'];
-angular.module('app.partners').controller('PartnersCtrl', PartnersCtrl);
+
+angular.module('app.partners').component('partners', {
+    controller: PartnersCtrl,
+    controllerAs: 'partnersCtrl',
+    templateUrl: '/app/partners/components/partners/partners.html'
+});

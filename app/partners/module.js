@@ -15,9 +15,7 @@ angular.module('app.partners', ['ui.router'])
                 },
                 views:{
                     "content@app": {
-                        controller: 'PartnersCtrl',
-                        controllerAs: 'partnersCtrl',
-                        templateUrl: '/app/partners/views/partners.html'
+                        template: '<partners></partners>'
                     }
                 }
             })
