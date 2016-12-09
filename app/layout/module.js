@@ -11,7 +11,8 @@
                 views: {
                     root: {
                         templateUrl: '/app/layout/layout.tpl.html',
-                        controller: 'LayoutCtrl'
+                        controller: 'LayoutCtrl',
+                        controllerAs: 'layoutCtrl'
                     }
                 }
             });
@@ -31,23 +32,22 @@
 
     });
 
-    module.controller('LayoutCtrl', ['$scope', '$state', 'serverApi', 'authService', '$localStorage', function($scope, $state, serverApi, authService, $localStorage){
-        var sc = $scope,
-            profile = authService.profile || {};
+    module.controller('LayoutCtrl', ['$state', 'serverApi', 'authService', '$localStorage', function($state, serverApi, authService, $localStorage){
+        var self = this;
 
-        sc.searchText = '';
+        this.searchText = '';
 
         //выполняем поиск по клику на кнопку в топ меню
-        sc.executeSearch = function(){
-            $state.go('app.search', {searchString: sc.searchText, page:0});
+        this.executeSearch = function(){
+            $state.go('app.search', {searchString: self.searchText, page:0});
         };
 
-        sc.signOut = function(){
+        this.signOut = function(){
             authService.logout();
         };
 
-        sc.logo = 'assets/img/logo.png';
-        sc.company_name = 'Texenergo';
+        this.logo = 'assets/img/logo.png';
+        this.company_name = 'Texenergo';
 
         if (window.location.hostname.match(/texenergo/) != undefined) {
             var yaParams = {};
@@ -66,7 +66,7 @@
         }
     }]);
 
-    module.controller('LayoutNavigationCtrl', ['$scope', function(sc){
+    module.controller('LayoutNavigationCtrl', [function(){
 //        sc.index = window.gon.index;
     }]);
 
