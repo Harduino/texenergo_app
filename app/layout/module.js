@@ -8,7 +8,7 @@ class LayoutCtrl {
         this.company_name = 'Texenergo';
 
         if (window.location.hostname.match(/texenergo/) != undefined) {
-            var yaParams = {};
+            let yaParams = {};
             if ($localStorage && $localStorage.profile && $localStorage.profile.user_metadata) {
                 yaParams.user_email = $localStorage.profile.user_metadata.email;
                 yaParams.user_id = $localStorage.profile.user_metadata.contact_id;
@@ -35,13 +35,8 @@ class LayoutCtrl {
 
 LayoutCtrl.$inject = ['$state', 'authService', '$localStorage'];
 
-(function () {
-
-    "use strict";
-
-    var module = angular.module('app.layout', ['ui.router', 'app.templates']);
-
-    module.config(function ($stateProvider, $urlRouterProvider) {
+angular.module('app.layout', ['ui.router', 'app.templates'])
+    .config(($stateProvider, $urlRouterProvider) => {
         $stateProvider
             .state('app', {
                 abstract: true,
@@ -53,24 +48,19 @@ LayoutCtrl.$inject = ['$state', 'authService', '$localStorage'];
                     }
                 }
             });
+
         $urlRouterProvider
-            .otherwise(function($injector){
-                var authService= $injector.get('authService'),
-                    token = authService.token,
-                    session = $injector.get('$sessionStorage'),
-                    returnToUrl = session.returnToUrl;
+            .otherwise($injector => {
+                let authService = $injector.get('authService'),
+                    token = authService.token;
 
                 if(!token || authService.isTokenExpired(token)){
                     return '/sign_in'
                 }
 
-                return returnToUrl || '/dashboard';
+                return $injector.get('$sessionStorage').returnToUrl || '/dashboard';
             });
-
-    });
-
-    module.controller('LayoutCtrl', LayoutCtrl);
-    module.controller('LayoutNavigationCtrl', [function(){}]);
-
-    return module;
-}());
+    })
+    .controller('LayoutCtrl', LayoutCtrl)
+    .controller('LayoutNavigationCtrl', angular.noop)
+;
