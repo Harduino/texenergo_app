@@ -1,5 +1,5 @@
 class DashboardCtrl {
-    constructor(serverApi) {
+    constructor(serverApi, teBarcodeScanner) {
         let self = this;
         this.data = {customerOrders:[], dispatchOrders:[], parseLogSearchQ: '', searchLogSearchQ: ''};
 
@@ -17,7 +17,7 @@ class DashboardCtrl {
     }
 }
 
-DashboardCtrl.$inject = ['serverApi'];
+DashboardCtrl.$inject = ['serverApi', 'teBarcodeScanner'];
 
 angular.module('app.dashboard').component('dashboard', {
     controller: DashboardCtrl,
