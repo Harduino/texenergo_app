@@ -1,8 +1,9 @@
 class ViewCatalogueCtrl {
-    constructor($scope, $state, $stateParams, serverApi, $sce) {
-        $scope.catalogue = {};
+    constructor($state, $stateParams, serverApi, $sce) {
+        let self = this;
+        this.catalogue = {};
 
-        $scope.visual = {
+        this.visual = {
             navButtsOptions:[
                 {type: 'back', callback: () => $state.go('app.catalogues', {})},
                 {type: 'edit', callback: () => $state.go('app.catalogues.view.edit', $stateParams)}
@@ -17,11 +18,11 @@ class ViewCatalogueCtrl {
         };
 
         serverApi.getCatalogueDetails($stateParams.id, result => {
-            $scope.catalogue = result.data;
-            $scope.catalogue.description = $sce.trustAsHtml(result.data.description);
+            self.catalogue = result.data;
+            self.catalogue.description = $sce.trustAsHtml(result.data.description);
         });
     }
 }
 
-ViewCatalogueCtrl.$inject = ['$scope', '$state', '$stateParams', 'serverApi', '$sce'];
+ViewCatalogueCtrl.$inject = ['$state', '$stateParams', 'serverApi', '$sce'];
 angular.module('app.catalogues').controller('ViewCatalogueCtrl', ViewCatalogueCtrl);
