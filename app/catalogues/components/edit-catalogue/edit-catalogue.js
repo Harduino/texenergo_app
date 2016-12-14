@@ -39,4 +39,9 @@ class EditCatalogueCtrl {
 }
 
 EditCatalogueCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
-angular.module('app.catalogues').controller('EditCatalogueCtrl', EditCatalogueCtrl);
+
+angular.module('app.catalogues').component('editCatalogue', {
+    controller: EditCatalogueCtrl,
+    controllerAs: 'editCatalogueCtrl',
+    templateUrl: '/app/catalogues/components/edit-catalogue/edit-catalogue.html'
+});

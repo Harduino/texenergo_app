@@ -3,17 +3,17 @@ angular.module('app.catalogues', ['ui.router'])
         $stateProvider
             .state('app.catalogues', {
                 url: '/catalogues?q',
-                data:{
+                data: {
                     title: 'Категории товаров',
-                    access:{
-                        action:'index',
-                        params:'Catalogue'
+                    access: {
+                        action: 'index',
+                        params: 'Catalogue'
                     }
                 },
-                params:{
-                  q:''
+                params: {
+                  q: ''
                 },
-                views:{
+                views: {
                     'content@app': {
                         template: '<catalogues></catalogues>'
                     }
@@ -21,13 +21,13 @@ angular.module('app.catalogues', ['ui.router'])
             })
             .state('app.catalogues.view', {
                 url: '/:id',
-                data:{
-                    access:{
+                data: {
+                    access: {
                         action:'read',
                         params:'Catalogue'
                     }
                 },
-                views:{
+                views: {
                     'content@app': {
                         template: '<view-catalogue></view-catalogue>'
                     }
@@ -35,18 +35,16 @@ angular.module('app.catalogues', ['ui.router'])
             })
             .state('app.catalogues.view.edit', {
                 url: '/edit',
-                data:{
-                    title:'Редактирование категории',
-                    access:{
-                        action:'edit',
-                        params:'Catalogue'
+                data: {
+                    title: 'Редактирование категории',
+                    access: {
+                        action: 'edit',
+                        params: 'Catalogue'
                     }
                 },
                 views:{
-                    'content@app':{
-                        controller: 'EditCatalogueCtrl',
-                        controllerAs: 'editCatalogueCtrl',
-                        templateUrl: '/app/catalogues/views/editCatalogue.html'
+                    'content@app': {
+                        template: '<edit-catalogue></edit-catalogue>'
                     }
                 }
             })
