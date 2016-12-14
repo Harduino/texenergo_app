@@ -29,9 +29,7 @@ angular.module('app.catalogues', ['ui.router'])
                 },
                 views:{
                     'content@app': {
-                        controller: 'ViewCatalogueCtrl',
-                        controllerAs: 'viewCatalogueCtrl',
-                        templateUrl: '/app/catalogues/views/viewCatalogue.html'
+                        template: '<view-catalogue></view-catalogue>'
                     }
                 }
             })

@@ -25,4 +25,9 @@ class ViewCatalogueCtrl {
 }
 
 ViewCatalogueCtrl.$inject = ['$state', '$stateParams', 'serverApi', '$sce'];
-angular.module('app.catalogues').controller('ViewCatalogueCtrl', ViewCatalogueCtrl);
+
+angular.module('app.catalogues').component('viewCatalogue', {
+    controller: ViewCatalogueCtrl,
+    controllerAs: 'viewCatalogueCtrl',
+    templateUrl: '/app/catalogues/components/view-catalogue/view-catalogue.html'
+});
