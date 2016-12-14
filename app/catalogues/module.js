@@ -45,6 +45,7 @@ angular.module('app.catalogues', ['ui.router'])
                 views:{
                     'content@app':{
                         controller: 'EditCatalogueCtrl',
+                        controllerAs: 'editCatalogueCtrl',
                         templateUrl: '/app/catalogues/views/editCatalogue.html'
                     }
                 }

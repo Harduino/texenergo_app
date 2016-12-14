@@ -1,15 +1,22 @@
 <div id="content">
     <div class="row">
-        <big-breadcrumbs items="['Редактирование категории']" data-icon="edit" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+        <big-breadcrumbs items="['Редактирование категории']" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"
+                         data-icon="edit">
+        </big-breadcrumbs>
     </div>
     <div class="well well-white">
-        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">Редактировать категорию {{data.catalogue.name}}</h2>
-        <form-nav-buttons options="visual.navButtsOptions" data-role="visual.roles" class="btn-group margin-top-10"></form-nav-buttons>
+        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">
+            Редактировать категорию {{editCatalogueCtrl.data.catalogue.name}}
+        </h2>
+        <form-nav-buttons options="editCatalogueCtrl.visual.navButtsOptions" data-role="editCatalogueCtrl.visual.roles"
+                          class="btn-group margin-top-10">
+        </form-nav-buttons>
         <hr>
         <section id="widget-grid" widget-grid>
             <div class="row">
                 <article class="col-md-12">
-                    <div id="edit_category_1" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false">
+                    <div id="edit_category_1" jarvis-widget data-widget-color="blueDark"
+                         data-widget-deletebutton="false">
                         <header>
                             <h2>Описание категории</h2>
                         </header>
@@ -17,13 +24,18 @@
                             <div class="well well-clean well-white">
                                 <div class="form-group">
                                     <label class="control-label input-group-addon">Название</label>
-                                    <input class="form-control" ng-model="data.catalogue.name" type="text" placeholder="Название">
+                                    <input ng-model="editCatalogueCtrl.data.catalogue.name" placeholder="Название"
+                                           type="text" class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label input-group-addon">Описание</label>
-                                    <textarea ui-tinymce="tinymceOptions" ng-model="data.catalogue.description"></textarea>
+                                    <textarea ui-tinymce="editCatalogueCtrl.tinymceOptions"
+                                              ng-model="editCatalogueCtrl.data.catalogue.description">
+                                    </textarea>
                                 </div>
-                                <button class="btn btn-info" ng-click="saveCatalogue()">Сохранить</button>
+                                <button class="btn btn-info" ng-click="editCatalogueCtrl.saveCatalogue()">
+                                    Сохранить
+                                </button>
                             </div>
                         </div>
                     </div>

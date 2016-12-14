@@ -1,6 +1,10 @@
 class EditCatalogueCtrl {
-    constructor($scope, $state, $stateParams, serverApi, funcFactory) {
-        $scope.visual = {
+    constructor($state, $stateParams, serverApi, funcFactory) {
+        let self = this;
+        this.serverApi = serverApi;
+        this.funcFactory = funcFactory;
+
+        this.visual = {
             navButtsOptions:[
                 {type: 'back', callback: () => $state.go('app.catalogues', $stateParams)},
                 {type: 'show', callback: () => $state.go('app.catalogues.view', $stateParams)}
@@ -8,33 +12,31 @@ class EditCatalogueCtrl {
             roles: {}
         };
 
-        $scope.data = {catalogue: {}};
-        $scope.tinymceOptions = funcFactory.getTinymceOptions();
+        this.data = {catalogue: {}};
+        this.tinymceOptions = funcFactory.getTinymceOptions();
 
         serverApi.getCatalogueDetails($stateParams.id, result => {
-            let catalogue = $scope.data.catalogue = result.data;
-            $scope.visual.roles = {can_edit: catalogue.can_edit, can_destroy: catalogue.can_destroy}
+            let catalogue = self.data.catalogue = result.data;
+            self.visual.roles = {can_edit: catalogue.can_edit, can_destroy: catalogue.can_destroy}
         });
+    }
 
-        /**
-         * Обновляем информацию по категории
-         */
-        $scope.saveCatalogue = () => {
-            let catalogue = $scope.data.catalogue;
-            let data = {catalogue: {name: catalogue.name, description: catalogue.description}};
+    saveCatalogue() {
+        let self = this;
+        let catalogue = this.data.catalogue;
+        let data = {catalogue: {name: catalogue.name, description: catalogue.description}};
 
-            serverApi.updateCatalogue(catalogue.id, data, result => {
-                if(result.status == 200 && !result.data.errors){
-                    funcFactory.showNotification('Успешно', 'Категория ' + catalogue.name + ' успешно отредактирована.',
-                        true);
-                } else {
-                    funcFactory.showNotification('Неудача', 'Не удалось отредактировать категорию ' + catalogue.name,
-                        true);
-                }
-            });
-        };
+        self.serverApi.updateCatalogue(catalogue.id, data, result => {
+            if(result.status == 200 && !result.data.errors){
+                self.funcFactory.showNotification('Успешно', 'Категория ' + catalogue.name +
+                    ' успешно отредактирована.', true);
+            } else {
+                self.funcFactory.showNotification('Неудача', 'Не удалось отредактировать категорию ' + catalogue.name,
+                    true);
+            }
+        });
     }
 }
 
-EditCatalogueCtrl.$inject = ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory'];
+EditCatalogueCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
 angular.module('app.catalogues').controller('EditCatalogueCtrl', EditCatalogueCtrl);
