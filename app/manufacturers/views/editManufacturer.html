@@ -1,10 +1,16 @@
 <div id="content">
     <div class="row">
-        <big-breadcrumbs items="['Редактирование производителя']" data-icon="edit" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+        <big-breadcrumbs items="['Редактирование производителя']" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"
+                         data-icon="edit">
+        </big-breadcrumbs>
     </div>
     <div class="well well-white">
-        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">Редактировать производителя {{data.manufacturer.name}}</h2>
-        <form-nav-buttons options="visual.navButtsOptions" data-role="visual.roles" class="btn-group margin-top-10"></form-nav-buttons>
+        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">
+            Редактировать производителя {{editManufacturerCtrl.data.manufacturer.name}}
+        </h2>
+        <form-nav-buttons options="editManufacturerCtrl.visual.navButtsOptions" data-role="visual.roles"
+                          class="btn-group margin-top-10">
+        </form-nav-buttons>
         <hr>
         <section id="widget-grid" widget-grid>
             <div class="row">
@@ -17,13 +23,18 @@
                             <div class="well well-clean well-white">
                                 <div class="form-group">
                                     <label class="control-label input-group-addon">Название</label>
-                                    <input class="form-control" ng-model="data.manufacturer.name" type="text" placeholder="Название">
+                                    <input class="form-control" ng-model="editManufacturerCtrl.data.manufacturer.name"
+                                           placeholder="Название" type="text">
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label input-group-addon">Описание</label>
-                                    <textarea ui-tinymce="tinymceOptions" ng-model="data.manufacturer.description"></textarea>
+                                    <textarea ui-tinymce="editManufacturerCtrl.tinymceOptions"
+                                              ng-model="editManufacturerCtrl.data.manufacturer.description">
+                                    </textarea>
                                 </div>
-                                <button class="btn btn-info" ng-click="saveManufacturer()">Сохранить</button>
+                                <button class="btn btn-info" ng-click="editManufacturerCtrl.saveManufacturer()">
+                                    Сохранить
+                                </button>
                             </div>
                         </div>
                     </div>
