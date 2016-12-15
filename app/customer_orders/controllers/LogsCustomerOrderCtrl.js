@@ -1,47 +1,31 @@
-/**
- * Created by Egor Lobanov on 15.11.15.
- */
-
-(function(){
-    "use strict";
-
-    angular.module('app.customer_orders').controller('LogsCustomerOrderCtrl', ['$state', '$stateParams', 'serverApi', 'funcFactory', function($state, $stateParams, serverApi, funcFactory) {
-        var self = this;
+class LogsCustomerOrderCtrl {
+    constructor($state, $stateParams, serverApi, funcFactory) {
+        let self = this;
         this.logs = {};
 
         this.visual = {
             navButtsOptions:[
-                {
-                    type: 'back',
-                    callback: function() {
-                        $state.go('app.customer_orders',{});
-                    }
-                },
+                {type: 'back', callback: () => $state.go('app.customer_orders', {})},
                 {type: 'files'},
                 {
                     type: 'send_email',
-                    callback: function() {
-                        serverApi.sendCustomerOrderInvoice($stateParams.id, function(result) {
+                    callback: () => {
+                        serverApi.sendCustomerOrderInvoice($stateParams.id, result => {
                             if(result.status == 200) {
                                 if(result.data.errors) {
-                                    funcFactory.showNotification("Неудача", result.data.errors, true);
+                                    funcFactory.showNotification('Неудача', result.data.errors, true);
                                 } else {
-                                    funcFactory.showNotification("Успешно", 'Заказ успешно отправлен.', true);
+                                    funcFactory.showNotification('Успешно', 'Заказ успешно отправлен.', true);
                                 }
                             } else {
-                                funcFactory.showNotification("Неудача", 'Ошибка при попытке отправить заказ.', true);
+                                funcFactory.showNotification('Неудача', 'Ошибка при попытке отправить заказ.', true);
                             }
                         });
                     }
                 },
                 {type: 'recalculate'},
                 {type: 'confirm_order'},
-                {
-                    type: 'show',
-                    callback: function() {
-                        $state.go('app.customer_orders.view', $stateParams);
-                    }
-                }
+                {type: 'show', callback: () => $state.go('app.customer_orders.view', $stateParams)}
             ],
             chartOptions: {
                 barColor: 'rgb(103,135,155)',
@@ -52,8 +36,9 @@
             }
         };
 
-        serverApi.getCustomerOrderLogs($stateParams.id, function(result){
-            self.logs = result.data;
-        });
-    }]);
-}());
+        serverApi.getCustomerOrderLogs($stateParams.id, result => self.logs = result.data);
+    }
+}
+
+LogsCustomerOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
+angular.module('app.customer_orders').controller('LogsCustomerOrderCtrl', LogsCustomerOrderCtrl);
