@@ -1,33 +1,37 @@
 <div id="content">
     <div class="well well-white">
-        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">{{visual.titles + dispatchOrder.number}}</h2>
-        <form-nav-buttons subdata="dispatchOrder" data-role="dispatchOrder" options="visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
+        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">
+            {{viewDispatchOrderCtrl.visual.titles + viewDispatchOrderCtrl.dispatchOrder.number}}
+        </h2>
+        <form-nav-buttons subdata="viewDispatchOrderCtrl.dispatchOrder" data-role="viewDispatchOrderCtrl.dispatchOrder"
+                          options="viewDispatchOrderCtrl.visual.navButtsOptions" class="btn-group margin-top-10">
+        </form-nav-buttons>
         <hr>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">
                 Номер:
             </p>
-            <p class="col-md-9">{{dispatchOrder.number}}</p>
+            <p class="col-md-9">{{viewDispatchOrderCtrl.dispatchOrder.number}}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">
                 Дата:
             </p>
-            <p class="col-md-9">{{dispatchOrder.date | date:'dd MMMM yy'}}</p>
+            <p class="col-md-9">{{viewDispatchOrderCtrl.dispatchOrder.date | date:'dd MMMM yy'}}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">
                 Партнёр:
             </p>
             <p class="col-md-9">
-                <a ng-href="/#/partners/{{dispatchOrder.partner.id || dispatchOrder.partner._id}}">{{dispatchOrder.partner.name}}</a>
+                <a ng-href="/#/partners/{{viewDispatchOrderCtrl.dispatchOrder.partner.id || viewDispatchOrderCtrl.dispatchOrder.partner._id}}">{{viewDispatchOrderCtrl.dispatchOrder.partner.name}}</a>
             </p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">
                 Статус:
             </p>
-            <p class="col-md-9">{{dispatchOrder.status}}</p>
+            <p class="col-md-9">{{viewDispatchOrderCtrl.dispatchOrder.status}}</p>
         </div>
 
 
@@ -35,62 +39,68 @@
             <p class="col-xs-12 col-md-3 font-bold">
                 Статус:
             </p>
-            <p class="col-md-9">{{dispatchOrder.status}}</p>
+            <p class="col-md-9">{{viewDispatchOrderCtrl.dispatchOrder.status}}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">
                 Номер транспортной накладной:
             </p>
             <div class="col-md-9">
-                {{ dispatchOrder.transportation_number || 'Нет' }}
+                {{ viewDispatchOrderCtrl.dispatchOrder.transportation_number || 'Нет' }}
             </div>
         </div>
 
     </div>
     
-    <div class="well well-white" ng-if="dispatchOrder.transportation=='Самовывоз'">
-        <div class="row" ng-if="dispatchOrder.person.id">
+    <div class="well well-white" ng-if="viewDispatchOrderCtrl.dispatchOrder.transportation=='Самовывоз'">
+        <div class="row" ng-if="viewDispatchOrderCtrl.dispatchOrder.person.id">
             <div class="col-xs-7">
                 <div class="row">
                     <p class="col-xs-12 col-md-3 font-bold">
                         Имя:
                     </p>
-                    <p class="col-md-9">{{ dispatchOrder.person.full_name }}</p>
+                    <p class="col-md-9">{{ viewDispatchOrderCtrl.dispatchOrder.person.full_name }}</p>
                 </div>
                 <div class="row">
                     <p class="col-xs-12 col-md-3 font-bold">
                         Имя:
                     </p>
-                    <p class="col-md-9">{{ dispatchOrder.person.full_name }}</p>
+                    <p class="col-md-9">{{ viewDispatchOrderCtrl.dispatchOrder.person.full_name }}</p>
                 </div>
                 <div class="row">
                     <p class="col-xs-12 col-md-3 font-bold">
                         Паспортные данные:
                     </p>
-                    <p class="col-md-9">{{ dispatchOrder.person.passport }}</p>
+                    <p class="col-md-9">{{ viewDispatchOrderCtrl.dispatchOrder.person.passport }}</p>
                 </div>
             </div>
             <div class="col-xs-5">
                 <div class="row">
-                    <img class="img-thumbnail" ng-src="{{ dispatchOrder.person.photo_url }}">
+                    <img class="img-thumbnail" ng-src="{{ viewDispatchOrderCtrl.dispatchOrder.person.photo_url }}">
                 </div>
             </div>
         </div>
-        <div class="row" ng-if="!dispatchOrder.person.id">
+        <div class="row" ng-if="!viewDispatchOrderCtrl.dispatchOrder.person.id">
             <h2 class="col-xs-12 font-bold bg-danger">
                 Не отгружать!!! Представитель не заполнен.
             </h2>
             <section class="form-group smart-form margin-top-10">
                 <label class="control-label input-group-addon">Кто забирает груз:</label>
                 <label class="select">
-                    <select class="input-sm" ng-model="dispatchOrder.chosenPersonId">
-                        <option ng-repeat="u in dispatchOrder.people" ng-selected="dispatchOrder.chosenPersonId===u.id" ng-attr-value="{{u.id}}">{{u.full_name}}</option>
+                    <select class="input-sm" ng-model="viewDispatchOrderCtrl.dispatchOrder.chosenPersonId">
+                        <option ng-repeat="u in viewDispatchOrderCtrl.dispatchOrder.people" ng-attr-value="{{u.id}}"
+                                ng-selected="viewDispatchOrderCtrl.dispatchOrder.chosenPersonId===u.id">
+                            {{u.full_name}}
+                        </option>
                     </select>
                     <i></i>
                 </label>
             </section>
             <div class="btn-group full-width">
-                <button class="btn btn-info right" ng-click="saveChosenPerson()" ng-disabled="!dispatchOrder.chosenPersonId">Выбрать человека</button>
+                <button class="btn btn-info right" ng-disabled="!viewDispatchOrderCtrl.dispatchOrder.chosenPersonId"
+                        ng-click="viewDispatchOrderCtrl.saveChosenPerson()">
+                    Выбрать человека
+                </button>
             </div>
         </div>
     </div>
@@ -108,7 +118,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in dispatchOrder.product_order_contents">
+                <tr ng-repeat="item in viewDispatchOrderCtrl.dispatchOrder.product_order_contents">
                     <td>{{ $index + 1 }}</td>
                     <td>
                         <a ng-href="#/products/{{ item.product.id }}">{{ item.product.name }}</a>
@@ -120,14 +130,15 @@
                 </tr>
                 <tr>
                     <td colspan="5" class="text-right">Итого:</td>
-                    <td>{{ dispatchOrder.total | currency }}</td>
+                    <td>{{ viewDispatchOrderCtrl.dispatchOrder.total | currency }}</td>
                 </tr>
             </tbody>
         </table>
     </div>
     
-    <div class="well well-white" nv-file-drop="" uploader="uploader" filters="queueLimit">
-        <div ng-show="uploader.isHTML5" class="well my-drop-zone" nv-file-over="" uploader="uploader">
+    <div class="well well-white" nv-file-drop="" uploader="viewDispatchOrderCtrl.uploader" filters="queueLimit">
+        <div ng-show="viewDispatchOrderCtrl.uploader.isHTML5" uploader="viewDispatchOrderCtrl.uploader" nv-file-over=""
+             class="well my-drop-zone">
             Приложить файл
         </div>
         <table class="table">
@@ -138,14 +149,15 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="document in dispatchOrder.documents">
+                <tr ng-repeat="document in viewDispatchOrderCtrl.dispatchOrder.documents">
                     <td>{{ document.name }}</td>
                     <td><a href="{{document.document_url}}">Скачать</a></td>
                 </tr>
-                <tr ng-repeat="item in uploader.queue">
+                <tr ng-repeat="item in viewDispatchOrderCtrl.uploader.queue">
                     <td>{{ item.file.name }}</td>
                     <td class="text-center">
-                        <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                        <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()"
+                                ng-disabled="item.isReady || item.isUploading || item.isSuccess">
                             <span class="glyphicon glyphicon-upload"></span> Загрузить
                         </button>
                         <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
