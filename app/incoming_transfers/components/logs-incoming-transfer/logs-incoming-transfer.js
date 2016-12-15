@@ -22,4 +22,9 @@ class LogsIncomingTransferCtrl {
 }
 
 LogsIncomingTransferCtrl.$inject = ['$state', '$stateParams', 'serverApi'];
-angular.module('app.incoming_transfers').controller('LogsIncomingTransferCtrl', LogsIncomingTransferCtrl);
+
+angular.module('app.incoming_transfers').component('logsIncomingTransfer', {
+    controller: LogsIncomingTransferCtrl,
+    controllerAs: 'logsIncomingTransferCtrl',
+    templateUrl: '/app/incoming_transfers/components/logs-incoming-transfer/logs-incoming-transfer.html'
+});

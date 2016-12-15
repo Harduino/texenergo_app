@@ -44,9 +44,7 @@ angular.module('app.incoming_transfers', ['ui.router'])
             },
             views:{
                 "content@app":{
-                    controller: 'LogsIncomingTransferCtrl',
-                    controllerAs: 'logsIncomingTransferCtrl',
-                    templateUrl: '/app/incoming_transfers/views/logsIncomingTransfer.html'
+                    template: '<logs-incoming-transfer></logs-incoming-transfer>'
                 }
             }
         });
