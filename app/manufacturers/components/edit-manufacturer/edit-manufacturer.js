@@ -43,4 +43,9 @@ class EditManufacturerCtrl {
 }
 
 EditManufacturerCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
-angular.module('app.manufacturers').controller('EditManufacturerCtrl', EditManufacturerCtrl);
+
+angular.module('app.manufacturers').component('editManufacturer', {
+    controller: EditManufacturerCtrl,
+    controllerAs: 'editManufacturerCtrl',
+    templateUrl: '/app/manufacturers/components/edit-manufacturer/edit-manufacturer.html'
+});
