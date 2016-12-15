@@ -54,6 +54,7 @@
             views:{
                 "content@app":{
                     controller: 'LogsCustomerOrderCtrl',
+                    controllerAs: 'logsCustomerOrderCtrl',
                     templateUrl: '/app/customer_orders/views/logsCustomerOrder.html'
                 }
             }
