@@ -41,4 +41,9 @@ class LogsCustomerOrderCtrl {
 }
 
 LogsCustomerOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
-angular.module('app.customer_orders').controller('LogsCustomerOrderCtrl', LogsCustomerOrderCtrl);
+
+angular.module('app.customer_orders').component('logsCustomerOrder', {
+    controller: LogsCustomerOrderCtrl,
+    controllerAs: 'logsCustomerOrderCtrl',
+    templateUrl: '/app/customer_orders/components/logs-customer-order/logs-customer-order.html'
+});

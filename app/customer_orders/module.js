@@ -44,18 +44,16 @@
             }
         }).state('app.customer_orders.view.logs', {
             url: '/logs',
-            data:{
-                title:'История заказа',
-                access:{
-                    action:'logs',
-                    params:'CustomerOrder'
+            data: {
+                title: 'История заказа',
+                access: {
+                    action: 'logs',
+                    params: 'CustomerOrder'
                 }
             },
-            views:{
-                "content@app":{
-                    controller: 'LogsCustomerOrderCtrl',
-                    controllerAs: 'logsCustomerOrderCtrl',
-                    templateUrl: '/app/customer_orders/views/logsCustomerOrder.html'
+            views: {
+                "content@app": {
+                    template: '<logs-customer-order></logs-customer-order>'
                 }
             }
         });
