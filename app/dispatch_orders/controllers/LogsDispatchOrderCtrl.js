@@ -1,28 +1,12 @@
-/**
- * Created by Egor Lobanov on 15.11.15.
- */
-
-(function(){
-    "use strict";
-
-    angular.module('app.dispatch_orders').controller('LogsDispatchOrderCtrl', ['$state', '$stateParams', 'serverApi', function($state, $stateParams, serverApi) {
-        var self = this;
-        this.logs = {};
+class LogsDispatchOrderCtrl {
+    constructor($state, $stateParams, serverApi) {
+        let self = this;
+        this.logs = [];
 
         this.visual = {
             navButtsOptions:[
-                {
-                    type: 'back',
-                    callback: function() {
-                        $state.go('app.dispatch_orders',{});
-                    }
-                },
-                {
-                    type: 'show',
-                    callback: function() {
-                        $state.go('app.dispatch_orders.view', $stateParams);
-                    }
-                }
+                {type: 'back', callback: () => $state.go('app.dispatch_orders', {})},
+                {type: 'show', callback: () => $state.go('app.dispatch_orders.view', $stateParams)}
             ],
             chartOptions: {
                 barColor: 'rgb(103,135,155)',
@@ -33,8 +17,9 @@
             }
         };
 
-        serverApi.getDispatchOrderLogs($stateParams.id, function(result) {
-            self.logs = result.data;
-        });
-    }]);
-}());
+        serverApi.getDispatchOrderLogs($stateParams.id, result => self.logs = result.data);
+    }
+}
+
+LogsDispatchOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi'];
+angular.module('app.dispatch_orders').controller('LogsDispatchOrderCtrl', LogsDispatchOrderCtrl);
