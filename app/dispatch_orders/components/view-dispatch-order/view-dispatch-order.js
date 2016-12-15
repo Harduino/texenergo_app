@@ -99,4 +99,9 @@ class ViewDispatchOrderCtrl {
 }
 
 ViewDispatchOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', 'FileUploader', '$localStorage'];
-angular.module('app.dispatch_orders').controller('ViewDispatchOrderCtrl', ViewDispatchOrderCtrl);
+
+angular.module('app.dispatch_orders').component('viewDispatchOrder', {
+    controller: ViewDispatchOrderCtrl,
+    controllerAs: 'viewDispatchOrderCtrl',
+    templateUrl: '/app/dispatch_orders/components/view-dispatch-order/view-dispatch-order.html'
+});

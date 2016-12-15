@@ -30,9 +30,7 @@ angular.module('app.dispatch_orders', ['ui.router'])
                 },
                 views:{
                     'content@app':{
-                        controller: 'ViewDispatchOrderCtrl',
-                        controllerAs: 'viewDispatchOrderCtrl',
-                        templateUrl: '/app/dispatch_orders/views/viewDispatchOrder.html'
+                        template: '<view-dispatch-order></view-dispatch-order>'
                     }
                 }
             })
