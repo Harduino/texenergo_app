@@ -1,60 +1,46 @@
-/**
- * Created by Mikhail Arzhaev on 07.12.15.
- */
-(function(){
-    angular.module('app.manufacturers').controller('EditManufacturerCtrl', ['$state', '$stateParams', 'serverApi', '$filter', 'funcFactory', function($state, $stateParams, serverApi, $filter, funcFactory){
-        var self = this;
+class EditManufacturerCtrl {
+    constructor($state, $stateParams, serverApi, funcFactory) {
+        let self = this;
+        this.serverApi = serverApi;
+        this.funcFactory = funcFactory;
+
         this.data = {manufacturer: {}};
         this.tinymceOptions = funcFactory.getTinymceOptions();
 
         this.visual = {
             navButtsOptions:[
-                {
-                    type: 'back',
-                    callback: function() {
-                        $state.go('app.manufacturers', $stateParams);
-                    }
-                },
-                {
-                    type: 'show',
-                    callback: function() {
-                        $state.go('app.manufacturers.view', $stateParams);
-                    }
-                }
+                {type: 'back', callback: () => $state.go('app.manufacturers', $stateParams)},
+                {type: 'show', callback: () => $state.go('app.manufacturers.view', $stateParams)}
             ],
             roles: {}
         };
 
-        serverApi.getManufacturerDetails($stateParams.id, function(result) {
-            var manufacturer = self.data.manufacturer = result.data;
+        serverApi.getManufacturerDetails($stateParams.id, result => {
+            let manufacturer = self.data.manufacturer = result.data;
 
             self.visual.roles = {
                 can_edit: manufacturer.can_edit,
                 can_destroy: manufacturer.can_destroy
             }
         });
+    }
 
-        /**
-         * Обновляем информацию по категории
-         */
-        this.saveManufacturer = function() {
-            var manufacturer = self.data.manufacturer;
-            var data = {
-                manufacturer: {
-                    name: manufacturer.name,
-                    description: manufacturer.description
-                }
-            };
+    saveManufacturer() {
+        let self = this;
+        let manufacturer = this.data.manufacturer;
+        let data = {manufacturer: {name: manufacturer.name, description: manufacturer.description}};
 
-            serverApi.updateManufacturer(manufacturer.id, data, function(result) {
-                if((result.status == 200) && !result.data.errors) {
-                    funcFactory.showNotification("Успешно", 'Производитель ' + manufacturer.name +
-                        ' успешно отредактирован.', true);
-                } else {
-                    funcFactory.showNotification("Неудача", 'Не удалось отредактировать производителя ' +
-                        manufacturer.name, true);
-                }
-            });
-        };
-    }]);
-}());
+        this.serverApi.updateManufacturer(manufacturer.id, data, result => {
+            if((result.status == 200) && !result.data.errors) {
+                self.funcFactory.showNotification('Успешно', 'Производитель ' + manufacturer.name +
+                    ' успешно отредактирован.', true);
+            } else {
+                self.funcFactory.showNotification('Неудача', 'Не удалось отредактировать производителя ' +
+                    manufacturer.name, true);
+            }
+        });
+    }
+}
+
+EditManufacturerCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
+angular.module('app.manufacturers').controller('EditManufacturerCtrl', EditManufacturerCtrl);
