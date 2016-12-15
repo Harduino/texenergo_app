@@ -1,12 +1,25 @@
 (function(){
-
     "use strict";
 
-    angular.module('app.incoming_transfers').controller('LogsIncomingTransferCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', function($scope, $state, $stateParams, serverApi, funcFactory){
-        var sc = $scope;
-        sc.logs = {};
-        sc.visual = {
-            navButtsOptions:[{type:'back', callback:returnBack}, {type: 'show', callback: goToShow}],
+    angular.module('app.incoming_transfers').controller('LogsIncomingTransferCtrl', ['$state', '$stateParams', 'serverApi', function($state, $stateParams, serverApi) {
+        var self = this;
+        this.logs = [];
+
+        this.visual = {
+            navButtsOptions:[
+                {
+                    type: 'back',
+                    callback: function() {
+                        $state.go('app.incoming_transfers',{});
+                    }
+                },
+                {
+                    type: 'show',
+                    callback: function() {
+                        $state.go('app.incoming_transfers.view', $stateParams);
+                    }
+                }
+            ],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
                 scaleColor:false,
@@ -17,16 +30,7 @@
         };
 
         serverApi.getIncomingTransferLogs($stateParams.id, function(result){
-            var logs = sc.logs = result.data;
+            self.logs = result.data;
         });
-
-        function goToShow(){
-            $state.go('app.incoming_transfers.view', $stateParams);
-        }
-        
-        function returnBack(){
-            $state.go('app.incoming_transfers',{});
-        }
-        
     }]);
 }());
