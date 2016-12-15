@@ -22,4 +22,9 @@ class LogsDispatchOrderCtrl {
 }
 
 LogsDispatchOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi'];
-angular.module('app.dispatch_orders').controller('LogsDispatchOrderCtrl', LogsDispatchOrderCtrl);
+
+angular.module('app.dispatch_orders').component('logsDispatchOrder', {
+    controller: LogsDispatchOrderCtrl,
+    controllerAs: 'logsDispatchOrderCtrl',
+    templateUrl: '/app/dispatch_orders/components/logs-dispatch-order/logs-dispatch-order.html'
+});
