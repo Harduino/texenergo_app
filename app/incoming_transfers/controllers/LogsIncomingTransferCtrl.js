@@ -1,24 +1,12 @@
-(function(){
-    "use strict";
-
-    angular.module('app.incoming_transfers').controller('LogsIncomingTransferCtrl', ['$state', '$stateParams', 'serverApi', function($state, $stateParams, serverApi) {
-        var self = this;
+class LogsIncomingTransferCtrl {
+    constructor($state, $stateParams, serverApi) {
+        let self = this;
         this.logs = [];
 
         this.visual = {
             navButtsOptions:[
-                {
-                    type: 'back',
-                    callback: function() {
-                        $state.go('app.incoming_transfers',{});
-                    }
-                },
-                {
-                    type: 'show',
-                    callback: function() {
-                        $state.go('app.incoming_transfers.view', $stateParams);
-                    }
-                }
+                {type: 'back', callback: () => $state.go('app.incoming_transfers',{})},
+                {type: 'show', callback: () => $state.go('app.incoming_transfers.view', $stateParams)}
             ],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
@@ -29,8 +17,9 @@
             }
         };
 
-        serverApi.getIncomingTransferLogs($stateParams.id, function(result){
-            self.logs = result.data;
-        });
-    }]);
-}());
+        serverApi.getIncomingTransferLogs($stateParams.id, result => self.logs = result.data);
+    }
+}
+
+LogsIncomingTransferCtrl.$inject = ['$state', '$stateParams', 'serverApi'];
+angular.module('app.incoming_transfers').controller('LogsIncomingTransferCtrl', LogsIncomingTransferCtrl);
