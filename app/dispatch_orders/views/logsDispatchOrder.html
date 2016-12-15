@@ -1,9 +1,10 @@
 <div id="content">
     <div class="row">
-        <big-breadcrumbs items="['История списания']" data-icon="book" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+        <big-breadcrumbs items="['История списания']" data-icon="book" class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        </big-breadcrumbs>
     </div>
     <div class="well">
-        <form-nav-buttons options="visual.navButtsOptions" class="btn-group"></form-nav-buttons>
+        <form-nav-buttons options="logsDispatchOrderCtrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
         <hr>
         <table class="table table-bordered">
             <thead>
@@ -15,7 +16,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="row in logs">
+                <tr ng-repeat="row in logsDispatchOrderCtrl.logs">
                     <td>{{ $index + 1 }}</td>
                     <td>
                         {{ row.action }}
