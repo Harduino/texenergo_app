@@ -1,27 +1,15 @@
-/**
- * Created by Mikhail Arzhaev on 25.11.15.
- */
-(function(){
-    "use strict";
-
-    angular.module('app.outgoing_transfers').controller('ViewOutgoingTransferCtrl', ['$state', '$stateParams', 'serverApi', function($state, $stateParams, serverApi) {
-        var self = this;
+class ViewOutgoingTransferCtrl {
+    constructor($state, $stateParams, serverApi) {
+        let self = this;
         this.outgoingTransfer = {};
 
         this.visual = {
             navButtsOptions:[
-                {
-                    type: 'back',
-                    callback: function() {
-                        $state.go('app.outgoing_transfers', {});
-                    }
-                },
+                {type: 'back', callback: () => $state.go('app.outgoing_transfers', {})},
                 {
                     type: 'refresh',
-                    callback: function() {
-                        serverApi.getOutgoingTransferDetails($stateParams.id, function(result) {
-                            self.outgoingTransfer = result.data;
-                        })
+                    callback: () => {
+                        serverApi.getOutgoingTransferDetails($stateParams.id, res => self.outgoingTransfer = res.data)
                     }
                 }
             ],
@@ -36,8 +24,8 @@
             titles: 'Исходящий платёж: '
         };
 
-        serverApi.getOutgoingTransferDetails($stateParams.id, function(result) {
-            var transfer = self.outgoingTransfer = result.data;
+        serverApi.getOutgoingTransferDetails($stateParams.id, result => {
+            let transfer = self.outgoingTransfer = result.data;
 
             self.fileModalOptions = {
                 url:'/api/outgoing_transfers/' + transfer.id + '/documents',
@@ -47,5 +35,8 @@
                 id: transfer.id
             };
         });
-    }]);
-}());
+    }
+}
+
+ViewOutgoingTransferCtrl.$inject = ['$state', '$stateParams', 'serverApi'];
+angular.module('app.outgoing_transfers').controller('ViewOutgoingTransferCtrl', ViewOutgoingTransferCtrl);
