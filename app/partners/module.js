@@ -1,5 +1,5 @@
 angular.module('app.partners', ['ui.router'])
-    .config(function ($stateProvider) {
+    .config($stateProvider => {
         $stateProvider
             .state('app.partners', {
                 url: '/partners?q',
@@ -14,7 +14,7 @@ angular.module('app.partners', ['ui.router'])
                   q: ''
                 },
                 views:{
-                    "content@app": {
+                    'content@app': {
                         template: '<partners></partners>'
                     }
                 }
@@ -28,7 +28,7 @@ angular.module('app.partners', ['ui.router'])
                     }
                 },
                 views:{
-                    "content@app": {
+                    'content@app': {
                         controller: 'ViewPartnerCtrl',
                         templateUrl: '/app/partners/views/showPartner.html'
                     }
@@ -44,16 +44,17 @@ angular.module('app.partners', ['ui.router'])
                     }
                 },
                 views:{
-                    "content@app":{
+                    'content@app':{
                         controller: 'LogsPartnerCtrl',
+                        controllerAs: 'logsPartnerCtrl',
                         templateUrl: '/app/partners/views/logsPartner.html'
                     }
                 }
             })
         ;
     })
-    .filter('innKpp', function() {
-       return function(inn, kpi) {
+    .filter('innKpp', () => {
+       return (inn, kpi) => {
            return inn && kpi ? inn.toString() + '/' + kpi.toString() : '';
        }
     })
