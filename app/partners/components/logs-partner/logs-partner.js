@@ -22,4 +22,9 @@ class LogsPartnerCtrl {
 }
 
 LogsPartnerCtrl.$inject = ['$state', '$stateParams', 'serverApi'];
-angular.module('app.partners').controller('LogsPartnerCtrl', LogsPartnerCtrl);
+
+angular.module('app.partners').component('logsPartner', {
+    controller: LogsPartnerCtrl,
+    controllerAs: 'logsPartnerCtrl',
+    templateUrl: '/app/partners/components/logs-partner/logs-partner.html'
+});

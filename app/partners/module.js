@@ -45,9 +45,7 @@ angular.module('app.partners', ['ui.router'])
                 },
                 views:{
                     'content@app':{
-                        controller: 'LogsPartnerCtrl',
-                        controllerAs: 'logsPartnerCtrl',
-                        templateUrl: '/app/partners/views/logsPartner.html'
+                        template: '<logs-partner></logs-partner>'
                     }
                 }
             })
