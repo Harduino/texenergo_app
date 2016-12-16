@@ -25,4 +25,9 @@ class ViewManufacturerCtrl {
 }
 
 ViewManufacturerCtrl.$inject = ['$state', '$stateParams', 'serverApi', '$sce'];
-angular.module('app.manufacturers').controller('ViewManufacturerCtrl', ViewManufacturerCtrl);
+
+angular.module('app.manufacturers').component('viewManufacturer', {
+    controller: ViewManufacturerCtrl,
+    controllerAs: 'viewManufacturerCtrl',
+    templateUrl: '/app/manufacturers/components/view-manufacturer/view-manufacturer.html'
+});

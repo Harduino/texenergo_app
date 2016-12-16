@@ -26,10 +26,8 @@ angular.module('app.manufacturers', ['ui.router']).config($stateProvider => {
             }
         },
         views:{
-            "content@app":{
-                controller: 'ViewManufacturerCtrl',
-                controllerAs: 'viewManufacturerCtrl',
-                templateUrl: '/app/manufacturers/views/viewManufacturer.html'
+            "content@app": {
+                template: '<view-manufacturer></view-manufacturer>'
             }
         }
     }).state('app.manufacturers.view.edit', {
