@@ -1,27 +1,12 @@
-/**
- * Created by Mikhail Arzhaev on 20.11.15.
- */
-(function(){
-    "use strict";
-
-    angular.module('app.manufacturers').controller('ViewManufacturerCtrl', ['$state', '$stateParams', 'serverApi', '$sce', function($state, $stateParams, serverApi, $sce){
-        var self = this;
+class ViewManufacturerCtrl {
+    constructor($state, $stateParams, serverApi, $sce) {
+        let self = this;
         this.manufacturer = {};
 
         this.visual = {
             navButtsOptions:[
-                {
-                    type: 'back',
-                    callback: function() {
-                        $state.go('app.manufacturers', {});
-                    }
-                },
-                {
-                    type: 'edit',
-                    callback: function() {
-                        $state.go('app.manufacturers.view.edit', $stateParams);
-                    }
-                }
+                {type: 'back', callback: () => $state.go('app.manufacturers', {})},
+                {type: 'edit', callback: () => $state.go('app.manufacturers.view.edit', $stateParams)}
             ],
             chartOptions: {
                 barColor: 'rgb(103,135,155)',
@@ -32,9 +17,12 @@
             }
         };
 
-        serverApi.getManufacturerDetails($stateParams.id, function(result){
+        serverApi.getManufacturerDetails($stateParams.id, result => {
             self.manufacturer = result.data;
             self.manufacturer.description = $sce.trustAsHtml(result.data.description);
         });
-    }]);
-}());
+    }
+}
+
+ViewManufacturerCtrl.$inject = ['$state', '$stateParams', 'serverApi', '$sce'];
+angular.module('app.manufacturers').controller('ViewManufacturerCtrl', ViewManufacturerCtrl);
