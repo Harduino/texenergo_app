@@ -27,9 +27,7 @@ angular.module('app.outgoing_transfers', ['ui.router']).config($stateProvider =>
         },
         views:{
             "content@app":{
-                controller: 'ViewOutgoingTransferCtrl',
-                controllerAs: 'viewOutgoingTransferCtrl',
-                templateUrl: '/app/outgoing_transfers/views/viewOutgoingTransfer.html'
+                template: '<view-outgoing-transfer></view-outgoing-transfer>'
             }
         }
     });

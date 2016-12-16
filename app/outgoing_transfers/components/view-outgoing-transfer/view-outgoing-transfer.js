@@ -39,4 +39,9 @@ class ViewOutgoingTransferCtrl {
 }
 
 ViewOutgoingTransferCtrl.$inject = ['$state', '$stateParams', 'serverApi'];
-angular.module('app.outgoing_transfers').controller('ViewOutgoingTransferCtrl', ViewOutgoingTransferCtrl);
+
+angular.module('app.outgoing_transfers').component('viewOutgoingTransfer', {
+    controller: ViewOutgoingTransferCtrl,
+    controllerAs: 'viewOutgoingTransferCtrl',
+    templateUrl: '/app/outgoing_transfers/components/view-outgoing-transfer/view-outgoing-transfer.html'
+});
