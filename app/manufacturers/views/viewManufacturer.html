@@ -1,26 +1,24 @@
 <div id="content">
     <div class="well well-white">
-        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">Производитель {{ manufacturer.name }}</h2>
-        <form-nav-buttons options="visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
+        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">
+            Производитель {{ viewManufacturerCtrl.manufacturer.name }}
+        </h2>
+        <form-nav-buttons options="viewManufacturerCtrl.visual.navButtsOptions" class="btn-group margin-top-10">
+        </form-nav-buttons>
         <hr>
         <div class="row">
             <div class="col-md-3">
-                <img class="img-thumbnail" ng-src="{{ manufacturer.image_url }}">
+                <img class="img-thumbnail" ng-src="{{ viewManufacturerCtrl.manufacturer.image_url }}">
             </div>
-            <div class="col-md-9">
-            </div>
+            <div class="col-md-9"></div>
         </div>
         <div class="row margin-top-10">
-            <p class="col-xs-12 col-md-3 font-bold">
-                Название:
-            </p>
-            <p class="col-md-9">{{ manufacturer.name }}</p>
+            <p class="col-xs-12 col-md-3 font-bold">Название:</p>
+            <p class="col-md-9">{{ viewManufacturerCtrl.manufacturer.name }}</p>
         </div>
         <div class="row">
-            <p class="col-xs-12 col-md-3 font-bold">
-                Описание:
-            </p>
-            <p class="col-md-9" ng-bind-html="manufacturer.description"></p>
+            <p class="col-xs-12 col-md-3 font-bold">Описание:</p>
+            <p class="col-md-9" ng-bind-html="viewManufacturerCtrl.manufacturer.description"></p>
         </div>
     </div>
 </div>
