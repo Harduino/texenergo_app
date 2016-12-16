@@ -1,24 +1,12 @@
-(function(){
-    "use strict";
-
-    angular.module('app.partners').controller('LogsPartnerCtrl', ['$state', '$stateParams', 'serverApi', function($state, $stateParams, serverApi){
-        var self = this;
+class LogsPartnerCtrl {
+    constructor($state, $stateParams, serverApi) {
+        let self = this;
         this.logs = {};
 
         this.visual = {
             navButtsOptions:[
-                {
-                    type: 'back',
-                    callback: function() {
-                        $state.go('app.partners', {});
-                    }
-                },
-                {
-                    type: 'show',
-                    callback: function(){
-                        $state.go('app.partners.view', $stateParams);
-                    }
-                }
+                {type: 'back', callback: () => $state.go('app.partners', {})},
+                {type: 'show', callback: () => $state.go('app.partners.view', $stateParams)}
             ],
             chartOptions: {
                 barColor: 'rgb(103,135,155)',
@@ -29,8 +17,9 @@
             }
         };
 
-        serverApi.getPartnerLogs($stateParams.id, function(result) {
-            self.logs = result.data;
-        });
-    }]);
-}());
+        serverApi.getPartnerLogs($stateParams.id, result => self.logs = result.data);
+    }
+}
+
+LogsPartnerCtrl.$inject = ['$state', '$stateParams', 'serverApi'];
+angular.module('app.partners').controller('LogsPartnerCtrl', LogsPartnerCtrl);
