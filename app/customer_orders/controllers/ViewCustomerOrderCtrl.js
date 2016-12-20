@@ -666,11 +666,12 @@
             serverApi.updateCustomerOrderProduct(sc.order.id, row.id, {
                 customer_order_content: {
                     comment: data.comment
-                    funcFactory.showNotification('Добавил комментарий', 'Добавлен комментарий');
                 }
             }, function(result){
                 if(result.data.errors){
                     funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors);
+                } else {
+                    funcFactory.showNotification('Добавил комментарий', 'Добавлен комментарий');
                 }
             });
         }

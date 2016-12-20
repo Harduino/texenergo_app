@@ -1,0 +1,66 @@
+<div id="content">
+    <div class="well well-white">
+        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">PDF Каталог "{{ viewPdfCatalogueCtrl.pdfCatalogue.name }}"</h2>
+        <form-nav-buttons options="viewPdfCatalogueCtrl.visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
+        <hr>
+        <div class="row margin-top-10">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Название:
+            </p>
+            <p class="col-md-9">
+                <a ng-if="viewPdfCatalogueCtrl.pdfCatalogue.can_edit" editable-text="viewPdfCatalogueCtrl.pdfCatalogue.name" onaftersave="viewPdfCatalogueCtrl.savePdfCatalogue()">
+                    {{ viewPdfCatalogueCtrl.pdfCatalogue.name || 'Нет названия' }}
+                </a>
+                <span ng-if="!viewPdfCatalogueCtrl.pdfCatalogue.can_edit">
+                    {{ viewPdfCatalogueCtrl.pdfCatalogue.name || 'Нет названия' }}
+                </span>
+            </p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Описание:
+            </p>
+            <p class="col-md-9">
+                <a ng-if="viewPdfCatalogueCtrl.pdfCatalogue.can_edit" editable-text="viewPdfCatalogueCtrl.pdfCatalogue.description" onaftersave="viewPdfCatalogueCtrl.savePdfCatalogue()">
+                    {{ viewPdfCatalogueCtrl.pdfCatalogue.description || 'Нет описания' }}
+                </a>
+                <span ng-if="!viewPdfCatalogueCtrl.pdfCatalogue.can_edit">
+                    {{ viewPdfCatalogueCtrl.pdfCatalogue.description || 'Нет описания' }}
+                </span>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Производитель:
+            </p>
+            <p class="col-md-9">{{ viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.name }}</p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Ссылка на каталог:
+            </p>
+            <p class="col-md-9">
+                <a href="#" ng-href="{{ viewPdfCatalogueCtrl.pdfCatalogue.file_url }}" target="_blank">Скачать</a>
+            </p>
+        </div>
+    </div>
+    <div class="well well-white">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th class="hidden-xs"></th>
+                    <th>Номенкалутра</th>
+                    <th class="hidden-xs">Артикул</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='item in viewPdfCatalogueCtrl.pdfCatalogue.products'>
+                    <td class="hidden-xs">{{ $index + 1 }}</td>
+                    <td>
+                        <a ng-href="/#/products/{{ item.id }}">{{ item.name }}</a>
+                    </td>
+                    <td class="hidden-xs">{{ item.article}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

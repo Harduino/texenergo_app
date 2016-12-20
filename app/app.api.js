@@ -180,6 +180,9 @@
         o.getPdfCatalogueDetails = function(id, success, fail){
             $http.get('/pdf_catalogues/' + id).then(success, fail);
         };
+        o.updatePdfCatalogue = function(id, data, success, fail){
+            $http.put('/pdf_catalogues/' + id, data).then(success, fail);
+        };
         o.deletePdfCatalogue = function(id, success, fail){
             $http.delete('/pdf_catalogues/' + id).then(success, fail);
         };

@@ -19,16 +19,14 @@ angular.module('app.pdf_catalogues', ['ui.router']).config($stateProvider => {
     }).state('app.pdf_catalogues.view', {
         url: '/:id',
         data:{
-            title: 'Просмотр производителя',
+            title: 'PDF Каталог',
             access:{
-                action:'read',
-                params:'pdf_catalogues'
+                action:'read'
             }
         },
         views:{
             "content@app":{
-                controller: 'ViewPdfCatalogueCtrl',
-                templateUrl: '/app/pdf_catalogues/views/viewPdfCatalogue.html'
+                template: '<view-pdf-catalogue></view-pdf-catalogue>'
             }
         }
     });
