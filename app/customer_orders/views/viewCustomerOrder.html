@@ -514,6 +514,14 @@
                     </div>
                 </p>
             </div>
+            <div class="row">
+                <p class="col-xs-12 col-md-3 font-bold">
+                    Комментарий:
+                </p>
+                <p class="col-md-9">
+                    <a editable-text="row.comment" onaftersave="saveProductComment({comment: row.comment})" buttons="no">{{ row.comment || "Комментарий" }}</a>
+                </p>
+            </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-danger" type="button" ng-click="cancel()">{{config.btnCancelText}}</button>

@@ -210,6 +210,7 @@
                 windowClass: 'eqo-centred-modal',
                 resolve: {
                     row: row,
+                    order: sc.order,
                     config: {}
                 }
             });
