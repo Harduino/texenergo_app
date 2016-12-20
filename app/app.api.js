@@ -60,11 +60,11 @@
         o.addCustomerOrderProduct = function(id, data, success, fail){
             $http.post('/customer_orders/'+id+'/customer_order_contents', data).then(success, fail);
         };
-        o.updateCustomerOrderProduct = function(order_id, product_id, data, success, fail){
-            $http.put('/customer_orders/'+order_id+'/customer_order_contents/' + product_id, data).then(success, fail);
+        o.updateCustomerOrderProduct = function(order_id, row_id, data, success, fail){
+            $http.put('/customer_orders/'+order_id+'/customer_order_contents/' + row_id, data).then(success, fail);
         };
-        o.removeCustomerOrderProduct = function(order_id, product_id, success, fail){
-            $http.delete('/customer_orders/'+order_id+'/customer_order_contents/' + product_id).then(success);
+        o.removeCustomerOrderProduct = function(order_id, row_id, success, fail){
+            $http.delete('/customer_orders/'+order_id+'/customer_order_contents/' + row_id).then(success);
         };
         o.getCustomerOrderLogs = function(id, success, fail){
             $http.get('/customer_orders/' + id + '/logs').then(success, fail);
