@@ -5,6 +5,8 @@ class ViewPdfCatalogueCtrl {
         this.funcFactory = funcFactory;
 
         this.pdfCatalogue = {};
+        this.data = { manufacturersList: [] };
+        this.manufacturerSelectConfig = { dataMethod: serverApi.getManufacturers };
         this.visual = {
             navButtsOptions:[
                 {
@@ -35,7 +37,13 @@ class ViewPdfCatalogueCtrl {
     savePdfCatalogue() {
         let self = this;
         let pdfCatalogue = this.pdfCatalogue;
-        let data = { pdf_catalogue: { name: pdfCatalogue.name, description: pdfCatalogue.description } };
+        let data = { 
+            pdf_catalogue: { 
+                name: pdfCatalogue.name, 
+                description: pdfCatalogue.description,
+                manufacturer_id: pdfCatalogue.manufacturer.id
+            }
+        };
 
         self.serverApi.updatePdfCatalogue(pdfCatalogue.id, data, r => {
             if(r.status == 200 && !r.data.errors){

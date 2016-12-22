@@ -1,5 +1,5 @@
 <div id="content">
-    <div class="well well-white">
+    <div class="well well-white" ng-switch="viewPdfCatalogueCtrl.pdfCatalogue.can_edit">
         <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">PDF Каталог "{{ viewPdfCatalogueCtrl.pdfCatalogue.name }}"</h2>
         <form-nav-buttons options="viewPdfCatalogueCtrl.visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
         <hr>
@@ -20,19 +20,49 @@
             <p class="col-xs-12 col-md-3 font-bold">
                 Описание:
             </p>
-            <p class="col-md-9">
-                <a ng-if="viewPdfCatalogueCtrl.pdfCatalogue.can_edit" editable-text="viewPdfCatalogueCtrl.pdfCatalogue.description" onaftersave="viewPdfCatalogueCtrl.savePdfCatalogue()">
-                    {{ viewPdfCatalogueCtrl.pdfCatalogue.description || 'Нет описания' }}
-                </a>
-                <span ng-if="!viewPdfCatalogueCtrl.pdfCatalogue.can_edit">
-                    {{ viewPdfCatalogueCtrl.pdfCatalogue.description || 'Нет описания' }}
-                </span>
+            <div class="col-md-9" ng-if="viewPdfCatalogueCtrl.pdfCatalogue.can_edit">
+                <pre class="full-editable-area">
+                    <a editable-textarea="viewPdfCatalogueCtrl.pdfCatalogue.description" onaftersave="viewPdfCatalogueCtrl.savePdfCatalogue()">
+                        {{ viewPdfCatalogueCtrl.pdfCatalogue.description || 'Нет описания' }}
+                    </a>
+                </pre>
+            </div>
+            <p ng-if="!viewPdfCatalogueCtrl.pdfCatalogue.can_edit">
+                {{ viewPdfCatalogueCtrl.pdfCatalogue.description || 'Нет описания' }}
+            </p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">
                 Производитель:
             </p>
-            <p class="col-md-9">{{ viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.name }}</p>
+            <div class="col-md-9" ng-switch-when="true">
+                <a ng-hide="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.x_editable_show" class="editable-click"
+                   ng-click="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.x_editable_show=true;">
+                    {{viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.name || 'Нет'}}
+                </a>
+                <div ng-if="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.x_editable_show">
+                    <ui-select ui-select-infinity="viewPdfCatalogueCtrl.manufacturerSelectConfig" theme="select2"
+                               ng-model="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer" style="width: 50%;" ng-disabled="disabled"
+                               on-select="viewPdfCatalogueCtrl.savePdfCatalogue()">
+                        <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="manufacturer in viewPdfCatalogueCtrl.data.manufacturersList|filter:$select.search">
+                            <div ng-bind-html="manufacturer.name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                    <button type="button" ng-click="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.x_editable_show=false;"
+                            class="btn btn-default">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                    <button ng-click="viewPdfCatalogueCtrl.goToManufacturer()" type="button" class="btn btn-default">
+                        <span class="fa fa-eye"></span>
+                    </button>
+                </div>
+            </div>
+            <p class="col-md-9" ng-switch-default>
+                <a ng-href="/#/manufacturers/{{viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.id }}">
+                    {{ viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.name }}
+                </a>
+            </p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">
