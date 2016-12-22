@@ -171,4 +171,9 @@ class ViewPartnerCtrl {
 }
 
 ViewPartnerCtrl.$inject = ['$state', 'serverApi', '$stateParams', 'funcFactory'];
-angular.module('app.partners').controller('ViewPartnerCtrl', ViewPartnerCtrl);
+
+angular.module('app.partners').component('viewPartner', {
+    controller: ViewPartnerCtrl,
+    controllerAs: 'viewPartnerCtrl',
+    templateUrl: '/app/partners/components/view-partner/view-partner.html'
+});
