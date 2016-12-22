@@ -310,7 +310,7 @@
                 </table>
             </div>
             <div class="tab-pane fade" id="s5">
-                <div ng-click="viewPartnerCtrl.createBankAccount()" ng-if="viewPartnerCtrl.partner.can_edit"
+                <div ng-click="viewPartnerCtrl.showBankAccountForm()" ng-if="viewPartnerCtrl.partner.can_edit"
                      class="ng-scope btn btn-success">
                     <i class="fa fa-plus"></i>
                     <span class="hidden-xs ng-binding">Новый</span>
@@ -359,7 +359,7 @@
                 </table>
             </div>
             <div class="tab-pane fade" id="s6">
-                <div class="ng-scope btn btn-success" ng-click="viewPartnerCtrl.createPerson()">
+                <div class="ng-scope btn btn-success" ng-click="viewPartnerCtrl.showNewPersonForm()">
                     <i class="fa fa-plus"></i>
                     <span class="hidden-xs ng-binding">Новый</span>
                 </div>

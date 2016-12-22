@@ -77,7 +77,7 @@ class ViewPartnerCtrl {
         });
     }
 
-    createPerson () {
+    showNewPersonForm () {
         $('#createPersonModal').modal('show');
     }
 
@@ -103,7 +103,7 @@ class ViewPartnerCtrl {
     //PERSON END
 
     //BANK ACCOUNT BEGIN
-    createBankAccount () {
+    showBankAccountForm () {
         $('#createBankAccountModal').modal('show');
     }
 
