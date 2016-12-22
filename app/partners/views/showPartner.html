@@ -1,41 +1,67 @@
 <div id="content">
-    <div class="well well-white" ng-switch="partner.can_edit">
-        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">{{visual.titles + partner.prefix}}</h2>
-        <form-nav-buttons options="visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
+    <div class="well well-white" ng-switch="viewPartnerCtrl.partner.can_edit">
+        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">
+            {{viewPartnerCtrl.visual.titles + viewPartnerCtrl.partner.prefix}}
+        </h2>
+        <form-nav-buttons options="viewPartnerCtrl.visual.navButtsOptions" class="btn-group margin-top-10">
+        </form-nav-buttons>
         <hr>
+
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Наименование:</p>
             <p class="col-md-9" ng-switch-when="true">
-                <span editable-text="partner.name" onaftersave="savePartner()" >{{ partner.name }}</span>
+                <span editable-text="viewPartnerCtrl.partner.name" onaftersave="viewPartnerCtrl.savePartner()" >
+                    {{ viewPartnerCtrl.partner.name }}
+                </span>
             </p>
-            <p class="col-md-9" ng-switch-default>{{ partner.name }}</p>
+            <p class="col-md-9" ng-switch-default>{{ viewPartnerCtrl.partner.name }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Официальное наименование:</p>
             <p class="col-md-9" ng-switch-when="true">
-                <span editable-text="partner.legal_name" onaftersave="savePartner()" >{{ partner.legal_name }}</span>
+                <span editable-text="viewPartnerCtrl.partner.legal_name" onaftersave="viewPartnerCtrl.savePartner()" >
+                    {{ viewPartnerCtrl.partner.legal_name }}
+                </span>
             </p>
-            <p class="col-md-9" ng-switch-default>{{ partner.legal_name }}</p>
+            <p class="col-md-9" ng-switch-default>{{ viewPartnerCtrl.partner.legal_name }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">ИНН/КПП:</p>
             <p class="col-md-9">
-                <span>{{ partner.inn }} /</span>
-                <span editable-text="partner.kpp" onaftersave="savePartner()" >{{ partner.kpp || "Нет" }}</span>
+                <span>{{ viewPartnerCtrl.partner.inn }} /</span>
+                <span editable-text="viewPartnerCtrl.partner.kpp" onaftersave="viewPartnerCtrl.savePartner()" >
+                    {{ viewPartnerCtrl.partner.kpp || "Нет" }}
+                </span>
             </p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Адрес доставки:</p>
             <span class="col-md-9">
-                <form editable-form name="editableFormDelivery" onaftersave="savePartner()">
-                    <span editable-text="partner.delivery_address.postal_index" e-placeholder="Индекс" e-name="postal_index" e-required>{{ partner.delivery_address.postal_index || 'Нет' }}</span>
-                    <span editable-text="partner.delivery_address.region" e-placeholder="Регион" e-name="region" e-required>{{ partner.delivery_address.region || 'Нет' }}</span>
-                    <span editable-text="partner.delivery_address.city" e-placeholder="Город" e-name="city" e-required>{{ partner.delivery_address.city || 'Нет' }}</span>
-                    <span editable-text="partner.delivery_address.street" e-placeholder="Улица" e-name="street" e-required>{{ partner.delivery_address.street || 'Нет' }}</span>
-                    <span editable-text="partner.delivery_address.house" e-placeholder="Дом" e-name="house" e-required>{{ partner.delivery_address.house || 'Нет' }}</span>
+                <form editable-form name="editableFormDelivery" onaftersave="viewPartnerCtrl.savePartner()">
+                    <span e-placeholder="Индекс" e-name="postal_index" e-required
+                          editable-text="viewPartnerCtrl.partner.delivery_address.postal_index">
+                        {{ viewPartnerCtrl.partner.delivery_address.postal_index || 'Нет' }}
+                    </span>
+                    <span e-placeholder="Регион" e-name="region" e-required
+                          editable-text="viewPartnerCtrl.partner.delivery_address.region">
+                        {{ viewPartnerCtrl.partner.delivery_address.region || 'Нет' }}
+                    </span>
+                    <span e-placeholder="Город" e-name="city" e-required
+                          editable-text="viewPartnerCtrl.partner.delivery_address.city">
+                        {{ viewPartnerCtrl.partner.delivery_address.city || 'Нет' }}
+                    </span>
+                    <span e-placeholder="Улица" e-name="street" e-required
+                          editable-text="viewPartnerCtrl.partner.delivery_address.street">
+                        {{ viewPartnerCtrl.partner.delivery_address.street || 'Нет' }}
+                    </span>
+                    <span e-placeholder="Дом" e-name="house" e-required
+                          editable-text="viewPartnerCtrl.partner.delivery_address.house">
+                        {{ viewPartnerCtrl.partner.delivery_address.house || 'Нет' }}
+                    </span>
                     <span class="buttons">
                         <!-- button to show form -->
-                        <span type="button" ng-click="editableFormDelivery.$show()" ng-show="!editableFormDelivery.$visible">
+                        <span type="button" ng-click="editableFormDelivery.$show()"
+                              ng-show="!editableFormDelivery.$visible">
                             Изменить
                         </span>
                         <!-- buttons to submit / cancel form -->
@@ -43,7 +69,8 @@
                             <button type="submit" class="btn btn-primary" ng-disabled="editableFormDelivery.$waiting">
                                 Сохранить
                             </button>
-                            <span type="button" class="btn btn-default" ng-disabled="editableFormDelivery.$waiting" ng-click="editableFormDelivery.$cancel()">
+                            <span type="button" class="btn btn-default" ng-disabled="editableFormDelivery.$waiting"
+                                  ng-click="editableFormDelivery.$cancel()">
                                 Отменить
                             </span>
                         </span>
@@ -54,12 +81,27 @@
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Адрес официальный:</p>
             <span class="col-md-9">
-                <form editable-form name="editableFormLegal" onaftersave="savePartner()">
-                    <span editable-text="partner.legal_address.postal_index" e-placeholder="Индекс" e-name="postal_index" e-required>{{ partner.legal_address.postal_index || 'Нет' }}</span>
-                    <span editable-text="partner.legal_address.region" e-placeholder="Регион" e-name="region" e-required>{{ partner.legal_address.region || 'Нет' }}</span>
-                    <span editable-text="partner.legal_address.city" e-placeholder="Город" e-name="city" e-required>{{ partner.legal_address.city || 'Нет' }}</span>
-                    <span editable-text="partner.legal_address.street" e-placeholder="Улица" e-name="street" e-required>{{ partner.legal_address.street || 'Нет' }}</span>
-                    <span editable-text="partner.legal_address.house" e-placeholder="Дом" e-name="house" e-required>{{ partner.legal_address.house || 'Нет' }}</span>
+                <form editable-form name="editableFormLegal" onaftersave="viewPartnerCtrl.savePartner()">
+                    <span e-placeholder="Индекс" e-name="postal_index" e-required
+                          editable-text="viewPartnerCtrl.partner.legal_address.postal_index">
+                        {{ viewPartnerCtrl.partner.legal_address.postal_index || 'Нет' }}
+                    </span>
+                    <span e-placeholder="Регион" e-name="region" e-required
+                          editable-text="viewPartnerCtrl.partner.legal_address.region">
+                        {{ viewPartnerCtrl.partner.legal_address.region || 'Нет' }}
+                    </span>
+                    <span e-placeholder="Город" e-name="city" e-required
+                          editable-text="viewPartnerCtrl.partner.legal_address.city">
+                        {{ viewPartnerCtrl.partner.legal_address.city || 'Нет' }}
+                    </span>
+                    <span e-placeholder="Улица" e-name="street" e-required
+                          editable-text="viewPartnerCtrl.partner.legal_address.street">
+                        {{ viewPartnerCtrl.partner.legal_address.street || 'Нет' }}
+                    </span>
+                    <span e-placeholder="Дом" e-name="house" e-required
+                          editable-text="viewPartnerCtrl.partner.legal_address.house">
+                        {{ viewPartnerCtrl.partner.legal_address.house || 'Нет' }}
+                    </span>
                     <span class="buttons">
                         <!-- button to show form -->
                         <span type="button" ng-click="editableFormLegal.$show()" ng-show="!editableFormLegal.$visible">
@@ -70,7 +112,8 @@
                             <button type="submit" class="btn btn-primary" ng-disabled="editableFormLegal.$waiting">
                                 Сохранить
                             </button>
-                            <span type="button" class="btn btn-default" ng-disabled="editableFormLegal.$waiting" ng-click="editableFormLegal.$cancel()">
+                            <span type="button" ng-disabled="editableFormLegal.$waiting"
+                                  class="btn btn-default" ng-click="editableFormLegal.$cancel()">
                                 Отменить
                             </span>
                         </span>
@@ -81,42 +124,50 @@
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Телефон:</p>
             <p class="col-md-9" ng-switch-when="true">
-                <span editable-text="partner.phone" onaftersave="savePartner()" >{{ partner.phone || "Нет" }}</span>
+                <span editable-text="viewPartnerCtrl.partner.phone" onaftersave="viewPartnerCtrl.savePartner()" >
+                    {{ viewPartnerCtrl.partner.phone || "Нет" }}
+                </span>
             </p>
-            <p class="col-md-9" ng-switch-default>{{ partner.phone }}</p>
+            <p class="col-md-9" ng-switch-default>{{ viewPartnerCtrl.partner.phone }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Email:</p>
             <p class="col-md-9" ng-switch-when="true">
-                <span editable-text="partner.email" onaftersave="savePartner()" >{{ partner.email || "Нет" }}</span>
+                <span editable-text="viewPartnerCtrl.partner.email" onaftersave="viewPartnerCtrl.savePartner()" >
+                    {{ viewPartnerCtrl.partner.email || "Нет" }}
+                </span>
             </p>
-            <p class="col-md-9" ng-switch-default>{{ partner.email }}</p>
+            <p class="col-md-9" ng-switch-default>{{ viewPartnerCtrl.partner.email }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Руководитель:</p>
             <p class="col-md-9" ng-switch-when="true">
-                <span editable-text="partner.ceo_name" onaftersave="savePartner()" >{{ partner.ceo_name || "Нет" }}</span>
+                <span editable-text="viewPartnerCtrl.partner.ceo_name" onaftersave="viewPartnerCtrl.savePartner()" >
+                    {{ viewPartnerCtrl.partner.ceo_name || "Нет" }}
+                </span>
             </p>
-            <p class="col-md-9" ng-switch-default>{{ partner.ceo_name }}</p>
+            <p class="col-md-9" ng-switch-default>{{ viewPartnerCtrl.partner.ceo_name }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Должность:</p>
             <p class="col-md-9" ng-switch-when="true">
-                <span editable-text="partner.ceo_title" onaftersave="savePartner()" >{{ partner.ceo_title || "Нет" }}</span>
+                <span editable-text="viewPartnerCtrl.partner.ceo_title" onaftersave="viewPartnerCtrl.savePartner()" >
+                    {{ viewPartnerCtrl.partner.ceo_title || "Нет" }}
+                </span>
             </p>
-            <p class="col-md-9" ng-switch-default>{{ partner.ceo_title }}</p>
+            <p class="col-md-9" ng-switch-default>{{ viewPartnerCtrl.partner.ceo_title }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Менеджер:</p>
-            <p class="col-md-9">{{ partner.manager_name }}</p>
+            <p class="col-md-9">{{ viewPartnerCtrl.partner.manager_name }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Отгрузка:</p>
-            <p class="col-md-9">{{ partner.transportation }}</p>
+            <p class="col-md-9">{{ viewPartnerCtrl.partner.transportation }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Владелец:</p>
-            <p class="col-md-9">{{ partner.owner.name || "Нет"}}</p>
+            <p class="col-md-9">{{ viewPartnerCtrl.partner.owner.name || "Нет"}}</p>
         </div>
         <ul id="myTab1" class="nav nav-tabs bordered margin-top-10">
             <li class="active">
@@ -154,14 +205,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="item in partner.customerOrders">
+                        <tr ng-repeat="item in viewPartnerCtrl.partner.customerOrders">
                             <td>{{ item.number }}</td>
                             <td class="hidden-xs">{{ item.date | date:'dd MMMM yy'}}</td>
                             <td class="text-right">{{ item.total | currency }}</td>
                             <td>{{ item.status }}</td>
                             <td class="center-item-text" style="max-width: 40px;">
                                 <div class="btn-group">
-                                    <a class="btn btn-xs btn-info" href="#/customer_orders/{{item.id}}"><i class="fa fa-eye"></i></a>
+                                    <a class="btn btn-xs btn-info" href="#/customer_orders/{{item.id}}">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -180,15 +233,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="item in partner.dispatchOrders">
+                        <tr ng-repeat="item in viewPartnerCtrl.partner.dispatchOrders">
                             <td>{{ item.number }}</td>
                             <td class="hidden-xs">{{ item.date | date:'dd MMMM yy'}}</td>
                             <td class="text-right">{{ item.total | currency }}</td>
                             <td>{{ item.status }}</td>
                             <td class="center-item-text" style="max-width: 40px;">
                                 <div class="btn-group">
-                                    <a class="btn btn-xs btn-info" href="#/dispatch_orders/{{item.id}}"><i class="fa fa-eye"></i></a>
-                                    <a class="btn btn-xs btn-default" href="#/dispatch_orders/{{item.id}}/edit"><i class="fa fa-pencil"></i></a>
+                                    <a class="btn btn-xs btn-info" href="#/dispatch_orders/{{item.id}}">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    <a class="btn btn-xs btn-default" href="#/dispatch_orders/{{item.id}}/edit">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -207,15 +264,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="item in partner.incoming_transfers">
+                        <tr ng-repeat="item in viewPartnerCtrl.partner.incoming_transfers">
                             <td>{{ item.number }}</td>
                             <td class="hidden-xs">{{ item.date | date:'dd MMMM yy, HH:mm'}}</td>
                             <td class="text-right">{{ item.amount | currency }}</td>
                             <td class="hidden-xs text-right">{{ item.remaining_amount | currency}}</td>
                             <td class="center-item-text" style="max-width: 40px;">
                                 <div class="btn-group">
-                                    <a class="btn btn-xs btn-info" href="#/incoming_transfers/{{item.id}}"><i class="fa fa-eye"></i></a>
-                                    <a class="btn btn-xs btn-default" href="#/incoming_transfers/{{item.id}}/edit"><i class="fa fa-pencil"></i></a>
+                                    <a class="btn btn-xs btn-info" href="#/incoming_transfers/{{item.id}}">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    <a class="btn btn-xs btn-default" href="#/incoming_transfers/{{item.id}}/edit">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -233,13 +294,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="item in partner.contacts">
+                        <tr ng-repeat="item in viewPartnerCtrl.partner.contacts">
                             <td>{{ item.first_name }}</td>
                             <td>{{ item.last_name }}</td>
                             <td>{{ item.email }}</td>
                             <td class="center-item-text">
                                 <div class="btn-group">
-                                    <a class="btn btn-xs btn-info" href="#/contacts/{{item.id}}"><i class="fa fa-eye"></i></a>
+                                    <a class="btn btn-xs btn-info" href="#/contacts/{{item.id}}">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -247,7 +310,8 @@
                 </table>
             </div>
             <div class="tab-pane fade" id="s5">
-                <div class="ng-scope btn btn-success" ng-click="createBankAccount()" ng-if="partner.can_edit">
+                <div ng-click="viewPartnerCtrl.createBankAccount()" ng-if="viewPartnerCtrl.partner.can_edit"
+                     class="ng-scope btn btn-success">
                     <i class="fa fa-plus"></i>
                     <span class="hidden-xs ng-binding">Новый</span>
                 </div>
@@ -261,21 +325,33 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="item in partner.bank_accounts" ng-switch="partner.can_edit">
+                        <tr ng-repeat="item in viewPartnerCtrl.partner.bank_accounts"
+                            ng-switch="viewPartnerCtrl.partner.can_edit">
                             <td>
-                                <a ng-switch-when="true" editable-text="item.rs" onaftersave="saveBankAccount({item: item, index: $index})" buttons="no">{{ item.rs || "Нет" }}</a>
+                                <a ng-switch-when="true" editable-text="item.rs" buttons="no"
+                                   onaftersave="viewPartnerCtrl.saveBankAccount({item: item, index: $index})">
+                                    {{ item.rs || "Нет" }}
+                                </a>
                                 <span ng-switch-default>{{ item.rs }}</span>
                             </td>
                             <td>
-                                <a ng-switch-when="true" editable-text="item.ks" onaftersave="saveBankAccount({item: item, index: $index})" buttons="no">{{ item.ks || "Нет" }}</a>
+                                <a ng-switch-when="true" editable-text="item.ks" buttons="no"
+                                   onaftersave="viewPartnerCtrl.saveBankAccount({item: item, index: $index})">
+                                    {{ item.ks || "Нет" }}</a>
                                 <span ng-switch-default>{{ item.ks }}</span>
                             </td>
                             <td>
-                                <a ng-switch-when="true" editable-text="item.bik" onaftersave="saveBankAccount({item: item, index: $index})" buttons="no">{{ item.bik || "Нет" }}</a>
+                                <a ng-switch-when="true" editable-text="item.bik" buttons="no"
+                                   onaftersave="viewPartnerCtrl.saveBankAccount({item: item, index: $index})">
+                                    {{ item.bik || "Нет" }}
+                                </a>
                                 <span ng-switch-default>{{ item.bik }}</span>
                             </td>
                             <td>
-                                <a ng-switch-when="true" editable-text="item.bank_name" onaftersave="saveBankAccount({item: item, index: $index})" buttons="no">{{ item.bank_name || "Нет" }}</a>
+                                <a ng-switch-when="true" editable-text="item.bank_name" buttons="no"
+                                   onaftersave="viewPartnerCtrl.saveBankAccount({item: item, index: $index})">
+                                    {{ item.bank_name || "Нет" }}
+                                </a>
                                 <span ng-switch-default>{{ item.bank_name }}</span>
                             </td>
                         </tr>
@@ -283,7 +359,7 @@
                 </table>
             </div>
             <div class="tab-pane fade" id="s6">
-                <div class="ng-scope btn btn-success" ng-click="createPerson()">
+                <div class="ng-scope btn btn-success" ng-click="viewPartnerCtrl.createPerson()">
                     <i class="fa fa-plus"></i>
                     <span class="hidden-xs ng-binding">Новый</span>
                 </div>
@@ -297,7 +373,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="item in partner.people">
+                        <tr ng-repeat="item in viewPartnerCtrl.partner.people">
                             <td>{{ item.first_name + " " + item.middle_name + " " + item.last_name}}</td>
                             <td>{{ item.passport_number + " " + item.passport_issued_date + " " + item.passport_issued_by }}</td>
                             <td>{{ item.title }}</td>
@@ -312,7 +388,10 @@
                 </table>
             </div>
             <div class="tab-pane fade" id="s7">
-                <span class="editable-textarea-fw" editable-textarea="partner.invoice_conditions" onaftersave="savePartner()">{{ partner.invoice_conditions || "Нет" }}</span>
+                <span class="editable-textarea-fw" editable-textarea="viewPartnerCtrl.partner.invoice_conditions"
+                      onaftersave="viewPartnerCtrl.savePartner()">
+                    {{ viewPartnerCtrl.partner.invoice_conditions || "Нет" }}
+                </span>
             </div>
             <div class="modal fade" id="createPersonModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog">
@@ -327,51 +406,53 @@
                             <section>
                                 <label class="label">Имя</label>
                                 <label class="input">
-                                    <input type="text" class="input-sm" ng-model="newPerson.first_name">
+                                    <input type="text" class="input-sm" ng-model="viewPartnerCtrl.newPerson.first_name">
                                 </label>
                             </section>
                             <section>
                                 <label class="label">Отчество</label>
                                 <label class="input">
-                                    <input type="text" class="input-sm" ng-model="newPerson.middle_name">
+                                    <input type="text" class="input-sm" ng-model="viewPartnerCtrl.newPerson.middle_name">
                                 </label>
                             </section>
                             <section>
                                 <label class="label">Фамилия</label>
                                 <label class="input">
-                                    <input type="text" class="input-sm" ng-model="newPerson.last_name">
+                                    <input type="text" class="input-sm" ng-model="viewPartnerCtrl.newPerson.last_name">
                                 </label>
                             </section>
                             <section>
                                 <label class="label">Номер паспорта</label>
                                 <label class="input">
-                                    <input type="text" class="input-sm" ng-model="newPerson.passport_number">
+                                    <input type="text" class="input-sm" ng-model="viewPartnerCtrl.newPerson.passport_number">
                                 </label>
                             </section>
                             <section>
                                 <label class="label">Дата выдачи</label>
                                 <label class="input">
-                                    <input type="text" class="input-sm" ng-model="newPerson.passport_issued_date">
+                                    <input type="text" class="input-sm" ng-model="viewPartnerCtrl.newPerson.passport_issued_date">
                                 </label>
                             </section>
                             <section>
                                 <label class="label">Кем выдан</label>
                                 <label class="input">
-                                    <input type="text" class="input-sm" ng-model="newPerson.passport_issued_by">
+                                    <input type="text" class="input-sm" ng-model="viewPartnerCtrl.newPerson.passport_issued_by">
                                 </label>
                             </section>
                             <section>
                                 <label class="label">Должность</label>
                                 <label class="input">
-                                    <input type="text" class="input-sm" ng-model="newPerson.title">
+                                    <input type="text" class="input-sm" ng-model="viewPartnerCtrl.newPerson.title">
                                 </label>
                             </section>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearPerson()">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"
+                                    ng-click="viewPartnerCtrl.clearPerson()">
                                 Отмена
                             </button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addNewPerson()">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                    ng-click="viewPartnerCtrl.addNewPerson()">
                                 Сохранить
                             </button>
                         </div>
@@ -391,9 +472,9 @@
                             <section>
                                 <label class="label">БИК</label>
                                 <label class="input">
-                                    <input type="text" ng-model="newBankAccount.bik"
-                                        uib-typeahead="name.label for name in getDaDataSuggestions('bank', $viewValue, 'data.bik')"
-                                        typeahead-on-select="fillBySuggestion($item, 'bik')"
+                                    <input type="text" ng-model="viewPartnerCtrl.newBankAccount.bik"
+                                        uib-typeahead="name.label for name in viewPartnerCtrl.getDaDataSuggestions('bank', $viewValue, 'data.bik')"
+                                        typeahead-on-select="viewPartnerCtrl.fillBySuggestion($item, 'bik')"
                                         typeahead-template-url="typeAhead.tmpl.html"
                                         name="data.bik"
                                         class="input-sm">
@@ -402,27 +483,29 @@
                             <section>
                                 <label class="label">Название банка</label>
                                 <label class="input">
-                                    <input type="text" class="input-sm" ng-model="newBankAccount.bank_name">
+                                    <input type="text" class="input-sm" ng-model="viewPartnerCtrl.newBankAccount.bank_name">
                                 </label>
                             </section>
                             <section>
                                 <label class="label">К/С</label>
                                 <label class="input">
-                                    <input type="text" class="input-sm" ng-model="newBankAccount.ks">
+                                    <input type="text" class="input-sm" ng-model="viewPartnerCtrl.newBankAccount.ks">
                                 </label>
                             </section>
                             <section>
                                 <label class="label">Р/С</label>
                                 <label class="input">
-                                    <input type="text" class="input-sm" ng-model="newBankAccount.rs">
+                                    <input type="text" class="input-sm" ng-model="viewPartnerCtrl.newBankAccount.rs">
                                 </label>
                             </section>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearBankAccount()">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"
+                                    ng-click="viewPartnerCtrl.clearBankAccount()">
                                 Отмена
                             </button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addBankAccount()">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                    ng-click="viewPartnerCtrl.addBankAccount()">
                                 Сохранить
                             </button>
                         </div>

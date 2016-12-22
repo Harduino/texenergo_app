@@ -30,6 +30,7 @@ angular.module('app.partners', ['ui.router'])
                 views:{
                     'content@app': {
                         controller: 'ViewPartnerCtrl',
+                        controllerAs: 'viewPartnerCtrl',
                         templateUrl: '/app/partners/views/showPartner.html'
                     }
                 }

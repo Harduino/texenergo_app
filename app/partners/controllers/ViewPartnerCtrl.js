@@ -3,65 +3,75 @@
  * Контроллер страницы "Партнер"
  */
 (function(){
-
-    angular.module('app.partners').controller('ViewPartnerCtrl',['$scope', '$state', 'serverApi', '$stateParams', 'funcFactory', '$http', '$parse', function($scope, $state, serverApi, $stateParams, funcFactory, $http, $parse){
-        var sc = $scope;
+    angular.module('app.partners').controller('ViewPartnerCtrl',['$state', 'serverApi', '$stateParams', 'funcFactory', function ($state, serverApi, $stateParams, funcFactory) {
+        var self = this;
+        this.partner = {};
         
-        sc.partner = {};
-        
-        sc.visual = {
+        this.visual = {
             navButtsOptions:[
-                { type: 'back', callback: returnBack },
-                { type: 'logs', callback: goToLogs },
-                { type: 'refresh', callback: refresh }
+                {
+                    type: 'back',
+                    callback: function() {
+                        $state.go('app.partners', {});
+                    }
+                },
+                {
+                    type: 'logs',
+                    callback: function() {
+                        $state.go('app.partners.view.logs', {});
+                    }
+                },
+                {
+                    type: 'refresh',
+                    callback: function() {
+                        serverApi.getPartnerDetails($stateParams.id, function(res) {
+                            self.partner = res.data;
+                        });
+                    }
+                }
             ],
             chartOptions: {
-                barColor:'rgb(103,135,155)',
-                scaleColor:false,
-                lineWidth:5,
-                lineCap:'circle',
-                size:50
+                barColor: 'rgb(103,135,155)',
+                scaleColor: false,
+                lineWidth: 5,
+                lineCap: 'circle',
+                size: 50
             },
             titles: 'Партнёр: ',
-            roles: {
-                can_edit: sc.partner.can_edit
-            }
+            roles: {can_edit: self.partner.can_edit}
         };
         
-        sc.newPerson = {
-        };
-
-        sc.newBankAccount = {};
+        this.newPerson = {};
+        this.newBankAccount = {};
         
-        serverApi.getPartnerDetails($stateParams.id, function(result){
-            sc.partner = result.data;
+        serverApi.getPartnerDetails($stateParams.id, function (result) {
+            self.partner = result.data;
             
-            serverApi.getCustomerOrders(1, "-"+sc.partner.prefix+"-", {}, function(result){
-                sc.partner.customerOrders = result.data;
+            serverApi.getCustomerOrders(1, '-' + self.partner.prefix + '-', {}, function (result) {
+                self.partner.customerOrders = result.data;
             });
             
-            serverApi.getDispatchOrders(1, "-"+sc.partner.prefix+"-", {}, function(result){
-                sc.partner.dispatchOrders = result.data;
+            serverApi.getDispatchOrders(1, '-' + self.partner.prefix + "-", {}, function(result){
+                self.partner.dispatchOrders = result.data;
             });
         });
         
-        sc.canCreatePerson = function(){
-            for(var i=0; i < gon.ability.rules.length; i++) {
-                if(gon.ability.rules[i].subjects[0]==="Person") {
-                    return true;
-                }
-                if(gon.ability.rules[i].subjects[0]==="all") {
+        this.canCreatePerson = function () {
+            for(var i = 0; i < gon.ability.rules.length; i++) {
+                if(['all', 'Person'].indexOf(gon.ability.rules[i].subjects[0]) !== -1) {
                     return true;
                 }
             }
+
             return false;
-        }
+        };
 
         /**
          * Обновляем информацию по категории
          */
-        sc.savePartner = function(){
-            var partner = sc.partner;
+        this.savePartner = function() {
+            var partner = self.partner;
+
             var data = {
                 partner:{
                     name: partner.name,
@@ -75,113 +85,104 @@
                     invoice_conditions: partner.invoice_conditions
                 }
             };
+
             debugger;
-            serverApi.updatePartner(partner.id, data, function(result){
-                if(result.status == 200 && !result.data.errors){
-                    funcFactory.showNotification("Успешно", 'Категория ' + partner.name + ' успешно отредактирована.', true);
-                }else funcFactory.showNotification("Неудача", 'Не удалось отредактировать категорию ' + partner.name, true);
+
+            serverApi.updatePartner(partner.id, data, function (result) {
+                if((result.status == 200) && !result.data.errors){
+                    funcFactory.showNotification('Успешно', 'Категория ' + partner.name + ' успешно отредактирована.',
+                        true);
+                } else {
+                    funcFactory.showNotification('Неудача', 'Не удалось отредактировать категорию ' + partner.name,
+                        true);
+                }
             });
         };
         
-        function returnBack(){
-            $state.go('app.partners',{});
-        }
-        
-        sc.createPerson = function(){
+        this.createPerson = function () {
             $('#createPersonModal').modal('show');
         };
         
-        sc.clearPerson = function(){
-            sc.newPerson = {};
-            sc.passport_scan = sc.person_photo= "";
+        this.clearPerson = function () {
+            self.newPerson = {};
+            self.passport_scan = self.person_photo= '';
         };
         
-        sc.addNewPerson = function(){
-            var data  = {
-                person: sc.newPerson
-            };
+        this.addNewPerson = function () {
+            var data  = {person: self.newPerson};
 
-            serverApi.createPerson(sc.partner.id, data, function(result){
+            serverApi.createPerson(self.partner.id, data, function(result){
                 if(!result.data.errors){
                     funcFactory.showNotification('Представитель успешно добавлен', '', true);
-                    sc.partner.people.push(result.data);
-                    sc.clearPerson();
+                    self.partner.people.push(result.data);
+                    self.clearPerson();
                 } else {
                     funcFactory.showNotification('Не удалось создать представителя', result.data.errors);
                 }
             });
         };
 
-        sc.createBankAccount = function(){
+
+        this.createBankAccount = function () {
             $('#createBankAccountModal').modal('show');
         };
 
-        sc.clearBankAccount = function(){
-            sc.newBankAccount = {};
+        this.clearBankAccount = function () {
+            self.newBankAccount = {};
         };
 
-        sc.addBankAccount = function(){
-            var data = {
-                bank_account: sc.newBankAccount
-            };
+        this.addBankAccount = function() {
+            var data = {bank_account: self.newBankAccount};
 
-            serverApi.createBankAccount(sc.partner.id, data, function(result){
+            serverApi.createBankAccount(self.partner.id, data, function(result){
                 if(!result.data.errors){
                     funcFactory.showNotification('Создал банковский счёт', '', true);
-                    sc.partner.bank_accounts.push(result.data);
-                    sc.clearBankAccount();
+                    self.partner.bank_accounts.push(result.data);
+                    self.clearBankAccount();
                 } else {
                     funcFactory.showNotification('Не удалось создать банковский счёт', result.data.errors);
                 }
             });
         };
 
-        sc.saveBankAccount = function(data){
+        this.saveBankAccount = function (data) {
             var bank_account = data.item;
-            serverApi.updateBankAccount(sc.partner.id, bank_account.id, {
+            serverApi.updateBankAccount(this.partner.id, bank_account.id, {
                 rs: bank_account.rs,
                 ks: bank_account.ks,
                 bik: bank_account.bik,
                 bank_name: bank_account.bank_name
-            }, function(result){
+            }, function (result) {
                 if(!result.data.errors){
-                    for (var j = 0; j < sc.partner.bank_accounts.length; j++) {
-                        var x = sc.partner.bank_accounts[j];
-                        if (x.id === result.data.id) {
-                            sc.partner.bank_accounts[j] = angular.extend(x, result.data);
-                            funcFactory.showNotification('Успешно обновлен банковский счёт', (x.rs || ""), true);
+                    for (var j = 0; j < self.partner.bank_accounts.length; j++) {
+                        var bankAccount = self.partner.bank_accounts[j];
+
+                        if (bankAccount.id === result.data.id) {
+                            self.partner.bank_accounts[j] = angular.extend(bankAccount, result.data);
+                            funcFactory.showNotification('Успешно обновлен банковский счёт', (bankAccount.rs || ""), true);
                             break;
                         }
                     }
-                }else{
+                } else {
                     funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors);
                 }
             });
         };
 
-        sc.getDaDataSuggestions = function(type, val, field_name){
-            return serverApi.validateViaDaData(type, {"query": val}).then(function(result){
-                return result.data.suggestions.map(function(item){
-                    return {label: item.data.name.payment, item: item, field: field_name};
+
+        this.getDaDataSuggestions = function (type, val, fieldName) {
+            return serverApi.validateViaDaData(type, {query: val}).then(function (result) {
+                return result.data.suggestions.map(function (item) {
+                    return {label: item.data.name.payment, item: item, field: fieldName};
                 });
             });
         };
 
-        sc.fillBySuggestion = function($item, prop){
+        this.fillBySuggestion = function ($item) {
             var data = $item.item.data;
-            sc.newBankAccount.bik = data.bic;
-            sc.newBankAccount.ks = data.correspondent_account;
-            sc.newBankAccount.bank_name = data.name.payment;
-        }
-
-        function refresh(){
-            serverApi.getPartnerDetails($stateParams.id, function(result) {
-                sc.partner = result.data;
-            });
-        }
-
-        function goToLogs(){
-            $state.go('app.partners.view.logs', {});
-        }
+            self.newBankAccount.bik = data.bic;
+            self.newBankAccount.ks = data.correspondent_account;
+            self.newBankAccount.bank_name = data.name.payment;
+        };
     }]);
 }());
