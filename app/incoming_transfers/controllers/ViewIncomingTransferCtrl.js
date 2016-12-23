@@ -4,7 +4,7 @@
 (function () {
     'use strict';
 
-    angular.module('app.incoming_transfers').controller('ViewIncomingTransferCtrl', ['$scope', '$state', '$stateParams', 'serverApi', '$q', 'funcFactory', 'CanCan', function ($scope, $state, $stateParams, serverApi, $q, funcFactory, CanCan) {
+    angular.module('app.incoming_transfers').controller('ViewIncomingTransferCtrl', ['$state', '$stateParams', 'serverApi', '$q', 'funcFactory', 'CanCan', function ($state, $stateParams, serverApi, $q, funcFactory, CanCan) {
         var self = this;
         this.incomingTransfer = {};
 
@@ -27,6 +27,7 @@
                     callback: function () {
                         serverApi.getIncomingTransferDetails($stateParams.id, function (res) {
                             self.incomingTransfer = res.data;
+                            calculateRemainingAmount();
                         });
                     }
                 }
@@ -71,6 +72,7 @@
                             } else {
                                 self.incomingTransfer.remaining_amount = res.data.money_transfer.remaining_amount;
                                 self.incomingTransfer.money_to_orders.splice(data.index, 1);
+                                calculateRemainingAmount();
                                 funcFactory.showNotification(transferInfo + ' успешно удален', '', true);
                             }
                         });
@@ -85,6 +87,7 @@
 
         serverApi.getIncomingTransferDetails($stateParams.id, function (result) {
             var transfer = self.incomingTransfer = result.data;
+            calculateRemainingAmount();
 
             self.fileModalOptions = {
                 url: '/api/incoming_transfers/' + transfer.id + '/documents',
@@ -129,20 +132,15 @@
             }
         };
 
-        $scope.$watch(function () {
-            return self.incomingTransfer.money_to_orders;
-        }, function (val) {
-            if (val) {
-                var incomingTransfer = self.incomingTransfer,
-                    remainingAmount = incomingTransfer.amount;
+        var calculateRemainingAmount = function() {
+            var remainingAmount = self.incomingTransfer.amount;
 
-                angular.forEach(incomingTransfer.money_to_orders, function (item) {
-                    remainingAmount -= item.amount;
-                });
+            angular.forEach(self.incomingTransfer.money_to_orders, function (item) {
+                remainingAmount -= item.amount;
+            });
 
-                incomingTransfer.remaining_amount = remainingAmount;
-            }
-        });
+            self.incomingTransfer.remaining_amount = remainingAmount;
+        };
 
         this.onOrderSelect = function () {
             var order = self.data.orderForAppend;
@@ -174,6 +172,7 @@
                         if (!result.data.errors) {
                             self.incomingTransfer.remaining_amount = result.data.money_transfer.remaining_amount;
                             self.incomingTransfer.money_to_orders.push(result.data);
+                            calculateRemainingAmount();
                             funcFactory.showNotification('Успешно', transferInfo + ' успешно добавлен', true);
                             angular.element('#vit_order_select').data().$uiSelectController.open = true;
                         } else {
