@@ -1,52 +1,93 @@
 /**
  * Created by Mikhail Arzhaev on 25.11.15.
  */
-(function(){
+(function () {
+    'use strict';
 
-    "use strict";
+    angular.module('app.incoming_transfers').controller('ViewIncomingTransferCtrl', ['$scope', '$state', '$stateParams', 'serverApi', '$q', 'funcFactory', 'CanCan', function ($scope, $state, $stateParams, serverApi, $q, funcFactory, CanCan) {
+        var self = this;
+        this.incomingTransfer = {};
 
-    angular.module('app.incoming_transfers').controller('ViewIncomingTransferCtrl', ['$scope', '$state', '$stateParams', 'serverApi', '$q', 'funcFactory', 'CanCan', function($scope, $state, $stateParams, serverApi, $q, funcFactory, CanCan){
-        var sc = $scope;
-        sc.incomingTransfer = {};
-        sc.visual = {
+        this.visual = {
             navButtsOptions:[
-                { type: 'back', callback:returnBack },
-                { type: 'logs', callback: goToLogs },
-                { type: 'refresh', callback: refresh }
+                {
+                    type: 'back',
+                    callback: function () {
+                        $state.go('app.incoming_transfers', {});
+                    }
+                },
+                {
+                    type: 'logs',
+                    callback: function () {
+                        $state.go('app.incoming_transfers.view.logs', {});
+                    }
+                },
+                {
+                    type: 'refresh',
+                    callback: function () {
+                        serverApi.getIncomingTransferDetails($stateParams.id, function (res) {
+                            self.incomingTransfer = res.data;
+                        });
+                    }
+                }
             ],
             chartOptions: {
-                barColor:'rgb(103,135,155)',
-                scaleColor:false,
-                lineWidth:5,
-                lineCap:'circle',
-                size:50
+                barColor: 'rgb(103,135,155)',
+                scaleColor: false,
+                lineWidth: 5,
+                lineCap: 'circle',
+                size: 50
             },
             showFileModal: angular.noop,
-            navTableButts:[{type:'view', callback: viewDocument}, {type:'remove', callback:removeOrder}],
+            navTableButts: [
+                {
+                    type:'view',
+                    callback: function (item) {
+                        if (item.data.hasOwnProperty('customer_order')) {
+                            $state.go('app.customer_orders.view', {id: item.data.customer_order.id});
+                        }
+
+                        if (item.data.hasOwnProperty('incoming_transfer')) {
+                            $state.go('app.incoming_transfer.view', {id: item.data.incoming_transfer.id});
+                        }
+                    }
+                },
+                {
+                    type:'remove',
+                    callback: function (data) {
+                        var item = data.data;
+
+                        serverApi.removeIncomingTransferOrder(self.incomingTransfer.id, item.id, function (res) {
+                            var transferInfo;
+
+                            if (item.hasOwnProperty('outgoing_transfer')) {
+                                transferInfo = 'Платеж ' + item.outgoing_transfer.incoming_code;
+                            } else {
+                                transferInfo = 'Заказ ' + item.customer_order.number;
+                            }
+
+                            if (res.data.errors) {
+                                funcFactory.showNotification('Не удалось удалить ' + transferInfo, res.data.errors);
+                            } else {
+                                self.incomingTransfer.remaining_amount = res.data.money_transfer.remaining_amount;
+                                self.incomingTransfer.money_to_orders.splice(data.index, 1);
+                                funcFactory.showNotification(transferInfo + ' успешно удален', '', true);
+                            }
+                        });
+                    }
+                }
+            ],
             titles: 'Входящий платеж: №',
-            roles: {
-                can_destroy: true,
-                can_edit: CanCan.can('edit', 'IncomingTransfer')
-            }
-        };
-        sc.data = {
-            ordersList: [],
-            orderForAppend: {
-                amount:0
-            }
+            roles: {can_destroy: true, can_edit: CanCan.can('edit', 'IncomingTransfer')}
         };
 
-        function refresh(){
-            serverApi.getIncomingTransferDetails($stateParams.id, function(result) {
+        this.data = {ordersList: [], orderForAppend: {amount: 0}};
 
-                sc.incomingTransfer = result.data;
-            });
-        }
+        serverApi.getIncomingTransferDetails($stateParams.id, function (result) {
+            var transfer = self.incomingTransfer = result.data;
 
-        serverApi.getIncomingTransferDetails($stateParams.id, function(result){
-            var transfer = sc.incomingTransfer = result.data;
-            sc.fileModalOptions={
-                url:'/api/incoming_transfers/'+ transfer.id +'/documents',
+            self.fileModalOptions = {
+                url: '/api/incoming_transfers/' + transfer.id + '/documents',
                 files: transfer.documents,
                 r_delete: serverApi.deleteFile,
                 view: 'incoming_transfers',
@@ -54,54 +95,72 @@
             };
         });
 
-        sc.orderSelectConf = {
-            dataMethod: function(page, query, config, success){
-                var canceler1 = $q.defer(),
-                    canceler2 = $q.defer();
+        this.orderSelectConf = {
+            dataMethod: function (page, query, config, success) {
+                var canceler1 = $q.defer(), canceler2 = $q.defer();
+
                 var data = [],//data for callback
-                    checkStatus = function(result){
+                    checkStatus = function (result) {
                         return result.status == 200 ? result.data : [];// if result not success, return []
                     },
-                    defers = [$q.defer(),$q.defer()];//requests defers
-                serverApi.getCustomerOrders(page, query, {timeout:canceler1.promise}, function(result){
+                    defers = [$q.defer(), $q.defer()];//requests defers
+
+                serverApi.getCustomerOrders(page, query, {timeout:canceler1.promise}, function (result) {
                     defers[0].resolve(checkStatus(result));
-                }, null, sc.incomingTransfer.partner.id);
-                serverApi.getOutgoingTransfers(page, query, {timeout:canceler2.promise}, function(result){
+                }, null, self.incomingTransfer.partner.id);
+
+                serverApi.getOutgoingTransfers(page, query, {timeout:canceler2.promise}, function (result) {
                     defers[1].resolve(checkStatus(result));
-                }, null, sc.incomingTransfer.partner.id);
+                }, null, self.incomingTransfer.partner.id);
+
                 //cancel both requests
-                config.timeout.then(function(){
+                config.timeout.then(function () {
                     canceler1.resolve();
                     canceler2.resolve();
                 });
+
                 //wait all promises
-                $q.all(defers.map(function(item){
+                $q.all(defers.map(function (item) {
                     return item.promise;
-                })).then(function(result){
+                })).then(function (result) {
                     data = result[0].concat(result[1]);//concat results
                     success({data:data});
                 });
             }
         };
 
-        sc.onOrderSelect = function(){
-            var order = sc.data.orderForAppend;
-            if(order.hasOwnProperty('type') && order.type.search(/transfer/gi)>-1){
+        $scope.$watch(function () {
+            return self.incomingTransfer.money_to_orders;
+        }, function (val) {
+            if (val) {
+                var incomingTransfer = self.incomingTransfer,
+                    remainingAmount = incomingTransfer.amount;
+
+                angular.forEach(incomingTransfer.money_to_orders, function (item) {
+                    remainingAmount -= item.amount;
+                });
+
+                incomingTransfer.remaining_amount = remainingAmount;
+            }
+        });
+
+        this.onOrderSelect = function () {
+            var order = self.data.orderForAppend;
+
+            if (order.hasOwnProperty('type') && (order.type.search(/transfer/gi) > -1)) {
                 order.total = new Number(order.amount);
-            }else{
+            } else {
                 order.amount = new Number(order.total);
             }
         };
 
-        sc.appendOrder = function(event){
-            var data = sc.data.orderForAppend,
-                append = function(){
-                    sc.data.orderForAppend = {};
-                    var postData = {
-                        amount: data.amount
-                    };
-
+        this.appendOrder = function (event) {
+            var data = self.data.orderForAppend,
+                append = function () {
+                    self.data.orderForAppend = {};
+                    var postData = {amount: data.amount};
                     var transfer = false;
+
                     if (data.type === "OutgoingTransfer") {
                         transfer = true;
                         postData.outgoing_transfer_id = data.id;
@@ -109,69 +168,29 @@
                         postData.customer_order_id = data.id;
                     }
 
-                    serverApi.appendIncomingTransferOrder(sc.incomingTransfer.id, postData, function(result){
-                        var t = transfer?'Платеж ' + data.number: 'Заказ '+ data.number;
-                        if(!result.data.errors){
-                            sc.incomingTransfer.remaining_amount = result.data.money_transfer.remaining_amount;
-                            sc.incomingTransfer.money_to_orders.push(result.data);
-                            funcFactory.showNotification('Успешно', t + ' успешно добавлен', true);
-                            angular.element('#vit_order_select').data().$uiSelectController.open=true;
-                        }else funcFactory.showNotification('Неудалось прикрепить ' + t, result.data.errors);
+                    serverApi.appendIncomingTransferOrder(self.incomingTransfer.id, postData, function (result) {
+                        var transferInfo = transfer ? 'Платеж ' + data.number : 'Заказ ' + data.number;
+
+                        if (!result.data.errors) {
+                            self.incomingTransfer.remaining_amount = result.data.money_transfer.remaining_amount;
+                            self.incomingTransfer.money_to_orders.push(result.data);
+                            funcFactory.showNotification('Успешно', transferInfo + ' успешно добавлен', true);
+                            angular.element('#vit_order_select').data().$uiSelectController.open = true;
+                        } else {
+                            funcFactory.showNotification('Не удалось прикрепить ' + transferInfo, result.data.errors);
+                        }
                     });
                 };
-            if(event){
+
+            if (event) {
                 event.keyCode == 13 && append();
-            }else append();
+            } else {
+                append();
+            }
         };
 
-        function removeOrder(data){
-            var item = data.data;
-            serverApi.removeIncomingTransferOrder(sc.incomingTransfer.id, item.id, function(result){
-                var transfer = item.hasOwnProperty('outgoing_transfer');
-                var t = transfer?'Платеж ' + item.outgoing_transfer.incoming_code: 'Заказ '+ item.customer_order.number;
-                if(!result.data.errors){
-                    sc.incomingTransfer.remaining_amount = result.data.money_transfer.remaining_amount;
-                    sc.incomingTransfer.money_to_orders.splice(data.index, 1);
-                    funcFactory.showNotification(t + ' успешно удален','', true);
-                } else {
-                    funcFactory.showNotification('Неудалось удалить ' + t, result.data.errors);
-                }
-            });
-        }
-
-        sc.getMax = function(){
-            var total = sc.data.orderForAppend.total,
-                remaining_amount = sc.incomingTransfer.remaining_amount;
-
-            return total > remaining_amount ? remaining_amount : total;
+        this.getMax = function () {
+            return Math.min(self.data.orderForAppend.total, self.incomingTransfer.remaining_amount);
         };
-
-        sc.$watch('incomingTransfer.money_to_orders', function(val){
-            if(val){
-                var it = sc.incomingTransfer,
-                    ra = it.amount;
-                angular.forEach(it.money_to_orders, function(item){
-                    ra -= item.amount;
-                });
-                it.remaining_amount = ra;
-            }
-        });
-
-        function returnBack(){
-            $state.go('app.incoming_transfers',{});
-        }
-
-        function viewDocument(item){
-            if (item.data.hasOwnProperty('customer_order')) {
-                $state.go('app.customer_orders.view', {id: item.data.customer_order.id});
-            }
-            if (item.data.hasOwnProperty('incoming_transfer')) {
-                $state.go('app.incoming_transfer.view', {id: item.data.incoming_transfer.id});
-            }
-        }
-
-        function goToLogs(){
-            $state.go('app.incoming_transfers.view.logs', {});
-        }
     }]);
 }());

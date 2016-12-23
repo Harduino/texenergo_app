@@ -30,6 +30,7 @@ angular.module('app.incoming_transfers', ['ui.router'])
             views:{
                 "content@app":{
                     controller: 'ViewIncomingTransferCtrl',
+                    controllerAs: 'viewIncomingTransferCtrl',
                     templateUrl: '/app/incoming_transfers/views/viewIncomingTransfer.html'
                 }
             }

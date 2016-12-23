@@ -1,39 +1,48 @@
 <div id="content">
     <div class="well well-white">
-        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">{{visual.titles + incomingTransfer.number}}</h2>
-        <form-nav-buttons options="visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
+        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">
+            {{viewIncomingTransferCtrl.visual.titles + viewIncomingTransferCtrl.incomingTransfer.number}}
+        </h2>
+        <form-nav-buttons options="viewIncomingTransferCtrl.visual.navButtsOptions" class="btn-group margin-top-10">
+        </form-nav-buttons>
         <hr>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">
                 Входящий номер:
             </p>
-            <p class="col-md-9">{{incomingTransfer.number}}</p>
+            <p class="col-md-9">{{viewIncomingTransferCtrl.incomingTransfer.number}}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">
                 Партнёр:
             </p>
             <p class="col-md-9">
-                <a ng-href="/#/partners/{{incomingTransfer.partner.id}}">{{incomingTransfer.partner.name}}</a>
+                <a ng-href="/#/partners/{{viewIncomingTransferCtrl.incomingTransfer.partner.id}}">
+                    {{viewIncomingTransferCtrl.incomingTransfer.partner.name}}
+                </a>
             </p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">
                 Входящая дата:
             </p>
-            <p class="col-md-9">{{incomingTransfer.date | date:'dd MMMM yy'}}</p>
+            <p class="col-md-9">{{viewIncomingTransferCtrl.incomingTransfer.date | date:'dd MMMM yy'}}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">
                 Назчание:
             </p>
-            <p class="col-md-9">{{incomingTransfer.description}}</p>
+            <p class="col-md-9">{{viewIncomingTransferCtrl.incomingTransfer.description}}</p>
         </div>
     </div>
 
     <div class="well well-white">
-        <div class="margin-bottom-10 m-r-10">Свободно средств: {{incomingTransfer.remaining_amount | currency}}</div>
-        <table class="table table-bordered margin-top-10" ng-if="incomingTransfer.can_edit && incomingTransfer.remaining_amount>0">
+        <div class="margin-bottom-10 m-r-10">
+            Свободно средств: {{viewIncomingTransferCtrl.incomingTransfer.remaining_amount | currency}}
+        </div>
+
+        <table class="table table-bordered margin-top-10"
+               ng-if="viewIncomingTransferCtrl.incomingTransfer.can_edit && (viewIncomingTransferCtrl.incomingTransfer.remaining_amount > 0)">
             <thead>
             <tr>
                 <th>Заказ клиента/Исходящий платеж</th>
@@ -44,18 +53,25 @@
             <tbody>
                 <tr>
                     <td>
-                        <ui-select id="vit_order_select"  ui-select-infinity="orderSelectConf" on-select="onOrderSelect()" ng-model="data.orderForAppend" theme="select2" class="td-ui-select">
-                            <ui-select-match placeholder="Выберите заказ">{{$select.selected.number || $select.selected.incoming_code}}</ui-select-match>
-                            <ui-select-choices repeat="order in data.ordersList">
+                        <ui-select id="vit_order_select"  ui-select-infinity="viewIncomingTransferCtrl.orderSelectConf"
+                                   on-select="viewIncomingTransferCtrl.onOrderSelect()" class="td-ui-select"
+                                   ng-model="viewIncomingTransferCtrl.data.orderForAppend" theme="select2">
+                            <ui-select-match placeholder="Выберите заказ">
+                                {{$select.selected.number || $select.selected.incoming_code}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="order in viewIncomingTransferCtrl.data.ordersList">
                                 <div ng-bind-html="order | f_incomingT | highlight: $select.search"></div>
                             </ui-select-choices>
                         </ui-select>
                     </td>
-                    <td ng-keypress="data.orderForAppend.id && appendOrder($event)">
-                        <input id="append_order_amount" class="form-control table-input" ng-model="data.orderForAppend.amount" model-filter="{min:0, number:true, max:getMax()}" filter-name="te_number" type="text">
+                    <td ng-keypress="viewIncomingTransferCtrl.data.orderForAppend.id && viewIncomingTransferCtrl.appendOrder($event)">
+                        <input id="append_order_amount" class="form-control table-input" filter-name="te_number"
+                               model-filter="{min: 0, number: true, max: viewIncomingTransferCtrl.getMax()}" type="text"
+                               ng-model="viewIncomingTransferCtrl.data.orderForAppend.amount">
                     </td>
                     <td class="center-item-text">
-                        <div ng-click="appendOrder()" class="btn btn-success" ng-disabled="!data.orderForAppend.id">
+                        <div ng-click="viewIncomingTransferCtrl.appendOrder()" class="btn btn-success"
+                             ng-disabled="!viewIncomingTransferCtrl.data.orderForAppend.id">
                             <i class="fa fa-plus"></i>
                         </div>
                     </td>
@@ -73,22 +89,35 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in incomingTransfer.money_to_orders">
+                <tr ng-repeat="item in viewIncomingTransferCtrl.incomingTransfer.money_to_orders">
                     <td>{{ $index + 1 }}</td>
-                    <td><span ng-if="item.hasOwnProperty('customer_order')">{{ item.customer_order.number }}</span></td>
-                    <td><span ng-if="item.hasOwnProperty('outgoing_transfer')">{{ item.outgoing_transfer.number }}</span></td>
+                    <td>
+                        <span ng-if="item.hasOwnProperty('customer_order')">
+                            {{ item.customer_order.number }}
+                        </span>
+                    </td>
+                    <td>
+                        <span ng-if="item.hasOwnProperty('outgoing_transfer')">
+                            {{ item.outgoing_transfer.number }}
+                        </span>
+                    </td>
                     <td>{{ item.amount | currency }}</td>
                     <td>
-                        <form-nav-buttons data-role="visual.roles" data-role="row" class="btn-group" data-options="visual.navTableButts" subdata="{data:item, index:$index}" data-template="table" content-class="btn btn-xs"></form-nav-buttons>
+                        <form-nav-buttons data-role="viewIncomingTransferCtrl.visual.roles" content-class="btn btn-xs"
+                                          data-options="viewIncomingTransferCtrl.visual.navTableButts" data-role="row"
+                                          data-template="table" subdata="{data:item, index:$index}" class="btn-group">
+                        </form-nav-buttons>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="3" class="text-right">Итого:</td>
-                    <td>{{ incomingTransfer.amount | currency }}</td>
+                    <td>{{ viewIncomingTransferCtrl.incomingTransfer.amount | currency }}</td>
                     <td/>
                 </tr>
             </tbody>
         </table>
     </div>
-    <file-worker data-trigger="visual.showFileModal" data-config="fileModalOptions"></file-worker>
+    <file-worker data-trigger="viewIncomingTransferCtrl.visual.showFileModal"
+                 data-config="viewIncomingTransferCtrl.fileModalOptions">
+    </file-worker>
 </div>
