@@ -29,9 +29,7 @@ angular.module('app.incoming_transfers', ['ui.router'])
             },
             views:{
                 "content@app":{
-                    controller: 'ViewIncomingTransferCtrl',
-                    controllerAs: 'viewIncomingTransferCtrl',
-                    templateUrl: '/app/incoming_transfers/views/viewIncomingTransfer.html'
+                    template: '<view-incoming-transfer></view-incoming-transfer>'
                 }
             }
         }).state('app.incoming_transfers.view.logs', {
