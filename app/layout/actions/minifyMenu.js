@@ -3,7 +3,7 @@
 
     angular.module('app.layout').directive('minifyMenu', function(){
         return {
-            restrict: 'A',
+            restrict: 'E',
             link: function(scope, element){
                     var $body = $('body');
                 var minifyMenu = function() {
