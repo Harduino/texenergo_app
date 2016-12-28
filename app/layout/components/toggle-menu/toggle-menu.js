@@ -1,8 +1,8 @@
 class ToggleMenuCtrl {
-    constructor($scope) {
+    constructor(Observer) {
         this.$body = $('body');
         let self = this;
-        $scope.$on('requestToggleMenu', () => self.toggleMenu());
+        Observer.subscribe('requestToggleMenu', () => self.toggleMenu());
     }
 
     toggleMenu() {
@@ -18,7 +18,7 @@ class ToggleMenuCtrl {
     }
 }
 
-ToggleMenuCtrl.$inject = ['$scope'];
+ToggleMenuCtrl.$inject = ['Observer'];
 
 angular.module('app.layout').component('toggleMenu', {
     controller: ToggleMenuCtrl,
