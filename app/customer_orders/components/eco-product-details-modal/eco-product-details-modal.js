@@ -1,12 +1,9 @@
 class EqoProductDetailsModalCtrl {
-    constructor($uibModalInstance, config, row, order, serverApi) {
-        this.$uibModalInstance = $uibModalInstance;
+    constructor(funcFactory, serverApi) {
+        this.funcFactory = funcFactory;
         this.serverApi = serverApi;
-
-        this.row = row;
-        this.order = order;
-        this.config = angular.extend({title: 'Подробнее по строке', btnOkText: 'Понятно', btnCancelText: 'Закрыть'},
-            config);
+        this.resolve.config = angular.extend({title: 'Подробнее по строке', btnOkText: 'Понятно', btnCancelText: 'Закрыть'},
+            this.resolve.config);
     }
 
     saveProductComment (data) {
@@ -24,13 +21,19 @@ class EqoProductDetailsModalCtrl {
     }
 
     ok () {
-        this.$uibModalInstance.close();
+        this.modalInstance.close();
     }
 
     cancel () {
-        this.$uibModalInstance.dismiss('cancel');
+        this.modalInstance.dismiss('cancel');
     }
 }
 
-EqoProductDetailsModalCtrl.$inject = ['$uibModalInstance', 'config', 'row', 'order', 'serverApi'];
-angular.module('app.customer_orders').controller('EqoProductDetailsModalCtrl', EqoProductDetailsModalCtrl);
+EqoProductDetailsModalCtrl.$inject = ['funcFactory', 'serverApi'];
+
+angular.module('app.customer_orders').component('eqoProductDetailsModal', {
+    controller: EqoProductDetailsModalCtrl,
+    controllerAs: 'eqoProductDetailsModalCtrl',
+    bindings: {modalInstance: "<", resolve: "<"},
+    templateUrl: 'app/customer_orders/components/eco-product-details-modal/eco-product-details-modal.html'
+});

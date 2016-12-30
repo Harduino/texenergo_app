@@ -1,29 +1,29 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{eqoProductDetailsModalCtrl.config.title}}</h3>
+    <h3 class="modal-title">{{eqoProductDetailsModalCtrl.resolve.config.title}}</h3>
 </div>
 <div class="modal-body">
-    <div class="row" ng-if="eqoProductDetailsModalCtrl.row.query_original">
+    <div class="row" ng-if="eqoProductDetailsModalCtrl.resolve.row.query_original">
         <p class="col-xs-12 col-md-3 font-bold">
             Запрос:
         </p>
         <p class="col-md-9">
-            {{ eqoProductDetailsModalCtrl.row.query_original }}
+            {{ eqoProductDetailsModalCtrl.resolve.row.query_original }}
         </p>
     </div>
-    <div class="row" ng-if="eqoProductDetailsModalCtrl.row.discount_description">
+    <div class="row" ng-if="eqoProductDetailsModalCtrl.resolve.row.discount_description">
         <p class="col-xs-12 col-md-3 font-bold">
             Описание скидки:
         </p>
         <p class="col-md-9">
-        <pre>{{ eqoProductDetailsModalCtrl.row.discount_description }}</pre>
+        <pre>{{ eqoProductDetailsModalCtrl.resolve.row.discount_description }}</pre>
         </p>
     </div>
-    <div class="row" ng-if="eqoProductDetailsModalCtrl.row.messages.length > 0">
+    <div class="row" ng-if="eqoProductDetailsModalCtrl.resolve.row.messages.length > 0">
         <p class="col-xs-12 col-md-3 font-bold">
             Сообщения:
         </p>
         <p class="col-md-9">
-        <div ng-repeat="message in eqoProductDetailsModalCtrl.row.messages">
+        <div ng-repeat="message in eqoProductDetailsModalCtrl.resolve.row.messages">
             <span class="badge alert-{{message.level}}">!</span>
             {{ message.text }}
         </div>
@@ -34,8 +34,8 @@
             Комментарий:
         </p>
         <p class="col-md-9">
-            <a editable-text="eqoProductDetailsModalCtrl.row.comment" buttons="no"
-               onaftersave="eqoProductDetailsModalCtrl.saveProductComment({comment: eqoProductDetailsModalCtrl.row.comment})">
+            <a editable-text="eqoProductDetailsModalCtrl.resolve.row.comment" buttons="no"
+               onaftersave="eqoProductDetailsModalCtrl.saveProductComment({comment: eqoProductDetailsModalCtrl.resolve.row.comment})">
                 {{ row.comment || "Комментарий" }}
             </a>
         </p>
@@ -43,9 +43,9 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-danger" type="button" ng-click="eqoProductDetailsModalCtrl.cancel()">
-        {{eqoProductDetailsModalCtrl.config.btnCancelText}}
+        {{eqoProductDetailsModalCtrl.resolve.config.btnCancelText}}
     </button>
     <button class="btn btn-primary" type="button" ng-click="eqoProductDetailsModalCtrl.ok()">
-        {{eqoProductDetailsModalCtrl.config.btnOkText}}
+        {{eqoProductDetailsModalCtrl.resolve.config.btnOkText}}
     </button>
 </div>

@@ -206,15 +206,9 @@
 
             sc.productDetailsModal = function(row) {
                 $uibModal.open({
-                    templateUrl: 'app/customer_orders/components/eco-product-details-modal/eco-product-details-modal.html',
-                    controller: 'EqoProductDetailsModalCtrl',
-                    controllerAs: 'eqoProductDetailsModalCtrl',
+                    component: 'eqoProductDetailsModal',
                     windowClass: 'eqo-centred-modal',
-                    resolve: {
-                        row: row,
-                        order: sc.order,
-                        config: {}
-                    }
+                    resolve: {row: row, order: sc.order, config: {}}
                 });
             };
 
