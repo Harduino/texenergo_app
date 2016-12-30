@@ -32,7 +32,9 @@
         return {
             restrict: 'A',
             link: function (scope, element) {
+                var $body = $('body');
                 var $collapsible = element.find('li[data-menu-collapse]');
+
                 $collapsible.each(function (idx, li) {
                     var $li = $(li);
                     $li
