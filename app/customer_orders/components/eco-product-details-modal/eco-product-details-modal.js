@@ -1,32 +1,36 @@
-'use strict';
-
-angular.module('app.customer_orders')
-    .controller('EqoProductDetailsModalCtrl', ['$uibModalInstance', 'config', 'row', 'order', 'serverApi', function($uibModalInstance, config, row, order, serverApi) {
-        var self = this;
+class EqoProductDetailsModalCtrl {
+    constructor($uibModalInstance, config, row, order, serverApi) {
+        this.$uibModalInstance = $uibModalInstance;
+        this.serverApi = serverApi;
 
         this.row = row;
         this.order = order;
         this.config = angular.extend({title: 'Подробнее по строке', btnOkText: 'Понятно', btnCancelText: 'Закрыть'},
             config);
+    }
 
-        this.saveProductComment = function(data) {
-            serverApi.updateCustomerOrderProduct(self.order.id, self.row.id, {
-                customer_order_content: {comment: data.comment}
-            }, function(result) {
-                if(result.data.errors) {
-                    funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors);
-                } else {
-                    funcFactory.showNotification('Добавил комментарий', 'Добавлен комментарий');
-                }
-            });
-        };
+    saveProductComment (data) {
+        let self = this;
 
-        this.ok = function () {
-            $uibModalInstance.close();
-        };
+        this.serverApi.updateCustomerOrderProduct(self.order.id, self.row.id, {
+            customer_order_content: {comment: data.comment}
+        }, result => {
+            if(result.data.errors) {
+                self.funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors);
+            } else {
+                self.funcFactory.showNotification('Добавил комментарий', 'Добавлен комментарий');
+            }
+        });
+    }
 
-        this.cancel = function () {
-            $uibModalInstance.dismiss('cancel');
-        };
-    }])
-;
+    ok () {
+        this.$uibModalInstance.close();
+    }
+
+    cancel () {
+        this.$uibModalInstance.dismiss('cancel');
+    }
+}
+
+EqoProductDetailsModalCtrl.$inject = ['$uibModalInstance', 'config', 'row', 'order', 'serverApi'];
+angular.module('app.customer_orders').controller('EqoProductDetailsModalCtrl', EqoProductDetailsModalCtrl);
