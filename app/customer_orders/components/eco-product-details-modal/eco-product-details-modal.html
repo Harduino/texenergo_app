@@ -1,29 +1,29 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{config.title}}</h3>
+    <h3 class="modal-title">{{eqoProductDetailsModalCtrl.config.title}}</h3>
 </div>
 <div class="modal-body">
-    <div class="row" ng-if="row.query_original">
+    <div class="row" ng-if="eqoProductDetailsModalCtrl.row.query_original">
         <p class="col-xs-12 col-md-3 font-bold">
             Запрос:
         </p>
         <p class="col-md-9">
-            {{ row.query_original }}
+            {{ eqoProductDetailsModalCtrl.row.query_original }}
         </p>
     </div>
-    <div class="row" ng-if="row.discount_description">
+    <div class="row" ng-if="eqoProductDetailsModalCtrl.row.discount_description">
         <p class="col-xs-12 col-md-3 font-bold">
             Описание скидки:
         </p>
         <p class="col-md-9">
-        <pre>{{ row.discount_description }}</pre>
+        <pre>{{ eqoProductDetailsModalCtrl.row.discount_description }}</pre>
         </p>
     </div>
-    <div class="row" ng-if="row.messages.length > 0">
+    <div class="row" ng-if="eqoProductDetailsModalCtrl.row.messages.length > 0">
         <p class="col-xs-12 col-md-3 font-bold">
             Сообщения:
         </p>
         <p class="col-md-9">
-        <div ng-repeat="message in row.messages">
+        <div ng-repeat="message in eqoProductDetailsModalCtrl.row.messages">
             <span class="badge alert-{{message.level}}">!</span>
             {{ message.text }}
         </div>
@@ -34,11 +34,18 @@
             Комментарий:
         </p>
         <p class="col-md-9">
-            <a editable-text="row.comment" onaftersave="saveProductComment({comment: row.comment})" buttons="no">{{ row.comment || "Комментарий" }}</a>
+            <a editable-text="eqoProductDetailsModalCtrl.row.comment" buttons="no"
+               onaftersave="eqoProductDetailsModalCtrl.saveProductComment({comment: eqoProductDetailsModalCtrl.row.comment})">
+                {{ row.comment || "Комментарий" }}
+            </a>
         </p>
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-danger" type="button" ng-click="cancel()">{{config.btnCancelText}}</button>
-    <button class="btn btn-primary" type="button" ng-click="ok()">{{config.btnOkText}}</button>
+    <button class="btn btn-danger" type="button" ng-click="eqoProductDetailsModalCtrl.cancel()">
+        {{eqoProductDetailsModalCtrl.config.btnCancelText}}
+    </button>
+    <button class="btn btn-primary" type="button" ng-click="eqoProductDetailsModalCtrl.ok()">
+        {{eqoProductDetailsModalCtrl.config.btnOkText}}
+    </button>
 </div>

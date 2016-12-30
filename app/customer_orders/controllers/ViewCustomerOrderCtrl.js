@@ -208,6 +208,7 @@
                 $uibModal.open({
                     templateUrl: 'app/customer_orders/components/eco-product-details-modal/eco-product-details-modal.html',
                     controller: 'EqoProductDetailsModalCtrl',
+                    controllerAs: 'eqoProductDetailsModalCtrl',
                     windowClass: 'eqo-centred-modal',
                     resolve: {
                         row: row,
