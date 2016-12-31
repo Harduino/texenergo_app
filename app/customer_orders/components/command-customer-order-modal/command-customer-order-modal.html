@@ -1,0 +1,22 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{config.title}}</h3>
+</div>
+<div class="modal-body">
+    <input type="text" ng-model="command" id="vco_typeahead" placeholder="Введите комманду" class="form-control"
+           uib-typeahead="c for c in commandsLists[commandsLists.selectedList] | filter:$viewValue | limitTo:8">
+
+    <h5>сортировать_по цена</h5>
+    <p>Сортирует все товара в порядке возрастания цены</p>
+    <h5>удалить_где итого<100</h5>
+    <p>Удаляет все строки, где итого по строке меньше 100</p>
+    <h5>удалить_где остаток<1</h5>
+    <p>Удаляет все строки, где товара нет в наличии</p>
+    <h5>сортировать_по товар.артикул</h5>
+    <p>Сортирует все товары в порядке возврастания артикула</p>
+    <h5>группировать_по товар</h5>
+    <p>Объединяет дубли строк в одну строку</p>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-danger" type="button" ng-click="cancel()">{{config.btnCancelText}}</button>
+    <button class="btn btn-primary" type="button" ng-click="ok()">{{config.btnOkText}}</button>
+</div>
