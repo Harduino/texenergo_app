@@ -1,9 +1,10 @@
 class EqoChangeCustomerOrderProductModalCtrl {
-    constructor($uibModalInstance, serverApi, product, config) {
-        this.modalInstance = $uibModalInstance;
+    constructor(serverApi) {
+        let self = this;
         this.pSelectConfig = {startPage: 0, dataMethod: serverApi.getSearch};
-        this.data = {selectedProduct: product, productsList: []};
-        this.config = angular.extend({title: 'Изменить товар', btnOkText: 'Изменить', btnCancelText: 'Отмена'}, config);
+        this.data = {selectedProduct: self.resolve.product, productsList: []};
+        this.resolve.config = angular.extend({title: 'Изменить товар', btnOkText: 'Изменить', btnCancelText: 'Отмена'},
+            self.resolve.config);
     }
 
     ok () {
@@ -15,7 +16,11 @@ class EqoChangeCustomerOrderProductModalCtrl {
     }
 }
 
-EqoChangeCustomerOrderProductModalCtrl.$inject = ['$uibModalInstance', 'serverApi', 'product', 'config'];
+EqoChangeCustomerOrderProductModalCtrl.$inject = ['serverApi'];
 
-angular.module('app.customer_orders')
-    .controller('EqoChangeCustomerOrderProductModalCtrl', EqoChangeCustomerOrderProductModalCtrl);
+angular.module('app.customer_orders').component('eqoChangeCustomerOrderProductModal', {
+    controller: EqoChangeCustomerOrderProductModalCtrl,
+    controllerAs: '$ctrl',
+    bindings: {modalInstance: '<', resolve: '<'},
+    templateUrl: 'app/customer_orders/components/eqo-change-customer-order-product-modal/eqo-change-customer-order-product-modal.html'
+});

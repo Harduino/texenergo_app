@@ -190,9 +190,7 @@
              */
             sc.changeCustomerOrderProductModal = function(p){
                 $uibModal.open({
-                    templateUrl: 'app/customer_orders/components/eqo-change-customer-order-product-modal/eqo-change-customer-order-product-modal.html',
-                    controller: 'EqoChangeCustomerOrderProductModalCtrl',
-                    controllerAs: '$ctrl',
+                    component: 'eqoChangeCustomerOrderProductModal',
                     windowClass: 'eqo-centred-modal',
                     resolve: {product : p.product, config: {}}
                 }).result.then(function (selectedProduct) {
