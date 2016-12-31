@@ -1,11 +1,11 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{config.title}}</h3>
+    <h3 class="modal-title">{{$ctrl.config.title}}</h3>
 </div>
 <div class="modal-body">
-    <ui-select ng-model="data.selectedProduct" reset-search-input="false"
-               ui-select-infinity="pSelectConfig" class="full-width" theme="select2">
+    <ui-select ng-model="$ctrl.data.selectedProduct" reset-search-input="false" class="full-width" theme="select2"
+               ui-select-infinity="$ctrl.pSelectConfig">
         <ui-select-match placeholder="Введите товар для добавления...">{{$select.selected.name}}</ui-select-match>
-        <ui-select-choices repeat="product in data.productsList | filter:$select.search" class="search-item">
+        <ui-select-choices repeat="product in $ctrl.data.productsList | filter:$select.search" class="search-item">
             <div class="search-tr">
                 <div class="search-td col-md-1">
                     <img ng-src="{{product.image_url}}">
@@ -18,6 +18,6 @@
     </ui-select>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-danger" type="button" ng-click="cancel()">{{config.btnCancelText}}</button>
-    <button class="btn btn-primary" type="button" ng-click="ok()">{{config.btnOkText}}</button>
+    <button class="btn btn-danger" type="button" ng-click="$ctrl.cancel()">{{$ctrl.config.btnCancelText}}</button>
+    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">{{$ctrl.config.btnOkText}}</button>
 </div>

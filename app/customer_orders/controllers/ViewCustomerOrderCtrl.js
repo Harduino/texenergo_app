@@ -192,13 +192,15 @@
                 $uibModal.open({
                     templateUrl: 'app/customer_orders/components/eqo-change-customer-order-product-modal/eqo-change-customer-order-product-modal.html',
                     controller: 'EqoChangeCustomerOrderProductModalCtrl',
+                    controllerAs: '$ctrl',
                     windowClass: 'eqo-centred-modal',
-                    resolve: {
-                        product : p.product,
-                        config: {}
-                    }
+                    resolve: {product : p.product, config: {}}
                 }).result.then(function (selectedProduct) {
-                    sc.saveProductSubstitute({id: p.id, quantity: p.quantity, product_id: (selectedProduct._id || selectedProduct.id)});
+                    sc.saveProductSubstitute({
+                        id: p.id,
+                        quantity: p.quantity,
+                        product_id: selectedProduct._id || selectedProduct.id
+                    });
                 });
             };
 
