@@ -189,17 +189,15 @@
              * @param p - product
              */
             sc.changeCustomerOrderProductModal = function(p){
-                var modalInstance = $uibModal.open({
-                    templateUrl: 'eqoChangeCustomerOrderProductModal.tmpl.html',
+                $uibModal.open({
+                    templateUrl: 'app/customer_orders/components/eqo-change-customer-order-product-modal/eqo-change-customer-order-product-modal.html',
                     controller: 'EqoChangeCustomerOrderProductModalCtrl',
                     windowClass: 'eqo-centred-modal',
                     resolve: {
                         product : p.product,
                         config: {}
                     }
-                });
-
-                modalInstance.result.then(function (selectedProduct) {
+                }).result.then(function (selectedProduct) {
                     sc.saveProductSubstitute({id: p.id, quantity: p.quantity, product_id: (selectedProduct._id || selectedProduct.id)});
                 });
             };
@@ -623,31 +621,6 @@
                 });
             }
 
-        }])
-        .controller("EqoChangeCustomerOrderProductModalCtrl", ['$scope', '$uibModalInstance', 'serverApi', 'product', 'config', function($scope, $uibModalInstance, serverApi, product, config){
-            var sc = $scope;
-
-            sc.pSelectConfig = {
-                startPage: 0,
-                dataMethod: serverApi.getSearch
-            };
-            sc.data = {
-                selectedProduct: product,
-                productsList: []
-            };
-            sc.config = angular.extend({
-                title: 'Изменить товар',
-                btnOkText: 'Изменить',
-                btnCancelText: 'Отмена'
-            }, config);
-
-            sc.ok = function () {
-                $uibModalInstance.close(sc.data.selectedProduct);
-            };
-
-            sc.cancel = function () {
-                $uibModalInstance.dismiss('cancel');
-            };
         }])
         .controller("CommandCustomerOrderModalCtrl", ['$scope', '$uibModalInstance', 'serverApi', 'config', function($scope, $uibModalInstance, serverApi, config) {
             var sc = $scope;

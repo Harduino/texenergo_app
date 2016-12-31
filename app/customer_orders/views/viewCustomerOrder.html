@@ -435,30 +435,6 @@
             </div>
         </div>
     </div>
-    <script type="text/ng-template" id="eqoChangeCustomerOrderProductModal.tmpl.html">
-        <div class="modal-header">
-            <h3 class="modal-title">{{config.title}}</h3>
-        </div>
-        <div class="modal-body">
-            <ui-select ui-select-infinity="pSelectConfig" ng-model="data.selectedProduct" theme="select2" reset-search-input="false" class="full-width">
-                <ui-select-match placeholder="Введите товар для добавления...">{{$select.selected.name}}</ui-select-match>
-                <ui-select-choices repeat="product in data.productsList | filter:$select.search" class="search-item">
-                    <div class="search-tr">
-                        <div class="search-td col-md-1">
-                            <img ng-src="{{product.image_url}}">
-                        </div>
-                        <div class="search-td col-md-7" ng-bind-html="product.name | highlight: $select.search"></div>
-                        <div class="search-td col-md-2">{{product.stock}} ед.</div>
-                        <div class="search-td col-md-2">{{product.price | currency}}</div>
-                    </div>
-                </ui-select-choices>
-            </ui-select>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-danger" type="button" ng-click="cancel()">{{config.btnCancelText}}</button>
-            <button class="btn btn-primary" type="button" ng-click="ok()">{{config.btnOkText}}</button>
-        </div>
-    </script>
     <script type="text/ng-template" id="CommandCustomerOrderModalCtrl.tmpl.html">
         <div class="modal-header">
             <h3 class="modal-title">{{config.title}}</h3>
