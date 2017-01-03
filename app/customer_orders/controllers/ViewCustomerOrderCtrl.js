@@ -595,6 +595,7 @@
                 var modalInstance = $uibModal.open({
                     templateUrl: 'app/customer_orders/components/command-customer-order-modal/command-customer-order-modal.html',
                     controller: 'CommandCustomerOrderModalCtrl',
+                    controllerAs: '$ctrl',
                     windowClass: 'eqo-centred-modal',
                     resolve: {
                         config: {}
