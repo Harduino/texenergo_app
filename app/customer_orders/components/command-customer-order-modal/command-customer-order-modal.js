@@ -1,40 +1,42 @@
-'use strict';
-
-angular.module('app.customer_orders')
-    .controller('CommandCustomerOrderModalCtrl', ['$uibModalInstance', 'serverApi', 'config', function($uibModalInstance, serverApi, config) {
-        var self = this;
+class CommandCustomerOrderModalCtrl {
+    constructor ($uibModalInstance, serverApi, config) {
+        this.modalInstance = $uibModalInstance;
+        this.serverApi = serverApi;
         this.selectedCommandList = 0;
-    
+
         this.commandsLists = [
             ['сортировать_по', 'удалить_где'],
             ['сортировать_по артикул']
         ];
 
-        this.selectCommandList = function(newCommand) {
-            if(newCommand !== undefined) {
-                for(var commandListIndex = 0; commandListIndex < self.commandsLists.length; commandListIndex++) {
-                    var commandList = self.commandsLists[commandListIndex];
+        this.config = angular.extend({title: 'Использовать комманду', btnOkText: 'Изменить', btnCancelText: 'Отмена'},
+            config);
+    }
 
-                    for(var commandIndex = 0; commandIndex < commandList.length; commandIndex++) {
-                        var command = commandList[commandIndex];
+    selectCommandList (newCommand) {
+        if(newCommand !== undefined) {
+            for(let commandListIndex = 0; commandListIndex < this.commandsLists.length; commandListIndex++) {
+                let commandList = this.commandsLists[commandListIndex];
 
-                        if(command.lastIndexOf(newCommand) > -1) {
-                            return self.selectedCommandList = commandListIndex;
-                        }
+                for(let commandIndex = 0; commandIndex < commandList.length; commandIndex++) {
+                    let command = commandList[commandIndex];
+
+                    if(command.lastIndexOf(newCommand) > -1) {
+                        return this.selectedCommandList = commandListIndex;
                     }
                 }
             }
-        };
-    
-        this.config = angular.extend({title: 'Использовать комманду', btnOkText: 'Изменить', btnCancelText: 'Отмена'},
-            config);
-    
-        this.ok = function () {
-            $uibModalInstance.close(self.command);
-        };
-    
-        this.cancel = function () {
-            $uibModalInstance.dismiss('cancel');
-        };
-    }])
-;
+        }
+    }
+
+    ok () {
+        this.modalInstance.close(this.command);
+    }
+
+    cancel () {
+        this.modalInstance.dismiss('cancel');
+    }
+}
+
+CommandCustomerOrderModalCtrl.$inject = ['$uibModalInstance', 'serverApi', 'config'];
+angular.module('app.customer_orders').controller('CommandCustomerOrderModalCtrl', CommandCustomerOrderModalCtrl);
