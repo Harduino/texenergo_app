@@ -593,9 +593,7 @@
 
             function showCommandModal(){
                 var modalInstance = $uibModal.open({
-                    templateUrl: 'app/customer_orders/components/command-customer-order-modal/command-customer-order-modal.html',
-                    controller: 'CommandCustomerOrderModalCtrl',
-                    controllerAs: '$ctrl',
+                    component: 'commandCustomerOrderModal',
                     windowClass: 'eqo-centred-modal',
                     resolve: {
                         config: {}

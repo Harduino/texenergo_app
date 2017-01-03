@@ -1,6 +1,5 @@
 class CommandCustomerOrderModalCtrl {
-    constructor ($uibModalInstance, serverApi, config) {
-        this.modalInstance = $uibModalInstance;
+    constructor (serverApi) {
         this.serverApi = serverApi;
         this.selectedCommandList = 0;
 
@@ -9,8 +8,11 @@ class CommandCustomerOrderModalCtrl {
             ['сортировать_по артикул']
         ];
 
-        this.config = angular.extend({title: 'Использовать комманду', btnOkText: 'Изменить', btnCancelText: 'Отмена'},
-            config);
+        this.resolve.config = angular.extend({
+            title: 'Использовать комманду',
+            btnOkText: 'Изменить',
+            btnCancelText: 'Отмена'
+        }, this.resolve.config);
     }
 
     selectCommandList (newCommand) {
@@ -38,5 +40,11 @@ class CommandCustomerOrderModalCtrl {
     }
 }
 
-CommandCustomerOrderModalCtrl.$inject = ['$uibModalInstance', 'serverApi', 'config'];
-angular.module('app.customer_orders').controller('CommandCustomerOrderModalCtrl', CommandCustomerOrderModalCtrl);
+CommandCustomerOrderModalCtrl.$inject = ['serverApi'];
+
+angular.module('app.customer_orders').component('commandCustomerOrderModal', {
+    controller: CommandCustomerOrderModalCtrl,
+    controllerAs: '$ctrl',
+    bindings: {modalInstance: "<", resolve: "<"},
+    templateUrl: 'app/customer_orders/components/command-customer-order-modal/command-customer-order-modal.html'
+});

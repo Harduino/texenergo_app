@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{$ctrl.config.title}} {{$viewValue}}</h3>
+    <h3 class="modal-title">{{$ctrl.resolve.config.title}} {{$viewValue}}</h3>
 </div>
 <div class="modal-body">
     <input type="text" ng-model="$ctrl.command" placeholder="Введите комманду" class="form-control"
@@ -19,6 +19,6 @@
     <p>Объединяет дубли строк в одну строку</p>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-danger" type="button" ng-click="$ctrl.cancel()">{{$ctrl.config.btnCancelText}}</button>
-    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">{{$ctrl.config.btnOkText}}</button>
+    <button class="btn btn-danger" type="button" ng-click="$ctrl.cancel()">{{$ctrl.resolve.config.btnCancelText}}</button>
+    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">{{$ctrl.resolve.config.btnOkText}}</button>
 </div>
