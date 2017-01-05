@@ -114,6 +114,7 @@ gulp.task('app', function(){
         'app/*/controllers/*.js',
         'app/*/components/*/*.js',
         'app/*/directives/*.js',
+        'app/components/shortcut/shortcut-directive.js',
         'assets/plugin/angular-d3/angular-d3.js',
         'app/app.api.js',
         'app/app.js',

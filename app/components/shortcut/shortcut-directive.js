@@ -1,64 +1,70 @@
-define(['app'], function(app){
-    "use strict";
+/**
+ * Shortcut-directive
+ */
+(function(){
+    var module = angular.module('app.layout');
 
-	    return app.directive('toggleShortcut', function($log,$timeout) {
+    module.directive('toggleShortcut', toggleShortcut);
 
-	    var initDomEvents = function($element){
+    toggleShortcut.$inject = ['$timeout'];
 
-	    	var shortcut_dropdown = $('#shortcut');
+    function toggleShortcut($timeout) {
 
-			$element.on('click',function(){
-			
-				if (shortcut_dropdown.is(":visible")) {
-					shortcut_buttons_hide();
-				} else {
-					shortcut_buttons_show();
-				}
+        var initDomEvents = function ($element) {
 
-			})
+            var shortcut_dropdown = $('#shortcut');
 
-			shortcut_dropdown.find('a').click(function(e) {
-				e.preventDefault();
-				window.location = $(this).attr('href');
-				setTimeout(shortcut_buttons_hide, 300);
-			});
+            $element.on('click', function () {
+                if (shortcut_dropdown.is(":visible")) {
+                    shortcut_buttons_hide();
+                } else {
+                    shortcut_buttons_show();
+                }
 
-			
+            });
 
-			// SHORTCUT buttons goes away if mouse is clicked outside of the area
-			$(document).mouseup(function(e) {
-				if (shortcut_dropdown && !shortcut_dropdown.is(e.target) && shortcut_dropdown.has(e.target).length === 0) {
-					shortcut_buttons_hide();
-				}
-			});
+            shortcut_dropdown.find('a').click(function (e) {
+                e.preventDefault();
+                window.location = $(this).attr('href');
+                setTimeout(shortcut_buttons_hide, 300);
+            });
 
-			// SHORTCUT ANIMATE HIDE
-			function shortcut_buttons_hide() {
-				shortcut_dropdown.animate({
-					height : "hide"
-				}, 300, "easeOutCirc");
-				$('body').removeClass('shortcut-on');
 
-			}
+            // SHORTCUT buttons goes away if mouse is clicked outside of the area
+            $(document).mouseup(function (e) {
+                if (shortcut_dropdown && !shortcut_dropdown.is(e.target) && shortcut_dropdown.has(e.target).length === 0) {
+                    shortcut_buttons_hide();
+                }
+            });
 
-			// SHORTCUT ANIMATE SHOW
-			function shortcut_buttons_show() {
-				shortcut_dropdown.animate({
-					height : "show"
-				}, 200, "easeOutCirc");
-				$('body').addClass('shortcut-on');
-			}
-	    }
+            // SHORTCUT ANIMATE HIDE
+            function shortcut_buttons_hide() {
+                shortcut_dropdown.animate({
+                    height: "hide"
+                }, 300, "easeOutCirc");
+                $('body').removeClass('shortcut-on');
 
-		var link = function($scope,$element){
-			$timeout(function(){
-				initDomEvents($element);
-			});
-		}
-		
-		return{
-			restrict:'EA',
-			link:link
-		}
-	})
-});
+            }
+
+            // SHORTCUT ANIMATE SHOW
+            function shortcut_buttons_show() {
+                shortcut_dropdown.animate({
+                    height: "show"
+                }, 200, "easeOutCirc");
+                $('body').addClass('shortcut-on');
+            }
+        };
+
+        var link = function($scope,$element){
+            $timeout(function(){
+                initDomEvents($element);
+            });
+        };
+
+        return{
+            restrict:'EA',
+            link:link
+        }
+    }
+
+}());
