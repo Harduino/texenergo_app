@@ -20,16 +20,10 @@
             <p class="col-xs-12 col-md-3 font-bold">
                 Описание:
             </p>
-            <div class="col-md-9" ng-if="viewPdfCatalogueCtrl.pdfCatalogue.can_edit">
-                <pre class="full-editable-area">
-                    <a editable-textarea="viewPdfCatalogueCtrl.pdfCatalogue.description" onaftersave="viewPdfCatalogueCtrl.savePdfCatalogue()">
-                        {{ viewPdfCatalogueCtrl.pdfCatalogue.description || 'Нет описания' }}
-                    </a>
-                </pre>
+            <div class="col-md-9" ng-switch-when="true">
+                <pre class="full-editable-area"><a editable-textarea="viewPdfCatalogueCtrl.pdfCatalogue.description" onaftersave="viewPdfCatalogueCtrl.savePdfCatalogue()">{{ viewPdfCatalogueCtrl.pdfCatalogue.description || 'Нет' }}</a></pre>
             </div>
-            <p ng-if="!viewPdfCatalogueCtrl.pdfCatalogue.can_edit">
-                {{ viewPdfCatalogueCtrl.pdfCatalogue.description || 'Нет описания' }}
-            </p>
+            <p ng-switch-default class="col-md-9">{{viewPdfCatalogueCtrl.pdfCatalogue.description || 'Нет описания'}}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">

@@ -30,7 +30,7 @@ class ViewPdfCatalogueCtrl {
         };
 
         serverApi.getPdfCatalogueDetails($stateParams.id, r => {
-            let catalogue = self.pdfCatalogue = r.data;
+            self.pdfCatalogue = r.data;
         });
     };
 
