@@ -1,6 +1,6 @@
 class ViewReceiveOrderCtrl {
     constructor($state, $stateParams, serverApi, funcFactory){
-        var self = this;
+        let self = this;
 
         this.receiveOrder = {};
         this.visual = {
@@ -124,13 +124,13 @@ class ViewReceiveOrderCtrl {
         function goToLogs(){
             $state.go('app.receive_orders.view.logs', {});
         }
-    };
-};
+    }
+}
 
 ViewReceiveOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
 
-angular.module('app.receive_orders').component('viewReceiveOrderCtrl', {
+angular.module('app.receive_orders').component('viewReceiveOrder', {
     controller: ViewReceiveOrderCtrl,
     controllerAs: 'viewReceiveOrderCtrl',
-    templateUrl: '/app/receive_orders/components/view-receive-order/view-receive-order.html'
+    templateUrl: 'app/receive_orders/components/view-receive-order/view-receive-order.html'
 });
