@@ -21,14 +21,12 @@ angular.module('app.receive_orders', ['ui.router']).config($stateProvider => {
         data:{
             title: 'Просмотр поступления',
             access:{
-                action: 'read',
-                params:'ReceiveOrder'
+                action: 'read'
             }
         },
         views:{
             "content@app":{
-                controller: 'ViewReceiveOrderCtrl',
-                templateUrl: '/app/receive_orders/views/viewReceiveOrder.html'
+                template: '<view-receive-order></view-receive-order>'
             }
         }
     }).state('app.receive_orders.view.logs', {

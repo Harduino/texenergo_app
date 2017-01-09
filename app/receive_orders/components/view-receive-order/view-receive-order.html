@@ -1,0 +1,129 @@
+<div id="content">
+    <div class="well well-white">
+        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">
+            Поступление: {{ viewReceiveOrderCtrl.receiveOrder.number }}
+        </h2>
+        <form-nav-buttons options="viewReceiveOrderCtrl.visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
+        <hr>
+        <div class="row margin-top-10">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Номер накладной:
+            </p>
+            <p class="col-md-9">{{ viewReceiveOrderCtrl.receiveOrder.number }}</p>
+        </div>
+        <div class="row margin-top-10">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Номер счёт-фактуры:
+            </p>
+            <p class="col-md-9">{{ viewReceiveOrderCtrl.receiveOrder.vat_code }}</p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Дата:
+            </p>
+            <p class="col-md-9">{{ viewReceiveOrderCtrl.receiveOrder.date | date:'dd MMMM yy' }}</p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Партнёр:
+            </p>
+            <p class="col-md-9">
+                <a ui-sref="app.partners.view({id: viewReceiveOrderCtrl.receiveOrder.partner.id })">
+                    {{ viewReceiveOrderCtrl.receiveOrder.partner.name }}
+                </a>
+            </p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Статус:
+            </p>
+            <p class="col-md-9">{{ viewReceiveOrderCtrl.receiveOrder.status }}</p>
+        </div>
+    </div>
+    
+    <div class="well well-white">
+        <table class="table table-bordered margin-top-10" ng-switch="viewReceiveOrderCtrl.receiveOrder.can_edit">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Наименование</th>
+                    <th>Кол-во</th>
+                    <th>Итого</th>
+                    <th>ГТД/Страна</th>
+                    <th>Заказ</th>
+                    <th ng-switch-when="true"></th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr ng-switch-when="true">
+                <td></td>
+                <td>
+                    <ui-select id="vro_prod_select"  ui-select-infinity="productSelectConf" ng-model="data.productForAppend" theme="select2" class="td-ui-select" style="max-width: 310px;" on-select="onSelectProduct($item)">
+                        <ui-select-match>{{$select.selected.product.name}}</ui-select-match>
+                        <ui-select-choices repeat="order in ordersList">
+                            <div ng-bind-html="order.product.name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </td>
+                <td>
+                    <input class="form-control table-input" ng-model="viewReceiveOrderCtrl.data.productForAppend.quantity" model-filter="{min:0}" filter-name="te_number" type="text" ng-keypress="viewReceiveOrderCtrl.appendOrder($event)">
+                </td>
+                <td>
+                    <input class="form-control table-input" ng-model="viewReceiveOrderCtrl.data.productForAppend.total" model-filter="{min:0, number:true}" filter-name="te_number" type="text" ng-keypress="viewReceiveOrderCtrl.appendOrder($event)">
+                </td>
+                <td>
+                    <div class="display-flex" style="align-items: center;">
+                        <input class="form-control table-input" ng-model="viewReceiveOrderCtrl.data.productForAppend.gtd" type="text" placeholder="ГТД" ng-keypress="viewReceiveOrderCtrl.appendOrder($event)">
+                        &nbsp;/&nbsp;
+                        <input class="form-control table-input" ng-model="viewReceiveOrderCtrl.data.productForAppend.country" type="text" placeholder="Страна" ng-keypress="viewReceiveOrderCtrl.appendOrder($event)">
+                    </div>
+                </td>
+                <td>{{viewReceiveOrderCtrl.data.productForAppend.supplier_order.number || 'не указан'}}</td>
+                <td class="center-item-text" ng-switch-when="true">
+                    <div ng-click="viewReceiveOrderCtrl.appendOrder()" class="btn btn-success">
+                        <i class="fa fa-plus"></i>
+                    </div>
+                </td>
+            </tr>
+                <tr ng-repeat="item in viewReceiveOrderCtrl.receiveOrder.product_order_contents">
+                    <td>{{ $index + 1 }}</td>
+                    <td>
+                        <a ng-href="#/products/{{ item.product.id }}">
+                            {{ item.product.name }} ({{ item.product.article }})
+                        </a>
+                    </td>
+                    <td>
+                        <a ng-switch-when="true" editable-number="item.quantity" onaftersave="viewReceiveOrderCtrl.updateContentsProduct({data:item, index:$index})" e-min="0" buttons="no">{{ item.quantity }}</a>
+                        <span ng-switch-default>{{ item.quantity || 0}}</span>
+                    </td>
+                    <td class="text-right">
+                        <a ng-switch-when="true" editable-text="item.total" onaftersave="viewReceiveOrderCtrl.updateContentsProduct({data:item, index:$index})" buttons="no">{{ (item.total || 0) | currency}}</a>
+                        <span ng-switch-default>{{ item.total | currency }}</span>
+                    </td>
+                    <td>
+                        <span ng-switch-when="true">
+                            <a editable-text="item.gtd" buttons="no" onaftersave="viewReceiveOrderCtrl.updateContentsProduct({data:item, index:$index})">{{ item.gtd || 'Пусто'}}</a>
+                            <span>&nbsp; / &nbsp;</span>
+                            <a editable-text="item.country" buttons="no" onaftersave="updateContentsProduct({data:item, index:$index})">{{ item.country || 'Пусто'}}</a>
+                        </span>
+                        <span ng-switch-default ng-if="item.gtd">{{ item.gtd + ' / ' + item.country }}</span>
+                    </td>
+                    <td>
+                        <a href="/admin/#/supplier_orders/{{item.supplier_order.id}}">
+                            {{ item.supplier_order.number }}
+                        </a>
+                    </td>
+                    <td ng-switch-when="true">
+                        <!--form-nav-buttons data-role="visual.roles" class="btn-group" subdata="{data:item, index:$index}" data-options="visual.navTableButts" data-template="table" content-class="btn btn-xs"></form-nav-buttons-->
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-right">Итого:</td>
+                    <td>{{ viewReceiveOrderCtrl.receiveOrder.total | currency }}</td>
+                    <td colspan="2"></td>
+                    <td ng-switch-when="true"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
