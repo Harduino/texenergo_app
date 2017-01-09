@@ -67,14 +67,14 @@ class CustomerOrdersCtrl {
         delete this.newOrderData.partner;
         let self = this;
 
-        this.serverApi.createCustomerOrder(this.newOrderData, result => {
-            if(!result.data.errors) {
-                self.data.ordersList.unshift(result.data);
+        this.serverApi.createCustomerOrder(this.newOrderData, r => {
+            if(!r.data.errors) {
+                self.data.ordersList.unshift(r.data);
                 self.funcFactory.showNotification('Заказ успешно добавлен', '', true);
                 self.clearCreateOrder();
-                self.$state.go('app.customer_orders.view', {id: result.data.id});
+                self.$state.go('app.customer_orders.view', {id: r.data.id});
             } else {
-                self.funcFactory.showNotification('Не удалось создать заказ', result.data.errors);
+                self.funcFactory.showNotification('Не удалось создать заказ', r.data.errors);
             }
         });
     }

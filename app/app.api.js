@@ -186,6 +186,9 @@
         o.deletePdfCatalogue = function(id, success, fail){
             $http.delete('/pdf_catalogues/' + id).then(success, fail);
         };
+        o.deletePdfCatalogueProduct = function (pdf_catalogue_id, product_id, success, fail) {
+            $http.delete('/pdf_catalogues/' + pdf_catalogue_id + '/products/' + product_id).then(success, fail);
+        }
 
         // Входящие платежи
         o.getIncomingTransfers = function(page, query, config, success, fail){

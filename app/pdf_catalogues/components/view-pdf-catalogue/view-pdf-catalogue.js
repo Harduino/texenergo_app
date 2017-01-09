@@ -47,13 +47,36 @@ class ViewPdfCatalogueCtrl {
 
         self.serverApi.updatePdfCatalogue(pdfCatalogue.id, data, r => {
             if(r.status == 200 && !r.data.errors){
-                self.funcFactory.showNotification('Успешно', 'Каталог ' + pdfCatalogue.name +
-                    ' успешно отредактирован.', true);
+                self.funcFactory.showNotification(
+                    'Успешно',
+                    'Каталог ' + pdfCatalogue.name + ' успешно отредактирован.',
+                    true
+                );
             } else {
-                self.funcFactory.showNotification('Неудача', 'Не удалось отредактировать каталог ' + pdfCatalogue.name,
-                    true);
+                self.funcFactory.showNotification(
+                    'Неудача',
+                    'Не удалось отредактировать каталог ' + pdfCatalogue.name,
+                    true
+                );
             }
         });
+    }
+
+    removeProduct(product) {
+        let self = this;
+        let pdfCatalogue = this.pdfCatalogue;
+
+        self.serverApi.deletePdfCatalogueProduct(pdfCatalogue.id, product.id, r => {
+            if(r.status == 200 && !r.data.errors) {
+                self.funcFactory.showNotification('Успешно', 'Товар удалён', true);
+                for (var i = 0; i < pdfCatalogue.products.length; i++) {
+                    let prd = pdfCatalogue.products[i];
+                    if (prd.id === product.id) pdfCatalogue.products.splice(i, 1);
+                }
+            } else {
+                self.funcFactory.showNotification('Неудача', 'Товар не удалён', false);
+            }
+        })
     }
 };
 

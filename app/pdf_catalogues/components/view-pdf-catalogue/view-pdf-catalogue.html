@@ -23,7 +23,7 @@
             <div class="col-md-9" ng-switch-when="true">
                 <pre class="full-editable-area"><a editable-textarea="viewPdfCatalogueCtrl.pdfCatalogue.description" onaftersave="viewPdfCatalogueCtrl.savePdfCatalogue()">{{ viewPdfCatalogueCtrl.pdfCatalogue.description || 'Нет' }}</a></pre>
             </div>
-            <p ng-switch-default class="col-md-9">{{viewPdfCatalogueCtrl.pdfCatalogue.description || 'Нет описания'}}</p>
+            <p ng-switch-default class="col-md-9">{{ viewPdfCatalogueCtrl.pdfCatalogue.description || 'Нет описания' }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">
@@ -32,13 +32,13 @@
             <div class="col-md-9" ng-switch-when="true">
                 <a ng-hide="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.x_editable_show" class="editable-click"
                    ng-click="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.x_editable_show=true;">
-                    {{viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.name || 'Нет'}}
+                    {{ iewPdfCatalogueCtrl.pdfCatalogue.manufacturer.name || 'Нет' }}
                 </a>
                 <div ng-if="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.x_editable_show">
                     <ui-select ui-select-infinity="viewPdfCatalogueCtrl.manufacturerSelectConfig" theme="select2"
                                ng-model="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer" style="width: 50%;" ng-disabled="disabled"
                                on-select="viewPdfCatalogueCtrl.savePdfCatalogue()">
-                        <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
+                        <ui-select-match placeholder="Партнер не выбран">{{ $select.selected.name }}</ui-select-match>
                         <ui-select-choices repeat="manufacturer in viewPdfCatalogueCtrl.data.manufacturersList|filter:$select.search">
                             <div ng-bind-html="manufacturer.name | highlight: $select.search"></div>
                         </ui-select-choices>
@@ -74,15 +74,21 @@
                     <th class="hidden-xs"></th>
                     <th>Номенкалутра</th>
                     <th class="hidden-xs">Артикул</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat='item in viewPdfCatalogueCtrl.pdfCatalogue.products'>
+                <tr ng-repeat='product in viewPdfCatalogueCtrl.pdfCatalogue.products'>
                     <td class="hidden-xs">{{ $index + 1 }}</td>
                     <td>
-                        <a ng-href="/#/products/{{ item.id }}">{{ item.name }}</a>
+                        <a ng-href="/#/products/{{ product.id }}">{{ product.name }}</a>
                     </td>
-                    <td class="hidden-xs">{{ item.article}}</td>
+                    <td class="hidden-xs">{{ product.article }}</td>
+                    <td class="center">
+                        <div ng-disabled="product.can_destroy" ng-click="viewPdfCatalogueCtrl.removeProduct(product)" class="ng-scope btn btn-xs btn-danger">
+                            <i class="fa fa-trash-o"></i>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>

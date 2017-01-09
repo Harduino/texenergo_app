@@ -6,15 +6,15 @@
     var module = angular.module('app.layout');
 
     module.service('funcFactory', function(){
-       this.showNotification = function(title, content, succes){
-           var c = !succes && typeof content === 'object' ? Object.keys(content).map(function(item){
+       this.showNotification = function(title, content, success){
+           var c = !success && typeof content === 'object' ? Object.keys(content).map(function(item){
                return item + ' ' + content[item];
            }).join('\n') : content;
            $.smallBox({
                title: title,
                iconSmall: "fa fa-check fa-2x fadeInRight animated",
                content: '<i class="fa fa-edit"></i> <i>' + c + '</i>',
-               color: succes ? '#739E73' : '#C46A69',
+               color: success ? '#739E73' : '#C46A69',
                timeout: 4000
            })
        };
