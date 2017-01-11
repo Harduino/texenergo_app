@@ -1,9 +1,8 @@
-(function(){
-
-    "use strict";
-
-    angular.module('app.receive_orders').controller('LogsReceiveOrderCtrl', ['$state', '$stateParams', 'serverApi', 'funcFactory', function($state, $stateParams, serverApi, funcFactory){
-        var self = this;
+class LogsReceiveOrderCtrl {
+    constructor($state, $stateParams, serverApi, funcFactory){
+        let self = this;
+        this.funcFactory = funcFactory;
+        this.serverApi = serverApi;
         this.logs = {};
 
         this.visual = {
@@ -26,10 +25,10 @@
             }
         };
 
-        serverApi.getReceiveOrderLogs($stateParams.id, function(result){
-            self.logs = result.data;
-            
-        });
+        serverApi.getReceiveOrderLogs($stateParams.id, result => self.logs = result.data);
 
-    }]);
-}());
+    };
+};
+
+LogsReceiveOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
+angular.module('app.receive_orders').controller('LogsReceiveOrderCtrl', LogsReceiveOrderCtrl);
