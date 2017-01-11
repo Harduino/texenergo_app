@@ -68,6 +68,9 @@
         </div>
     </div>
     <div class="well well-white">
+        <div>
+            <input class="form-control" ng-model="viewPdfCatalogueCtrl.addableQuery" placeholder="Поисковый запрс" type="text" ng-change="viewPdfCatalogueCtrl.addableSearch()">
+        </div>
         <table class="table table-hover table-bordered">
             <thead>
                 <tr>
@@ -78,6 +81,16 @@
                 </tr>
             </thead>
             <tbody>
+                <tr ng-repeat='product in viewPdfCatalogueCtrl.addableProductsList'>
+                    <td class="hidden-xs"></td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.article }}</td>
+                    <td class="center">
+                        <div ng-click="viewPdfCatalogueCtrl.addProduct(product)" class="ng-scope btn btn-xs btn-danger">
+                            <i class="fa fa-plus">
+                        </div>
+                    </td>
+                </tr>
                 <tr ng-repeat='product in viewPdfCatalogueCtrl.pdfCatalogue.products'>
                     <td class="hidden-xs">{{ $index + 1 }}</td>
                     <td>

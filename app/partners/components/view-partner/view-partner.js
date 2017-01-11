@@ -14,7 +14,7 @@ class ViewPartnerCtrl {
                 {type: 'logs', callback: () => $state.go('app.partners.view.logs', {})},
                 {
                     type: 'refresh',
-                    callback: () => serverApi.getPartnerDetails($stateParams.id, res => self.partner = res.data)
+                    callback: () => loadPartner()
                 }
             ],
             chartOptions: {
@@ -28,11 +28,18 @@ class ViewPartnerCtrl {
             roles: {can_edit: self.partner.can_edit}
         };
 
-        serverApi.getPartnerDetails($stateParams.id, result => {
-            self.partner = result.data;
-            serverApi.getCustomerOrders(1, '-' + self.partner.prefix + '-', {}, res => self.partner.customerOrders = res.data);
-            serverApi.getDispatchOrders(1, '-' + self.partner.prefix + '-', {}, res => self.partner.dispatchOrders = res.data);
-        });
+        var loadResources = () => {
+            serverApi.getCustomerOrders(1, '-' + self.partner.prefix + '-', {}, r => self.partner.customerOrders = r.data);
+            serverApi.getDispatchOrders(1, '-' + self.partner.prefix + '-', {}, r => self.partner.dispatchOrders = r.data);
+        }
+
+        var loadPartner = () => {
+            serverApi.getPartnerDetails($stateParams.id, r => {
+                self.partner = r.data;
+                loadResources();
+            });
+        }
+        loadPartner();
     }
 
     canCreatePerson () {

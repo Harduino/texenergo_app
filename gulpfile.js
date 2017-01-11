@@ -141,6 +141,7 @@ gulp.task('watch', function() {
         'app/layout/filters/filters.js',
         'assets/widgets/directives/*.js',
         'app/*/controllers/*.js',
+        'app/*/components/*/*.js',
         'app/*/directives/*.js',
         'app/app.api.js',
         'app/app.js',
