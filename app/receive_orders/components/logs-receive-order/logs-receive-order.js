@@ -27,8 +27,12 @@ class LogsReceiveOrderCtrl {
 
         serverApi.getReceiveOrderLogs($stateParams.id, result => self.logs = result.data);
 
-    };
-};
+    }
+}
 
 LogsReceiveOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
-angular.module('app.receive_orders').controller('LogsReceiveOrderCtrl', LogsReceiveOrderCtrl);
+angular.module('app.receive_orders').component('logsReceiveOrder', {
+    controller: LogsReceiveOrderCtrl,
+    controllerAs: 'logsReceiveOrderCtrl',
+    templateUrl: '/app/receive_orders/components/logs-receive-order/logs-receive-order.html'
+});
