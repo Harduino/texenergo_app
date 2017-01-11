@@ -2,13 +2,20 @@
 
     "use strict";
 
-    angular.module('app.receive_orders').controller('LogsReceiveOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', function($scope, $state, $stateParams, serverApi, funcFactory){
-        var sc = $scope;
-        sc.logs = {};
-        sc.visual = {
+    angular.module('app.receive_orders').controller('LogsReceiveOrderCtrl', ['$state', '$stateParams', 'serverApi', 'funcFactory', function($state, $stateParams, serverApi, funcFactory){
+        var self = this;
+        this.logs = {};
+
+        this.visual = {
             navButtsOptions:[
-                { type: 'back', callback: returnBack },
-                { type: 'show', callback: goToShow }
+                {
+                    type: 'back',
+                    callback: () => $state.go('app.receive_orders', {})
+                },
+                {
+                    type: 'show',
+                    callback: () => $state.go('app.receive_orders.view', $stateParams)
+                }
             ],
             chartOptions: {
                 barColor:'rgb(103,135,155)',
@@ -20,16 +27,9 @@
         };
 
         serverApi.getReceiveOrderLogs($stateParams.id, function(result){
-            var logs = sc.logs = result.data;
+            self.logs = result.data;
+            
         });
 
-        function goToShow(){
-            $state.go('app.receive_orders.view', $stateParams);
-        }
-        
-        function returnBack(){
-            $state.go('app.receive_orders',{});
-        }
-        
     }]);
 }());

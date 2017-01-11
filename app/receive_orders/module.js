@@ -41,6 +41,7 @@ angular.module('app.receive_orders', ['ui.router']).config($stateProvider => {
         views:{
             "content@app":{
                 controller: 'LogsReceiveOrderCtrl',
+                controllerAs: 'logsReceiveOrderCtrl',
                 templateUrl: '/app/receive_orders/views/logsReceiveOrder.html'
             }
         }
