@@ -64,15 +64,16 @@ class ViewPartnerCtrl {
             }
         };
 
-        debugger;
-
         this.serverApi.updatePartner(partner.id, data, result => {
             if((result.status == 200) && !result.data.errors){
-                self.funcFactory.showNotification('Успешно', 'Категория ' + partner.name + ' успешно отредактирована.',
+                self.funcFactory.showNotification('Успешно', 'Партнёр ' + partner.name + ' успешно отредактирован.',
                     true);
             } else {
-                self.funcFactory.showNotification('Неудача', 'Не удалось отредактировать категорию ' + partner.name,
-                    true);
+                let msg = "";
+                for (var i = 0; i < result.data.errors.name.length; i++) {
+                    msg += (result.data.errors.name[i] + " ");
+                }
+                self.funcFactory.showNotification('Неудача', msg, false);
             }
         });
     }
