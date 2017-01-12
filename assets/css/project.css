@@ -920,3 +920,6 @@ td .editable-controls>input[type="number"]{
     word-break: normal;
     font-size: 13px;
 }
+.modal-backdrop {
+  z-index: 0;
+}
