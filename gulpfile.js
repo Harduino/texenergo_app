@@ -12,7 +12,8 @@ var gulp = require('gulp'),
 
 gulp.task('styles', function() {
     var files = [
-        'assets/css/bootstrap.css',
+        // 'assets/css/bootstrap.css',
+        'bower_components/bootstrap/dist/css/bootstrap.css',
         'assets/css/font-awesome.css',
         'assets/css/smartadmin-production-plugins.css',
         'assets/css/smartadmin-production.css',
