@@ -44,8 +44,34 @@
                                 </div>
                                 <div>
                                     <b>Производитель:</b>
-                                    <span ng-if="!viewProductCtrl.product.can_edit">{{ viewProductCtrl.product.manufacturer.name }}</span>
-                                    <a ng-if="viewProductCtrl.product.can_edit" class="editable-click" ng-click="viewProductCtrl.changeManufacturer()">{{viewProductCtrl.product.manufacturer.name}}</a>
+                                    <span ng-if="viewProductCtrl.product.can_edit">
+                                        <a ng-hide="viewProductCtrl.product.manufacturer.x_editable_show" class="editable-click"
+                                           ng-click="viewProductCtrl.product.manufacturer.x_editable_show=true;">
+                                            {{viewProductCtrl.product.manufacturer.name || 'Нет'}}
+                                        </a>
+                                        <div ng-if="viewProductCtrl.product.manufacturer.x_editable_show">
+                                            <ui-select ui-select-infinity="viewProductCtrl.manufacturerSelectConfig" theme="select2"
+                                                       ng-model="viewProductCtrl.product.manufacturer" style="width: 50%;" ng-disabled="disabled"
+                                                       on-select="viewProductCtrl.saveProduct()">
+                                                <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
+                                                <ui-select-choices repeat="partner in viewProductCtrl.partnersList|filter:$select.search">
+                                                    <div ng-bind-html="partner.name | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <button type="button" ng-click="viewProductCtrl.product.manufacturer.x_editable_show=false;"
+                                                    class="btn btn-default">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                            <button ng-click="viewProductCtrl.goToManufacturer()" type="button" class="btn btn-default">
+                                                <span class="fa fa-eye"></span>
+                                            </button>
+                                        </div>
+                                    </span>
+                                    <span ng-if="!viewProductCtrl.product.can_edit">
+                                        <a ng-href="/#/partners/{{viewProductCtrl.product.manufacturer.id }}">
+                                            {{viewProductCtrl.product.manufacturer.name}}
+                                        </a>
+                                    </span>
                                 </div>
                                 <div>
                                     <b>

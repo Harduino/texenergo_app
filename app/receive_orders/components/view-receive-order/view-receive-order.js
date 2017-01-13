@@ -16,7 +16,6 @@ class ViewReceiveOrderCtrl {
                 {
                     type: 'refresh',
                     callback: () => serverApi.getReceiveOrderDetails($stateParams.id, r => self.receiveOrder = r.data)
-
                 }
             ],
             chartOptions: {

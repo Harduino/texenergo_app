@@ -5,6 +5,11 @@ class ViewProductCtrl {
         this.serverApi = serverApi;
         this.funcFactory = funcFactory;
         this.uibModal = $uibModal;
+        this.state = $state;
+
+        this.partnersList = [];
+        this.manufacturerSelectConfig = {dataMethod: serverApi.getManufacturers};
+
         this.visual = {
             navButtsOptions:[
                 {
@@ -73,11 +78,8 @@ class ViewProductCtrl {
         }
     };
 
-    /**
-     * Обновляем информацию по товару
-     */
     saveProduct() {
-        var product = self.product;
+        var product = this.product;
         var data = {
             product:{
                 name: product.name,
@@ -96,20 +98,9 @@ class ViewProductCtrl {
         });
     };
 
-    changeManufacturer() {
-        this.uibModal.open({
-            component: 'productManufacturerModal',
-            template: '<product-manufacturer-modal></product-manufacturer-modal>',
-            windowClass: 'eqo-centred-modal',
-            resolve: {
-                product: this.product.manufacturer,
-                config: {}
-            }
-        }).result.then( selected => {
-            self.product.manufacturer = selected;
-            self.saveProduct();
-        });
-    };
+    goToManufacturer() {
+        this.state.go('app.manufacturers.view', {id: this.product.manufacturer.id});
+    }
 
     changeCatalogues() {
         var modalInstance = $uibModal.open({
