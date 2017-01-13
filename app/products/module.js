@@ -22,9 +22,7 @@
             },
             views:{
                 "content@app":{
-                    controller: 'ProductCtrl',
-                    controllerAs: 'viewProductCtrl',
-                    templateUrl: '/app/products/views/show_product.html'
+                    template: '<view-product></view-product>'
                 }
             }
         }).state('app.product.logs', {

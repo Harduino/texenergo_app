@@ -1,0 +1,15 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{ productManufacturerModalCtrl.resolve.config.title }}</h3>
+</div>
+<div class="modal-body">
+    <ui-select  ui-select-infinity="productManufacturerModalCtrl.mSelectConfig" ng-model="productManufacturerModalCtrl.data.manufacturer" theme="select2" class="td-ui-select">
+        <ui-select-match placeholder="Производитель не выбран">{{$select.selected.name}}</ui-select-match>
+        <ui-select-choices repeat="m in productManufacturerModalCtrl.data.manufacturers | filter:$select.search">
+            <div ng-bind-html="m.name | highlight: $select.search"></div>
+        </ui-select-choices>
+    </ui-select>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-danger" type="button" ng-click="productManufacturerModalCtrl.cancel()">Отмена</button>
+    <button class="btn btn-primary" type="button" ng-click="productManufacturerModalCtrl.ok()">Выбрать</button>
+</div>

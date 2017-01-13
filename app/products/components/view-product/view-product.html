@@ -77,7 +77,7 @@
                                 <div ng-show="viewProductCtrl.product.manufacturer.name === 'Schneider Electric'" class="margin-top-10">
                                     <div class="form-group string optional product_lead_time">
                                         <label class="control-label input-group-addon">Срок поставки (единиц товара)</label>
-                                        <input class="form-control" ng-model="viewProductCtrl.data.quantity" model-filter="{min:0}" filter-name="te_number" placeholder="Количество товара" type="text" ng-keypress="viewProductCtrl.getLeadTime(viewProductCtrl.product.id, data.quantity, $event)">
+                                        <input class="form-control" ng-model="viewProductCtrl.data.quantity" model-filter="{min:0}" filter-name="te_number" placeholder="Количество товара" type="text" ng-keypress="viewProductCtrl.getLeadTime(viewProductCtrl.product.id, viewProductCtrl.data.quantity, $event)">
                                     </div>
                                 </div>
                             </div>
@@ -313,23 +313,6 @@
         </section>
     </div>
 </div>
-<script type="text/ng-template" id="spChangeManufacturerModal.tmpl.html">
-    <div class="modal-header">
-        <h3 class="modal-title">Выберите производителя</h3>
-    </div>
-    <div class="modal-body">
-        <ui-select  ui-select-infinity="mSelectConfig" ng-model="viewProductCtrl.data.manufacturer" theme="select2" class="td-ui-select">
-            <ui-select-match placeholder="Производитель не выбран">{{$select.selected.name}}</ui-select-match>
-            <ui-select-choices repeat="m in viewProductCtrl.data.manufacturers | filter:$select.search">
-                <div ng-bind-html="m.name | highlight: $select.search"></div>
-            </ui-select-choices>
-        </ui-select>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-danger" type="button" ng-click="cancel()">Отмена</button>
-        <button class="btn btn-primary" type="button" ng-click="ok()">Выбрать</button>
-    </div>
-</script>
 <script type="text/ng-template" id="spChangeCataloguesModal.tmpl.html">
     <div class="modal-header">
         <h3 class="modal-title">Добавить категории</h3>
