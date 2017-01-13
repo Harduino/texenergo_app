@@ -165,24 +165,6 @@ angular.module('app.products').component('viewProduct', {
     templateUrl: 'app/products/components/view-product/view-product.html'
 });
 
-// class ProductCatalogueModalCtrl {
-//     constructor(serverApi, $uibModalInstance, data){
-//         let self = this;
-//         this.data = {
-//             selected: data.catalogues,
-//             catalogues: []
-//         };
-//         this.cselectConfig = {
-//             dataMethod: serverApi.getCatalogues
-//         };
-//         this.ok = () => $uibModalInstance.close(self.data.selected);
-//         this.cancel = () => $uibModalInstance.dismiss('cancel');
-//     }
-// }
-
-// ProductCatalogueModalCtrl.$inject = ['serverApi', '$uibModalInstance', 'data'];
-// angular.module('app.product').controller('productCatalogueModalCtrl', ProductCatalogueModalCtrl);
-
 // class SpChangeReplacementProductModalCtrl{
 //     constructor(serverApi, $uibModalInstance, product){
 //         let self = this;
