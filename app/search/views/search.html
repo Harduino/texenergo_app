@@ -2,23 +2,6 @@
     <div class="row">
         <big-breadcrumbs items="['Поиск']" data-icon="search" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
     </div>
-    <div class="well" ng-if="data.subSearch.human_name">
-        <h1>Кажется вы искали "{{data.subSearch.human_name}}"</h1>
-        <div ng-repeat="prop in data.subSearch.properties">
-            <h4 class="margin-bottom-10 margin-top-10">{{prop.human_name}}</h4>
-            <div ng-if="prop.max !== undefined && prop.min !== undefined">
-                <input data-smart-ionslider="prop.uiElement" un-watch>
-            </div>
-            <div ng-if="prop.options">
-                <select ng-model="prop.val" ng-options="o for o in prop.options">
-                    <option value="" selected>-- Выберите опцию --</option>
-                </select>
-            </div>
-        </div>
-        <div class="btn-group full-width padding-top-15">
-            <button ng-if="data.subSearch.properties.length>0" class="btn btn-success right" ng-click="searchByFunctor()">Искать</button>
-        </div>
-    </div>
     <div class="well">
         <h1>Результаты поиска "{{data.searchText}}"</h1>
         <table class="table table-bordered" infinite-scroll infinite-scroll-disabled="false" te-lazy-helper data-list="data.searchList" data-search-query="data.searchText" data-server-api-method="searchProduct" data-start-page="0">

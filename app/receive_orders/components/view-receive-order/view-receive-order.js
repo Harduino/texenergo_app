@@ -93,13 +93,17 @@ class ViewReceiveOrderCtrl {
 
         this.goToPartner = () => $state.go('app.partners.view', {id: (this.receiveOrder.partner.id || this.receiveOrder.partner._id)});
 
-        var deleteContentsProduct = item => {
-            var data = item.data;
-            serverApi.deleteReceiveOrderContents(this.receiveOrder.id, data.id, result => {
-                if(!result.data.errors){
-                    funcFactory.showNotification('Успешно', 'Продукт ' + data.product.name + ' успешно удален', true);
-                    this.receiveOrder.product_order_contents.splice(item.index, 1);
-                }else funcFactory.showNotification('Не удалось удалить продукт ' + data.product.name, result.data.errors);
+        this.deleteProduct = item => {
+            serverApi.deleteReceiveOrderContents(this.receiveOrder.id, item.id, result => {
+                if(!result.data.errors) {
+                    funcFactory.showNotification('Успешно', 'Продукт ' + item.product.name + ' успешно удален', true);
+                    for (var i = 0; i < this.receiveOrder.product_order_contents.length; i++) {
+                        var c = this.receiveOrder.product_order_contents[i];
+                        if(c.id === item.id) this.receiveOrder.product_order_contents.splice(i, 1);
+                    }
+                } else {
+                    funcFactory.showNotification('Не удалось удалить продукт ' + item.product.name, result.data.errors);
+                }
             });
         }
         

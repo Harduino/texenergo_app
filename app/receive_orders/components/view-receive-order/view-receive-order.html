@@ -55,36 +55,36 @@
                 </tr>
             </thead>
             <tbody>
-            <tr ng-switch-when="true">
-                <td></td>
-                <td>
-                    <ui-select id="vro_prod_select"  ui-select-infinity="viewReceiveOrderCtrl.productSelectConf" ng-model="viewReceiveOrderCtrl.data.productForAppend" theme="select2" class="td-ui-select" style="max-width: 310px;" on-select="onSelectProduct($item)">
-                        <ui-select-match>{{$select.selected.product.name}}</ui-select-match>
-                        <ui-select-choices repeat="order in viewReceiveOrderCtrl.ordersList">
-                            <div ng-bind-html="order.product.name | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
-                </td>
-                <td>
-                    <input class="form-control table-input" ng-model="viewReceiveOrderCtrl.data.productForAppend.quantity" model-filter="{min:0}" filter-name="te_number" type="text" ng-keypress="viewReceiveOrderCtrl.appendOrder($event)">
-                </td>
-                <td>
-                    <input class="form-control table-input" ng-model="viewReceiveOrderCtrl.data.productForAppend.total" model-filter="{min:0, number:true}" filter-name="te_number" type="text" ng-keypress="viewReceiveOrderCtrl.appendOrder($event)">
-                </td>
-                <td>
-                    <div class="display-flex" style="align-items: center;">
-                        <input class="form-control table-input" ng-model="viewReceiveOrderCtrl.data.productForAppend.gtd" type="text" placeholder="ГТД" ng-keypress="viewReceiveOrderCtrl.appendOrder($event)">
-                        &nbsp;/&nbsp;
-                        <input class="form-control table-input" ng-model="viewReceiveOrderCtrl.data.productForAppend.country" type="text" placeholder="Страна" ng-keypress="viewReceiveOrderCtrl.appendOrder($event)">
-                    </div>
-                </td>
-                <td>{{viewReceiveOrderCtrl.data.productForAppend.supplier_order.number || 'не указан'}}</td>
-                <td class="center-item-text" ng-switch-when="true">
-                    <div ng-click="viewReceiveOrderCtrl.appendOrder()" class="btn btn-success">
-                        <i class="fa fa-plus"></i>
-                    </div>
-                </td>
-            </tr>
+                <tr ng-switch-when="true">
+                    <td></td>
+                    <td>
+                        <ui-select id="vro_prod_select"  ui-select-infinity="viewReceiveOrderCtrl.productSelectConf" ng-model="viewReceiveOrderCtrl.data.productForAppend" theme="select2" class="td-ui-select" style="max-width: 310px;" on-select="onSelectProduct($item)">
+                            <ui-select-match>{{$select.selected.product.name}}</ui-select-match>
+                            <ui-select-choices repeat="order in viewReceiveOrderCtrl.ordersList">
+                                <div ng-bind-html="order.product.name | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </td>
+                    <td>
+                        <input class="form-control table-input" ng-model="viewReceiveOrderCtrl.data.productForAppend.quantity" model-filter="{min:0}" filter-name="te_number" type="text" ng-keypress="viewReceiveOrderCtrl.appendOrder($event)">
+                    </td>
+                    <td>
+                        <input class="form-control table-input" ng-model="viewReceiveOrderCtrl.data.productForAppend.total" model-filter="{min:0, number:true}" filter-name="te_number" type="text" ng-keypress="viewReceiveOrderCtrl.appendOrder($event)">
+                    </td>
+                    <td>
+                        <div class="display-flex" style="align-items: center;">
+                            <input class="form-control table-input" ng-model="viewReceiveOrderCtrl.data.productForAppend.gtd" type="text" placeholder="ГТД" ng-keypress="viewReceiveOrderCtrl.appendOrder($event)">
+                            &nbsp;/&nbsp;
+                            <input class="form-control table-input" ng-model="viewReceiveOrderCtrl.data.productForAppend.country" type="text" placeholder="Страна" ng-keypress="viewReceiveOrderCtrl.appendOrder($event)">
+                        </div>
+                    </td>
+                    <td>{{viewReceiveOrderCtrl.data.productForAppend.supplier_order.number || 'не указан'}}</td>
+                    <td class="center-item-text">
+                        <div ng-click="viewReceiveOrderCtrl.appendOrder()" class="btn btn-success">
+                            <i class="fa fa-plus"></i>
+                        </div>
+                    </td>
+                </tr>
                 <tr ng-repeat="item in viewReceiveOrderCtrl.receiveOrder.product_order_contents">
                     <td>{{ $index + 1 }}</td>
                     <td>
@@ -93,7 +93,9 @@
                         </a>
                     </td>
                     <td>
-                        <a ng-switch-when="true" editable-number="item.quantity" onaftersave="viewReceiveOrderCtrl.updateContentsProduct({data:item, index:$index})" e-min="0" buttons="no">{{ item.quantity }}</a>
+                        <a ng-switch-when="true" editable-number="item.quantity" onaftersave="viewReceiveOrderCtrl.updateContentsProduct({data:item, index:$index})" e-min="0" buttons="no">
+                            {{ item.quantity }}
+                        </a>
                         <span ng-switch-default>{{ item.quantity || 0}}</span>
                     </td>
                     <td class="text-right">
@@ -109,12 +111,14 @@
                         <span ng-switch-default ng-if="item.gtd">{{ item.gtd + ' / ' + item.country }}</span>
                     </td>
                     <td>
-                        <a href="/admin/#/supplier_orders/{{item.supplier_order.id}}">
+                        <a href="/#/supplier_orders/{{item.supplier_order.id}}">
                             {{ item.supplier_order.number }}
                         </a>
                     </td>
                     <td ng-switch-when="true">
-                        <!--form-nav-buttons data-role="visual.roles" class="btn-group" subdata="{data:item, index:$index}" data-options="visual.navTableButts" data-template="table" content-class="btn btn-xs"></form-nav-buttons-->
+                        <div ng-click="viewReceiveOrderCtrl.deleteProduct(item)" class="btn btn-danger">
+                            <i class="fa fa-trash-o"></i>
+                        </div>
                     </td>
                 </tr>
                 <tr>
