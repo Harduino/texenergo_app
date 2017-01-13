@@ -6,31 +6,32 @@
 
     'use strict';
 
-    angular.module('app.products').controller('ProductCtrl', ['$scope', '$stateParams', 'serverApi', '$state', 'funcFactory', '$uibModal', 'CanCan', 'FileUploader', '$localStorage', function($scope, $stateParams, serverApi, $state, funcFactory, $uibModal, CanCan, FileUploader, $localStorage){
-        var sc = $scope;
-
-        sc.visual = {
+    angular.module('app.products').controller('ProductCtrl', ['$stateParams', 'serverApi', '$state', 'funcFactory', '$uibModal', 'FileUploader', '$localStorage', function($stateParams, serverApi, $state, funcFactory, $uibModal, FileUploader, $localStorage){
+        var self = this;
+        this.product = {};
+        this.serverApi = serverApi;
+        this.visual = {
             navButtsOptions:[
-                { type: 'edit', callback: goToEdit },
-                { type: 'logs', callback: goToPartnerLogs },
+                {
+                    type: 'logs',
+                    callback: () => $state.go('app.product.logs', {})
+                },
                 { type: 'add', callback: appendProductToCustomerOrder }
-            ],
-            roles: {can_edit: CanCan.can('edit', 'Product')}
+            ]
         };
 
-        sc.tinymceOptions = funcFactory.getTinymceOptions();
+        this.tinymceOptions = funcFactory.getTinymceOptions();
 
-        sc.product = {};// данные продукта
-        sc.data = {
+        this.data = {
             quantity:0
         };
 
-        sc.uploader = new FileUploader({
+        this.uploader = new FileUploader({
             queueLimit: 1,
             onCompleteItem: function(fileItem, response, status, headers) {
                 if(status===200){
-                    sc.product.image_url = response.image_url;
-                    sc.uploader.clearQueue();
+                    self.product.image_url = response.image_url;
+                    self.uploader.clearQueue();
                     funcFactory.showNotification("Успешно", 'Изменил картинку.',true);
                 } else {
                     funcFactory.showNotification('Не удалось изменить картинку', result.data.errors);
@@ -38,18 +39,20 @@
             }
         });
 
-        //получаем информацию о продукте при загрузке контроллера $stateParams.id - id продукта
-        serverApi.getProduct($stateParams.id, function(result){
-            sc.product = result.data;
-            setFileUploadOptions(result.data);
-        });
-
         function setFileUploadOptions(product){
-            sc.uploader.url = window.APP_ENV.REMOTE_API_HTTP_BASE_URL + '/products/' + product.id + '/image?token=' +
-                $localStorage.id_token;
+            self.uploader.url = 'https://v2.texenergo.com/api/products/' + product.id + '/image?token=' +
+            $localStorage.id_token;
         }
 
-        sc.getLeadTime = function(id, quantity, event){
+        //получаем информацию о продукте при загрузке контроллера $stateParams.id - id продукта
+        serverApi.getProduct($stateParams.id, r => {
+            self.product = r.data;
+            setFileUploadOptions(r.data);
+        });
+
+        
+
+        this.getLeadTime = function(id, quantity, event){
             if(event.keyCode == 13){
                 serverApi.getLeadTime(id, quantity, function(result){
                     var info = result.data.lead_time_info;
@@ -81,34 +84,20 @@
             });
         }
 
-        function goToEdit(){
-            $state.go('app.product.edit', $stateParams);
-        }
-
-        function goToPartnerLogs(){
-            $state.go('app.product.partner_logs', $stateParams);
-        }
-
         /**
          * Обновляем информацию по товару
          */
-        sc.saveProduct = function(){
-            var product = sc.product;
+        this.saveProduct = () => {
+            var product = self.product;
             var data = {
-                    product:{
-                        name: product.name,
-                        description: product.description,
-                        article: product.article,
-                        manufacturer_id: product.manufacturer.id,
-                        catalogue_ids: (product.catalogues || []).map(function(item){
-                             return item.id;
-                        })//,
-                        // type: product.type.selected,
-                        // unit: product.unit.selected,
-                        // vat_rate: product.vat_rate.selected,
-                        // weight: product.weight
-                    }
-                };
+                product:{
+                    name: product.name,
+                    description: product.description,
+                    article: product.article,
+                    manufacturer_id: product.manufacturer.id,
+                    catalogue_ids: (product.catalogues || []).map( item => return item.id );
+                }
+            };
             serverApi.updateProduct(product.id, data, function(result){
                 if(!result.data.errors){
                     funcFactory.showNotification("Успешно", 'Товар '+product.name+' успешно отредактирована.',true);
@@ -118,41 +107,41 @@
             });
         };
 
-        sc.changeManufacturer = function(){
+        this.changeManufacturer = function(){
             var modalInstance = $uibModal.open({
                 templateUrl: 'spChangeManufacturerModal.tmpl.html',
                 controller: 'productManufacturerModalCtrl',
                 windowClass: 'eqo-centred-modal',
                 resolve: {
-                    product: sc.product.manufacturer
+                    product: self.product.manufacturer
                 }
             });
 
             modalInstance.result.then(function (selected) {
-                sc.product.manufacturer = selected;
-                sc.saveProduct();
+                self.product.manufacturer = selected;
+                self.saveProduct();
             });
         };
 
-        sc.changeCatalogues = function(){
+        this.changeCatalogues = function(){
             var modalInstance = $uibModal.open({
                 templateUrl: 'spChangeCataloguesModal.tmpl.html',
                 controller: 'productCatalogueModalCtrl',
                 windowClass: 'eqo-centred-modal',
                 resolve: {
-                    data: { catalogues: sc.product.catalogues}
+                    data: { catalogues: self.product.catalogues}
                 }
             });
 
             modalInstance.result.then(function (selected) {
-                sc.product.catalogues = selected;
-                sc.saveProduct();
+                self.product.catalogues = selected;
+                self.saveProduct();
             });
         };
 
         // Persists a product obsolete by sending request to server
-        sc.makeObsolete = function(enable, r_id){
-            var product = sc.product;
+        this.makeObsolete = function(enable, r_id){
+            var product = self.product;
             var data = {
                     product:{
                         obsolete: {
@@ -165,7 +154,7 @@
                 };
             serverApi.updateProduct(product.id, data, function(result){
                 if(!result.data.errors){
-                    sc.product = result.data;
+                    self.product = result.data;
                     funcFactory.showNotification("Успешно", 'Товар '+product.name+' успешно отредактирована.',true);
                 } else {
                     funcFactory.showNotification('Не удалось отредактировать категорию '+product.name, result.data.errors);
@@ -173,65 +162,67 @@
             });
         };
 
-        sc.selectReplacementProduct = function(){
+        this.selectReplacementProduct = function(){
             var modalInstance = $uibModal.open({
                 templateUrl: 'spChangeReplacementProduct.tmpl.html',
                 controller: 'spChangeReplacementProductModalCtrl',
                 windowClass: 'eqo-centred-modal',
                 resolve: {
-                    product : sc.product.obsolete
+                    product : self.product.obsolete
                 }
             });
 
             modalInstance.result.then(function (selectedProduct) {
-                sc.makeObsolete(true, selectedProduct.id);
+                self.makeObsolete(true, selectedProduct.id);
             });
         }
 
-    }]).controller('productManufacturerModalCtrl', ['$scope', 'serverApi', '$uibModalInstance', 'product', function(sc, serverApi, $uibModalInstance, product){
-        sc.data = {
+    }]).controller('productManufacturerModalCtrl', ['serverApi', '$uibModalInstance', 'product', function(serverApi, $uibModalInstance, product){
+        var self = this;
+        this.data = {
             manufacturer: product
         };
-        sc.mSelectConfig = {
+        this.mSelectConfig = {
             dataMethod: serverApi.getManufacturers
         };
-        sc.ok = function () {
-            $uibModalInstance.close(sc.data.manufacturer);
+        this.ok = function () {
+            $uibModalInstance.close(self.data.manufacturer);
         };
-        sc.cancel = function () {
+        this.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
-    }]).controller('productCatalogueModalCtrl', ['$scope', 'serverApi', '$uibModalInstance', 'data', function(sc, serverApi, $uibModalInstance, data){
-        sc.data = {
+    }]).controller('productCatalogueModalCtrl', ['serverApi', '$uibModalInstance', 'data', function(serverApi, $uibModalInstance, data){
+        var self = this;
+        this.data = {
             selected: data.catalogues,
             catalogues: []
         };
-        sc.cselectConfig = {
+        this.cselectConfig = {
             dataMethod: serverApi.getCatalogues
         };
-        sc.ok = function () {
-            $uibModalInstance.close(sc.data.selected);
+        this.ok = function () {
+            $uibModalInstance.close(self.data.selected);
         };
-        sc.cancel = function () {
+        this.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
-    }]).controller("spChangeReplacementProductModalCtrl", ['$scope', '$uibModalInstance', 'serverApi', 'product', function($scope, $uibModalInstance, serverApi, product){
-        var sc = $scope;
+    }]).controller("spChangeReplacementProductModalCtrl", ['$uibModalInstance', 'serverApi', 'product', function($uibModalInstance, serverApi, product){
+        var self = this;
 
-        sc.pSelectConfig = {
+        this.pSelectConfig = {
             startPage: 0,
             dataMethod: serverApi.getSearch
         };
-        sc.data = {
+        this.data = {
             selectedProduct: product,
             productsList: []
         };
 
-        sc.ok = function () {
-            $uibModalInstance.close(sc.data.selectedProduct);
+        this.ok = function () {
+            $uibModalInstance.close(self.data.selectedProduct);
         };
 
-        sc.cancel = function () {
+        this.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
     }]);

@@ -23,10 +23,11 @@
             views:{
                 "content@app":{
                     controller: 'ProductCtrl',
+                    controllerAs: 'viewProductCtrl',
                     templateUrl: '/app/products/views/show_product.html'
                 }
             }
-        }).state('app.product.partner_logs', {
+        }).state('app.product.logs', {
             url: '/partner_logs',
             params: {
                 id: ''

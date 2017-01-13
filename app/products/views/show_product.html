@@ -1,4 +1,4 @@
-<div id="content" ng-switch="visual.roles.can_edit">
+<div id="content" ng-switch="viewProductCtrl.viewProductCtrl.product.can_edit">
     <div class="row">
         <big-breadcrumbs items="['Просмотр товара']" data-icon="edit" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
     </div>
@@ -6,22 +6,22 @@
         <div class="row">
             <div class="col-xs-12 col-md-12">
                 <div>
-                    <h2 ng-if="product.can_edit" editable-text="product.name" onaftersave="saveProduct()" class="txt-color-blueDark semi-bold prod-review-title display-inline">
-                        {{ product.name }}
+                    <h2 ng-if="viewProductCtrl.product.can_edit" editable-text="viewProductCtrl.product.name" onaftersave="saveProduct()" class="txt-color-blueDark semi-bold prod-review-title display-inline">
+                        {{ viewProductCtrl.product.name }}
                     </h2>
-                    <h2 ng-if="!product.can_edit" class="txt-color-blueDark semi-bold prod-review-title display-inline">
-                        {{product.name}}
+                    <h2 ng-if="!viewProductCtrl.product.can_edit" class="txt-color-blueDark semi-bold prod-review-title display-inline">
+                        {{viewProductCtrl.product.name}}
                     </h2>
-                    <span ng-if="product.obsolete.flag" class="text-danger">
+                    <span ng-if="viewProductCtrl.product.obsolete.flag" class="text-danger">
                         (Снят с производства
-                        <span ng-if="product.obsolete.id">
+                        <span ng-if="viewProductCtrl.product.obsolete.id">
                             с заменой на
-                            <a ng-href="#/products/{{product.obsolete.id}}">{{ product.obsolete.article }}</a>
+                            <a ng-href="#/products/{{viewProductCtrl.product.obsolete.id}}">{{ viewProductCtrl.product.obsolete.article }}</a>
                         </span>
                         )
                     </span>
                 </div>
-                <form-nav-buttons options="visual.navButtsOptions" subdata="product.id" class="btn-group margin-top-10"></form-nav-buttons>
+                <form-nav-buttons options="visual.navButtsOptions" subdata="viewProductCtrl.product.id" class="btn-group margin-top-10"></form-nav-buttons>
                 <div class="col-xs-12 col-md-12">
                     <hr>
                 </div>
@@ -39,45 +39,45 @@
                             <div class="widget-body">
                                 <div te-copy-to-buffer>
                                     <b>Артикул:</b>
-                                    <span ng-if="product.can_edit" editable-text="product.article" onaftersave="saveProduct()" te-buffer-value>{{ product.article || "Нет артикула" }}</span>
-                                    <span ng-if="!product.can_edit" te-buffer-value>{{ product.article }}</span>
+                                    <span ng-if="viewProductCtrl.product.can_edit" editable-text="viewProductCtrl.product.article" onaftersave="saveProduct()" te-buffer-value>{{ viewProductCtrl.product.article || "Нет артикула" }}</span>
+                                    <span ng-if="!viewProductCtrl.product.can_edit" te-buffer-value>{{ viewProductCtrl.product.article }}</span>
                                 </div>
                                 <div>
                                     <b>Производитель:</b>
-                                    <span ng-if="!product.can_edit">{{ product.manufacturer.name }}</span>
-                                    <a ng-if="product.can_edit" class="editable-click" ng-click="changeManufacturer()">{{product.manufacturer.name}}</a>
+                                    <span ng-if="!viewProductCtrl.product.can_edit">{{ viewProductCtrl.product.manufacturer.name }}</span>
+                                    <a ng-if="viewProductCtrl.product.can_edit" class="editable-click" ng-click="viewProductCtrl.changeManufacturer()">{{viewProductCtrl.product.manufacturer.name}}</a>
                                 </div>
                                 <div>
                                     <b>
                                         Цена<span uib-tooltip="РЦП - Рекомендуемая Цена Продажи">*</span>:
                                     </b>
-                                    {{ product.price | currency }}
+                                    {{ viewProductCtrl.product.price | currency }}
                                 </div>
                                 <div >
                                     <b>Остаток:</b>
-                                    {{ product.can_edit ? product.stock : product.stock_with_mfk }}
+                                    {{ viewProductCtrl.product.can_edit ? viewProductCtrl.product.stock : viewProductCtrl.product.stock_with_mfk }}
                                 </div>
-                                <div ng-if="product.can_edit">
+                                <div ng-if="viewProductCtrl.product.can_edit">
                                     <b>Остаток у МФК:</b>
-                                    {{ (product.stock_with_mfk - product.stock) < 0 ? 0 : (product.stock_with_mfk - product.stock) }}
+                                    {{ (viewProductCtrl.product.stock_with_mfk - viewProductCtrl.product.stock) < 0 ? 0 : (viewProductCtrl.product.stock_with_mfk - viewProductCtrl.product.stock) }}
                                 </div>
-                                <div ng-if="product.can_edit">
+                                <div ng-if="viewProductCtrl.product.can_edit">
                                     <b>Снятие с производства:</b>
-                                    <a href="" ng-click="makeObsolete(false)" ng-if="product.obsolete.flag">
+                                    <a href="" ng-click="viewProductCtrl.makeObsolete(false)" ng-if="viewProductCtrl.product.obsolete.flag">
                                         Отменить снятие с производства
                                     </a>
-                                    <a href="" ng-click="selectReplacementProduct()" ng-if="!product.obsolete.flag">
+                                    <a href="" ng-click="viewProductCtrl.selectReplacementProduct()" ng-if="!viewProductCtrl.product.obsolete.flag">
                                         Отметить как снятый с производства
                                     </a>
                                 </div>
-                                <div ng-if="product.obsolete.flag">
+                                <div ng-if="viewProductCtrl.product.obsolete.flag">
                                     <b>С заменой на:</b>
-                                    <a ng-click="selectReplacementProduct()">{{ product.obsolete.name }}</a>
+                                    <a ng-click="viewProductCtrl.selectReplacementProduct()">{{ viewProductCtrl.product.obsolete.name }}</a>
                                 </div>
-                                <div ng-show="product.manufacturer.name === 'Schneider Electric'" class="margin-top-10">
+                                <div ng-show="viewProductCtrl.product.manufacturer.name === 'Schneider Electric'" class="margin-top-10">
                                     <div class="form-group string optional product_lead_time">
                                         <label class="control-label input-group-addon">Срок поставки (единиц товара)</label>
-                                        <input class="form-control" ng-model="data.quantity" model-filter="{min:0}" filter-name="te_number" placeholder="Количество товара" type="text" ng-keypress="getLeadTime(product.id, data.quantity, $event)">
+                                        <input class="form-control" ng-model="viewProductCtrl.data.quantity" model-filter="{min:0}" filter-name="te_number" placeholder="Количество товара" type="text" ng-keypress="viewProductCtrl.getLeadTime(viewProductCtrl.product.id, data.quantity, $event)">
                                     </div>
                                 </div>
                             </div>
@@ -89,20 +89,20 @@
                         <header><h2>Фото</h2></header>
                         <div>
                             <div class="widget-body">
-                                <img  ng-if="!product.can_edit" class="img-thumbnail" ng-src="{{ product.image_url }}" img-error="http://cdn.texenergo.com/no_image.png" style="max-height: 200px; max-width: 200px;">
-                                <div ng-if="product.can_edit" class="full-width product-thumb" nv-file-drop=""  uploader="uploader" filters="queueLimit">
-                                    <div ng-show="uploader.isHTML5" class="well my-drop-zone" nv-file-over="" uploader="uploader">
-                                        <img class="thumbnail no-padding" ng-src="{{product.image_url}}" img-error="/assets/smart_admin/no_image.png" style="max-height: 200px; max-width: 200px;">
+                                <img  ng-if="!viewProductCtrl.product.can_edit" class="img-thumbnail" ng-src="{{ viewProductCtrl.product.image_url }}" img-error="http://cdn.texenergo.com/no_image.png" style="max-height: 200px; max-width: 200px;">
+                                <div ng-if="viewProductCtrl.product.can_edit" class="full-width product-thumb" nv-file-drop=""  uploader="viewProductCtrl.uploader" filters="queueLimit">
+                                    <div ng-show="viewProductCtrl.uploader.isHTML5" class="well my-drop-zone" nv-file-over="" uploader="viewProductCtrl.uploader">
+                                        <img class="thumbnail no-padding" ng-src="{{viewProductCtrl.product.image_url}}" img-error="/assets/smart_admin/no_image.png" style="max-height: 200px; max-width: 200px;">
                                     </div>
-                                    <div class="row" ng-if="uploader.queue.length>0">
-                                        <div class="col-md-12" ng-repeat="item in uploader.queue">
+                                    <div class="row" ng-if="viewProductCtrl.uploader.queue.length>0">
+                                        <div class="col-md-12" ng-repeat="item in viewProductCtrl.uploader.queue">
                                             Новая: <span ng-bind="item.file.name"></span>
                                             <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
                                                 <span class="glyphicon glyphicon-trash"></span>
                                             </button>
                                         </div>
                                         <div class="col-md-12">
-                                            <button class="btn btn-info" ng-click="uploader.queue[0].upload()">Заменить</button>
+                                            <button class="btn btn-info" ng-click="viewProductCtrl.uploader.queue[0].upload()">Заменить</button>
                                         </div>
                                     </div>
                                 </div>
@@ -114,14 +114,14 @@
                     <div id="show-product-3" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false" data-widget-collapsed="true">
                         <header><h2>Описание</h2></header>
                         <div>
-                            <div ng-if="!product.can_edit" class="widget-body">
-                                <div ng-bind-html="product.description"></div>
+                            <div ng-if="!viewProductCtrl.product.can_edit" class="widget-body">
+                                <div ng-bind-html="viewProductCtrl.product.description"></div>
                             </div>
-                            <div  ng-if="product.can_edit" style="padding-bottom: 10px;">
+                            <div  ng-if="viewProductCtrl.product.can_edit" style="padding-bottom: 10px;">
                                 <div style="display: flex; flex-direction: row; justify-content: flex-end;">
-                                    <button class="btn btn-success" ng-click="saveProduct()">Сохранить</button>
+                                    <button class="btn btn-success" ng-click="viewProductCtrl.saveProduct()">Сохранить</button>
                                 </div>
-                                <textarea ui-tinymce="tinymceOptions" ng-model="product.description"></textarea>
+                                <textarea ui-tinymce="tinymceOptions" ng-model="viewProductCtrl.product.description"></textarea>
                             </div>
                         </div>
                     </div>
@@ -134,10 +134,10 @@
                                 <input class="form-control" type="text">
                             </div>
                             <div class="widget-body">
-                                <button ng-if="product.can_edit" class="btn btn-success right" ng-click="changeCatalogues()">Изменить</button>
+                                <button ng-if="viewProductCtrl.product.can_edit" class="btn btn-success right" ng-click="viewProductCtrl.changeCatalogues()">Изменить</button>
                                 <div class="dd">
                                     <ol class="dd-list">
-                                        <li class="dd-item" ng-repeat="catalogue in product.catalogues">
+                                        <li class="dd-item" ng-repeat="catalogue in viewProductCtrl.product.catalogues">
                                             <div class="dd-handle">
                                                 <a href="/#/catalogues/{{ catalogue.id }}">{{ catalogue.name }}</a>
                                             </div>
@@ -168,7 +168,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="row in product.supplier_infos">
+                                        <tr ng-repeat="row in viewProductCtrl.product.supplier_infos">
                                             <td>{{row.supplier_code}}</td>
                                             <td class="hidden-xs">{{row.foreign_code}}</td>
                                             <td class="hidden-xs hidden-sm hidden-md">{{row.prime_cost | currency}}</td>
@@ -192,7 +192,7 @@
                             <div class="widget-body">
                                 <div class="dd">
                                     <ol class="dd-list">
-                                        <li class="dd-item" ng-repeat="similar in product.similar_products">
+                                        <li class="dd-item" ng-repeat="similar in viewProductCtrl.product.similar_products">
                                             <div class="dd-handle">
                                                 <div class="row">
                                                     <div class="col-md-8">
@@ -229,7 +229,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="item in product.properties">
+                                        <tr ng-repeat="item in viewProductCtrl.product.properties">
                                             <td>{{ item.name }}</td>
                                             <td>{{ item.value }}</td>
                                         </tr>
@@ -256,7 +256,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="item in product.customer_orders">
+                                        <tr ng-repeat="item in viewProductCtrl.product.customer_orders">
                                             <td><a href="/#/customer_orders/{{ item.id }}">{{ item.number }}</a></td>
                                             <td>{{ item.status }}</td>
                                             <td>{{ item.quantity }}</td>
@@ -285,7 +285,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-switch="item.type" ng-repeat="item in product.product_orders">
+                                        <tr ng-switch="item.type" ng-repeat="item in viewProductCtrl.product.product_orders">
                                             <td>{{ item.date | date:'dd/MM/yy HH:mm' }}</td>
                                             <td>
                                                 <a ng-switch-when="DispatchOrder" href="/#/dispatch_orders/{{ item.id }}">
@@ -318,9 +318,9 @@
         <h3 class="modal-title">Выберите производителя</h3>
     </div>
     <div class="modal-body">
-        <ui-select  ui-select-infinity="mSelectConfig" ng-model="data.manufacturer" theme="select2" class="td-ui-select">
+        <ui-select  ui-select-infinity="mSelectConfig" ng-model="viewProductCtrl.data.manufacturer" theme="select2" class="td-ui-select">
             <ui-select-match placeholder="Производитель не выбран">{{$select.selected.name}}</ui-select-match>
-            <ui-select-choices repeat="m in data.manufacturers | filter:$select.search">
+            <ui-select-choices repeat="m in viewProductCtrl.data.manufacturers | filter:$select.search">
                 <div ng-bind-html="m.name | highlight: $select.search"></div>
             </ui-select-choices>
         </ui-select>
@@ -357,11 +357,11 @@
             <ui-select-choices repeat="product in data.productsList | filter:$select.search" class="search-item">
                 <div class="search-tr">
                     <div class="search-td col-md-1">
-                        <img ng-src="{{product.image_url}}">
+                        <img ng-src="{{viewProductCtrl.product.image_url}}">
                     </div>
-                    <div class="search-td col-md-7" ng-bind-html="product.name | highlight: $select.search"></div>
-                    <div class="search-td col-md-2">{{product.stock}} ед.</div>
-                    <div class="search-td col-md-2">{{product.price | currency}}</div>
+                    <div class="search-td col-md-7" ng-bind-html="viewProductCtrl.product.name | highlight: $select.search"></div>
+                    <div class="search-td col-md-2">{{viewProductCtrl.product.stock}} ед.</div>
+                    <div class="search-td col-md-2">{{viewProductCtrl.product.price | currency}}</div>
                 </div>
             </ui-select-choices>
         </ui-select>
