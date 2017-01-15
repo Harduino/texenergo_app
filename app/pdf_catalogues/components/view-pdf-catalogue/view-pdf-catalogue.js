@@ -6,6 +6,7 @@ class ViewPdfCatalogueCtrl {
 
         this.pdfCatalogue = {};
         this.data = { manufacturersList: []};
+        this.manufacturerSelectConfig = {dataMethod: self.serverApi.getManufacturers};
 
         // For adding product BEGIN
         this.addableQuery = "";
@@ -91,7 +92,7 @@ class ViewPdfCatalogueCtrl {
         if (query.length <= 1) {
             self.addableProductsList = [];
         } else {
-            this.serverApi.getSearch(1, query, {}, r => self.addableProductsList = r.data.filter(alreadyAdded) );
+            this.serverApi.getSearch(0, query, {}, r => self.addableProductsList = r.data.filter(alreadyAdded) );
         }
         var alreadyAdded = v => {
             for (var i = 0; i < self.pdfCatalogue.products.length; i++) {

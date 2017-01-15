@@ -31,6 +31,7 @@ class ViewPartnerCtrl {
         var loadResources = () => {
             serverApi.getCustomerOrders(1, '-' + self.partner.prefix + '-', {}, r => self.partner.customerOrders = r.data);
             serverApi.getDispatchOrders(1, '-' + self.partner.prefix + '-', {}, r => self.partner.dispatchOrders = r.data);
+            serverApi.getReceiveOrders( 1, '', {}, r => self.partner.receiveOrders = r.data, {}, self.partner.id);
         }
 
         var loadPartner = () => {

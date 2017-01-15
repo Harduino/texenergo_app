@@ -176,20 +176,23 @@
             <li>
                 <a href="#s2" data-toggle="tab">Списания</a>
             </li>
-            <li class="dropdown">
-                <a href="#s3" data-toggle="tab">Платежи</a>
+            <li>
+                <a href="#s3" data-toggle="tab">Поступления</a>
             </li>
             <li class="dropdown">
-                <a href="#s4" data-toggle="tab">Пользователи</a>
+                <a href="#s4" data-toggle="tab">Платежи</a>
             </li>
             <li class="dropdown">
-                <a href="#s5" data-toggle="tab">Банковские счета</a>
+                <a href="#s5" data-toggle="tab">Пользователи</a>
             </li>
             <li class="dropdown">
-                <a href="#s6" data-toggle="tab">Представители</a>
+                <a href="#s6" data-toggle="tab">Банковские счета</a>
             </li>
             <li class="dropdown">
-                <a href="#s7" data-toggle="tab">Условия в счетах</a>
+                <a href="#s7" data-toggle="tab">Представители</a>
+            </li>
+            <li class="dropdown">
+                <a href="#s8" data-toggle="tab">Условия в счетах</a>
             </li>
         </ul>
         <div class="tab-content padding-10">
@@ -243,9 +246,6 @@
                                     <a class="btn btn-xs btn-info" href="#/dispatch_orders/{{item.id}}">
                                         <i class="fa fa-eye"></i>
                                     </a>
-                                    <a class="btn btn-xs btn-default" href="#/dispatch_orders/{{item.id}}/edit">
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -253,6 +253,34 @@
                 </table>
             </div>
             <div class="tab-pane fade" id="s3">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Номер</th>
+                            <th class="hidden-xs">Дата</th>
+                            <th>Сумма</th>
+                            <th>Статус</th>
+                            <th/>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in viewPartnerCtrl.partner.receiveOrders">
+                            <td>{{ item.number }}</td>
+                            <td class="hidden-xs">{{ item.date | date:'dd MMMM yy'}}</td>
+                            <td class="text-right">{{ item.total | currency }}</td>
+                            <td>{{ item.status }}</td>
+                            <td class="center-item-text" style="max-width: 40px;">
+                                <div class="btn-group">
+                                    <a class="btn btn-xs btn-info" href="#/receive_orders/{{item.id}}">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="s4">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -283,7 +311,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="tab-pane fade" id="s4">
+            <div class="tab-pane fade" id="s5">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -309,7 +337,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="tab-pane fade" id="s5">
+            <div class="tab-pane fade" id="s6">
                 <div ng-click="viewPartnerCtrl.showBankAccountForm()" ng-if="viewPartnerCtrl.partner.can_edit"
                      class="ng-scope btn btn-success">
                     <i class="fa fa-plus"></i>
@@ -358,7 +386,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="tab-pane fade" id="s6">
+            <div class="tab-pane fade" id="s7">
                 <div class="ng-scope btn btn-success" ng-click="viewPartnerCtrl.showNewPersonForm()">
                     <i class="fa fa-plus"></i>
                     <span class="hidden-xs ng-binding">Новый</span>
@@ -387,7 +415,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="tab-pane fade" id="s7">
+            <div class="tab-pane fade" id="s8">
                 <span class="editable-textarea-fw" editable-textarea="viewPartnerCtrl.partner.invoice_conditions"
                       onaftersave="viewPartnerCtrl.savePartner()">
                     {{ viewPartnerCtrl.partner.invoice_conditions || "Нет" }}

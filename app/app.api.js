@@ -312,8 +312,8 @@
         };
 
         // ReceiveOrder
-        o.getReceiveOrders = function(page, query, config, success, fail){
-            var path = '/receive_orders?page='+page + (query ? ('&q=' + query) : '');
+        o.getReceiveOrders = function(page, query, config, success, fail, partner_id){
+            var path = '/receive_orders?page='+page + (query ? ('&q=' + query) : '') + (partner_id ? ('&partner_id=' + partner_id) : '');
             $http.get(path, config).then(success, fail);
         };
         o.createReceiveOrder = function(data, success, fail){
