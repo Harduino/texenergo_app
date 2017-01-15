@@ -26,7 +26,7 @@
                 }
             }
         }).state('app.product.logs', {
-            url: '/partner_logs',
+            url: '/logs',
             params: {
                 id: ''
             },
@@ -34,13 +34,12 @@
                 title:'История товара',
                 access:{
                     action:'read',
-                    params:'PartnerLog'
+                    params:'Product'
                 }
             },
             views:{
                 "content@app":{
-                    controller: 'PartnerLogsProductCtrl',
-                    templateUrl: '/app/products/views/partner_logs.html'
+                    template: '<logs-product></logs-product>'
                 }
             }
         });

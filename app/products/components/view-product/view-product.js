@@ -16,7 +16,19 @@ class ViewProductCtrl {
                     type: 'logs',
                     callback: () => $state.go('app.product.logs', {})
                 },
-                { type: 'add', callback: appendProductToCustomerOrder }
+                { 
+                    type: 'add',
+                    callback: () => {
+                        $uibModal.open({
+                            templateUrl: 'app/layout/partials/productToCustomerOrder.html',
+                            controller: 'productToCustomerOrderModalCtrl',
+                            windowClass: 'eqo-centred-modal',
+                            resolve: {
+                                product : self.product
+                            }
+                        });
+                    }
+                }
             ]
         };
 
@@ -38,17 +50,6 @@ class ViewProductCtrl {
                 }
             }
         });
-
-        var appendProductToCustomerOrder = product_id => {
-            $uibModal.open({
-                templateUrl: 'app/layout/partials/productToCustomerOrder.html',
-                controller: 'productToCustomerOrderModalCtrl',
-                windowClass: 'eqo-centred-modal',
-                resolve: {
-                    product : {id: product_id}
-                }
-            });
-        }
 
         //получаем информацию о продукте при загрузке контроллера $stateParams.id - id продукта
         serverApi.getProduct($stateParams.id, r => {
