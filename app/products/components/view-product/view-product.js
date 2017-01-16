@@ -143,17 +143,18 @@ class ViewProductCtrl {
     };
 
     selectReplacementProduct() {
-        var modalInstance = $uibModal.open({
-            templateUrl: 'spChangeReplacementProduct.tmpl.html',
-            controller: 'spChangeReplacementProductModalCtrl',
+        this.uibModal.open({
+            component: 'replacementProductModal',
             windowClass: 'eqo-centred-modal',
-            resolve: {
-                product : self.product.obsolete
-            }
-        });
-
-        modalInstance.result.then( selectedProduct => {
-            self.makeObsolete(true, selectedProduct.id);
+            resolve: { product : self.product, config: {} },
+            templateUrl: 'app/products/components/replacement-product-modal/replacement-product-modal.html'
+        }).result.then(function (selectedProduct) {
+            debugger;
+            self.saveProductSubstitute({
+                id: p.id,
+                quantity: p.quantity,
+                product_id: selectedProduct._id || selectedProduct.id
+            });
         });
     }
     
@@ -165,24 +166,3 @@ angular.module('app.products').component('viewProduct', {
     controllerAs: 'viewProductCtrl',
     templateUrl: 'app/products/components/view-product/view-product.html'
 });
-
-// class SpChangeReplacementProductModalCtrl{
-//     constructor(serverApi, $uibModalInstance, product){
-//         let self = this;
-
-//         this.pSelectConfig = {
-//             startPage: 0,
-//             dataMethod: serverApi.getSearch
-//         };
-//         this.data = {
-//             selectedProduct: product,
-//             productsList: []
-//         };
-
-//         this.ok = () => $uibModalInstance.close(self.data.selectedProduct);
-//         this.cancel = () => $uibModalInstance.dismiss('cancel');
-//     }
-// }
-
-// SpChangeReplacementProductModalCtrl.$inject = ['serverApi', '$uibModalInstance', 'product'];
-// angular.module('app.product').controller('spChangeReplacementProductModalCtrl', SpChangeReplacementProductModalCtrl);
