@@ -134,52 +134,37 @@
                 });
             };
 
+            var processUpdateCustomerDataResponse = function(result) {
+                if(!result.data.errors){
+                    for (var i = 0; i < result.data.length; i++) {
+                        var updated_row = result.data[i];
+                        for (var j = 0; j < sc.order.customer_order_contents.length; j++) {
+                            var x = sc.order.customer_order_contents[j];
+                            if (x.id === updated_row.id) {
+                                sc.order.customer_order_contents[j] = angular.extend(x, updated_row);
+                                funcFactory.showNotification('Успешно обновлены данные продукта', x.product.name, true);
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors);
+                }
+            };
+
             sc.saveProductChange = function(data) {
                 var product = data.item;
                 serverApi.updateCustomerOrderProduct(sc.order.id, product.id, {
                     quantity: product.quantity,
                     discount: product.discount
-                }, function(result){
-                    if(!result.data.errors){
-                        for (var i = 0; i < result.data.length; i++) {
-                            var updated_row = result.data[i];
-                            for (var j = 0; j < sc.order.customer_order_contents.length; j++) {
-                                var x = sc.order.customer_order_contents[j];
-                                if (x.id === updated_row.id) {
-                                    sc.order.customer_order_contents[j] = angular.extend(x, updated_row);
-                                    funcFactory.showNotification('Успешно обновлены данные продукта', x.product.name, true);
-                                    break;
-                                }
-                            }
-                        }
-                    }else{
-                        funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors);
-                    }
-                });
+                }, processUpdateCustomerDataResponse);
             };
 
             // Заменяет товар в строке и вызывается из модального окна. Следовательно, не знаем index-а строки и поэтому ищем через for(){}
             // Именно этим и отличается от sc.savProductChange
             sc.saveProductSubstitute = function(data) {
-                serverApi.updateCustomerOrderProduct(sc.order.id, data.id, {
-                    product_id: data.product_id
-                }, function(result){
-                    if(!result.data.errors){
-                        for (var i = 0; i < result.data.length; i++) {
-                            var updated_row = result.data[i];
-                            for (var j = 0; j < sc.order.customer_order_contents.length; j++) {
-                                var x = sc.order.customer_order_contents[j];
-                                if (x.id === updated_row.id) {
-                                    sc.order.customer_order_contents[j] = angular.extend(x, updated_row);
-                                    funcFactory.showNotification('Успешно обновлены данные продукта', updated_row.product.name, true);
-                                    break;
-                                }
-                            }
-                        }
-                    }else{
-                        funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors);
-                    }
-                });
+                serverApi.updateCustomerOrderProduct(sc.order.id, data.id, {product_id: data.product_id},
+                    processUpdateCustomerDataResponse);
             };
 
             /**
