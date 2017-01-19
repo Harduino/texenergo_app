@@ -304,6 +304,9 @@
         o.updateDispatchOrder = function(id, data, success, fail){
             $http.put('/dispatch_orders/' + id, data).then(success, fail);
         };
+        o.deleteDispatchOrder = function(dispatch_order_id, success, fail){
+            $http.delete('/dispatch_orders/' + dispatch_order_id).then(success, fail);
+        };
         o.updateStatusDispatchOrder = function(id, data, success, fail){
             $http.put('/dispatch_orders/' + id + '/update_status', data).then(success, fail);
         };
