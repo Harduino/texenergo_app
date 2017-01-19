@@ -209,19 +209,19 @@
                 });
             };
 
-            sc.selectPosition = function($event, item){
-                if($event.shiftKey){
-
+            sc.selectPosition = function($event, item) {
+                if($event.shiftKey) {
                     $event.preventDefault();
                     $event.stopImmediatePropagation();
-
                     item.selected = !item.selected;
 
-                    if(item.selected){
+                    if(item.selected) {
                         sc.summaryData.positions[item.id] = item;
                     } else {
                         delete sc.summaryData.positions[item.id];
                     }
+
+                    updateSelectedItemsSummary();
                 }
             };
 
@@ -289,20 +289,19 @@
                 });
             }
 
-            sc.$watch('summaryData.positions', function(values){
-                if(values){
-                    var total = 0;
-                    var keys = Object.keys(values);
+            var updateSelectedItemsSummary = function() {
+                var values = sc.summaryData.positions;
+                var total = 0;
+                var keys = Object.keys(values);
 
-                    sc.summaryData.show = keys.length>0;
+                sc.summaryData.show = keys.length > 0;
 
-                    keys.map(function(prop){
-                        var item = values[prop];
-                        total += $filter('price_net')(item, item.quantity);
-                    });
-                    sc.summaryData.total = total;
-                }
-            }, true);
+                keys.map(function(prop) {
+                    total += $filter('price_net')(values[prop], values[prop].quantity);
+                });
+
+                sc.summaryData.total = total;
+            };
 
             // Send HTTP request to remove the product from Customer Order.
             sc.removeProduct = function(item, index){
@@ -324,47 +323,24 @@
                 });
             };
 
-            // Удаляет все невыделенные товары
-            sc.leaveSelectedItems = function() {
-                for (var i = (sc.order.customer_order_contents.length - 1); i >= 0; i--) {
+            sc.deleteSelectedItems = function(useSelected) {
+                sc.order.customer_order_contents.forEach(function(item, i) {
+                    if (item.selected === useSelected) {
+                        serverApi.removeCustomerOrderProduct(sc.order.id, item.id, function(result) {
+                            if(result.data.errors) {
+                                funcFactory.showNotification('Не удалось удалить продукт', result.data.errors);
+                            } else {
+                                if(useSelected) {
+                                    delete sc.summaryData.positions[item.id];
+                                    updateSelectedItemsSummary();
+                                }
 
-                    var item = sc.order.customer_order_contents[i];
-
-                    // If the item is selected then continue on to the next
-                    if (sc.order.customer_order_contents[i].selected)
-                        continue;
-
-                    serverApi.removeCustomerOrderProduct(sc.order.id, item.id, function(result){
-                        if(!result.data.errors){
-                            sc.order.customer_order_contents.splice(i, 1);
-                            delete sc.summaryData.positions[item.id];
-                            funcFactory.showNotification('Продукт удален:', item.product.name, true);
-                        } else {
-                            funcFactory.showNotification('Не удалось удалить продукт', result.data.errors);
-                        }
-                    });
-                }
-            };
-
-            sc.deleteSelectedItems = function() {
-                for (var i = (sc.order.customer_order_contents.length - 1); i >= 0; i--) {
-
-                    var item = sc.order.customer_order_contents[i];
-
-                    // If the item is not selected then continue on to the next
-                    if (!sc.order.customer_order_contents[i].selected)
-                        continue;
-
-                    serverApi.removeCustomerOrderProduct(sc.order.id, item.id, function(result){
-                        if(!result.data.errors){
-                            sc.order.customer_order_contents.splice(i, 1);
-                            delete sc.summaryData.positions[item.id];
-                            funcFactory.showNotification('Продукт удален:', item.product.name, true);
-                        } else {
-                            funcFactory.showNotification('Не удалось удалить продукт', result.data.errors);
-                        }
-                    });
-                }
+                                sc.order.customer_order_contents.splice(i, 1);
+                                funcFactory.showNotification('Продукт удален:', item.product.name, true);
+                            }
+                        });
+                    }
+                });
             };
 
             /**

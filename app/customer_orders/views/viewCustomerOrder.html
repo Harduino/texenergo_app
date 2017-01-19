@@ -424,14 +424,14 @@
             </article>
         </div>
     </section>
-    <div class="summary-draggable-panel" ng-if="summaryData.show">
+    <div class="summary-draggable-panel" ng-show="summaryData.show">
         <div class="content" te-jq-ui="summaryPanelOptions" data-ui-type="draggable">
             <b>Итого: {{summaryData.total | currency}}</b>
             <div class="col-sm-6">
-                <a ng-href="" ng-click="leaveSelectedItems()">Оставить выделенные</a>
+                <a ng-href="" ng-click="deleteSelectedItems(false)">Оставить выделенные</a>
             </div>
             <div class="col-sm-6">
-                <a ng-href="" ng-click="deleteSelectedItems()">Удалить выделенные</a>
+                <a ng-href="" ng-click="deleteSelectedItems(true)">Удалить выделенные</a>
             </div>
         </div>
     </div>
