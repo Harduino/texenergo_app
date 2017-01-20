@@ -4,6 +4,7 @@ class ViewProductCtrl {
         this.product = {};
         this.serverApi = serverApi;
         this.funcFactory = funcFactory;
+        this.localStoraj = $localStorage;
         this.uibModal = $uibModal;
         this.state = $state;
 
@@ -51,11 +52,21 @@ class ViewProductCtrl {
             }
         });
 
-        //получаем информацию о продукте при загрузке контроллера $stateParams.id - id продукта
-        serverApi.getProduct($stateParams.id, r => {
-            self.product = r.data;
-            self.uploader.url = 'https://v2.texenergo.com/api/products/' + self.product.id + '/image?token=' + $localStorage.id_token;
-        });
+        this.loadProduct = () => {
+            if (window.products !== undefined && window.products[$stateParams.id] !== undefined) {
+                self.product = window.products[$stateParams.id];
+                self.uploader.url = 'https://v2.texenergo.com/api/products/' + self.product.id + '/image?token=' + $localStorage.id_token;
+            } else {
+                serverApi.getProduct($stateParams.id, r => {
+                    self.product = r.data;
+                    self.uploader.url = 'https://v2.texenergo.com/api/products/' + self.product.id + '/image?token=' + $localStorage.id_token;
+                    if(!window.products) window.products = {};
+                    window.products[$stateParams.id] = r.data;
+                });
+            }
+        }
+
+        this.loadProduct();
     }
 
     getLeadTime(id, quantity, event) {
@@ -64,9 +75,9 @@ class ViewProductCtrl {
                 var info = r.data.lead_time_info;
                 if (window.yaCounter7987369 != undefined) {
                     var yaParams = {};
-                    if ($localStorage && $localStorage.profile && $localStorage.profile.user_metadata) {
-                        yaParams.user_email = $localStorage.profile.user_metadata.email;
-                        yaParams.user_id = $localStorage.profile.user_metadata.contact_id;
+                    if (self.localStoraj && self.localStoraj.profile && self.localStoraj.profile.user_metadata) {
+                        yaParams.user_email = self.localStoraj.profile.user_metadata.email;
+                        yaParams.user_id = self.localStoraj.profile.user_metadata.contact_id;
                     }
                     yaCounter7987369.reachGoal("SeLeadTime", yaParams);
                 }

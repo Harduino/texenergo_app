@@ -16,7 +16,17 @@
         //get current list of searched data
         o.getSearch = function(page, query, config, success, fail){
             var encoded = encodeURIComponent(query);
-            $http.get('/products/search?term='+encoded+'&$skip='+(page*25)+'&$top=25', config || null).then(success, fail);
+
+            var key = 'term='+encoded+'&$skip='+page+'&$top=25';
+            if (window.search_results !== undefined && window.search_results[key] !== undefined) return success(window.search_results[key]);
+
+            $http.get('/products/search?term='+encoded+'&$skip='+(page*25)+'&$top=25', config || null).then(r => {
+                if(!window.search_results) window.search_results = {};
+                window.search_results[key] = r;
+                success(r);
+            }, fail);
+
+            // $http.get('/products/search?term='+encoded+'&$skip='+(page*25)+'&$top=25', config || null).then(success, fail);
         };
 
         o.getSubSearch = function(query, config, success, fail){
