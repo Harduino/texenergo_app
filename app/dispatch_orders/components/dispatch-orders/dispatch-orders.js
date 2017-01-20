@@ -1,6 +1,7 @@
 class DispatchOrdersCtrl {
     constructor($state, $stateParams, serverApi) {
-        this.data = {ordersList:[], searchQuery: $stateParams.q};
+        let self = this
+        this.data = {ordersList:[], searchQuery: $stateParams.q, dispatchableProducts: []};
 
         this.visual = {
             navButtsOptions:[
@@ -9,7 +10,7 @@ class DispatchOrdersCtrl {
             navTableButts: [
                 {
                     type: 'view',
-                    callback: (id) => $state.go('app.dispatch_orders.view', {id: id})
+                    callback: (item) => $state.go('app.dispatch_orders.view', {id: item.data.id})
                 },
                 {
                     type: 'remove',
@@ -37,6 +38,7 @@ class DispatchOrdersCtrl {
             ],
             titles: ['Списания']
         };
+        serverApi.getDispatchableProducts(r => self.data.dispatchableProducts = r.data);
     }
 }
 

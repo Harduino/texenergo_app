@@ -323,6 +323,9 @@
         o.getDispatchOrderLogs = function(id, success, fail){
             $http.get('/dispatch_orders/' + id + '/logs').then(success, fail);
         };
+        o.getDispatchableProducts = function(success, fail){
+            $http.get('/customer_orders/can_dispatch').then(success, fail);
+        };
 
         // ReceiveOrder
         o.getReceiveOrders = function(page, query, config, success, fail, partner_id){
