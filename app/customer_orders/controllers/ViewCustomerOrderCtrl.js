@@ -226,37 +226,30 @@
             /**
              * Добавить продукт в список
              */
-            sc.appendProduct = function(event){
-                var append = function(){
-                    var t=sc.productForAppend,
-                        data = angular.extend(t, {product: {name:t.name, id: t.id}}),
+            sc.appendProduct = function(event) {
+                if(!event || (event.keyCode == 13)) {
+                    var t = sc.productForAppend,
+                        data = angular.extend(t, {product: {name: t.name, id: t.id}}),
                         selectCtrl = angular.element('#vco_prod_select').data().$uiSelectController,
-                        post = {
-                            product_id: t.id,
-                            quantity: t.quantity,
-                            query_original: selectCtrl.search
-                        };
+                        post = {product_id: t.id, quantity: t.quantity, query_original: selectCtrl.search};
+
                     sc.productForAppend = {};
                     sc.data.selectedProduct = null;
 
-                    serverApi.addCustomerOrderProduct(sc.order.id, post,function(result){
-                        if(!result.data.errors){
+                    serverApi.addCustomerOrderProduct(sc.order.id, post, function(result) {
+                        if(result.data.errors) {
+                            funcFactory.showNotification('Не удалось добавить продукт', result.data.errors);
+                        } else {
                             for (var i = 0; i < result.data.length; i++) {
                                 sc.order.customer_order_contents.push(angular.extend(data, result.data[i]));
                             }
+
                             funcFactory.showNotification('Успешно добавлен продукт', t.name, true);
-                            selectCtrl.open=true;
+                            selectCtrl.open = true;
                             selectCtrl.search = '';
-                        } else {
-                            funcFactory.showNotification('Не удалось добавить продукт', result.data.errors);
                         }
                     });
-                };
-                if(event){
-                    if(event.keyCode == 13){
-                        append();
-                    }
-                } else append();
+                }
             };
 
             /**
