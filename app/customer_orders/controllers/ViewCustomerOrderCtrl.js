@@ -138,8 +138,10 @@
                 if(!result.data.errors){
                     for (var i = 0; i < result.data.length; i++) {
                         var updated_row = result.data[i];
+
                         for (var j = 0; j < sc.order.customer_order_contents.length; j++) {
                             var x = sc.order.customer_order_contents[j];
+
                             if (x.id === updated_row.id) {
                                 sc.order.customer_order_contents[j] = angular.extend(x, updated_row);
                                 funcFactory.showNotification('Успешно обновлены данные продукта', x.product.name, true);
@@ -147,6 +149,8 @@
                             }
                         }
                     }
+
+                    updateTotal();
                 } else {
                     funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors);
                 }
@@ -244,6 +248,7 @@
                                 sc.order.customer_order_contents.push(angular.extend(data, result.data[i]));
                             }
 
+                            updateTotal();
                             funcFactory.showNotification('Успешно добавлен продукт', t.name, true);
                             selectCtrl.open = true;
                             selectCtrl.search = '';
@@ -261,6 +266,7 @@
                     if(!result.data.errors){
                         sc.order.customer_order_contents.splice(item.index, 1);
                         funcFactory.showNotification('Продукт удален:', item.data.product.name, true);
+                        updateTotal();
                     } else {
                         funcFactory.showNotification('Не удалось удалить продукт', result.data.errors);
                     }
@@ -293,6 +299,7 @@
                             if(!result.data.errors){
                                 sc.order.customer_order_contents.splice(index, 1);
                                 funcFactory.showNotification('Продукт удален:', item.product.name, true);
+                                updateTotal();
                             } else {
                                 funcFactory.showNotification('Не удалось удалить продукт', result.data.errors);
                             }
@@ -314,6 +321,7 @@
                                 }
 
                                 sc.order.customer_order_contents.splice(i, 1);
+                                updateTotal();
                                 funcFactory.showNotification('Продукт удален:', item.product.name, true);
                             }
                         });
@@ -340,6 +348,7 @@
                     };
 
                     calculateTotals(order);
+                    updateTotal();
                     completeInitPage(order)
                 });
             }
@@ -389,20 +398,15 @@
                 sc.total_dispatched = y;
             }
 
-            /**
-             * следим за изменеиями в коллекции (включая свойства коллекции) при изменении пересчитываем total
-             */
-            sc.$watch('order.customer_order_contents', function(values){
-                if(values){
-                    var total = 0;
+            var updateTotal = function() {
+                var total = 0;
 
-                    values.map(function(item){
-                        total += $filter('price_net')(item, item.quantity);
-                    });
+                sc.order.customer_order_contents.map(function(item){
+                    total += $filter('price_net')(item, item.quantity);
+                });
 
-                    sc.total = total;
-                }
-            }, true);
+                sc.total = total;
+            };
 
             sc.getDaDataSuggestions = function(val, field_name){
                 return serverApi.validateViaDaData('address', {"query": val}).then(function(result){
