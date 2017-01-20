@@ -308,6 +308,9 @@
             var path = '/dispatch_orders?page='+page + (query ? ('&q=' + query) : '');
             $http.get(path, config).then(success, fail);
         };
+        o.createDispatchOrder = function(data, success, fail){
+            $http.post('/dispatch_orders', data).then(success, fail);
+        };
         o.getDispatchOrderDetails = function(id, success, fail){
             $http.get('/dispatch_orders/' + id).then(success, fail);
         };
@@ -325,6 +328,9 @@
         };
         o.getDispatchableProducts = function(success, fail){
             $http.get('/customer_orders/can_dispatch').then(success, fail);
+        };
+        o.createDispatchOrderContent = function(dispatch_order_id, data, success, fail){
+            $http.post('/dispatch_orders/'+dispatch_order_id+'/dispatch_order_contents', data).then(success, fail);
         };
 
         // ReceiveOrder

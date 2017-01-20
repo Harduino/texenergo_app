@@ -1,11 +1,12 @@
 class ViewDispatchOrderCtrl {
     constructor($state, $stateParams, serverApi, funcFactory, FileUploader, $localStorage) {
+        let self = this;
         this.$stateParams = $stateParams;
         this.serverApi = serverApi;
         this.funcFactory = funcFactory;
         this.$localStorage = $localStorage;
 
-        let self = this;
+        
         this.dispatchOrder = {};
 
         this.visual = {
