@@ -8,21 +8,96 @@
         .controller('ViewCustomerOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', '$filter', 'customerOrdersNotifications', '$uibModal', '$parse', '$timeout', function($scope, $state, $stateParams, serverApi, funcFactory, $filter, notifications, $uibModal, $parse, $timeout){
             var _subscription;
             var sc = $scope;
-            sc.partnersList = [];
-            sc.partnerSelectConfig = {
-                dataMethod: serverApi.getPartners
-            };
-            sc.order = {};
-            sc.total = 0;
-            sc.visual = {
+            var self = this;
+
+            this.partnersList = [];
+            this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
+            this.order = {};
+            this.total = 0;
+
+            this.visual = {
                 navButtsOptions:[
-                    { type: 'back', callback: returnBack },
-                    { type: 'command', callback: showCommandModal },
-                    { type: 'send_email', callback: sendCustomerOrder },
-                    { type: 'recalculate', callback: recalculateCustomerOrder },
-                    { type: 'logs', callback: goToLogs },
-                    { type: 'confirm_order', callback: confirmCustomerOrder },
-                    { type: 'refresh', callback: refresh }
+                    {
+                        type: 'back',
+                        callback: function() {
+                            $state.go('app.customer_orders', {});
+                        }
+                    },
+                    {
+                        type: 'command',
+                        callback: function() {
+                            $uibModal.open({
+                                component: 'commandCustomerOrderModal',
+                                windowClass: 'eqo-centred-modal',
+                                resolve: {config: {}}
+                            }).result.then(function (command) {
+                                var data = {customer_order: {command: command}};
+
+                                serverApi.updateCommandCustomerOrder(self.order.id, data, function(res) {
+                                    if(res.status == 200) {
+                                        self.order = res.data;
+                                        funcFactory.showNotification('Комманда выполнена', "", true);
+                                    } else {
+                                        funcFactory.showNotification('Не удалось переместить сторку', res.data.errors);
+                                    }
+                                }, angular.noop);
+                            });
+                        }
+                    },
+                    {
+                        type: 'send_email',
+                        callback: function () {
+                            serverApi.sendCustomerOrderInvoice($stateParams.id, function(result){
+                                if(result.status == 200 && !result.data.errors) {
+                                    funcFactory.showNotification("Успешно", 'Заказ успешно отправлен.', true);
+                                } else if (result.status == 200 && result.data.errors) {
+                                    funcFactory.showNotification("Неудача", result.data.errors, true);
+                                } else {
+                                    funcFactory.showNotification("Неудача", 'Ошибка при попытке отправить заказ.', true);
+                                }
+                            });
+                        }
+                    },
+                    {
+                        type: 'recalculate',
+                        callback: function() {
+                            serverApi.recalculateCustomerOrder($stateParams.id, function(result){
+                                if(result.status == 200 && !result.data.errors) {
+                                    funcFactory.showNotification("Успешно", 'Заказ успешно пересчитан.', true);
+                                    self.data.order = result.data;
+                                } else {
+                                    funcFactory.showNotification("Неудача", 'Ошибка при пересчёте заказа.', true);
+                                }
+                            });
+                        }
+                    },
+                    {
+                        type: 'logs',
+                        callback: function () {
+                            $state.go('app.customer_orders.view.logs', {});
+                        }
+                    },
+                    {
+                        type: 'confirm_order',
+                        callback: function (subdata, item) {
+                            var data = {customer_order: {event: item.event}};
+
+                            serverApi.updateStatusCustomerOrder($stateParams.id, data, function(res) {
+                                if(res.status == 200 && !res.data.errors) {
+                                    funcFactory.showNotification("Успешно", 'Удалось ' + item.name.toLowerCase() +
+                                        ' заказ', true);
+                                    self.order = res.data;
+                                } else {
+                                    funcFactory.showNotification("Не удалось " + item.name.toLowerCase() + ' заказ',
+                                        res.data.errors);
+                                }
+                            });
+                        }
+                    },
+                    {
+                        type: 'refresh',
+                        callback: getOrderDetails
+                    }
                 ],
                 chartOptions: {
                     barColor:'rgb(103,135,155)',
@@ -34,13 +109,45 @@
                 },
                 titles: 'Заказ клиента: №',
                 sortOpts: {
-                    update: updateRowPositionView,
+                    update: function (e, ui) {
+                        var $this = $(this),
+                            last_ind = angular.element(ui.item).scope().$index,
+                            new_ind = ui.item.index(),
+                            data = {customer_order: {command: 'переместить_строку ' + (last_ind + 1) + '_на_' + (new_ind + 1)}};
+                        serverApi.updateCommandCustomerOrder(self.order.id, data, function(result) {
+                            if(result.status == 200) {
+                                self.order.customer_order_contents.swapItemByindex(last_ind, new_ind);
+                            } else {
+                                funcFactory.showNotification('Не удалось переместить сторку', result.data.errors);
+                                $this.sortable('cancel');
+                            }
+                        }, function(){
+                            $this.sortable( "cancel" );
+                        });
+                    },
                     items: "> .order-items"
                 },
                 roles: {},
-                navTableButts:[{type:'remove', disabled:false, callback:removeProduct}]
+                navTableButts:[
+                    {
+                        type: 'remove',
+                        disabled: false,
+                        callback: function (item) {
+                            serverApi.removeCustomerOrderProduct(self.order.id, item.data.id, function(result) {
+                                if(!result.data.errors){
+                                    self.order.customer_order_contents.splice(item.index, 1);
+                                    funcFactory.showNotification('Продукт удален:', item.data.product.name, true);
+                                    updateTotal();
+                                } else {
+                                    funcFactory.showNotification('Не удалось удалить продукт', result.data.errors);
+                                }
+                            });
+                        }
+                    }
+                ]
             };
-            sc.data = {
+
+            this.data = {
                 networkData: null,
                 productsList: [],//селект выбора продукта
                 networkConfig: {
@@ -73,41 +180,29 @@
                 }
             };
 
-            sc.amontPercent = 0;
-            sc.dispatchedPercent = 0;
-            sc.productForAppend = {};//данные продукта, который необходимо добавить к заказу
+            this.amontPercent = 0;
+            this.dispatchedPercent = 0;
+            this.productForAppend = {};//данные продукта, который необходимо добавить к заказу
+            this.pSelectConfig = {startPage: 0, dataMethod: serverApi.getSearch};
 
-            sc.pSelectConfig = {
-                startPage: 0,
-                dataMethod: serverApi.getSearch
-            };
-
-            sc.sliderOptions = {
+            this.sliderOptions = {
                 value:1,
                 min: 0.9,
                 max: 3,
                 step: 0.01,
                 slide: function(event, ui){
-                    sc.data.networkConfig.zoom = ui.value;
+                    self.data.networkConfig.zoom = ui.value;
                 }
             };
 
-            sc.summaryPanelOptions = {
-                appendTo: 'body',
-                scroll: true,
-                containment: 'body'
-            };
-            sc.summaryData = {
-                show: false,
-                positions: {},
-                total: 0
-            };
+            this.summaryPanelOptions = {appendTo: 'body', scroll: true, containment: 'body'};
+            this.summaryData = {show: false, positions: {}, total: 0};
 
             /**
              * Обновляем информацию по заказу
              */
-            sc.saveOrderInfo = function(){
-                var order = sc.order,
+            this.saveOrderInfo = function(){
+                var order = self.order,
                     data = {
                         customer_order:{
                             title: order.title,
@@ -124,26 +219,27 @@
                             }
                         }
                     };
+
                 serverApi.updateCustomerOrder(order.id, data, function(result){
                     if(result.status == 200 && !result.data.errors){
-                        sc.order = result.data;
-                        funcFactory.showNotification("Успешно", 'Заказ '+order.number+' успешно отредактирован.',true);
+                        self.order = result.data;
+                        funcFactory.showNotification("Успешно", 'Заказ ' + order.number + ' успешно отредактирован.', true);
                     } else {
-                        funcFactory.showNotification("Неудача", 'Не удалось отредактировать заказ '+order.number,true);
+                        funcFactory.showNotification("Неудача", 'Не удалось отредактировать заказ ' + order.number, true);
                     }
                 });
             };
 
             var processUpdateCustomerDataResponse = function(result) {
-                if(!result.data.errors){
+                if(!result.data.errors) {
                     for (var i = 0; i < result.data.length; i++) {
                         var updated_row = result.data[i];
 
-                        for (var j = 0; j < sc.order.customer_order_contents.length; j++) {
-                            var x = sc.order.customer_order_contents[j];
+                        for (var j = 0; j < self.order.customer_order_contents.length; j++) {
+                            var x = self.order.customer_order_contents[j];
 
                             if (x.id === updated_row.id) {
-                                sc.order.customer_order_contents[j] = angular.extend(x, updated_row);
+                                self.order.customer_order_contents[j] = angular.extend(x, updated_row);
                                 funcFactory.showNotification('Успешно обновлены данные продукта', x.product.name, true);
                                 break;
                             }
@@ -156,9 +252,10 @@
                 }
             };
 
-            sc.saveProductChange = function(data) {
+            this.saveProductChange = function(data) {
                 var product = data.item;
-                serverApi.updateCustomerOrderProduct(sc.order.id, product.id, {
+
+                serverApi.updateCustomerOrderProduct(self.order.id, product.id, {
                     quantity: product.quantity,
                     discount: product.discount
                 }, processUpdateCustomerDataResponse);
@@ -166,8 +263,8 @@
 
             // Заменяет товар в строке и вызывается из модального окна. Следовательно, не знаем index-а строки и поэтому ищем через for(){}
             // Именно этим и отличается от sc.savProductChange
-            sc.saveProductSubstitute = function(data) {
-                serverApi.updateCustomerOrderProduct(sc.order.id, data.id, {product_id: data.product_id},
+            this.saveProductSubstitute = function(data) {
+                serverApi.updateCustomerOrderProduct(self.order.id, data.id, {product_id: data.product_id},
                     processUpdateCustomerDataResponse);
             };
 
@@ -176,13 +273,13 @@
              * Opens modal window with ability to change product of Product item.
              * @param p - product
              */
-            sc.changeCustomerOrderProductModal = function(p){
+            this.changeCustomerOrderProductModal = function(p) {
                 $uibModal.open({
                     component: 'eqoChangeCustomerOrderProductModal',
                     windowClass: 'eqo-centred-modal',
                     resolve: {product : p.product, config: {}}
                 }).result.then(function (selectedProduct) {
-                    sc.saveProductSubstitute({
+                    self.saveProductSubstitute({
                         id: p.id,
                         quantity: p.quantity,
                         product_id: selectedProduct._id || selectedProduct.id
@@ -190,24 +287,24 @@
                 });
             };
 
-            sc.productDetailsModal = function(row) {
+            this.productDetailsModal = function(row) {
                 $uibModal.open({
                     component: 'eqoProductDetailsModal',
                     windowClass: 'eqo-centred-modal',
-                    resolve: {row: row, order: sc.order, config: {}}
+                    resolve: {row: row, order: self.order, config: {}}
                 });
             };
 
-            sc.selectPosition = function($event, item) {
+            this.selectPosition = function($event, item) {
                 if($event.shiftKey) {
                     $event.preventDefault();
                     $event.stopImmediatePropagation();
                     item.selected = !item.selected;
 
                     if(item.selected) {
-                        sc.summaryData.positions[item.id] = item;
+                        self.summaryData.positions[item.id] = item;
                     } else {
-                        delete sc.summaryData.positions[item.id];
+                        delete self.summaryData.positions[item.id];
                     }
 
                     updateSelectedItemsSummary();
@@ -217,10 +314,10 @@
             /**
              * выбор продукта для добавления к заказу
              */
-            sc.selectProductForAppend = function(item){
-                sc.productForAppend = item;
-                sc.productForAppend.id = item.id || item._id;
-                sc.productForAppend.quantity = 0;
+            this.selectProductForAppend = function(item){
+                self.productForAppend = item;
+                self.productForAppend.id = item.id || item._id;
+                self.productForAppend.quantity = 0;
 
                 $timeout(function(){
                     angular.element('#append_product_quantity').focus();
@@ -230,22 +327,22 @@
             /**
              * Добавить продукт в список
              */
-            sc.appendProduct = function(event) {
+            this.appendProduct = function(event) {
                 if(!event || (event.keyCode == 13)) {
-                    var t = sc.productForAppend,
+                    var t = self.productForAppend,
                         data = angular.extend(t, {product: {name: t.name, id: t.id}}),
                         selectCtrl = angular.element('#vco_prod_select').data().$uiSelectController,
                         post = {product_id: t.id, quantity: t.quantity, query_original: selectCtrl.search};
 
-                    sc.productForAppend = {};
-                    sc.data.selectedProduct = null;
+                    self.productForAppend = {};
+                    self.data.selectedProduct = null;
 
-                    serverApi.addCustomerOrderProduct(sc.order.id, post, function(result) {
+                    serverApi.addCustomerOrderProduct(self.order.id, post, function(result) {
                         if(result.data.errors) {
                             funcFactory.showNotification('Не удалось добавить продукт', result.data.errors);
                         } else {
                             for (var i = 0; i < result.data.length; i++) {
-                                sc.order.customer_order_contents.push(angular.extend(data, result.data[i]));
+                                self.order.customer_order_contents.push(angular.extend(data, result.data[i]));
                             }
 
                             updateTotal();
@@ -257,47 +354,31 @@
                 }
             };
 
-            /**
-             * Удаление продукта
-             * @param item - объект с индексом продукта в листе и id
-             */
-            function removeProduct(item){
-                serverApi.removeCustomerOrderProduct(sc.order.id, item.data.id, function(result){
-                    if(!result.data.errors){
-                        sc.order.customer_order_contents.splice(item.index, 1);
-                        funcFactory.showNotification('Продукт удален:', item.data.product.name, true);
-                        updateTotal();
-                    } else {
-                        funcFactory.showNotification('Не удалось удалить продукт', result.data.errors);
-                    }
-                });
-            }
-
             var updateSelectedItemsSummary = function() {
-                var values = sc.summaryData.positions;
+                var values = self.summaryData.positions;
                 var total = 0;
                 var keys = Object.keys(values);
 
-                sc.summaryData.show = keys.length > 0;
+                self.summaryData.show = keys.length > 0;
 
                 keys.map(function(prop) {
                     total += $filter('price_net')(values[prop], values[prop].quantity);
                 });
 
-                sc.summaryData.total = total;
+                self.summaryData.total = total;
             };
 
             // Send HTTP request to remove the product from Customer Order.
-            sc.removeProduct = function(item, index){
+            this.removeProduct = function(item, index){
                 $.SmartMessageBox({
                     title: "Удалить товар?",
                     content: "Вы действительно хотите номенклатуру " + item.product.name,
                     buttons: '[Нет][Да]'
                 }, function (ButtonPressed) {
                     if (ButtonPressed === "Да") {
-                        serverApi.removeCustomerOrderProduct(sc.order.id, item.id, function(result){
+                        serverApi.removeCustomerOrderProduct(self.order.id, item.id, function(result) {
                             if(!result.data.errors){
-                                sc.order.customer_order_contents.splice(index, 1);
+                                self.order.customer_order_contents.splice(index, 1);
                                 funcFactory.showNotification('Продукт удален:', item.product.name, true);
                                 updateTotal();
                             } else {
@@ -308,19 +389,19 @@
                 });
             };
 
-            sc.deleteSelectedItems = function(useSelected) {
-                sc.order.customer_order_contents.forEach(function(item, i) {
+            this.deleteSelectedItems = function(useSelected) {
+                self.order.customer_order_contents.forEach(function(item, i) {
                     if (item.selected === useSelected) {
-                        serverApi.removeCustomerOrderProduct(sc.order.id, item.id, function(result) {
+                        serverApi.removeCustomerOrderProduct(self.order.id, item.id, function(result) {
                             if(result.data.errors) {
                                 funcFactory.showNotification('Не удалось удалить продукт', result.data.errors);
                             } else {
                                 if(useSelected) {
-                                    delete sc.summaryData.positions[item.id];
+                                    delete self.summaryData.positions[item.id];
                                     updateSelectedItemsSummary();
                                 }
 
-                                sc.order.customer_order_contents.splice(i, 1);
+                                self.order.customer_order_contents.splice(i, 1);
                                 updateTotal();
                                 funcFactory.showNotification('Продукт удален:', item.product.name, true);
                             }
@@ -335,13 +416,13 @@
             getOrderDetails();
             function getOrderDetails (){
                 serverApi.getCustomerOrderDetails($stateParams.id, function(result){
-                    var order = sc.order = result.data;
+                    var order = self.order = result.data;
 
-                    funcFactory.setPageTitle('Заказ ' + sc.order.number);
-                    sc.amontPercent = funcFactory.getPercent(order.paid_amount, order.total);
-                    sc.dispatchedPercent = funcFactory.getPercent(order.dispatched_amount, order.total);
+                    funcFactory.setPageTitle('Заказ ' + self.order.number);
+                    self.amontPercent = funcFactory.getPercent(order.paid_amount, order.total);
+                    self.dispatchedPercent = funcFactory.getPercent(order.dispatched_amount, order.total);
 
-                    sc.visual.roles = {
+                    self.visual.roles = {
                         can_edit: order.can_edit,
                         can_destroy: order.can_destroy,
                         can_confirm: order.can_confirm
@@ -349,66 +430,57 @@
 
                     calculateTotals(order);
                     updateTotal();
-                    completeInitPage(order)
+
+                    _subscription =  notifications.subscribe({
+                        channel: 'CustomerOrdersChannel',
+                        customer_order_id: $stateParams.id
+                    }, self.order.customer_order_contents);
                 });
             }
 
-            getNetworkData();
-            function getNetworkData(){
-                serverApi.getRelatedOrdersOfCustomer($stateParams.id, function(result){
-                    sc.data.networkData = result.data;
-                });
-            }
-
-            function refresh(){
-                getOrderDetails();
-                //getNetworkData();
-            }
-
-            function completeInitPage(){
-                _subscription =  notifications.subscribe({
-                    channel: 'CustomerOrdersChannel',
-                    customer_order_id: $stateParams.id
-                }, sc.order.customer_order_contents);
-            }
+            serverApi.getRelatedOrdersOfCustomer($stateParams.id, function(result) {
+                self.data.networkData = result.data;
+            });
 
             function calculateTotals(order){
-                var x, y, i, il;
+                var x, y, i;
 
                 // Считаем суммы по входящим платежам
                 x = 0;
                 y = 0;
-                for (i = 0, il = order.incoming_transfers.length; i < il; i++) {
+                for (i = 0; i < order.incoming_transfers.length; i++) {
                     var t = order.incoming_transfers[i];
                     x += t.linked_total;
                     y += t.amount;
                 }
-                sc.total_paid_linked = x;
-                sc.total_paid = y;
+
+                self.total_paid_linked = x;
+                self.total_paid = y;
 
                 // Считаем суммы по отгрузкам
                 x = 0;
                 y = 0;
-                for (i = 0, il=order.dispatch_orders.length; i < il; i++) {
+                for (i = 0; i < order.dispatch_orders.length; i++) {
                     var d = order.dispatch_orders[i];
                     x += d.linked_total;
                     y += d.amount;
                 }
-                sc.total_dispatched_linked = x;
-                sc.total_dispatched = y;
+
+                self.total_dispatched_linked = x;
+                self.total_dispatched = y;
             }
 
             var updateTotal = function() {
                 var total = 0;
 
-                sc.order.customer_order_contents.map(function(item){
+                self.order.customer_order_contents.map(function(item){
                     total += $filter('price_net')(item, item.quantity);
                 });
 
-                sc.total = total;
+                self.total = total;
             };
 
-            sc.getDaDataSuggestions = function(val, field_name){
+            this.getDaDataSuggestions = function(val, field_name){
                 return serverApi.validateViaDaData('address', {"query": val}).then(function(result){
                    return result.data.suggestions.map(function(item){
                        return {label: $parse(field_name)(item) || val, item: item, field: field_name};
@@ -416,7 +488,7 @@
                 });
             };
 
-            sc.fillBySuggestion = function($item){
+            this.fillBySuggestion = function($item){
                 var data = $item.item.data;
 
                 switch ($item.field){
@@ -450,57 +522,11 @@
                 }
             };
 
-            function returnBack(){
-                $state.go('app.customer_orders', {});
-            }
-
-            function goToLogs(){
-                $state.go('app.customer_orders.view.logs', {});
-            }
-
-            function sendCustomerOrder(){
-                serverApi.sendCustomerOrderInvoice($stateParams.id, function(result){
-                    if(result.status == 200 && !result.data.errors) {
-                        funcFactory.showNotification("Успешно", 'Заказ успешно отправлен.', true);
-                    } else if (result.status == 200 && result.data.errors) {
-                        funcFactory.showNotification("Неудача", result.data.errors, true);
-                    } else {
-                        funcFactory.showNotification("Неудача", 'Ошибка при попытке отправить заказ.', true);
-                    }
-                });
-            }
-
-            function confirmCustomerOrder(subdata, item) {
-                var data = {
-                    customer_order:{
-                        event: item.event
-                    }
-                };
-                serverApi.updateStatusCustomerOrder($stateParams.id, data, function(result){
-                    if(result.status == 200 && !result.data.errors) {
-                        funcFactory.showNotification("Успешно", 'Удалось ' + item.name.toLowerCase() + ' заказ', true);
-                        sc.order = result.data;
-                    } else {
-                        funcFactory.showNotification("Не удалось " + item.name.toLowerCase() + ' заказ', result.data.errors);
-                    }
-                });
-            }
-
-            function recalculateCustomerOrder() {
-                serverApi.recalculateCustomerOrder($stateParams.id, function(result){
-                    if(result.status == 200 && !result.data.errors) {
-                        funcFactory.showNotification("Успешно", 'Заказ успешно пересчитан.', true);
-                        sc.data.order = result.data;
-                    } else {
-                        funcFactory.showNotification("Неудача", 'Ошибка при пересчёте заказа.', true);
-                    }
-                });
-            }
-
             function getPropertyByDocumentType(item){
-                if (sc.data.networkData.format !== undefined && sc.data.networkData.format[item.type] !== undefined) {
-                    return sc.data.networkData.format[item.type];
+                if (self.data.networkData.format !== undefined && self.data.networkData.format[item.type] !== undefined) {
+                    return self.data.networkData.format[item.type];
                 }
+
                 switch (item.type){
                     case "CustomerOrder" : return {
                         title: "Заказ клиента",
@@ -524,59 +550,13 @@
                 }
             }
 
-            function updateRowPositionView(e, ui){
-                var $this = $(this),
-                    last_ind = angular.element(ui.item).scope().$index,
-                    new_ind = ui.item.index(),
-                    data = {customer_order: {command: "переместить_строку "+(last_ind+1)+"_на_" + (new_ind+1)}};
-                serverApi.updateCommandCustomerOrder(sc.order.id, data, function(result){
-                    if(result.status == 200){
-                        sc.order.customer_order_contents.swapItemByindex(last_ind, new_ind);
-                    }else{
-                        funcFactory.showNotification('Не удалось переместить сторку', result.data.errors);
-                        $this.sortable( "cancel" );
-                    }
-                }, function(){
-                    $this.sortable( "cancel" );
-                });
-            }
-
             sc.$on('$destroy', function(){
                _subscription && _subscription.unsubscribe();
             });
 
-            sc.goToPartner = function() {
-                $state.go('app.partners.view', {id: sc.order.partner.id})
+            this.goToPartner = function() {
+                $state.go('app.partners.view', {id: self.order.partner.id})
             };
-
-            function showCommandModal(){
-                var modalInstance = $uibModal.open({
-                    component: 'commandCustomerOrderModal',
-                    windowClass: 'eqo-centred-modal',
-                    resolve: {
-                        config: {}
-                    }
-                });
-
-                modalInstance.result.then(function (command) {
-                    var data = {
-                        customer_order: {
-                            command: command
-                        }
-                    };
-
-                    serverApi.updateCommandCustomerOrder(sc.order.id, data, function(result){
-                        if(result.status == 200){
-                            sc.order = result.data;
-                            funcFactory.showNotification('Комманда выполнена', "", true);
-                        } else {
-                            funcFactory.showNotification('Не удалось переместить сторку', result.data.errors);
-                        }
-                    }, function(){
-                    });
-                });
-            }
-
         }])
     ;
 }());
