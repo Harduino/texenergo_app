@@ -1,16 +1,10 @@
 /**
  * Shortcut-directive
  */
-(function(){
-    var module = angular.module('app.layout');
+class ToggleShortcut{
+    constructor($timeout, authService, $compile, $state){
 
-    module.directive('toggleShortcut', toggleShortcut);
-
-    toggleShortcut.$inject = ['$timeout', 'authService', '$compile', '$state'];
-
-    function toggleShortcut($timeout, authService, $compile, $state) {
-
-        var initDomEvents = function ($element, $scope) {
+        let initDomEvents = function ($element, $scope) {
 
             var shortcut_dropdown = $('#shortcut');
 
@@ -66,16 +60,21 @@
             }
         };
 
-        var link = function($scope, $element){
+        let link = function($scope, $element){
             $timeout(function(){
                 initDomEvents($element, $scope);
             });
         };
 
-        return{
-            restrict:'EA',
-            link:link
-        }
+        this.restrict = 'EA';
+        this.link = link;
     }
+}
 
-}());
+toggleShortcut.$inject = ['$timeout', 'authService', '$compile', '$state'];
+
+function toggleShortcut($timeout, authService, $compile, $state){
+    return new ToggleShortcut($timeout, authService, $compile, $state);
+}
+
+angular.module('app.layout').directive('toggleShortcut', toggleShortcut);
