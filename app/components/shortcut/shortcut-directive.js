@@ -1,18 +1,30 @@
 /**
  * Shortcut-directive
  */
-(function(){
-    var module = angular.module('app.layout');
+class ToggleShortcut{
+    constructor($timeout, authService, $compile, $state){
 
-    module.directive('toggleShortcut', toggleShortcut);
-
-    toggleShortcut.$inject = ['$timeout'];
-
-    function toggleShortcut($timeout) {
-
-        var initDomEvents = function ($element) {
+        let initDomEvents = function ($element, $scope) {
 
             var shortcut_dropdown = $('#shortcut');
+
+            $compile(shortcut_dropdown)($scope);
+
+            $scope.goToShortCutItem = function(state, params){
+                var p = params || null;
+
+                if(state === 'app.contacts.view'){
+                    var authProfile = authService.profile;
+                    if(authProfile){
+                        p = {
+                            id:authProfile.user_metadata.contact_id
+                        };
+                    }
+                }
+
+                $state.go(state, p);
+                window.setTimeout(shortcut_buttons_hide, 300);
+            };
 
             $element.on('click', function () {
                 if (shortcut_dropdown.is(":visible")) {
@@ -22,13 +34,6 @@
                 }
 
             });
-
-            shortcut_dropdown.find('a').click(function (e) {
-                e.preventDefault();
-                window.location = $(this).attr('href');
-                setTimeout(shortcut_buttons_hide, 300);
-            });
-
 
             // SHORTCUT buttons goes away if mouse is clicked outside of the area
             $(document).mouseup(function (e) {
@@ -55,16 +60,21 @@
             }
         };
 
-        var link = function($scope,$element){
+        let link = function($scope, $element){
             $timeout(function(){
-                initDomEvents($element);
+                initDomEvents($element, $scope);
             });
         };
 
-        return{
-            restrict:'EA',
-            link:link
-        }
+        this.restrict = 'EA';
+        this.link = link;
     }
+}
 
-}());
+toggleShortcut.$inject = ['$timeout', 'authService', '$compile', '$state'];
+
+function toggleShortcut($timeout, authService, $compile, $state){
+    return new ToggleShortcut($timeout, authService, $compile, $state);
+}
+
+angular.module('app.layout').directive('toggleShortcut', toggleShortcut);

@@ -1,4 +1,4 @@
-angular.module('app.layout', ['ui.router', 'app.templates'])
+angular.module('app.layout', ['ui.router', 'app.templates', 'login'])
     .config(($stateProvider, $urlRouterProvider) => {
         $stateProvider
             .state('app', {
