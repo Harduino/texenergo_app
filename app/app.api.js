@@ -332,6 +332,9 @@
         o.createDispatchOrderContent = function(dispatch_order_id, data, success, fail){
             $http.post('/dispatch_orders/'+dispatch_order_id+'/dispatch_order_contents', data).then(success, fail);
         };
+        o.deleteDispatchOrderContent = function(dispatch_order_id, content_id, success, fail){
+            $http.delete('/dispatch_orders/'+dispatch_order_id+'/dispatch_order_contents/' + content_id).then(success, fail);
+        };
 
         // ReceiveOrder
         o.getReceiveOrders = function(page, query, config, success, fail, partner_id){

@@ -97,6 +97,20 @@ class ViewDispatchOrderCtrl {
         window.open(window.APP_ENV.TEXENERGO_COM_API_HTTP_BASE_URL + '/dispatch_orders/' + this.dispatchOrder.id +
             path + '.pdf?token=' + this.$localStorage.id_token, '_blank');
     }
+
+    deleteProduct(item) {
+        let self = this;
+        self.serverApi.deleteDispatchOrderContent(this.$stateParams.id, item.id, r => {
+            if (!r.data.errors) {
+                for (var i = self.dispatchOrder.product_order_contents.length - 1; i >= 0; i--) {
+                    if (self.dispatchOrder.product_order_contents[i].id === item.id) self.dispatchOrder.product_order_contents.splice(i, 1);
+                }
+                self.funcFactory.showNotification('Удалил товар', 'Успешно удали товаро ' + item.product.name + ' из реализации', true);
+            } else {
+                self.funcFactory.showNotification('Не смог удалить', r.data.errors, false);
+            }
+        })
+    }
 }
 
 ViewDispatchOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', 'FileUploader', '$localStorage'];

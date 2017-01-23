@@ -60,9 +60,9 @@ class DispatchOrdersCtrl {
         };
         self.serverApi.createDispatchOrderContent(dispatch_order.id, data, r => {
             if (!r.data.errors) {
-                self.funcFactory.showNotification("Позиция списана", "Позиция добавлена в реализацию " + dispatch_order.number);
+                self.funcFactory.showNotification("Позиция списана", "Позиция добавлена в реализацию " + dispatch_order.number, true);
                 for (var i = self.data.dispatchableProducts.length - 1; i >= 0; i--) {
-                    if(self.data.dispatchableProducts.customer_order_content_id === item.customer_order_content_id) self.data.dispatchableProducts.splice(i, 1);
+                    if(self.data.dispatchableProducts[i].customer_order_content_id === item.customer_order_content_id) self.data.dispatchableProducts.splice(i, 1);
                 }
             } else {
                 self.funcFactory.showNotification("Не смог списать", "Сервер ответил " + r.data.errors);
@@ -79,7 +79,7 @@ class DispatchOrdersCtrl {
                 self.data.ordersList.unshift(r.data);
                 currentOrder = self.fetchAddableOrder(item);
                 if(currentOrder !== undefined){
-                    self.funcFactory.showNotification("Содание реализации", "Создан новый документ реализации " + currentOrder.number);
+                    self.funcFactory.showNotification("Содание реализации", "Создан новый документ реализации " + currentOrder.number, true);
                     self.addDispatchOrderContent(item, currentOrder);
                 } else {
                     self.funcFactory.showNotification("Нет списания", "Не смог ни найти, ни создать новый документ реализации. ", false)
@@ -90,10 +90,10 @@ class DispatchOrdersCtrl {
 
     disallowAutomatic(item) {
         let self = this;
-        let data = { prevent_robot: true };
+        let data = { automatically_dispatchable: false };
         self.serverApi.updateCustomerOrderProduct(item.customer_order_id, item.customer_order_content_id, data, r => {
             if(!r.data.errors) {
-                item.prevent_robot = true;
+                item.automatically_dispatchable = false;
                 self.funcFactory.showNotification("Получилось", "Позиция НЕ будет обрабатываться роботом.", true);
             } else {
                 self.funcFactory.showNotification("Не получилось", "Не получилось поставить отметку о разрешении списания роботом. " + r.data.errors, false);
@@ -103,10 +103,10 @@ class DispatchOrdersCtrl {
 
     allowAutomatic(item) {
         let self = this;
-        let data = { prevent_robot: false };
+        let data = { automatically_dispatchable: true };
         self.serverApi.updateCustomerOrderProduct(item.customer_order_id, item.customer_order_content_id, data, r => {
             if(!r.data.errors){
-                item.prevent_robot = false;
+                item.automatically_dispatchable = true;
                 self.funcFactory.showNotification("Получилось", "Позиция будет списана роботом автоматически.", true);
             } else {
                 self.funcFactory.showNotification("Не получилось", "Не получилось снять отметку о запрете списания роботом. " + r.data.errors, false);
