@@ -9,13 +9,13 @@ class EqoProductDetailsModalCtrl {
     saveProductComment (data) {
         let self = this;
 
-        this.serverApi.updateCustomerOrderProduct(self.order.id, self.row.id, {
+        this.serverApi.updateCustomerOrderProduct(self.resolve.order.id, self.resolve.row.id, {
             customer_order_content: {comment: data.comment}
         }, result => {
             if(result.data.errors) {
-                self.funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors);
+                self.funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors, true);
             } else {
-                self.funcFactory.showNotification('Добавил комментарий', 'Добавлен комментарий');
+                self.funcFactory.showNotification('Добавил комментарий', 'Добавлен комментарий', true);
             }
         });
     }
