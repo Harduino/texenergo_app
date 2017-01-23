@@ -9,7 +9,7 @@ class DispatchOrdersCtrl {
             navTableButts: [
                 {
                     type: 'view',
-                    callback: (id) => $state.go('app.dispatch_orders.view', {id: id})
+                    callback: (item) => $state.go('app.dispatch_orders.view', {id: item.data.id})
                 },
                 {
                     type: 'remove',
