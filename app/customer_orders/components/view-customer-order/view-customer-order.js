@@ -119,18 +119,8 @@ class ViewCustomerOrderCtrl {
                 {
                     type: 'remove',
                     disabled: false,
-                    callback: item => {
-                        serverApi.removeCustomerOrderProduct(self.order.id, item.data.id, result => {
-                            if(!result.data.errors){
-                                self.order.customer_order_contents.splice(item.index, 1);
-                                funcFactory.showNotification('Продукт удален:', item.data.product.name, true);
-                                self.removeLinkedDispatchedOrder(item.data);
-                                self.updateTotal();
-                            } else {
-                                funcFactory.showNotification('Не удалось удалить продукт', result.data.errors);
-                            }
-                        });
-                    }
+                    callback: item => serverApi.removeCustomerOrderProduct(self.order.id, item.data.id,
+                        self.getRemovePositionHandler(item.data))
                 }
             ]
         };
@@ -293,11 +283,11 @@ class ViewCustomerOrderCtrl {
 
                         if(self.getPositionIndex(position) === -1) {
                             self.order.customer_order_contents.push(position);
+                            self.funcFactory.showNotification('Успешно добавлен продукт', t.name, true);
                         }
                     }
 
                     self.updateTotal();
-                    self.funcFactory.showNotification('Успешно добавлен продукт', t.name, true);
                     selectCtrl.open = true;
                     selectCtrl.search = '';
                 }
@@ -306,7 +296,7 @@ class ViewCustomerOrderCtrl {
     }
 
     // Send HTTP request to remove the product from Customer Order. PROBABLY NOT USED
-    removeProduct (item, index) {
+    removeProduct (item) {
         let self = this;
 
         $.SmartMessageBox({
@@ -315,16 +305,7 @@ class ViewCustomerOrderCtrl {
             buttons: '[Нет][Да]'
         }, ButtonPressed => {
             if (ButtonPressed === 'Да') {
-                self.serverApi.removeCustomerOrderProduct(self.order.id, item.id, result => {
-                    if(!result.data.errors){
-                        self.order.customer_order_contents.splice(index, 1);
-                        self.funcFactory.showNotification('Продукт удален:', item.product.name, true);
-                        self.removeLinkedDispatchedOrder(item);
-                        self.updateTotal();
-                    } else {
-                        self.funcFactory.showNotification('Не удалось удалить продукт', result.data.errors);
-                    }
-                });
+                self.serverApi.removeCustomerOrderProduct(self.order.id, item.id, self.getRemovePositionHandler(item));
             }
         });
     }
@@ -332,22 +313,15 @@ class ViewCustomerOrderCtrl {
     deleteSelectedItems (useSelected) {
         let self = this;
 
-        this.order.customer_order_contents.forEach((item, i) => {
+        this.order.customer_order_contents.forEach((item) => {
             if (item.selected === useSelected) {
                 self.serverApi.removeCustomerOrderProduct(self.order.id, item.id, result => {
-                    if(result.data.errors) {
-                        self.funcFactory.showNotification('Не удалось удалить продукт', result.data.errors);
-                    } else {
-                        if(useSelected) {
-                            delete self.summaryData.positions[item.id];
-                            self.updateSelectedItemsSummary();
-                        }
-
-                        self.order.customer_order_contents.splice(i, 1);
-                        self.removeLinkedDispatchedOrder(item);
-                        self.updateTotal();
-                        self.funcFactory.showNotification('Продукт удален:', item.product.name, true);
+                    if(!result.data.errors && useSelected) {
+                        delete self.summaryData.positions[item.id];
+                        self.updateSelectedItemsSummary();
                     }
+
+                    self.getRemovePositionHandler(item)(result);
                 });
             }
         });
@@ -493,6 +467,26 @@ class ViewCustomerOrderCtrl {
         });
 
         return positionIndex;
+    }
+
+    getRemovePositionHandler (position) {
+        let self = this;
+
+        return res => {
+            if(res.data.errors) {
+                self.funcFactory.showNotification('Не удалось удалить продукт', res.data.errors);
+            } else {
+                let positionIndex = self.getPositionIndex(position);
+
+                if(positionIndex > -1) {
+                    self.order.customer_order_contents.splice(positionIndex, 1);
+                    self.funcFactory.showNotification('Продукт удален:', position.product.name, true);
+                }
+
+                self.removeLinkedDispatchedOrder(position);
+                self.updateTotal();
+            }
+        };
     }
 }
 
