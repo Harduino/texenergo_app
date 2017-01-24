@@ -124,6 +124,7 @@ class ViewCustomerOrderCtrl {
                             if(!result.data.errors){
                                 self.order.customer_order_contents.splice(item.index, 1);
                                 funcFactory.showNotification('Продукт удален:', item.data.product.name, true);
+                                self.removeLinkedDispatchedOrder(item.data);
                                 self.updateTotal();
                             } else {
                                 funcFactory.showNotification('Не удалось удалить продукт', result.data.errors);
@@ -314,6 +315,7 @@ class ViewCustomerOrderCtrl {
                     if(!result.data.errors){
                         self.order.customer_order_contents.splice(index, 1);
                         self.funcFactory.showNotification('Продукт удален:', item.product.name, true);
+                        self.removeLinkedDispatchedOrder(item);
                         self.updateTotal();
                     } else {
                         self.funcFactory.showNotification('Не удалось удалить продукт', result.data.errors);
@@ -338,6 +340,7 @@ class ViewCustomerOrderCtrl {
                         }
 
                         self.order.customer_order_contents.splice(i, 1);
+                        self.removeLinkedDispatchedOrder(item);
                         self.updateTotal();
                         self.funcFactory.showNotification('Продукт удален:', item.product.name, true);
                     }
@@ -466,6 +469,14 @@ class ViewCustomerOrderCtrl {
 
         this[fieldX] = x;
         this[fieldY] = y;
+    }
+
+    removeLinkedDispatchedOrder (customerOrder) {
+        for(let dispatchIndex = this.order.dispatched.length - 1; dispatchIndex >= 0; dispatchIndex--) {
+            if(customerOrder.product.id === this.order.dispatched[dispatchIndex].product.id) {
+                this.order.dispatched.splice(dispatchIndex, 1);
+            }
+        }
     }
 }
 
