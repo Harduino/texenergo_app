@@ -289,7 +289,11 @@ class ViewCustomerOrderCtrl {
                     self.funcFactory.showNotification('Не удалось добавить продукт', result.data.errors);
                 } else {
                     for (let i = 0; i < result.data.length; i++) {
-                        self.order.customer_order_contents.push(angular.extend(data, result.data[i]));
+                        let position = angular.extend(data, result.data[i]);
+
+                        if(self.getPositionIndex(position) === -1) {
+                            self.order.customer_order_contents.push(position);
+                        }
                     }
 
                     self.updateTotal();
@@ -477,6 +481,18 @@ class ViewCustomerOrderCtrl {
                 this.order.dispatched.splice(dispatchIndex, 1);
             }
         }
+    }
+
+    getPositionIndex (position) {
+        let positionIndex = -1;
+
+        this.order.customer_order_contents.forEach((existingPosition, existingPositionIndex) => {
+            if(existingPosition.id === position.id) {
+                positionIndex = existingPositionIndex;
+            }
+        });
+
+        return positionIndex;
     }
 }
 
