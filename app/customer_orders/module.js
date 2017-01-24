@@ -62,9 +62,20 @@
         var actions = {
             create: function(productsList, row){
                 if ($localStorage.profile && ($localStorage.profile.user_metadata.contact_id != row.user_id)) {
-                    var data = row.data[0];
-                    productsList.push(data);
-                    funcFactory.showNotification("Добавлен продукт", data.product.name + ' добавлен другим пользователем.', true);
+                    var newProduct = row.data[0];
+                    var productExists = false;
+
+                    productsList.forEach(function(product) {
+                        if(product._id === newProduct._id) {
+                            productExists = true;
+                        }
+                    });
+
+                    if(!productExists) {
+                        productsList.push(newProduct);
+                        funcFactory.showNotification("Добавлен продукт", newProduct.product.name +
+                            ' добавлен другим пользователем.', true);
+                    }
                 }
             },
             update: function(productsList, row){
