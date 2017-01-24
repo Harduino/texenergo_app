@@ -86,7 +86,7 @@ class ViewCustomerOrderCtrl {
                         });
                     }
                 },
-                {type: 'refresh', callback: self.getOrderDetails}
+                {type: 'refresh', callback: self.getOrderDetails.bind(self)}
             ],
             chartOptions: {
                 barColor: 'rgb(103,135,155)',
@@ -222,7 +222,7 @@ class ViewCustomerOrderCtrl {
         this.serverApi.updateCustomerOrderProduct(this.order.id, product.id, {
             quantity: product.quantity,
             discount: product.discount
-        }, this.processUpdateCustomerDataResponse);
+        }, this.processUpdateCustomerDataResponse.bind(this));
     }
 
     changeCustomerOrderProductModal (p) {
@@ -373,7 +373,7 @@ class ViewCustomerOrderCtrl {
     // Именно этим и отличается от saveProductChange
     saveProductSubstitute (data) {
         this.serverApi.updateCustomerOrderProduct(this.order.id, data.id, {product_id: data.product_id},
-            this.processUpdateCustomerDataResponse);
+            this.processUpdateCustomerDataResponse.bind(this));
     }
 
     processUpdateCustomerDataResponse (result) {
