@@ -1,5 +1,5 @@
 class ViewCustomerOrderCtrl {
-    constructor($scope, $state, $stateParams, serverApi, funcFactory, $filter, notifications, $uibModal, $parse, $timeout) {
+    constructor($state, $stateParams, serverApi, funcFactory, $filter, $parse, $timeout, notifications, $uibModal) {
         let self = this;
 
         this.serverApi = serverApi;
@@ -183,7 +183,7 @@ class ViewCustomerOrderCtrl {
         this.summaryData = {show: false, positions: {}, total: 0};
         this.getOrderDetails();
         serverApi.getRelatedOrdersOfCustomer($stateParams.id, res => self.data.networkData = res.data);
-        $scope.$on('$destroy', () => self._subscription && self._subscription.unsubscribe());
+        this.$onDestroy = () => self._subscription && self._subscription.unsubscribe();
     }
 
     saveOrderInfo () {
@@ -469,6 +469,11 @@ class ViewCustomerOrderCtrl {
     }
 }
 
-ViewCustomerOrderCtrl.$inject = ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', '$filter',
-    'customerOrdersNotifications', '$uibModal', '$parse', '$timeout'];
-angular.module('app.customer_orders').controller('ViewCustomerOrderCtrl', ViewCustomerOrderCtrl);
+ViewCustomerOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', '$filter', '$parse', '$timeout',
+    'customerOrdersNotifications', '$uibModal'];
+
+angular.module('app.customer_orders').component('viewCustomerOrder', {
+    controller: ViewCustomerOrderCtrl,
+    controllerAs: '$ctrl',
+    templateUrl: '/app/customer_orders/components/view-customer-order/view-customer-order.html'
+});
