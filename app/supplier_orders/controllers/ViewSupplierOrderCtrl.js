@@ -52,30 +52,22 @@
             dataMethod: serverApi.getPartners
         };
 
-        /**
-         * следим за изменеиями в коллекции (включая свойства коллекции) при изменении пересчитываем total
-         */
-        sc.$watch('data.supplierOrder.supplier_order_contents', function(values){
-            if(values){
-                var total = 0;
+        var updateTotal = function() {
+            var total = 0;
 
-                values.map(function(item){
-                    total += $filter('price_net')(item, item.quantity);
-                });
+            sc.data.supplierOrder.supplier_order_contents.map(function(item) {
+                total += $filter('price_net')(item, item.quantity);
+            });
 
-                sc.data.supplierOrder.total = total;
-            }
-        }, true);
+            sc.data.supplierOrder.total = total;
+        };
 
         serverApi.getSupplierOrderDetails($stateParams.id, function(result){
             var order = sc.data.supplierOrder = result.data;
+            updateTotal();
             sc.amontPercent = funcFactory.getPercent(order.paid_amount, order.total);
             sc.dispatchedPercent = funcFactory.getPercent(order.received_amount, order.total);
-
-            sc.visual.roles = {
-                can_edit: order.can_edit,
-                can_confirm: order.can_confirm
-            };
+            sc.visual.roles = {can_edit: order.can_edit, can_confirm: order.can_confirm};
 
             sc.fileModalOptions={
                 url:'/api/supplier_orders/'+ order.id +'/documents',
@@ -94,12 +86,10 @@
         function refresh(){
             serverApi.getSupplierOrderDetails($stateParams.id, function(result) {
                 var order = sc.data.supplierOrder = result.data;
+                updateTotal();
                 sc.amontPercent = funcFactory.getPercent(order.paid_amount, order.total);
                 sc.dispatchedPercent = funcFactory.getPercent(order.received_amount, order.total);
-
-                sc.visual.roles = {
-                    can_confirm: order.can_confirm
-                };
+                sc.visual.roles = {can_confirm: order.can_confirm};
             });
         }
 
@@ -120,34 +110,17 @@
             });
         }
 
-        /**
-         * выбор продукта для добавления к заказу
-         */
         sc.selectProductForAppend = function(item){
             sc.productForAppend = item;
             sc.productForAppend.id = item.id || item._id;
             sc.productForAppend.quantity = 1;
-            sc.productForAppend.price = item.price;
         };
 
-        /**
-         * Добавить продукт в список
-         */
         sc.appendProduct = function(event){
-            var append = function(){
-                var t=sc.productForAppend,
-                    data = angular.extend(t, {product: {name:t.name, id: t.id}}),
-                    post = {
-                        product_id: t.id,
-                        quantity: t.quantity
-                    };
-                sc._subscription.send({action: "create_content", data: post });
-            };
-            if(event){
-                if(event.keyCode == 13){
-                    append();
-                }
-            } else append();
+            if(!event || (event.keyCode == 13)) {
+                var t = sc.productForAppend;
+                sc._subscription.send({action: 'create_content', data: {product_id: t.id, quantity: t.quantity}});
+            }
         };
 
         sc.$on('$destroy', function(){
@@ -190,42 +163,20 @@
          * Удаление продукта
          * @param item - объект с индексом продукта в листе и id
          */
-        sc.removeProduct = function(item){
+        sc.removeProduct = function(item) {
             sc._subscription.send({action: "destroy_content", data: item});
         };
 
-
-        function confirmOrder(subdata, item) {
-            var data = {
-                title: supplierOrder.title,
-                description: supplierOrder.description,
-                partner_id: supplierOrder.partner.id,
-                number: supplierOrder.number
-            };
-            sc._subscription.send({action: "update", data: data });
-        }
-
         sc.saveProductChange = function(data) {
-            var product = data.item;
-            sc._subscription.send({action: "update_content", data: product });
+            sc._subscription.send({action: "update_content", data: data.item});
         };
 
         function updateStatus(subdata, item) {
-            var data = {
-                event: item.event
-            };
-            sc._subscription.send({action: "update_status", data: data });
-        }
-        
-        function goEditSupplierOrder(){
-            $state.go('app.supplier_orders.view.edit', $stateParams)
+            sc._subscription.send({action: "update_status", data: {event: item.event}});
         }
 
         function returnBack(){
             $state.go('app.supplier_orders', {});
-        }
-        function showFileModal(){
-            sc.visual.showFileModal();
         }
     }]);
 }());
