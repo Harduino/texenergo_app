@@ -1,78 +1,82 @@
 <div id="content">
-    <div class="well well-white" ng-switch="data.supplierOrder.can_edit">
-        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">{{visual.titles + data.supplierOrder.number}}</h2>    
-        <form-nav-buttons subdata="data.supplierOrder" data-role="visual.roles" options="visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
+    <div class="well well-white" ng-switch="$ctrl.data.supplierOrder.can_edit">
+        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">
+            {{$ctrl.visual.titles + $ctrl.data.supplierOrder.number}}
+        </h2>
+        <form-nav-buttons subdata="$ctrl.data.supplierOrder" data-role="$ctrl.visual.roles"
+                          options="$ctrl.visual.navButtsOptions" class="btn-group margin-top-10">
+        </form-nav-buttons>
         <hr>
         <div class="row">
             <div class="col-xs-12 col-md-3">
-                <span easypiechart options="visual.chartOptions" percent="amontPercent" class="easy-pie-chart">
-                    <span class="percent ng-cloak" ng-bind="amontPercent"></span>
+                <span options="$ctrl.visual.chartOptions" percent="$ctrl.amontPercent" class="easy-pie-chart"
+                      easypiechart>
+                    <span class="percent ng-cloak" ng-bind="$ctrl.amontPercent"></span>
                 </span>
                 <span class="easy-pie-title">оплачен</span>
             </div>
             <div class="col-xs-12 col-md-3">
-                <span easypiechart options="visual.chartOptions" percent="dispatchedPercent" class="easy-pie-chart">
-                    <span class="percent ng-cloak" ng-bind="dispatchedPercent"></span>
+                <span options="$ctrl.visual.chartOptions" percent="$ctrl.dispatchedPercent" class="easy-pie-chart"
+                      easypiechart>
+                    <span class="percent ng-cloak" ng-bind="$ctrl.dispatchedPercent"></span>
                 </span>
                 <span class="easy-pie-title">получен</span>
             </div>
         </div>
         <div class="row margin-top-10">
-            <p class="col-xs-12 col-md-3 font-bold">
-                Номер:
-            </p>
+            <p class="col-xs-12 col-md-3 font-bold">Номер:</p>
             <div class="col-md-9" ng-switch-when="true">
-                <a editable-text="data.supplierOrder.number" onaftersave="saveSupplierOrderInfo()">{{ data.supplierOrder.number || 'Нет' }}</a>
+                <a editable-text="$ctrl.data.supplierOrder.number" onaftersave="$ctrl.saveSupplierOrderInfo()">
+                    {{ $ctrl.data.supplierOrder.number || 'Нет' }}
+                </a>
             </div>
-            <p ng-switch-default class="col-md-9">{{ data.supplierOrder.number }}</p>
+            <p ng-switch-default class="col-md-9">{{ $ctrl.data.supplierOrder.number }}</p>
         </div>
         <div class="row margin-top-10">
-            <p class="col-xs-12 col-md-3 font-bold">
-                Название:
-            </p>
+            <p class="col-xs-12 col-md-3 font-bold">Название:</p>
             <div class="col-md-9" ng-switch-when="true">
-                <a editable-textarea="data.supplierOrder.title" onaftersave="saveSupplierOrderInfo()">{{ data.supplierOrder.title || 'Нет' }}</a>
+                <a editable-textarea="$ctrl.data.supplierOrder.title" onaftersave="$ctrl.saveSupplierOrderInfo()">
+                    {{ $ctrl.data.supplierOrder.title || 'Нет' }}
+                </a>
             </div>
-            <p ng-switch-default class="col-md-9">{{data.supplierOrder.title}}</p>
+            <p ng-switch-default class="col-md-9">{{$ctrl.data.supplierOrder.title}}</p>
         </div>
         <div class="row margin-top-10">
-            <p class="col-xs-12 col-md-3 font-bold">
-                Описание:
-            </p>
+            <p class="col-xs-12 col-md-3 font-bold">Описание:</p>
             <div class="col-md-9" ng-switch-when="true">
-                <a editable-textarea="data.supplierOrder.description" onaftersave="saveSupplierOrderInfo()">{{ data.supplierOrder.description || 'Нет' }}</a>
+                <a editable-textarea="$ctrl.data.supplierOrder.description" onaftersave="$ctrl.saveSupplierOrderInfo()">
+                    {{ $ctrl.data.supplierOrder.description || 'Нет' }}
+                </a>
             </div>
-            <p ng-switch-default class="col-md-9">{{data.supplierOrder.description}}</p>
+            <p ng-switch-default class="col-md-9">{{$ctrl.data.supplierOrder.description}}</p>
         </div>
         <div class="row">
-            <p class="col-xs-12 col-md-3 font-bold">
-                Дата заказа:
-            </p>
-            <p class="col-md-9">{{data.supplierOrder.date | date:'dd MMMM yy, HH:mm'}}</p>
+            <p class="col-xs-12 col-md-3 font-bold">Дата заказа:</p>
+            <p class="col-md-9">{{$ctrl.data.supplierOrder.date | date:'dd MMMM yy, HH:mm'}}</p>
         </div>
         <div class="row">
-            <p class="col-xs-12 col-md-3 font-bold">
-                Партнер:
-            </p>
+            <p class="col-xs-12 col-md-3 font-bold">Партнер:</p>
             <p class="col-md-9">
                 <div ng-switch-when="true">
-                    <ui-select ui-select-infinity="partnerSelectConfig" ng-model="data.supplierOrder.partner" theme="select2" style="min-width: 250px; margin-top: -6px;" on-select="saveSupplierOrderInfo()">
+                    <ui-select ui-select-infinity="$ctrl.partnerSelectConfig" on-select="$ctrl.saveSupplierOrderInfo()"
+                               style="min-width: 250px; margin-top: -6px;" ng-model="$ctrl.data.supplierOrder.partner"
+                               theme="select2">
                         <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
-                        <ui-select-choices repeat="partner in data.partnersList | filter:$select.search">
+                        <ui-select-choices repeat="partner in $ctrl.data.partnersList | filter:$select.search">
                             <div ng-bind-html="partner.name | highlight: $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
             </p>
             <p class="col-md-9">
-                <a ng-switch-default ng-href="/#/partners/{{data.supplierOrder.partner.id}}">{{data.supplierOrder.partner.name}}</a>
+                <a ng-switch-default ng-href="/#/partners/{{$ctrl.data.supplierOrder.partner.id}}">
+                    {{$ctrl.data.supplierOrder.partner.name}}
+                </a>
             </p>
         </div>
         <div class="row">
-            <p class="col-xs-12 col-md-3 font-bold">
-                Статус:
-            </p>
-            <p class="col-md-9">{{data.supplierOrder.status}}</p>
+            <p class="col-xs-12 col-md-3 font-bold">Статус:</p>
+            <p class="col-md-9">{{$ctrl.data.supplierOrder.status}}</p>
         </div>
     </div>
     <ul class="nav nav-tabs bordered" id="myTab1">
@@ -82,9 +86,13 @@
     </ul>
     <div class="tab-content padding-10" id="myTabContent1" style="background: white;">
         <div class="tab-pane fade in active" id="s1">
-            <ui-select ng-if="data.supplierOrder.can_edit" id="eso_prod_select" ui-select-infinity="pSelectConfig" ng-model="data.selectedProduct" theme="select2" on-select="selectProductForAppend($item, $model)" style="width: 100%;">
-                <ui-select-match placeholder="Введите товар для добавления...">{{$select.selected.name}}</ui-select-match>
-                <ui-select-choices repeat="product in data.productsList | filter:$select.search" class="search-item">
+            <ui-select ng-if="$ctrl.data.supplierOrder.can_edit" ui-select-infinity="$ctrl.pSelectConfig"
+                       ng-model="$ctrl.data.selectedProduct" theme="select2" id="eso_prod_select"
+                       style="width: 100%;" on-select="$ctrl.selectProductForAppend($item, $model)">
+                <ui-select-match placeholder="Введите товар для добавления...">
+                    {{$select.selected.name}}
+                </ui-select-match>
+                <ui-select-choices repeat="product in $ctrl.data.productsList|filter:$select.search" class="search-item">
                     <div class="search-tr">
                         <div class="search-td col-md-1">
                             <img ng-src="{{product.image_url}}">
@@ -103,46 +111,58 @@
                         <th class="hidden-xs">Цена</th>
                         <th>Кол-во</th>
                         <th>Итого</th>
-                        <th/>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-if="productForAppend.id" class="append-product-row a-row-add" ng-keypress="appendProduct($event)">
+                    <tr ng-if="$ctrl.productForAppend.id" class="append-product-row a-row-add"
+                        ng-keypress="$ctrl.appendProduct($event)">
                         <td></td>
-                        <td>{{ productForAppend.name }}</td>
-                        <td>{{ productForAppend.article }}</td>
+                        <td>{{ $ctrl.productForAppend.name }}</td>
+                        <td>{{ $ctrl.productForAppend.article }}</td>
                         <td>
-                            <input id="append_product_price" class="form-control table-input" ng-model="productForAppend.price" model-filter="{min:0, number: true}" filter-name="te_number" type="text" ng-init="focusOnProduct()">
+                            <input id="append_product_price" class="form-control table-input" filter-name="te_number"
+                                   ng-model="$ctrl.productForAppend.price" model-filter="{min:0, number: true}"
+                                   type="text" ng-init="focusOnProduct()">
                         </td>
                         <td>
-                            <input id="append_product_quantity" class="form-control table-input" ng-model="productForAppend.quantity" model-filter="{min:0}" filter-name="te_number" type="text" ng-init="focusOnProduct()">
+                            <input id="append_product_quantity" class="form-control table-input" filter-name="te_number"
+                                   ng-model="$ctrl.productForAppend.quantity" model-filter="{min:0}" type="text"
+                                   ng-init="focusOnProduct()">
                         </td>
                         <td>
-                            {{ productForAppend.price * productForAppend.quantity }}
+                            {{ $ctrl.productForAppend.price * $ctrl.productForAppend.quantity }}
                         </td>
                         <td class="center-item-text">
-                            <div ng-click="appendProduct()" class="btn btn-success">
+                            <div ng-click="$ctrl.appendProduct()" class="btn btn-success">
                                 <i class="fa fa-plus"></i>
                             </div>
                         </td>
                     </tr>
-                    <tr ng-repeat='item in data.supplierOrder.supplier_order_contents'>
+                    <tr ng-repeat='item in $ctrl.data.supplierOrder.supplier_order_contents'>
                         <td class="hidden-xs">{{ $index + 1 }}</td>
                         <td>
                             <a ng-href="/#/products/{{ item.product.id }}">{{ item.product.name }}</a>
                         </td>
                         <td class="hidden-xs">{{ item.product.article}}</td>
                         <td class="text-right">
-                            <a ng-if="data.supplierOrder.can_edit" editable-number="item.price" e-step="0.01" onaftersave="saveProductChange({item: item, index: $index})" buttons="no">{{ item.price }}</a>
-                            <span ng-if="!data.supplierOrder.can_edit">{{ item.price }}</span>
+                            <a ng-if="$ctrl.data.supplierOrder.can_edit" editable-number="item.price" e-step="0.01"
+                               onaftersave="$ctrl.saveProductChange({item: item, index: $index})" buttons="no">
+                                {{ item.price }}
+                            </a>
+                            <span ng-if="!$ctrl.data.supplierOrder.can_edit">{{ item.price }}</span>
                         </td>
                         <td class="text-right">
-                            <a ng-if="data.supplierOrder.can_edit" editable-number="item.quantity" onaftersave="saveProductChange({item: item, index: $index})" e-min="0" buttons="no">{{ item.quantity }}</a>
-                            <span ng-if="!data.supplierOrder.can_edit">{{ item.quantity || 0}}</span>
+                            <a ng-if="$ctrl.data.supplierOrder.can_edit" editable-number="item.quantity" buttons="no"
+                               onaftersave="$ctrl.saveProductChange({item: item, index: $index})" e-min="0">
+                                {{ item.quantity }}
+                            </a>
+                            <span ng-if="!$ctrl.data.supplierOrder.can_edit">{{ item.quantity || 0}}</span>
                         </td>
-                        <td class="text-right" class="hidden-xs">{{ item.price * item.quantity | currency }}</td>
+                        <td class="text-right hidden-xs">{{ item.price * item.quantity | currency }}</td>
                         <td class="center">
-                            <div ng-disabled="!item.can_destroy" ng-click="removeProduct(item)" class="ng-scope btn btn-xs btn-danger">
+                            <div ng-disabled="!item.can_destroy" ng-click="$ctrl.removeProduct(item)"
+                                 class="ng-scope btn btn-xs btn-danger">
                                 <i class="fa fa-trash-o"></i>
                             </div>
                         </td>
@@ -152,11 +172,9 @@
                         <td></td>
                         <td class="hidden-xs"></td>
                         <td class="hidden-xs"></td>
-                        <td>
-                            <span class="pull-right">Итого:</span>
-                        </td>
-                        <td>{{ data.supplierOrder.total | currency }}</td>
-                        <td/>
+                        <td><span class="pull-right">Итого:</span></td>
+                        <td>{{ $ctrl.data.supplierOrder.total | currency }}</td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>
@@ -171,14 +189,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="item in data.supplierOrder.received">
+                    <tr ng-repeat="item in $ctrl.data.supplierOrder.received">
                         <td class="hidden-xs">{{ $index + 1 }}</td>
                         <td>
                             <a ng-href="/#/products/{{ item.product.id}}">
                                 {{ item.product.name + ' '+ item.product.article }}
                             </a>
                         </td>
-                        <td class="success" ng-class="{'warning': item.received_quantity < item.quantity}">{{item.received_quantity +'/'+ item.quantity}}</td>
+                        <td class="success" ng-class="{'warning': item.received_quantity < item.quantity}">
+                            {{item.received_quantity +'/'+ item.quantity}}
+                        </td>
                 </tbody>
             </table>
         </div>
@@ -195,7 +215,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="item in data.supplierOrder.receive_orders">
+                    <tr ng-repeat="item in $ctrl.data.supplierOrder.receive_orders">
                         <td class="hidden-xs">{{ $index + 1 }}</td>
                         <td>{{ item.number }}</td>
                         <td class="hidden-xs">{{ item.date | date:'dd MMMM yy, HH:mm'}}</td>
@@ -203,7 +223,9 @@
                         <td class="hidden-xs">{{ item.total | currency}}</td>
                         <td class="center">
                         <div class="btn-group">
-                        <a class="btn btn-xs btn-info" ng-href="/#/receive_orders/{{item.id}}"><i class="fa fa-eye"></i></a>
+                        <a class="btn btn-xs btn-info" ng-href="/#/receive_orders/{{item.id}}">
+                            <i class="fa fa-eye"></i>
+                        </a>
                         </div>
                         </td>
                     </tr>
@@ -221,7 +243,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="item in data.supplierOrder.outgoing_transfers">
+                    <tr ng-repeat="item in $ctrl.data.supplierOrder.outgoing_transfers">
                         <td class="hidden-xs">{{ $index + 1 }}</td>
                         <td>{{ item.number }}</td>
                         <td class="hidden-xs">{{ item.date | date:'dd MMMM yy, HH:mm' }}</td>
@@ -229,7 +251,9 @@
                         <td class="hidden-xs">{{ item.total | currency}}</td>
                         <td class="center">
                             <div class="btn-group">
-                                <a class="btn btn-xs btn-info" ng-href="/#/outgoing_transfers/{{ item.id }}"><i class="fa fa-eye"></i></a>
+                                <a class="btn btn-xs btn-info" ng-href="/#/outgoing_transfers/{{ item.id }}">
+                                    <i class="fa fa-eye"></i>
+                                </a>
                             </div>
                         </td>
                     </tr>

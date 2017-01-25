@@ -38,6 +38,7 @@
             views:{
                 "content@app":{
                     controller: 'ViewSupplierOrderCtrl',
+                    controllerAs: '$ctrl',
                     templateUrl: '/app/supplier_orders/views/viewSupplierOrder.html'
                 }
             }
