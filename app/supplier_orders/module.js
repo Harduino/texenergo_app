@@ -35,10 +35,9 @@
                     params:'SupplierOrder'
                 }
             },
-            views:{
-                "content@app":{
-                    controller: 'ViewSupplierOrderCtrl',
-                    templateUrl: '/app/supplier_orders/views/viewSupplierOrder.html'
+            views: {
+                "content@app": {
+                    template: '<view-supplier-order></view-supplier-order>'
                 }
             }
         });

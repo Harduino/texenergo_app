@@ -38,8 +38,7 @@
             },
             views:{
                 "content@app":{
-                    controller: 'ViewCustomerOrderCtrl',
-                    templateUrl: '/app/customer_orders/views/viewCustomerOrder.html'
+                    template: '<view-customer-order></view-customer-order>'
                 }
             }
         }).state('app.customer_orders.view.logs', {
@@ -63,9 +62,13 @@
         var actions = {
             create: function(productsList, row){
                 if ($localStorage.profile && ($localStorage.profile.user_metadata.contact_id != row.user_id)) {
-                    var data = row.data[0];
-                    productsList.push(data);
-                    funcFactory.showNotification("Добавлен продукт", data.product.name + ' добавлен другим пользователем.', true);
+                    var newProduct = row.data[0];
+
+                    if(nsb.getIndexByProperty(productsList, newProduct, 'id') === -1) {
+                        productsList.push(newProduct);
+                        funcFactory.showNotification("Добавлен продукт", newProduct.product.name +
+                            ' добавлен другим пользователем.', true);
+                    }
                 }
             },
             update: function(productsList, row){
