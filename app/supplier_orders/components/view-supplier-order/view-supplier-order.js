@@ -1,5 +1,5 @@
 class ViewSupplierOrderCtrl {
-    constructor($scope, $state, $stateParams, serverApi, funcFactory, notifications, $filter, $localStorage) {
+    constructor ($state, $stateParams, serverApi, funcFactory, notifications, $filter, $localStorage) {
         let self = this;
         this._subscription = {};
         this.data = {supplierOrder: {}, partnersList: [], productsList: [], total: 0};
@@ -86,7 +86,7 @@ class ViewSupplierOrderCtrl {
             }, self);
         });
 
-        $scope.$on('$destroy', () => self._subscription && self._subscription.unsubscribe());
+        this.$onDestroy = () => self._subscription && self._subscription.unsubscribe();
     }
 
     selectProductForAppend (item) {
@@ -153,7 +153,11 @@ class ViewSupplierOrderCtrl {
     }
 }
 
-ViewSupplierOrderCtrl.$inject = ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory',
-    'supplierOrdersNotifications', '$filter', '$localStorage'];
+ViewSupplierOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', 'supplierOrdersNotifications',
+    '$filter', '$localStorage'];
 
-angular.module('app.supplier_orders').controller('ViewSupplierOrderCtrl', ViewSupplierOrderCtrl);
+angular.module('app.supplier_orders').component('viewSupplierOrder', {
+    controller: ViewSupplierOrderCtrl,
+    controllerAs: '$ctrl',
+    templateUrl: '/app/supplier_orders/components/view-supplier-order/view-supplier-order.html'
+});
