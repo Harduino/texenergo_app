@@ -36,7 +36,7 @@
         lockPasswordlessProvider.init(lockConfig);
 
         // Intercept http calls.
-        $provide.factory('ErrorHttpInterceptor', ['$q', '$rootScope', '$location', 'authService', function ($q, $rootScope, $location, authService) {
+        $provide.factory('ErrorHttpInterceptor', ['$q', 'globalVariables', '$location', 'authService', function ($q, globalVariables, $location, authService) {
             var errorCounter = 0;
             function notifyError(rejection){
                 $.bigBox({
@@ -50,7 +50,7 @@
             }
 
             function setInload(inLoad){
-                $rootScope.showRibbonLoader = inLoad;
+                globalVariables.globals.showRibbonLoader = inLoad;
             }
 
             return {

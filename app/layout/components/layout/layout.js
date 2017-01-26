@@ -1,7 +1,8 @@
 class LayoutCtrl {
-    constructor($state, authService, $localStorage) {
+    constructor($state, authService, $localStorage, globalVariables) {
         this.$state = $state;
         this.authService = authService;
+        this.globals = globalVariables.globals;
 
         this.searchText = '';
         this.logo = 'assets/img/logo.png';
@@ -33,7 +34,7 @@ class LayoutCtrl {
     }
 }
 
-LayoutCtrl.$inject = ['$state', 'authService', '$localStorage'];
+LayoutCtrl.$inject = ['$state', 'authService', '$localStorage', 'globalVariables'];
 
 angular.module('app.layout').component('layout', {
     templateUrl: '/app/layout/components/layout/layout.html',
