@@ -42,7 +42,7 @@
     </div>
     
     <div class="well well-white">
-        <table class="table table-bordered margin-top-10" ng-switch="viewReceiveOrderCtrl.receiveOrder.can_edit">
+        <table class="table table-bordered margin-top-10">
             <thead>
                 <tr>
                     <th></th>
@@ -51,11 +51,11 @@
                     <th>Итого</th>
                     <th>ГТД/Страна</th>
                     <th>Заказ</th>
-                    <th ng-switch-when="true"></th>
+                    <th ng-if="viewReceiveOrderCtrl.receiveOrder.can_edit"></th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-switch-when="true">
+                <tr ng-if="viewReceiveOrderCtrl.receiveOrder.can_edit">
                     <td></td>
                     <td>
                         <ui-select id="vro_prod_select"  ui-select-infinity="viewReceiveOrderCtrl.productSelectConf" ng-model="viewReceiveOrderCtrl.data.productForAppend" theme="select2" class="td-ui-select" style="max-width: 310px;" on-select="onSelectProduct($item)">
@@ -93,29 +93,29 @@
                         </a>
                     </td>
                     <td>
-                        <a ng-switch-when="true" editable-number="item.quantity" onaftersave="viewReceiveOrderCtrl.updateContentsProduct({data:item, index:$index})" e-min="0" buttons="no">
+                        <a ng-if="viewReceiveOrderCtrl.receiveOrder.can_edit" editable-number="item.quantity" onaftersave="viewReceiveOrderCtrl.updateContentsProduct({data:item, index:$index})" e-min="0" buttons="no">
                             {{ item.quantity }}
                         </a>
-                        <span ng-switch-default>{{ item.quantity || 0}}</span>
+                        <span ng-if="!viewReceiveOrderCtrl.receiveOrder.can_edit">{{ item.quantity || 0}}</span>
                     </td>
                     <td class="text-right">
-                        <a ng-switch-when="true" editable-text="item.total" onaftersave="viewReceiveOrderCtrl.updateContentsProduct({data:item, index:$index})" buttons="no">{{ (item.total || 0) | currency}}</a>
-                        <span ng-switch-default>{{ item.total | currency }}</span>
+                        <a ng-if="viewReceiveOrderCtrl.receiveOrder.can_edit" editable-text="item.total" onaftersave="viewReceiveOrderCtrl.updateContentsProduct({data:item, index:$index})" buttons="no">{{ (item.total || 0) | currency}}</a>
+                        <span ng-if="!viewReceiveOrderCtrl.receiveOrder.can_edit">{{ item.total | currency }}</span>
                     </td>
                     <td>
-                        <span ng-switch-when="true">
+                        <span ng-if="viewReceiveOrderCtrl.receiveOrder.can_edit">
                             <a editable-text="item.gtd" buttons="no" onaftersave="viewReceiveOrderCtrl.updateContentsProduct({data:item, index:$index})">{{ item.gtd || 'Пусто'}}</a>
                             <span>&nbsp; / &nbsp;</span>
                             <a editable-text="item.country" buttons="no" onaftersave="updateContentsProduct({data:item, index:$index})">{{ item.country || 'Пусто'}}</a>
                         </span>
-                        <span ng-switch-default ng-if="item.gtd">{{ item.gtd + ' / ' + item.country }}</span>
+                        <span ng-if="item.gtd && !viewReceiveOrderCtrl.receiveOrder.can_edit">{{ item.gtd + ' / ' + item.country }}</span>
                     </td>
                     <td>
                         <a href="/#/supplier_orders/{{item.supplier_order.id}}">
                             {{ item.supplier_order.number }}
                         </a>
                     </td>
-                    <td ng-switch-when="true">
+                    <td ng-if="viewReceiveOrderCtrl.receiveOrder.can_edit">
                         <div ng-click="viewReceiveOrderCtrl.deleteProduct(item)" class="btn btn-danger">
                             <i class="fa fa-trash-o"></i>
                         </div>
@@ -125,7 +125,7 @@
                     <td colspan="3" class="text-right">Итого:</td>
                     <td>{{ viewReceiveOrderCtrl.receiveOrder.total | currency }}</td>
                     <td colspan="2"></td>
-                    <td ng-switch-when="true"></td>
+                    <td ng-if="viewReceiveOrderCtrl.receiveOrder.can_edit"></td>
                 </tr>
             </tbody>
         </table>
