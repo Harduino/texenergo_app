@@ -32,7 +32,7 @@ class ViewDispatchOrderCtrl {
                         });
                     }
                 },
-                {type: 'refresh', callback: () => self.getDispatchOrderDetails()},
+                {type: 'refresh', callback: () => self.getDispatchOrderDetails(true)},
                 {type: 'logs', callback: () => $state.go('app.dispatch_orders.view.logs', {})}
             ],
             chartOptions: {
@@ -77,15 +77,27 @@ class ViewDispatchOrderCtrl {
         });
     }
 
-    getDispatchOrderDetails() {
+    getDispatchOrderDetails(force_reload) {
         let self = this;
 
-        this.serverApi.getDispatchOrderDetails(this.$stateParams.id, result => {
-            let dispatchOrder = self.dispatchOrder = result.data;
-            self.amontPercent = self.funcFactory.getPercent(dispatchOrder.paid_amount, dispatchOrder.total);
-            self.dispatchedPercent = self.funcFactory.getPercent(dispatchOrder.dispatched_amount, dispatchOrder.total);
-            self.setFileUploadOptions(dispatchOrder);
-        });
+        if (window.dispatch_orders !== undefined && window.dispatch_orders[self.$stateParams.id] !== undefined && force_reload !== true) {
+            self.dispatchOrder = window.dispatch_orders[self.$stateParams.id];
+        } else {
+            let data = {
+                dispatch_order: {
+                    person_id: self.dispatchOrder.chosenPersonId
+                }
+            };
+
+            this.serverApi.getDispatchOrderDetails(self.$stateParams.id, result => {
+                if(!window.dispatch_orders) window.dispatch_orders = {};
+                let dispatchOrder = self.dispatchOrder = result.data;
+                window.dispatch_orders[self.$stateParams.id] = self.dispatchOrder;
+                self.amontPercent = self.funcFactory.getPercent(dispatchOrder.paid_amount, dispatchOrder.total);
+                self.dispatchedPercent = self.funcFactory.getPercent(dispatchOrder.dispatched_amount, dispatchOrder.total);
+                self.setFileUploadOptions(dispatchOrder);
+            });
+        }
     }
 
     setFileUploadOptions(dispatchOrder) {
