@@ -145,6 +145,12 @@ class ViewReceiveOrderCtrl {
     setAddableProduct(item) {
         let self = this;
         self.addableProduct = jQuery.extend(true, {}, item);
+
+        // Handling a case when unreceived quantity less than a quantity in customer order content entry.
+        // The product at the line had been previously partially received.
+        self.addableProduct.quantity = item.unreceived;
+        self.addableProduct.total = item.total / item.quantity * item.unreceived;
+        
         self.searchProductsList = [];
     }
 

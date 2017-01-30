@@ -211,7 +211,9 @@
                         <tr ng-repeat="item in viewPartnerCtrl.partner.customerOrders">
                             <td>{{ item.number }}</td>
                             <td class="hidden-xs">{{ item.date | date:'dd MMMM yy'}}</td>
-                            <td class="text-right">{{ item.total | currency }}</td>
+                            <td class="text-right" ng-class="item.amount_paid > item.total ? 'warning' : (item.amount_paid === item.total ? 'success' : '') ">
+                                {{ item.total | currency }}
+                            </td>
                             <td>{{ item.status }}</td>
                             <td class="center-item-text" style="max-width: 40px;">
                                 <div class="btn-group">
@@ -296,7 +298,7 @@
                             <td>{{ item.number }}</td>
                             <td class="hidden-xs">{{ item.date | date:'dd MMMM yy, HH:mm'}}</td>
                             <td class="text-right">{{ item.amount | currency }}</td>
-                            <td class="hidden-xs text-right">{{ item.remaining_amount | currency}}</td>
+                            <td class="hidden-xs text-right" ng-class="item.remaining_amount > 0 ? 'success' : ''">{{ item.remaining_amount | currency}}</td>
                             <td class="center-item-text" style="max-width: 40px;">
                                 <div class="btn-group">
                                     <a class="btn btn-xs btn-info" href="#/incoming_transfers/{{item.id}}">

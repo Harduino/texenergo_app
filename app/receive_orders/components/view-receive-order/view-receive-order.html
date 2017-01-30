@@ -148,8 +148,8 @@
                             {{ item.product.name }} ({{ item.product.article }})
                         </a>
                     </td>
-                    <td>{{ item.quantity }}</td>
-                    <td>{{ item.total | currency }}</td>
+                    <td>{{ item.unreceived }}</td>
+                    <td>{{ item.total / item.quantity * item.unreceived | currency }}</td>
                     <td>
                         <a href="/#/supplier_orders/{{item.supplier_order.id}}">
                             {{ item.supplier_order.number }}

@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-xs-12 col-md-12">
                 <div>
-                    <h2 ng-if="viewProductCtrl.product.can_edit" editable-text="viewProductCtrl.product.name" onaftersave="saveProduct()" class="txt-color-blueDark semi-bold prod-review-title display-inline">
+                    <h2 ng-if="viewProductCtrl.product.can_edit" editable-text="viewProductCtrl.product.name" onaftersave="viewProductCtrl.saveProduct()" class="txt-color-blueDark semi-bold prod-review-title display-inline">
                         {{ viewProductCtrl.product.name }}
                     </h2>
                     <h2 ng-if="!viewProductCtrl.product.can_edit" class="txt-color-blueDark semi-bold prod-review-title display-inline">
@@ -39,7 +39,7 @@
                             <div class="widget-body">
                                 <div te-copy-to-buffer>
                                     <b>Артикул:</b>
-                                    <span ng-if="viewProductCtrl.product.can_edit" editable-text="viewProductCtrl.product.article" onaftersave="saveProduct()" te-buffer-value>{{ viewProductCtrl.product.article || "Нет артикула" }}</span>
+                                    <span ng-if="viewProductCtrl.product.can_edit" editable-text="viewProductCtrl.product.article" onaftersave="viewProductCtrl.saveProduct()" te-buffer-value>{{ viewProductCtrl.product.article || "Нет артикула" }}</span>
                                     <span ng-if="!viewProductCtrl.product.can_edit" te-buffer-value>{{ viewProductCtrl.product.article }}</span>
                                 </div>
                                 <div>
