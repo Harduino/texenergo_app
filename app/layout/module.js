@@ -22,5 +22,4 @@ angular.module('app.layout', ['ui.router', 'app.templates', 'login'])
                 return $injector.get('$sessionStorage').returnToUrl || '/dashboard';
             });
     })
-    .controller('LayoutNavigationCtrl', angular.noop)
 ;
