@@ -53,7 +53,7 @@
                 });
             },
             template: '<ng-transclude></ng-transclude>' +
-                '<i class="fa fa-copy te-c-to-buffer-ico" uib-tooltip="Скопировано!" tooltip-trigger="none" tooltip-is-open="showTeCopyToBufferTooltip">' +
+                '<i class="fa fa-copy te-c-to-buffer-ico" uib-tooltip="Скопировано!" tooltip-trigger="\'none\'" tooltip-is-open="showTeCopyToBufferTooltip">' +
                 '<input class="te-c-buffer-input" type="text">' +
                 '</i>'
         }
