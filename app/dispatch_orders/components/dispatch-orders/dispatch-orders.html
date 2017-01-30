@@ -38,11 +38,9 @@
                     <td>{{ item.remains_to_dispatch }}</td>
                     <td>{{ item.stock }}</td>
                     <td>
-                        <span ng-if="item.dispatchable">
-                            <span class="btn btn-success" ng-click="dispatchOrdersCtrl.dispatchItem(item)">В отгрузку</span>
-                            <span class="btn btn-warning" ng-if="!item.automatically_dispatchable" ng-click="dispatchOrdersCtrl.allowAutomatic(item)">Не отгрузится автоматически</span>
-                            <span class="btn btn-warning" ng-if="item.automatically_dispatchable" ng-click="dispatchOrdersCtrl.disallowAutomatic(item)">Отгрузится автоматически</span>
-                        </span>
+                        <span class="btn btn-success" ng-click="dispatchOrdersCtrl.dispatchItem(item)" ng-if="item.dispatchable">В отгрузку</span>
+                        <span class="btn btn-warning" ng-if="!item.automatically_dispatchable" ng-click="dispatchOrdersCtrl.allowAutomatic(item)">Не отгрузится автоматически</span>
+                        <span class="btn btn-warning" ng-if="item.automatically_dispatchable" ng-click="dispatchOrdersCtrl.disallowAutomatic(item)">Отгрузится автоматически</span>
                         <span ng-if="!item.dispatchable">{{item.reason}}</span>
                     </td>
                 </tr>

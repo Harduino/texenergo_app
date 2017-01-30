@@ -59,7 +59,7 @@ class DispatchOrdersCtrl {
             customer_order_id: item.customer_order_id
         };
         self.serverApi.createDispatchOrderContent(dispatch_order.id, data, r => {
-            if (!r.data.errors) {
+            if (!!r.data && !r.data.errors) {
                 self.funcFactory.showNotification("Позиция списана", "Позиция добавлена в реализацию " + dispatch_order.number, true);
                 for (var i = self.data.dispatchableProducts.length - 1; i >= 0; i--) {
                     if(self.data.dispatchableProducts[i].customer_order_content_id === item.customer_order_content_id) self.data.dispatchableProducts.splice(i, 1);
@@ -73,9 +73,14 @@ class DispatchOrdersCtrl {
     dispatchItem(item) {
         let self = this;
         let currentOrder = self.fetchAddableOrder(item);
-
+        let data = {
+            partner_id: item.partner.id,
+            // customer_order_id: item.customer_order_id
+            delivery_address: item.delivery_address,
+            transportation: item.transportation
+        }
         if (currentOrder === undefined) {
-            self.serverApi.createDispatchOrder({partner_id: item.partner.id}, r => {
+            self.serverApi.createDispatchOrder(data, r => {
                 self.data.ordersList.unshift(r.data);
                 currentOrder = self.fetchAddableOrder(item);
                 if(currentOrder !== undefined){
