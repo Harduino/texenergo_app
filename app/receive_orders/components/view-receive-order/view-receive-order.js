@@ -84,8 +84,17 @@ class ViewReceiveOrderCtrl {
                     self.clearProductForAppend();
 
                     for (var i = self.unreceivedProducts.length - 1; i >= 0; i--) {
-                        var c = self.unreceivedProducts[i];
-                        if(c.product.id === data.product.id && c.supplier_order_id === data.supplier_order_id) self.unreceivedProducts.splice(i, 1);
+                        var unreceived_row = self.unreceivedProducts[i];
+                        if(unreceived_row.product.id === data.product.id && unreceived_row.supplier_order_id === data.supplier_order_id) {
+                            if (unreceived_row.unreceived === data.quantity) {
+                                // Standard case. We are receiving all the pending quantity.
+                                self.unreceivedProducts.splice(i, 1);    
+                            } else if (data.quantity < unreceived_row.unreceived) {
+                                // Partially receiving the quantities
+                                unreceived_row.unreceived = unreceived_row.unreceived - data.quantity;
+                            }
+                            // Pending a case when a customer order has got two rows of the product received as a single row.
+                        }
                     }
 
                     angular.element('#vro_prod_select').focus();
