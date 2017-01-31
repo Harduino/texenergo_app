@@ -21,6 +21,7 @@
             views:{
                 "content@app": {
                     controller: 'TopSearchCtrl',
+                    controllerAs: '$ctrl',
                     templateUrl: '/app/search/views/search.html'
                 }
             }

@@ -1,10 +1,13 @@
 <div id="content">
     <div class="row">
-        <big-breadcrumbs items="['Поиск']" data-icon="search" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+        <big-breadcrumbs items="['Поиск']" data-icon="search" class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        </big-breadcrumbs>
     </div>
     <div class="well">
-        <h1>Результаты поиска "{{data.searchText}}"</h1>
-        <table class="table table-bordered" infinite-scroll infinite-scroll-disabled="false" te-lazy-helper data-list="data.searchList" data-search-query="data.searchText" data-server-api-method="searchProduct" data-start-page="0">
+        <h1>Результаты поиска "{{$ctrl.data.searchText}}"</h1>
+        <table class="table table-bordered" infinite-scroll infinite-scroll-disabled="false" te-lazy-helper
+               data-list="$ctrl.data.searchResults" data-search-query="$ctrl.data.searchText"
+               data-server-api-method="$ctrl.searchProduct" data-start-page="0">
             <thead>
                 <tr>
                     <th class="hidden-xs"></th>
@@ -17,9 +20,17 @@
                 </tr>
             </thead>
             <tbody id="top_search_table_body">
-                <tr ng-repeat="item in data.searchList" ng-class="{selected: $index === selectedRowIndex}" ng-click="selectRow($index)" class="cursor-pointer">
-                    <td class="hidden-xs"><img ng-src="{{item.image_url}}" style="max-heigth: 40px; max-width: 40px;" class="img img-responsive" img-error="http://cdn.texenergo.com/no_image.png"></td>
-                    <td te-copy-to-buffer><a ng-href="/#/products/{{item.id || item._id}}" class="black" te-buffer-value>{{item.article}}</a></td>
+                <tr ng-repeat="item in $ctrl.data.searchResults" ng-click="$ctrl.selectRow($index)"
+                    class="cursor-pointer" ng-class="{selected: $index === $ctrl.selectedRowIndex}">
+                    <td class="hidden-xs">
+                        <img ng-src="{{item.image_url}}" style="max-heigth: 40px; max-width: 40px;"
+                             class="img img-responsive" img-error="http://cdn.texenergo.com/no_image.png" />
+                    </td>
+                    <td te-copy-to-buffer>
+                        <a ng-href="/#/products/{{item.id || item._id}}" class="black" te-buffer-value>
+                            {{item.article}}
+                        </a>
+                    </td>
                     <td te-copy-to-buffer>
                         <span class="badge alert-danger" ng-if="item.obsolete" uib-tooltip="Оборудование снято с производства">!</span>
                         <span te-buffer-value>{{item.name}}</span>
@@ -28,7 +39,10 @@
                     <td class="no-warp">{{item.price | currency}}</td>
                     <td>{{item.stock}}</td>
                     <td class="center-item-text">
-                        <form-nav-buttons data-role="visual.role" data-options="visual.navButtsOptions" subdata="item._id || item.id" data-template="table" content-class="btn btn-xs" class="btn-group"></form-nav-buttons>
+                        <form-nav-buttons data-role="$ctrl.visual.role" data-options="$ctrl.visual.navButtsOptions"
+                                          subdata="item._id || item.id" data-template="table" content-class="btn btn-xs"
+                                          class="btn-group">
+                        </form-nav-buttons>
                     </td>
                 </tr>
             </tbody>
