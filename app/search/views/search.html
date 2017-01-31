@@ -7,7 +7,7 @@
         <h1>Результаты поиска "{{$ctrl.data.searchText}}"</h1>
         <table class="table table-bordered" infinite-scroll infinite-scroll-disabled="false" te-lazy-helper
                data-list="$ctrl.data.searchResults" data-search-query="$ctrl.data.searchText"
-               data-server-api-method="$ctrl.searchProduct" data-start-page="0">
+               data-server-api-method="$ctrl.getSearchProductHandler()" data-start-page="0">
             <thead>
                 <tr>
                     <th class="hidden-xs"></th>
@@ -23,7 +23,7 @@
                 <tr ng-repeat="item in $ctrl.data.searchResults" ng-click="$ctrl.selectRow($index)"
                     class="cursor-pointer" ng-class="{selected: $index === $ctrl.selectedRowIndex}">
                     <td class="hidden-xs">
-                        <img ng-src="{{item.image_url}}" style="max-heigth: 40px; max-width: 40px;"
+                        <img ng-src="{{item.image_url}}" style="max-height: 40px; max-width: 40px;"
                              class="img img-responsive" img-error="http://cdn.texenergo.com/no_image.png" />
                     </td>
                     <td te-copy-to-buffer>
