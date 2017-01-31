@@ -1,9 +1,8 @@
 class ProductToCustomerOrderModalCtrl {
-    constructor(product, $uibModalInstance, serverApi, funcFactory) {
+    constructor(serverApi, funcFactory) {
         let self = this;
-        this.data = {product: product, quantity: null, customerOrdersList: []};
+        this.data = {product: self.resolve.product, quantity: null, customerOrdersList: []};
 
-        this.$uibModalInstance = $uibModalInstance;
         this.serverApi = serverApi;
         this.funcFactory = funcFactory;
 
@@ -15,7 +14,7 @@ class ProductToCustomerOrderModalCtrl {
     }
 
     cancel () {
-        this.$uibModalInstance.dismiss('cancel');
+        this.modalInstance.dismiss('cancel');
     }
 
     addProductToCustomerOrder (customer_order) {
@@ -39,5 +38,11 @@ class ProductToCustomerOrderModalCtrl {
     }
 }
 
-ProductToCustomerOrderModalCtrl.$inject = ['product', '$uibModalInstance', 'serverApi', 'funcFactory'];
-angular.module('app.layout').controller('productToCustomerOrderModalCtrl', ProductToCustomerOrderModalCtrl);
+ProductToCustomerOrderModalCtrl.$inject = ['serverApi', 'funcFactory'];
+
+angular.module('app.layout').component('productToCustomerOrderModal', {
+    controller: ProductToCustomerOrderModalCtrl,
+    controllerAs: '$ctrl',
+    bindings: {modalInstance: '<', resolve: '<'},
+    templateUrl: 'app/layout/components/product-to-customer-orer-modal/product-to-customer-orer-modal.html'
+});

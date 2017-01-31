@@ -20,9 +20,7 @@ class ViewProductCtrl {
                     type: 'add',
                     callback: () => {
                         $uibModal.open({
-                            templateUrl: 'app/layout/partials/productToCustomerOrder.html',
-                            controller: 'productToCustomerOrderModalCtrl',
-                            controllerAs: '$ctrl',
+                            component: 'productToCustomerOrderModal',
                             windowClass: 'eqo-centred-modal',
                             resolve: {product : self.product}
                         });

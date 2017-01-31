@@ -2,17 +2,16 @@
  * Created by Egor Lobanov on 02.11.15.
  * Контролер страницы поиска продуктов
  */
-(function(){
-
+(function() {
         'use strict';
 
         angular.module('app.search').controller('TopSearchCtrl', ['$scope', '$stateParams', '$location', '$state', 'serverApi', '$uibModal', function(sc, $stateParams, $location, $state, serverApi, $uibModal){
-
             sc.data = {
                 searchText: decodeURIComponent($stateParams.searchString), //содержимое сроки поиска в топ меню
                 searchList: [], // массив с результатами поиска
                 subSearch: {}
             };
+
             sc.visual = {
                 //контролы таблицы
                 navButtsOptions:[
@@ -40,9 +39,7 @@
              */
             function addProductToCustomerOrderModal(productId){
                 $uibModal.open({
-                    templateUrl: 'app/layout/partials/productToCustomerOrder.html',
-                    controller: 'productToCustomerOrderModalCtrl',
-                    controllerAs: '$ctrl',
+                    component: 'productToCustomerOrderModal',
                     windowClass: 'eqo-centred-modal',
                     resolve: {product : {id: productId}}
                 });
@@ -62,8 +59,7 @@
              * If Enter pressed, then open product view
              * @param event
              */
-            function navigateInTable (event){
-
+            function navigateInTable (event) {
                 const up = 38;
                 const enter = 13;
                 const escape = 27;
