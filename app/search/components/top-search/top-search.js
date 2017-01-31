@@ -1,5 +1,5 @@
 class TopSearchCtrl {
-    constructor(sc, $stateParams, $state, serverApi, $uibModal) {
+    constructor($stateParams, $state, serverApi, $uibModal) {
         let self = this;
         this.serverApi = serverApi;
         this.$state = $state;
@@ -24,7 +24,7 @@ class TopSearchCtrl {
         };
 
         angular.element(window).on('keydown', self.navigateInTable.bind(self));
-        sc.$on('$destroy', () => angular.element(window).off('keydown', self.navigateInTable.bind(self)));
+        this.$onDestroy = () => angular.element(window).off('keydown', self.navigateInTable.bind(self));
     }
 
     getSearchProductHandler () {
@@ -95,5 +95,10 @@ class TopSearchCtrl {
     }
 }
 
-TopSearchCtrl.$inject = ['$scope', '$stateParams', '$state', 'serverApi', '$uibModal'];
-angular.module('app.search').controller('TopSearchCtrl', TopSearchCtrl);
+TopSearchCtrl.$inject = ['$stateParams', '$state', 'serverApi', '$uibModal'];
+
+angular.module('app.search').component('topSearch', {
+    controller: TopSearchCtrl,
+    controllerAs: '$ctrl',
+    templateUrl: '/app/search/components/top-search/top-search.html'
+});
