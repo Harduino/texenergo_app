@@ -6,7 +6,7 @@
 
         'use strict';
 
-        angular.module('app.search').controller('TopSearchCtrl', ['$scope', '$stateParams', '$location', '$state', 'serverApi', '$uibModal', '$filter', '$localStorage', function(sc, $stateParams, $location, $state, serverApi, $uibModal, $filter, $localStorage){
+        angular.module('app.search').controller('TopSearchCtrl', ['$scope', '$stateParams', '$location', '$state', 'serverApi', '$uibModal', function(sc, $stateParams, $location, $state, serverApi, $uibModal){
 
             sc.data = {
                 searchText: decodeURIComponent($stateParams.searchString), //содержимое сроки поиска в топ меню
@@ -36,16 +36,15 @@
 
             /**
              * Открываем модальное окно, чтобы открыть список заказов и добавить товар
-             * @param p - product
+             * @param productId - id продукта
              */
-            function addProductToCustomerOrderModal(product_id){
+            function addProductToCustomerOrderModal(productId){
                 $uibModal.open({
                     templateUrl: 'app/layout/partials/productToCustomerOrder.html',
                     controller: 'productToCustomerOrderModalCtrl',
+                    controllerAs: '$ctrl',
                     windowClass: 'eqo-centred-modal',
-                    resolve: {
-                        product : {id: product_id}
-                    }
+                    resolve: {product : {id: productId}}
                 });
             }
 

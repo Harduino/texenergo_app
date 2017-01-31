@@ -22,10 +22,9 @@ class ViewProductCtrl {
                         $uibModal.open({
                             templateUrl: 'app/layout/partials/productToCustomerOrder.html',
                             controller: 'productToCustomerOrderModalCtrl',
+                            controllerAs: '$ctrl',
                             windowClass: 'eqo-centred-modal',
-                            resolve: {
-                                product : self.product
-                            }
+                            resolve: {product : self.product}
                         });
                     }
                 }
@@ -40,7 +39,7 @@ class ViewProductCtrl {
 
         this.uploader = new FileUploader({
             queueLimit: 1,
-            onCompleteItem: (fileItem, response, status, headers) => {
+            onCompleteItem: (fileItem, response, status) => {
                 if(status===200){
                     self.product.image_url = response.image_url;
                     self.uploader.clearQueue();

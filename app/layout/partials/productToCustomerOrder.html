@@ -6,15 +6,15 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-plus"></i></span>
-                <input class="form-control" ng-model="data.quantity" placeholder="Количество" type="text">
+                <input class="form-control" ng-model="$ctrl.data.quantity" placeholder="Количество" type="text">
             </div>
         </div>
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" ng-repeat='item in data.customerOrdersList' style="padding: 5px;">
-            <a href="" ng-click="addProductToCustomerOrder(item)" class="editable editable-click">{{ item.number }}</a>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" ng-repeat='item in $ctrl.data.customerOrdersList' style="padding: 5px;">
+            <a href="" ng-click="$ctrl.addProductToCustomerOrder(item)" class="editable editable-click">{{item.number}}</a>
         </div>
     </div>
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-danger" type="button" ng-click="cancel()">Закрыть</button>
+    <button class="btn btn-danger" type="button" ng-click="$ctrl.cancel()">Закрыть</button>
 </div>
