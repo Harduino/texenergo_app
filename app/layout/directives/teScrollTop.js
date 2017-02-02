@@ -8,35 +8,29 @@
             restrict: 'E',
             scope:{},
             link: function(scope, element, attrs){
-                var config = angular.extend({
-                    container: window,
-                    buttonClass: ""
-                }, $parse(attrs.config || {})());
-
+                var config = angular.extend({container: window, buttonClass: ''}, $parse(attrs.config || {})());
                 element.addClass("scroll-up-btn " + config.buttonClass + ' not-selectable');
-                scope.teScrollTop = function(){
-                    w.scrollTop(0);
-                };
-
                 var w = $(config.container);
+
+                var onScroll = function () {
+                    if (w.scrollTop() >= 2 * w.outerHeight()) {
+                        !element.hasClass('slideUp') && element.addClass('slideUp');
+                    } else {
+                        element.removeClass('slideUp');
+                    }
+                };
 
                 w.scroll(onScroll);
 
-                function onScroll() {
-                    var top = w.scrollTop(),
-                        height = w.outerHeight();
-                    if(top>=height*2){
-                        !element.hasClass('slideUp') && element.addClass('slideUp');
-                    }else element.removeClass('slideUp');
-                }
+                scope.teScrollTop = function() {
+                    w.scrollTop(0);
+                };
 
                 scope.$on('$destroy', function(){
                    w.off('scroll', onScroll);
                 });
             },
-            template: '<div ng-click="teScrollTop()">'+
-                '<span class="glyphicon glyphicon-arrow-up"></span>'+
-            '</div>'
+            templateUrl: 'app/layout/components/te-scroll-top/te-scroll-top.html'
         };
     }]);
 }());
