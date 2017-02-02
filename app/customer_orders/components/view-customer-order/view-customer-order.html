@@ -310,21 +310,25 @@
                                     <tr ng-repeat='item in $ctrl.order.customer_order_contents' class="order-items"
                                         ng-click="$ctrl.selectPosition($event, item)" ng-class="{selected: item.selected}">
                                         <td class="hidden-xs">{{ $index + 1 }}</td>
-                                        <td te-copy-to-buffer hidden-buttons>
+                                        <td hidden-buttons>
                                             <span ng-if="item.messages.length > 0">
                                                 <span class="badge alert-danger" ng-click="$ctrl.productDetailsModal(item)">!</span>
                                             </span>
-                                            <a ng-href="/#/products/{{ item.product.id }}" te-buffer-value>
-                                                {{ item.product.name }}
-                                            </a>
+                                            <te-copy-to-buffer>
+                                                <a ng-href="/#/products/{{ item.product.id }}" te-buffer-value>
+                                                    {{ item.product.name }}
+                                                </a>
+                                            </te-copy-to-buffer>
                                             <i class="blue-hover" ng-if="item.can_edit"
                                                ng-click="$ctrl.changeCustomerOrderProductModal(item)">
                                                 заменить
                                             </i>
                                             <i class="blue-hover" ng-click="$ctrl.productDetailsModal(item)">подробно</i>
                                         </td>
-                                        <td class="hidden-xs" te-copy-to-buffer>
-                                            <span te-buffer-value>{{ item.product.article}}</span>
+                                        <td class="hidden-xs">
+                                            <te-copy-to-buffer>
+                                                <span te-buffer-value>{{ item.product.article}}</span>
+                                            </te-copy-to-buffer>
                                         </td>
                                         <td class="hidden-xs text-right">{{ item | price_net | currency}}</td>
                                         <td class="text-right">

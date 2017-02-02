@@ -11,9 +11,9 @@
 
     angular.module('teBuffer', []).directive('teCopyToBuffer', ['$timeout', '$compile', function($timeout, $compile){
         return {
-            restrict: 'A',
+            restrict: 'E',
             transclude: true,
-            link: function(scope, element, attrs){
+            link: function(scope, element){
                 var input = element.find(".te-c-buffer-input"),
                     btn = element.find('.te-c-to-buffer-ico'),
                     iScope = scope.$new(true);
