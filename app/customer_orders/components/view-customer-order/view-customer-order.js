@@ -98,19 +98,23 @@ class ViewCustomerOrderCtrl {
             },
             titles: 'Заказ клиента: №',
             sortOpts: {
-                update: (e, ui) => {
+                update: function (e, ui) {
                     let $this = $(this),
                         last_ind = angular.element(ui.item).scope().$index,
                         new_ind = ui.item.index(),
                         data = {customer_order: {command: 'переместить_строку ' + (last_ind + 1) + '_на_' + (new_ind + 1)}};
-                    serverApi.updateCommandCustomerOrder(self.order.id, data, result => {
-                        if(result.status == 200) {
-                            self.order.customer_order_contents.swapItemByindex(last_ind, new_ind);
-                        } else {
-                            funcFactory.showNotification('Не удалось переместить сторку', result.data.errors);
-                            $this.sortable('cancel');
-                        }
-                    }, () => $this.sortable('cancel'));
+                    if(self.visual.roles.can_edit){
+                        serverApi.updateCommandCustomerOrder(self.order.id, data, result => {
+                            if(result.status == 200) {
+                            	self.order.customer_order_contents.swapItemByindex(last_ind, new_ind);
+                        	} else {
+	                            funcFactory.showNotification('Не удалось переместить сторку', result.data.errors);
+	                            $this.sortable('cancel');
+                        	}
+                        }, () => $this.sortable('cancel'));
+                    }else{
+               			$this.sortable('cancel');
+                    }
                 },
                 items: '> .order-items'
             },
