@@ -1,19 +1,18 @@
 class ScrollTopCtrl {
     constructor($scope) {
         this.block = $($scope.selector || window);
-        this.slideUp = false;
-        this.block.scroll(this.onScroll.bind(this));
+        this.block.scroll(this.setVisibility.bind(this));
 
         let self = this;
-        $scope.$on('$destroy', () => self.block.off('scroll', self.onScroll));
+        $scope.$on('$destroy', () => self.block.off('scroll', self.setVisibility.bind(self)));
     }
 
-    teScrollTop () {
+    scrollTop () {
         this.block.scrollTop(0);
     }
 
-    onScroll () {
-        this.slideUp = this.block.scrollTop() >= 2 * this.block.outerHeight();
+    setVisibility () {
+        this.visible = this.block.scrollTop() >= 2 * this.block.outerHeight();
     }
 }
 
