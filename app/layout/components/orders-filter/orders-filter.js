@@ -17,7 +17,5 @@ angular.module('app.layout').component('ordersFilter', {
     bindings: {searchQuery: '=', toState: '@'},
     controller: OrdersFilterCtrl,
     controllerAs: '$ctrl',
-    template: ['$templateCache', function ($templateCache) {
-        return $templateCache.get('ordersFilter.tmpl.html')
-    }]
+    templateUrl: 'app/layout/components/orders-filter/orders-filter.html'
 });
