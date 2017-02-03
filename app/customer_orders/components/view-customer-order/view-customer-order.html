@@ -247,7 +247,7 @@
                         <div class="well well-clean well-white no-padding">
                             <div>
                             <ui-select ng-if="$ctrl.visual.roles.can_edit" id="vco_prod_select" theme="select2"
-                                       ui-select-infinity="$ctrl.pSelectConfig" ng-model="$ctrl.data.selectedProduct"
+                                       ui-select-infinity="$ctrl.pSelectConfig" ng-model="$ctrl.productForAppend"
                                        on-select="$ctrl.selectProductForAppend($item, $model)" reset-search-input="false"
                                        style="width: 100%;">
                                 <ui-select-match placeholder="Введите товар для добавления...">
@@ -336,7 +336,7 @@
                                         </td>
                                         <td class="text-right">
                                             <a ng-if="$ctrl.order.can_edit" editable-number="item.discount" buttons="no"
-                                               onaftersave="$ctrl.saveProductChange({item: item, index: $index})" e-min="0"
+                                               onaftersave="$ctrl.saveProductChange({item: item, index: $index})"
                                                uib-tooltip="{{item.discount_description}}">
                                                 {{ item.discount }}
                                             </a>
