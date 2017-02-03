@@ -14,7 +14,7 @@ class ViewPartnerCtrl {
                 {type: 'logs', callback: () => $state.go('app.partners.view.logs', {})},
                 {
                     type: 'refresh',
-                    callback: () => loadPartner()
+                    callback: () => loadPartner(true)
                 }
             ],
             chartOptions: {
@@ -29,16 +29,31 @@ class ViewPartnerCtrl {
         };
 
         var loadResources = () => {
-            serverApi.getCustomerOrders(1, '-' + self.partner.prefix + '-', {}, r => self.partner.customerOrders = r.data);
-            serverApi.getDispatchOrders(1, '-' + self.partner.prefix + '-', {}, r => self.partner.dispatchOrders = r.data);
-            serverApi.getReceiveOrders( 1, '', {}, r => self.partner.receiveOrders = r.data, {}, self.partner.id);
+            serverApi.getCustomerOrders(1, '-' + self.partner.prefix + '-', {}, r => {
+                window.partners[$stateParams.id].customerOrders = r.data;
+                self.partner.customerOrders = r.data;
+            });
+            serverApi.getDispatchOrders(1, '-' + self.partner.prefix + '-', {}, r => {
+                window.partners[$stateParams.id].dispatchOrders = r.data;
+                self.partner.dispatchOrders = r.data;
+            });
+            serverApi.getReceiveOrders( 1, '', {}, r => {
+                window.partners[$stateParams.id].receiveOrders = r.data;
+                self.partner.receiveOrders = r.data;
+            }, {}, self.partner.id);
         }
 
-        var loadPartner = () => {
-            serverApi.getPartnerDetails($stateParams.id, r => {
-                self.partner = r.data;
-                loadResources();
-            });
+        var loadPartner = (force_reload) => {
+            if (window.partners !== undefined && window.partners[$stateParams.id] !== undefined && force_reload !== true) {
+                self.partner = window.partners[$stateParams.id];
+            } else {
+                serverApi.getPartnerDetails($stateParams.id, r => {
+                    self.partner = r.data;
+                    if(!window.partners) window.partners = {};
+                    window.partners[$stateParams.id] = r.data;
+                    loadResources();
+                });
+            }
         }
         loadPartner();
     }
