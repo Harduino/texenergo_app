@@ -1,41 +1,45 @@
+class CopyToBufferCtrl {
+    constructor($timeout, $element) {
+        let self = this;
+        this.$timeout = $timeout;
+        this.$element = $element;
 
-
-angular.module('teBuffer', []).component('teCopyToBuffer', {
-    controller: function($timeout, $element) {
-        var input = $element.find(".te-c-buffer-input"), btn = $element.find('.te-c-to-buffer-ico');
-        var self = this;
+        this.input = $element.find('.te-c-buffer-input');
+        this.btn = $element.find('.te-c-to-buffer-ico');
         this.showTooltip = false;
 
-        var copy = function() {
-            var value = "",
-                vals = $element.find("[te-buffer-value='']"),
-                length = vals.length;
+        this.btn.click(this.copy.bind(this));
+        this.$onDestroy = () => self.btn.off('click', this.copy.bind(this));
+    }
 
-            vals.each(function(index, item){
-                var name = item.nodeName,
-                    method = (name === "INPUT" || name === "TEXTAREA" ? 'val' : 'html'),
-                    separator = (length>1 && index !== length-1 ? " | " : "");
+    copy () {
+        let value = '', values = this.$element.find('[te-buffer-value=""]');
+        let self = this;
 
-                value += $(item)[method]() + separator;
-            });
+        values.each((index, item) => {
+            let separator = index !== (values.length - 1) ? ' | ' : '';
+            value += $(item)[['INPUT', 'TEXTAREA'].indexOf(item.nodeName) === -1 ? 'html' : 'val']() + separator;
+        });
 
-            input.val(value);
-            input.focus();
-            input.select();
+        this.input.val(value);
+        this.input.focus();
+        this.input.select();
 
-            document.execCommand('copy');
-            btn.addClass('animate');
-            self.showTooltip = true;
+        document.execCommand('copy');
+        this.btn.addClass('animate');
+        this.showTooltip = true;
 
-            $timeout(function(){
-                btn.removeClass('animate');
-                self.showTooltip = false;
-            }, 820);
-        };
+        this.$timeout(() => {
+            self.btn.removeClass('animate');
+            self.showTooltip = false;
+        }, 820);
+    }
+}
 
-        btn.click(copy);
-        this.$onDestroy = () => btn.off("click", copy);
-    },
+CopyToBufferCtrl.$inject = ['$timeout', '$element'];
+
+angular.module('teBuffer', []).component('teCopyToBuffer', {
+    controller: CopyToBufferCtrl,
     controllerAs: '$ctrl',
     templateUrl: 'app/layout/components/te-copy-to-buffer/te-copy-to-buffer.html',
     transclude : true
