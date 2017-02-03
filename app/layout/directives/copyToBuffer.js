@@ -1,14 +1,10 @@
 
 
 angular.module('teBuffer', []).component('teCopyToBuffer', {
-    controller: function($scope, $compile, $timeout, $element) {
-        var input = $element.find(".te-c-buffer-input"),
-            btn = $element.find('.te-c-to-buffer-ico'),
-            iScope = $scope.$new(true);
-
-        iScope.showTeCopyToBufferTooltip = false;
-
-        $compile(btn)(iScope);
+    controller: function($timeout, $element) {
+        var input = $element.find(".te-c-buffer-input"), btn = $element.find('.te-c-to-buffer-ico');
+        var self = this;
+        this.showTooltip = false;
 
         var copy = function() {
             var value = "",
@@ -29,19 +25,16 @@ angular.module('teBuffer', []).component('teCopyToBuffer', {
 
             document.execCommand('copy');
             btn.addClass('animate');
-            iScope.showTeCopyToBufferTooltip = true;
+            self.showTooltip = true;
 
             $timeout(function(){
                 btn.removeClass('animate');
-                iScope.showTeCopyToBufferTooltip = false;
+                self.showTooltip = false;
             }, 820);
         };
 
         btn.click(copy);
-
-        $scope.$on("$destroy", function() {
-            btn.off("click", copy);
-        });
+        this.$onDestroy = () => btn.off("click", copy);
     },
     controllerAs: '$ctrl',
     templateUrl: 'app/layout/components/te-copy-to-buffer/te-copy-to-buffer.html',
