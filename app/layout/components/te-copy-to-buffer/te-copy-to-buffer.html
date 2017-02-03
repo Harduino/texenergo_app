@@ -1,5 +1,5 @@
 <ng-transclude></ng-transclude>
 <i class="fa fa-copy te-c-to-buffer-ico" tooltip-trigger="'none'" tooltip-is-open="$ctrl.showTooltip"
-   uib-tooltip="Скопировано!">
+   uib-tooltip="Скопировано!" ng-click="$ctrl.copy()" ng-class="{animate: $ctrl.showTooltip}">
     <input class="te-c-buffer-input" type="text">
 </i>
