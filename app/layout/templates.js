@@ -14,11 +14,11 @@
                 '<section>'+
                     '<label class="label">Запрос</label>'+
                     '<label class="input">'+
-                        '<input type="text" ng-model="searchQuery" placeholder="Введите часть номера" class="input-sm" ng-keypress="exeSearch($event)">'+
+                        '<input type="text" ng-model="$ctrl.searchQuery" placeholder="Введите часть номера" class="input-sm" ng-keypress="$ctrl.executeSearch($event)">'+
                     '</label>'+
                 '</section>'+
             '</div>'+
-            '<button class="btn btn-primary un-float margin-bottom-10" ng-click="exeSearch()">'+
+            '<button class="btn btn-primary un-float margin-bottom-10" ng-click="$ctrl.executeSearch()">'+
                 '<i class="fa fa-search"></i> Поиск'+
             '</button>'
         );
