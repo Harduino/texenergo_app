@@ -76,37 +76,47 @@
     /**
      * Subscribe to Rails Websocket server channels
      */
-    module.service('CableApi', ['$localStorage', function($localStorage) {
-        var token = ($localStorage.id_token || "").replace(/\"/g,"");
+    module.service('CableApi', ['authService', '$q', function(authService, $q) {
         var _this = this,
-            ws = window.APP_ENV.API_WS_BASE_URL;
+              ws = window.APP_ENV.API_WS_BASE_URL,
+              defer = $q.defer();
 
-        if (token !== undefined) ws = ws + '?token=' + token;
-        _this.consumer = new ActionCable.Consumer(ws);
+        Object.defineProperty(this, "ready", { 
+              get: function () { 
+                  return  defer.promise;
+              } 
+        }); 
+
+        authService.tokenPromise.then((token)=>{
+          if (token !== undefined) ws = ws + '?token=' + token;
+          _this.consumer = new ActionCable.Consumer(ws);
 
 
-        _this.subscribe = function(channel, callbacks) {
-            return _this.consumer.subscriptions.create(channel, callbacks);
-        };
+          _this.subscribe = function(channel, callbacks) {
+              return _this.consumer.subscriptions.create(channel, callbacks);
+          };
 
-        /**
-         * Getting consumer subscription by channel name
-         * @param channelName
-         * @returns {*} - ActionCable subscription, or null if subscription not found.
-         */
-        _this.getSubscription = function(channelName){
-            //find subscription
-            const subscriptions = _this.consumer.subscriptions.subscriptions;
+          /**
+           * Getting consumer subscription by channel name
+           * @param channelName
+           * @returns {*} - ActionCable subscription, or null if subscription not found.
+           */
+          _this.getSubscription = function(channelName){
+              //find subscription
+              const subscriptions = _this.consumer.subscriptions.subscriptions;
 
-            for(var i= 0, il = subscriptions.length, subscription; i<il; i++){
-                subscription = subscriptions[i];
+              for(var i= 0, il = subscriptions.length, subscription; i<il; i++){
+                  subscription = subscriptions[i];
 
-                //check channel name into json string (identifier)
-                if(JSON.parse(subscription.identifier).channel === channelName){
-                    return subscription;
-                }
-            }
-            return null;
-        }
+                  //check channel name into json string (identifier)
+                  if(JSON.parse(subscription.identifier).channel === channelName){
+                      return subscription;
+                  }
+              }
+              return null;
+          }
+          //resolve promise when CableApi inited
+          defer.resolve(_this);
+        });
     }]);
 }());

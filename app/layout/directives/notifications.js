@@ -11,37 +11,39 @@
                 sc.notifications = [];
                 sc.hidden = true;
                 
-                // Deal with a private channel
-                sc.channel = CableApi.subscribe('NotificationsChannel', {
-                    connected: function(data) {
-                        console.info("Канал получения уведомлений настроен!")
-                    },
-                    rejected: function(data) {
-                        console.info("Канал получения уведомлений. Не удалось установить соединение!")
-                    },
-                    received: function(data) {
-                        var notifications = sc.notifications;
+                CableApi.ready.then(function(){
+                    // Deal with a private channel
+                    sc.channel = CableApi.subscribe('NotificationsChannel', {
+                        connected: function(data) {
+                            console.info("Канал получения уведомлений настроен!")
+                        },
+                        rejected: function(data) {
+                            console.info("Канал получения уведомлений. Не удалось установить соединение!")
+                        },
+                        received: function(data) {
+                            var notifications = sc.notifications;
 
-                        //check if message in list
-                        for(var i=sc.notifications.length-1; i>-1; i--){
-                            //check by id
-                            if(data.id === notifications[i].id){
-                                return 0;
+                            //check if message in list
+                            for(var i=sc.notifications.length-1; i>-1; i--){
+                                //check by id
+                                if(data.id === notifications[i].id){
+                                    return 0;
+                                }
                             }
+
+                            //add to list
+                            notifications.unshift(data);
+                            !sc.$$phase && sc.$apply();
+
+                            $.smallBox({
+                                title: "Уведомление",
+                                content: "Вам пришло новое уведомление",
+                                color: "#739E73",
+                                iconSmall: "fa fa-check fadeInRight animated",
+                                timeout: 4000
+                            });
                         }
-
-                        //add to list
-                        notifications.unshift(data);
-                        !sc.$$phase && sc.$apply();
-
-                        $.smallBox({
-                            title: "Уведомление",
-                            content: "Вам пришло новое уведомление",
-                            color: "#739E73",
-                            iconSmall: "fa fa-check fadeInRight animated",
-                            timeout: 4000
-                        });
-                    }
+                    });
                 });
                 
                 // Trigger named events on a server through the private channel

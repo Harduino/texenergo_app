@@ -1,8 +1,9 @@
 class AuthService {
-    constructor($rootScope, lock, $localStorage, jwtHelper, lockPasswordless, $location) {
+    constructor($rootScope, lock, $localStorage, jwtHelper, lockPasswordless, $location, $q) {
         this._token = $localStorage.id_token || null;
         this._profile = undefined;
         this.authDomain = 'texenergo.eu.auth0.com';
+        this.tokenDefer = $q.defer();
 
         this.$rootScope = $rootScope;
         this.lock = lock;
@@ -11,13 +12,21 @@ class AuthService {
         this.lockPasswordless = lockPasswordless;
         this.$location = $location;
 
+        if(this._token !== null){
+            this.tokenDefer.resolve(this._token);
+        }
         if(this._token && !jwtHelper.isTokenExpired(this._token)) {
             this.getProfile(this._token);
         }
     }
 
+    //TODO: DEPRECATED Remove all usages 
     get	token() {
         return this._token;
+    }
+
+    get tokenPromise(){
+        return this.tokenDefer.promise;
     }
 
     get	profile() {
@@ -41,6 +50,7 @@ class AuthService {
         this.lock.on('authenticated', authResult => {
             console.log('auth result', authResult);
             self._token = self.$localStorage.id_token = authResult.idToken;
+            self.tokenDefer.resolve(self._token); // resolve promises 
             self.getProfile(authResult.idToken);
             self.$rootScope.$emit('authenticated');
         });
@@ -85,6 +95,7 @@ class AuthService {
             }
 
             self._token = self.$localStorage.id_token = id_token;
+            self.tokenDefer.resolve(self._token); // resolve promises 
             self._profile = profile;
 
             let url = self.$location.$$absUrl,
@@ -115,5 +126,5 @@ class AuthService {
     }
 }
 
-AuthService.$inject = ['$rootScope', 'lock', '$localStorage', 'jwtHelper', 'lockPasswordless', '$location'];
+AuthService.$inject = ['$rootScope', 'lock', '$localStorage', 'jwtHelper', 'lockPasswordless', '$location', '$q'];
 angular.module('login').service('authService', AuthService);

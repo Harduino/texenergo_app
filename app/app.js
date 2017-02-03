@@ -131,7 +131,7 @@ appConfig.sound_on = true;
                     $state.transitionTo('login', null, {reload:true});
                 }
 
-                sendState(toState, toParams, fromState, fromParams);
+                if(token)sendState(toState, toParams, fromState, fromParams);
             }
         );
 
