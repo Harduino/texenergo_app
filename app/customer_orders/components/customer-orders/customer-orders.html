@@ -27,8 +27,10 @@
             <tbody>
                 <tr ng-repeat="row in customerOrdersCtrl.data.ordersList">
                     <td ng-attr-title="{{row.transportation}}" class="hidden-xs">{{row.transportation[0]}}</td>
-                    <td te-copy-to-buffer>
-                        <span te-buffer-value>{{row.number}}</span>
+                    <td>
+                        <te-copy-to-buffer>
+                            <span te-buffer-value>{{row.number}}</span>
+                        </te-copy-to-buffer>
                     </td>
                     <td>{{ row.title }}</td>
                     <td class="hidden-xs">{{row.status}}</td>

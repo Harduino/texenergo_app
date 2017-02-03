@@ -1,11 +1,12 @@
 class ViewDispatchOrderCtrl {
     constructor($state, $stateParams, serverApi, funcFactory, FileUploader, $localStorage) {
+        let self = this;
         this.$stateParams = $stateParams;
         this.serverApi = serverApi;
         this.funcFactory = funcFactory;
         this.$localStorage = $localStorage;
 
-        let self = this;
+        
         this.dispatchOrder = {};
 
         this.visual = {
@@ -31,7 +32,7 @@ class ViewDispatchOrderCtrl {
                         });
                     }
                 },
-                {type: 'refresh', callback: () => self.getDispatchOrderDetails()},
+                {type: 'refresh', callback: () => self.getDispatchOrderDetails(true)},
                 {type: 'logs', callback: () => $state.go('app.dispatch_orders.view.logs', {})}
             ],
             chartOptions: {
@@ -76,15 +77,27 @@ class ViewDispatchOrderCtrl {
         });
     }
 
-    getDispatchOrderDetails() {
+    getDispatchOrderDetails(force_reload) {
         let self = this;
 
-        this.serverApi.getDispatchOrderDetails(this.$stateParams.id, result => {
-            let dispatchOrder = self.dispatchOrder = result.data;
-            self.amontPercent = self.funcFactory.getPercent(dispatchOrder.paid_amount, dispatchOrder.total);
-            self.dispatchedPercent = self.funcFactory.getPercent(dispatchOrder.dispatched_amount, dispatchOrder.total);
-            self.setFileUploadOptions(dispatchOrder);
-        });
+        if (window.dispatch_orders !== undefined && window.dispatch_orders[self.$stateParams.id] !== undefined && force_reload !== true) {
+            self.dispatchOrder = window.dispatch_orders[self.$stateParams.id];
+        } else {
+            let data = {
+                dispatch_order: {
+                    person_id: self.dispatchOrder.chosenPersonId
+                }
+            };
+
+            this.serverApi.getDispatchOrderDetails(self.$stateParams.id, result => {
+                if(!window.dispatch_orders) window.dispatch_orders = {};
+                let dispatchOrder = self.dispatchOrder = result.data;
+                window.dispatch_orders[self.$stateParams.id] = self.dispatchOrder;
+                self.amontPercent = self.funcFactory.getPercent(dispatchOrder.paid_amount, dispatchOrder.total);
+                self.dispatchedPercent = self.funcFactory.getPercent(dispatchOrder.dispatched_amount, dispatchOrder.total);
+                self.setFileUploadOptions(dispatchOrder);
+            });
+        }
     }
 
     setFileUploadOptions(dispatchOrder) {
@@ -95,6 +108,20 @@ class ViewDispatchOrderCtrl {
     openPdf(path) {
         window.open(window.APP_ENV.TEXENERGO_COM_API_HTTP_BASE_URL + '/dispatch_orders/' + this.dispatchOrder.id +
             path + '.pdf?token=' + this.$localStorage.id_token, '_blank');
+    }
+
+    deleteProduct(item) {
+        let self = this;
+        self.serverApi.deleteDispatchOrderContent(this.$stateParams.id, item.id, r => {
+            if (!r.data.errors) {
+                for (var i = self.dispatchOrder.product_order_contents.length - 1; i >= 0; i--) {
+                    if (self.dispatchOrder.product_order_contents[i].id === item.id) self.dispatchOrder.product_order_contents.splice(i, 1);
+                }
+                self.funcFactory.showNotification('Удалил товар', 'Успешно удали товаро ' + item.product.name + ' из реализации', true);
+            } else {
+                self.funcFactory.showNotification('Не смог удалить', r.data.errors, false);
+            }
+        })
     }
 }
 

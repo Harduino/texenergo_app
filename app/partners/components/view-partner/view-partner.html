@@ -169,32 +169,34 @@
             <p class="col-xs-12 col-md-3 font-bold">Владелец:</p>
             <p class="col-md-9">{{ viewPartnerCtrl.partner.owner.name || "Нет"}}</p>
         </div>
-        <ul id="myTab1" class="nav nav-tabs bordered margin-top-10">
-            <li class="active">
-                <a href="#s1" data-toggle="tab">Заказы</a>
-            </li>
-            <li>
-                <a href="#s2" data-toggle="tab">Списания</a>
-            </li>
-            <li>
-                <a href="#s3" data-toggle="tab">Поступления</a>
-            </li>
-            <li class="dropdown">
-                <a href="#s4" data-toggle="tab">Платежи</a>
-            </li>
-            <li class="dropdown">
-                <a href="#s5" data-toggle="tab">Пользователи</a>
-            </li>
-            <li class="dropdown">
-                <a href="#s6" data-toggle="tab">Банковские счета</a>
-            </li>
-            <li class="dropdown">
-                <a href="#s7" data-toggle="tab">Представители</a>
-            </li>
-            <li class="dropdown">
-                <a href="#s8" data-toggle="tab">Условия в счетах</a>
-            </li>
-        </ul>
+        <nav-tabs>
+            <ul id="myTab1" class="nav nav-tabs bordered margin-top-10">
+                <li class="active">
+                    <a href="#s1" data-toggle="tab">Заказы</a>
+                </li>
+                <li>
+                    <a href="#s2" data-toggle="tab">Списания</a>
+                </li>
+                <li>
+                    <a href="#s3" data-toggle="tab">Поступления</a>
+                </li>
+                <li class="dropdown">
+                    <a href="#s4" data-toggle="tab">Платежи</a>
+                </li>
+                <li class="dropdown">
+                    <a href="#s5" data-toggle="tab">Пользователи</a>
+                </li>
+                <li class="dropdown">
+                    <a href="#s6" data-toggle="tab">Банковские счета</a>
+                </li>
+                <li class="dropdown">
+                    <a href="#s7" data-toggle="tab">Представители</a>
+                </li>
+                <li class="dropdown">
+                    <a href="#s8" data-toggle="tab">Условия в счетах</a>
+                </li>
+            </ul>
+        </nav-tabs>
         <div class="tab-content padding-10">
             <div class="tab-pane fade in active" id="s1">
                 <table class="table table-bordered">
@@ -211,7 +213,9 @@
                         <tr ng-repeat="item in viewPartnerCtrl.partner.customerOrders">
                             <td>{{ item.number }}</td>
                             <td class="hidden-xs">{{ item.date | date:'dd MMMM yy'}}</td>
-                            <td class="text-right">{{ item.total | currency }}</td>
+                            <td class="text-right" ng-class="item.amount_paid > item.total ? 'warning' : (item.amount_paid === item.total ? 'success' : '') ">
+                                {{ item.total | currency }}
+                            </td>
                             <td>{{ item.status }}</td>
                             <td class="center-item-text" style="max-width: 40px;">
                                 <div class="btn-group">
@@ -296,7 +300,7 @@
                             <td>{{ item.number }}</td>
                             <td class="hidden-xs">{{ item.date | date:'dd MMMM yy, HH:mm'}}</td>
                             <td class="text-right">{{ item.amount | currency }}</td>
-                            <td class="hidden-xs text-right">{{ item.remaining_amount | currency}}</td>
+                            <td class="hidden-xs text-right" ng-class="item.remaining_amount > 0 ? 'success' : ''">{{ item.remaining_amount | currency}}</td>
                             <td class="center-item-text" style="max-width: 40px;">
                                 <div class="btn-group">
                                     <a class="btn btn-xs btn-info" href="#/incoming_transfers/{{item.id}}">

@@ -699,7 +699,7 @@ td:hover .td-nb-btn.themed{
     max-width: 10px;
     width: 10px;
 }
-[te-copy-to-buffer]> i.te-c-to-buffer-ico{
+te-copy-to-buffer> i.te-c-to-buffer-ico{
     position: absolute;
     opacity: 0;
     /*margin-left: 10px;*/
@@ -712,7 +712,7 @@ td:hover .td-nb-btn.themed{
     -o-transition: opacity 500ms;
     transition: opacity 500ms;
 }
-[te-copy-to-buffer]:hover> i.te-c-to-buffer-ico{
+te-copy-to-buffer:hover> i.te-c-to-buffer-ico{
     opacity: 1;
 }
 /* end copy to buffer */
@@ -799,7 +799,7 @@ td .editable-controls>input[type="number"]{
 .eqo-schema-control-p .eqo-schema-prod>i:before{
     background-color: #008000;
 }
-[te-copy-to-buffer] .fa-copy.animate {
+te-copy-to-buffer .fa-copy.animate {
     animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
     transform: translate3d(0, 0, 0);
     backface-visibility: hidden;

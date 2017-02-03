@@ -240,7 +240,7 @@ class ViewCustomerOrderCtrl {
         this.$uibModal.open({
             component: 'eqoProductDetailsModal',
             windowClass: 'eqo-centred-modal',
-            resolve: {row: row, order: self.order, config: {}}
+            resolve: {row: row, order: this.order, config: {}}
         });
     }
 
