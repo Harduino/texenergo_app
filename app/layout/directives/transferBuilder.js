@@ -1,68 +1,70 @@
-/**
- * Created by Egor Lobanov on 18.12.15.
- * directive of create transfer form
- */
-(function(){
-    angular.module('app.layout').component('transferBuilder', {
-        bindings: {config: '=', transfersList: '='},
-        controller: function(serverApi, funcFactory, $element) {
-            var self = this;
-            this._modal = $element.find('.modal');
+class TransferBuilderCtrl {
+    constructor(serverApi, funcFactory, $element) {
+        let self = this;
+        this.funcFactory = funcFactory;
+        this._modal = $element.find('.modal');
 
-            this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
-            this.data = {partnersList: []};
-            this.datePickerConfig = {dateFormat: 'dd.mm.yy'};
+        this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
+        this.data = {partnersList: []};
+        this.datePickerConfig = {dateFormat: 'dd.mm.yy'};
 
-            this.config.showForm = function() {
-                self.clearForm();
-                self._modal.modal('show');
-            };
+        this.config.showForm = () => {
+            self.clearForm();
+            self._modal.modal('show');
+        };
 
-            this.clearForm = function () {
-                self.newTransfer = {
-                    date: new Date(),
-                    amount: 0,
-                    partner: {},
-                    partner_id: '',
-                    number: null,
-                    description: ''
-                };
-            };
+        this.clearForm();
+    }
 
-            this.clearForm();
+    createTransfer () {
+        let data = this.newTransfer;
+        let self = this;
 
-            this.appendTransfer = function(item) {
-                self.transfersList.unshift(item);
-                funcFactory.showNotification((item.type === 'IncomingTransfer' ? 'Входящий' : 'Исходящий') +
-                    ' платеж успешно добавлен', item.number, true);
-            };
+        if(data.partner) {
+            data.partner_id = data.partner.id;
+        }
 
-            this.createTransfer = function(){
-                var data = self.newTransfer;
+        delete data.partner;
 
-                if(data.partner) {
-                    data.partner_id = data.partner.id;
+        this.config.createMethod(data, result => {
+            if(!result.data.errors) {
+                if(angular.isArray(result.data)) {
+                    result.data.map(self.appendTransfer.bind(self));
+                } else {
+                    self.appendTransfer(result.data);
                 }
 
-                delete data.partner;
+                self._modal.modal('hide');
+                self.clearForm();
+            } else {
+                self.funcFactory.showNotification('Не удалось создать платеж', result.data.errors);
+            }
+        }, angular.noop);
+    }
 
-                self.config.createMethod(data, function(result) {
-                    if(!result.data.errors) {
-                        if(angular.isArray(result.data)) {
-                            result.data.map(self.appendTransfer.bind(self));
-                        } else {
-                            self.appendTransfer(result.data);
-                        }
+    clearForm () {
+        this.newTransfer = {
+            date: new Date(),
+            amount: 0,
+            partner: {},
+            partner_id: '',
+            number: null,
+            description: ''
+        };
+    }
 
-                        self._modal.modal('hide');
-                        self.clearForm();
-                    } else {
-                        funcFactory.showNotification('Не удалось создать платеж', result.data.errors);
-                    }
-                }, angular.noop);
-            };
-        },
-        controllerAs: '$ctrl',
-        templateUrl: '/app/layout/partials/transfer-builder.tplt.html'
-    });
-}());
+    appendTransfer (item) {
+        this.transfersList.unshift(item);
+        this.funcFactory.showNotification((item.type === 'IncomingTransfer' ? 'Входящий' : 'Исходящий') +
+            ' платеж успешно добавлен', item.number, true);
+    }
+}
+
+TransferBuilderCtrl.$inject = ['serverApi', 'funcFactory', '$element'];
+
+angular.module('app.layout').component('transferBuilder', {
+    bindings: {config: '=', transfersList: '='},
+    controller: TransferBuilderCtrl,
+    controllerAs: '$ctrl',
+    templateUrl: '/app/layout/partials/transfer-builder.tplt.html'
+});
