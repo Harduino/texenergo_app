@@ -2,29 +2,31 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    &times;
-                </button>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Создать новый платёж</h4>
             </div>
             <div class="modal-body">
                 <section class="form-group">
                     <label class="control-label">Код поступления</label>
-                    <input type="text" class="input-sm form-control" ng-model="newTransfer.number" placeholder="Код поступления">
+                    <input type="text" class="input-sm form-control" ng-model="$ctrl.newTransfer.number"
+                           placeholder="Код поступления">
                 </section>
                 <section class="form-group">
                     <label class="control-label">Партнер</label>
-                    <ui-select  ui-select-infinity="partnerSelectConfig" ng-model="newTransfer.partner" theme="select2" class="td-ui-select">
+                    <ui-select  ui-select-infinity="$ctrl.partnerSelectConfig" ng-model="$ctrl.newTransfer.partner"
+                                theme="select2" class="td-ui-select">
                         <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
-                        <ui-select-choices repeat="partner in data.partnersList | filter:$select.search">
+                        <ui-select-choices repeat="partner in $ctrl.data.partnersList | filter:$select.search">
                             <div ng-bind-html="partner.name | highlight: $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </section>
                 <section class="form-group">
-                    <label class="control-label">Дата поступления</label>
+                    <label class="control-label" for="datePickerConfig">Дата поступления</label>
                     <div class="input-group">
-                        <input type="text" te-jq-ui="datePickerConfig" data-watch-options="true" te-jq-datepicker data-ui-type="datepicker" ng-model="newTransfer.date" class="full-width input-sm form-control" style="position: initial;">
+                        <input type="text" te-jq-ui="$ctrl.datePickerConfig" data-watch-options="true" te-jq-datepicker
+                               data-ui-type="datepicker" ng-model="$ctrl.newTransfer.date"
+                               class="full-width input-sm form-control" style="position: initial;" id="datePickerConfig">
                         <span class="input-group-addon">
                             <i class="glyphicon glyphicon-calendar"></i>
                         </span>
@@ -32,21 +34,24 @@
                 </section>
                 <section class="form-group">
                     <label class="control-label">Описание</label>
-                    <textarea ng-model="newTransfer.description" class="custom-scroll form-control" style="height: 300px;" placeholder="Для разбора выписки из банка, вставьте её в это поле"></textarea>
+                    <textarea ng-model="$ctrl.newTransfer.description" class="custom-scroll form-control"
+                              style="height: 300px;" placeholder="Для разбора выписки из банка, вставьте её в это поле">
+                    </textarea>
                 </section>
                 <section class="form-group">
                     <i class="fa-fw fa fa-warning"></i> Поле описание может использоваться для разбора выписки из банка
                 </section>
                 <section class="form-group">
                     <label class="control-label">Сумма</label>
-                    <input type="text" class="input-sm form-control" ng-model="newTransfer.amount" model-filter="{min:0, number:true}" filter-name="te_number" placeholder="Сумма">
+                    <input type="text" class="input-sm form-control" ng-model="$ctrl.newTransfer.amount"
+                           model-filter="{min:0, number:true}" filter-name="te_number" placeholder="Сумма">
                 </section>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">
                     Отмена
                 </button>
-                <button type="button" class="btn btn-primary" ng-click="createTransfer()">
+                <button type="button" class="btn btn-primary" ng-click="$ctrl.createTransfer()">
                     Сохранить
                 </button>
             </div>

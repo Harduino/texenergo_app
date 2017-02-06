@@ -5,48 +5,21 @@
 (function(){
     angular.module('app.layout').component('transferBuilder', {
         bindings: {config: '=', transfersList: '='},
-        controller: function(serverApi, funcFactory, $scope, $element) {
+        controller: function(serverApi, funcFactory, $element) {
             var self = this;
-            var _modal = $element.find('.modal');
+            this._modal = $element.find('.modal');
 
-            $scope.partnerSelectConfig = {dataMethod: serverApi.getPartners};
-            $scope.data = {partnersList: []};
-            $scope.datePickerConfig = {dateFormat: 'dd.mm.yy'};
+            this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
+            this.data = {partnersList: []};
+            this.datePickerConfig = {dateFormat: 'dd.mm.yy'};
 
             this.config.showForm = function() {
-                clearForm();
-                _modal.modal('show');
+                self.clearForm();
+                self._modal.modal('show');
             };
 
-            clearForm();
-
-            $scope.createTransfer = function(){
-                var data = $scope.newTransfer;
-
-                if(data.partner) {
-                    data.partner_id = data.partner.id;
-                }
-
-                delete data.partner;
-
-                var appendTransfer = function(item) {
-                    self.transfersList.unshift(item);
-                    funcFactory.showNotification((item.type === 'IncomingTransfer' ? 'Входящий' : 'Исходящий') + ' платеж успешно добавлен', item.number, true);
-                };
-
-                self.config.createMethod(data, function(result) {
-                    if(!result.data.errors) {
-                        angular.isArray(result.data) ? result.data.map(appendTransfer) : appendTransfer(result.data);
-                        _modal.modal('hide');
-                        clearForm();
-                    } else {
-                        funcFactory.showNotification('Не удалось создать платеж', result.data.errors);
-                    }
-                }, angular.noop);
-            };
-
-            function clearForm() {
-                $scope.newTransfer = {
+            this.clearForm = function () {
+                self.newTransfer = {
                     date: new Date(),
                     amount: 0,
                     partner: {},
@@ -54,8 +27,42 @@
                     number: null,
                     description: ''
                 };
-            }
+            };
+
+            this.clearForm();
+
+            this.appendTransfer = function(item) {
+                self.transfersList.unshift(item);
+                funcFactory.showNotification((item.type === 'IncomingTransfer' ? 'Входящий' : 'Исходящий') +
+                    ' платеж успешно добавлен', item.number, true);
+            };
+
+            this.createTransfer = function(){
+                var data = self.newTransfer;
+
+                if(data.partner) {
+                    data.partner_id = data.partner.id;
+                }
+
+                delete data.partner;
+
+                self.config.createMethod(data, function(result) {
+                    if(!result.data.errors) {
+                        if(angular.isArray(result.data)) {
+                            result.data.map(self.appendTransfer.bind(self));
+                        } else {
+                            self.appendTransfer(result.data);
+                        }
+
+                        self._modal.modal('hide');
+                        self.clearForm();
+                    } else {
+                        funcFactory.showNotification('Не удалось создать платеж', result.data.errors);
+                    }
+                }, angular.noop);
+            };
         },
+        controllerAs: '$ctrl',
         templateUrl: '/app/layout/partials/transfer-builder.tplt.html'
     });
 }());
