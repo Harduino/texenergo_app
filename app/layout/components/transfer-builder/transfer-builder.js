@@ -66,5 +66,5 @@ angular.module('app.layout').component('transferBuilder', {
     bindings: {config: '=', transfersList: '='},
     controller: TransferBuilderCtrl,
     controllerAs: '$ctrl',
-    templateUrl: '/app/layout/partials/transfer-builder.tplt.html'
+    templateUrl: '/app/layout/components/transfer-builder/transfer-builder.html'
 });
