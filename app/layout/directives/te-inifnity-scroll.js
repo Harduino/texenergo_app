@@ -4,15 +4,11 @@
 (function(){
     "use strict";
 
-    angular.module('te.infinity.scroll', []).directive('teInfinity', ['$q', '$timeout', '$compile', function($q, $timeout, $compile){
-
+    angular.module('te.infinity.scroll', []).directive('teInfinity', ['$q', '$timeout', '$compile', function($q, $timeout, $compile) {
         return {
-            restrict: "A",
-            scope: {
-                config: '=teInfinity'
-            },
+            restrict: 'E',
+            scope: {config: '=', selector: '@'},
             link: function(scope, element){
-
                 var config = {
                     startFrom:0,
                     startPage:1,
@@ -29,19 +25,21 @@
                         '</div>'
                 };
 
+                var block = $(scope.selector);
+
                 var page,                                       // current page for load
                     content = $(element[0].firstElementChild),  // content of scroll
                     inLoad = false,                             // loading status
                     query,                                      // search query
                     canceler,                                   // request canceler
                     timeout_p,                                  // $timeout promise
-                    elHeight = element.outerHeight();
+                    elHeight = block.outerHeight();
 
                 config = angular.extend(config, scope.config);
 
                 element.append($compile(config.searchStatusTmpl)(scope));
 
-                element.scroll(scroll);
+                block.scroll(scroll);
 
                 config.liveLoad ? scope.$watch('config.queryModel', function(value){
                     setQueryValue(value);
@@ -63,7 +61,7 @@
                 }
 
                 function scroll(){
-                    var p = content.outerHeight() - element.scrollTop() - elHeight;
+                    var p = content.outerHeight() - block.scrollTop() - elHeight;
                     if(!inLoad && p<config.scrollDistance && p>-elHeight/2){
                         page++;
                         load(config.notShowLoadStatus);
@@ -91,7 +89,7 @@
                 }
 
                 scope.$on('$destroy', function(){
-                    element.off('scroll');
+                    block.off('scroll');
                 });
             }
         }
