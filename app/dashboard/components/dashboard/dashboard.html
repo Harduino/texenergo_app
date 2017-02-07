@@ -109,24 +109,8 @@
                         </div>
                         <div class="table-responsive dshb-srch-log-c">
                             <te-infinity config="dashboardCtrl.searchLogScrlCnfg" selector=".dshb-srch-log-c">
-                                <table class="table table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th class="hidden-xs">Дата</th>
-                                        <th>Запрос</th>
-                                        <th>Количество</th>
-                                        <th>Кто</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr ng-repeat="row in dashboardCtrl.searchLogScrlCnfg.resultCollection track by $index">
-                                        <td class="hidden-xs">{{row.date | date:'dd/MM/yy'}}</td>
-                                        <td>{{row.query}}</td>
-                                        <td>{{row.count}}</td>
-                                        <td>{{row.user_email}}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                <ng-include src="'app/dashboard/components/dashboard/partials/search-logs.html'">
+                                </ng-include>
                                 <te-scroll-top selector=".dshb-srch-log-c" button-class="dshb-t-scroll-up-btn">
                                 </te-scroll-top>
                             </te-infinity>
@@ -161,24 +145,8 @@
                         </div>
                         <div class="table-responsive dshb-parse-log-c">
                             <te-infinity config="dashboardCtrl.parseLogScrlCnfg" selector=".dshb-parse-log-c">
-                                <table class="table table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th class="hidden-xs">Дата</th>
-                                        <th>Запрос</th>
-                                        <th>Продукт</th>
-                                        <th>Кто</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr ng-repeat="row in dashboardCtrl.parseLogScrlCnfg.resultCollection track by $index">
-                                        <td class="hidden-xs">{{row.date | date:'dd/MM/yy'}}</td>
-                                        <td>{{row.source}}</td>
-                                        <td>{{row.product}}</td>
-                                        <td>{{row.user_email}}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                <ng-include src="'app/dashboard/components/dashboard/partials/parse-logs.html'">
+                                </ng-include>
                                 <te-scroll-top selector=".dshb-parse-log-c" button-class="dshb-t-scroll-up-btn">
                                 </te-scroll-top>
                             </te-infinity>
