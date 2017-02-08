@@ -93,7 +93,6 @@ self.addEventListener('fetch', function(event) {
           return r;
         })
       }
-
       return fetch(event.request).then(function(r) {
         return caches.open(CACHE_NAME + CACHE_VERSION).then(function(cache){
           cacheIt(cache, event.request, r);
@@ -101,6 +100,11 @@ self.addEventListener('fetch', function(event) {
         })
       }).catch(function(err){
         console.log("Catching fetch exception: " + err);
+        if (event.request.url.indexOf("http://cdn.texenergo.com/products/" === 0)) {
+          return fetch("https://s3-eu-west-1.amazonaws.com/texenergo-production-v3/site/images/texenergo_logo_high.png").then(function(blank_image){
+            return blank_image;
+          })
+        }
         if(response) return response;
       });
     }).catch(function(err){
