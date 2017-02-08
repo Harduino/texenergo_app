@@ -41,9 +41,20 @@
         <script src="/assets/plugin/json3/lib/json3.min.js"></script>
         <![endif]-->
 
-        <script src="/public/assets/javascripts/libs-min.js"></script>
-        <!-- Долго жмет его, поэтому отдельным запрсом-->
-        <!-- <script src="/assets/plugin/tinymce/tinymce.min.js"></script> -->
-        <script src="/public/assets/javascripts/app-modules-min.js"></script>
+        <script src="/public/assets/javascripts/libs.js"></script>
+        <script src="/public/assets/javascripts/app-modules.js"></script>
     </body>
+    <script type="text/javascript">
+        if ('serviceWorker' in navigator) {
+            var sw_path;
+            if(window.location.host.match(/localhost|127\.0\.0\.1/) == null) {
+                sw_path = 'https://www.texenergo.com/site/sw/sw.js'
+            } else {
+                sw_path = '/sw.js'
+            }
+            navigator.serviceWorker.register(sw_path).catch(function(error) {
+                console.log('Registration failed with ' + error);
+            });
+        }
+    </script>
 </html>
