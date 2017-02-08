@@ -1,5 +1,5 @@
 class DashboardCtrl {
-    constructor(serverApi, Observer) {
+    constructor(serverApi) {
         let self = this;
         this.data = {customerOrders:[], dispatchOrders:[]};
 
@@ -8,16 +8,10 @@ class DashboardCtrl {
 
         serverApi.getCustomerOrders(1, '', {}, result => self.data.customerOrders = result.data.slice(0, 10));
         serverApi.getDispatchOrders(1, '', {}, result => self.data.dispatchOrders = result.data.slice(0, 10));
-
-        Observer.subscribe('FILTER_LIST', filterData => {
-            if(['parse', 'search'].indexOf(filterData.listId) !== -1) {
-                self[filterData.listId + 'LogScrlCnfg'].setQueryValue(filterData.filter);
-            }
-        });
     }
 }
 
-DashboardCtrl.$inject = ['serverApi', 'Observer'];
+DashboardCtrl.$inject = ['serverApi'];
 
 angular.module('app.dashboard').component('dashboard', {
     controller: DashboardCtrl,
