@@ -5,12 +5,12 @@
     "use strict";
 
     angular.module('te.infinity.scroll', []).component('teInfinityScroll', {
-        bindings: {config: '=', loadData: '=', listId: '@', selector: '@', view: '@'},
+        bindings: {config: '<', loadData: '=', listId: '@', selector: '@', view: '@'},
         controller: function($q, Observer, $scope, $element) {
             var self = this;
-            var config = {startFrom: 0, startPage: 1, scrollDistance: 30, loadAfterInit: true};
+            var START_PAGE = 1;
+            var DEFAULT_CONFIG = {startFrom: 0, scrollDistance: 30, loadAfterInit: true};
             var block = $(this.selector);
-            this.resultCollection = [];
 
             var page,                                       // current page for load
                 content,                                    // content of scroll
@@ -19,10 +19,10 @@
                 canceler,                                   // request canceler
                 elHeight = block.outerHeight();
 
-            config = angular.extend(config, this.config);
-            this.startFrom = config.startFrom;
+            this.config = angular.extend(DEFAULT_CONFIG, this.config);
+            this.resultCollection = [];
             block.scroll(scroll);
-            config.loadAfterInit && setQueryValue('');
+            this.config.loadAfterInit && setQueryValue('');
 
             Observer.subscribe('FILTER_LIST', filterData => {
                 if(self.listId === filterData.listId) {
@@ -33,18 +33,18 @@
             function setQueryValue (value) {
                 if(value !== undefined) {
                     inLoad && canceler.resolve();
-                    page = config.startPage;
+                    page = START_PAGE;
                     inLoad = false;
                     query = value;
                     self.resultCollection = [];
 
-                    if(value.length >= config.startFrom) {
+                    if(value.length >= self.config.startFrom) {
                         load();
                     } else {
                         $scope.searchStatus = 'before';
                     }
-                    }
                 }
+            }
 
             function scroll() {
                 if(content === undefined) {
@@ -53,15 +53,15 @@
 
                 var p = content.outerHeight() - block.scrollTop() - elHeight;
 
-                if(!inLoad && (p < config.scrollDistance) && (p > -elHeight / 2)) {
+                if(!inLoad && (p < self.config.scrollDistance) && (p > -elHeight / 2)) {
                     page++;
-                    load(config.notShowLoadStatus);
+                    load(self.config.hideLoadingStatus);
                 }
             }
 
-            function load (notShowStatus){
+            function load (hideLoadingStatus) {
                 inLoad = true;
-                $scope.searchStatus = notShowStatus ? 'result' : 'inload';
+                $scope.searchStatus = hideLoadingStatus ? 'result' : 'inload';
                 canceler = $q.defer();
 
                 self.loadData(page, query, {timeout: canceler.promise}, function(result) {
@@ -72,7 +72,7 @@
                             self.resultCollection.push(item);
                         });
 
-                        $scope.searchStatus = (page == config.startPage) && inLoad ? 'noresult' : 'result';
+                        $scope.searchStatus = (page == START_PAGE) && inLoad ? 'noresult' : 'result';
                     } else {
                         inLoad = false;
                         $scope.searchStatus = 'noresult';
