@@ -85,7 +85,7 @@ touch "$LAST_UPLOAD_STAMP"
 
 echo "${#updated_list[@]} file(s) updated." 
 
-
+scp sw.js ubuntu@texenergo.com:~/texenergo_v3/shared/public/assets/app_sw.js
 
 
 

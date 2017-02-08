@@ -101,6 +101,7 @@ self.addEventListener('fetch', function(event) {
       }).catch(function(err){
         console.log("Catching fetch exception: " + err);
         if (event.request.url.indexOf("http://cdn.texenergo.com/products/" === 0)) {
+          // Fetches only at HTTPS.
           return fetch("https://s3-eu-west-1.amazonaws.com/texenergo-production-v3/site/images/texenergo_logo_high.png").then(function(blank_image){
             return blank_image;
           })
