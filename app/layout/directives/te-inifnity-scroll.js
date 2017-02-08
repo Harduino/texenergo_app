@@ -16,11 +16,11 @@
                     delay: 500,
                     dataMethod: angular.noop,
                     liveLoad: false,
-                    loadAfterInit: true,
-                    resultCollection: []
+                    loadAfterInit: true
                 };
 
                 var block = $($scope.selector);
+                $scope.resultCollection = [];
 
                 var page,                                       // current page for load
                     content,                                    // content of scroll
@@ -46,7 +46,7 @@
                         page = config.startPage;
                         inLoad = false;
                         query = value;
-                        $scope.config.resultCollection = [];
+                        $scope.resultCollection = [];
 
                         if(value.length >= config.startFrom) {
                             timeout_p = $timeout(load, config.delay);
@@ -78,7 +78,7 @@
                             inLoad = result.data.length == 0;
 
                             result.data.hasOwnProperty('length') && result.data.map(function(item){
-                                $scope.config.resultCollection.push(item);
+                                $scope.resultCollection.push(item);
                             });
 
                             $scope.searchStatus = (page == config.startPage) && inLoad ? 'noresult' : 'result';
