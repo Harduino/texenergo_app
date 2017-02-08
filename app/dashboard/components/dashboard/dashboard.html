@@ -91,20 +91,7 @@
                     <div class="widget-body">
                         <div class="widget-body-toolbar">
                             <div class="row widget-tollb-row-with-t">
-                                <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input class="form-control" ng-model="dashboardCtrl.data.searchLogSearchQ"
-                                               type="text" placeholder="Фильтр"
-                                               ng-keypress="dashboardCtrl.filterLogTable($event, 'search')">
-                                    </div>
-                                </div>
-                                <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
-                                    <button ng-click="dashboardCtrl.filterLogTable($event, 'search')"
-                                            class="btn btn-default">
-                                        <i class="fa fa-refresh"></i> <span class="hidden-mobile">Обновить</span>
-                                    </button>
-                                </div>
+                                <te-list-filter list-id="search"></te-list-filter>
                             </div>
                         </div>
                         <div class="table-responsive dshb-srch-log-c">
@@ -124,20 +111,7 @@
                     <div class="widget-body">
                         <div class="widget-body-toolbar">
                             <div class="row widget-tollb-row-with-t">
-                                <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input class="form-control" ng-model="dashboardCtrl.data.parseLogSearchQ"
-                                               type="text" placeholder="Фильтр"
-                                               ng-keypress="dashboardCtrl.filterLogTable($event, 'parse')">
-                                    </div>
-                                </div>
-                                <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
-                                    <button ng-click="dashboardCtrl.filterLogTable($event, 'parse')"
-                                            class="btn btn-default">
-                                        <i class="fa fa-refresh"></i> <span class="hidden-mobile">Обновить</span>
-                                    </button>
-                                </div>
+                                <te-list-filter list-id="parse"></te-list-filter>
                             </div>
                         </div>
                         <div class="table-responsive dshb-parse-log-c">
