@@ -108,12 +108,9 @@
                             </div>
                         </div>
                         <div class="table-responsive dshb-srch-log-c">
-                            <te-infinity config="dashboardCtrl.searchLogScrlCnfg" selector=".dshb-srch-log-c">
-                                <ng-include src="'app/dashboard/components/dashboard/partials/search-logs.html'">
-                                </ng-include>
-                                <te-scroll-top selector=".dshb-srch-log-c" button-class="dshb-t-scroll-up-btn">
-                                </te-scroll-top>
-                            </te-infinity>
+                            <te-infinity-scroll config="dashboardCtrl.searchLogScrlCnfg" selector=".dshb-srch-log-c"
+                                         view="app/dashboard/components/dashboard/partials/search-logs.html">
+                            </te-infinity-scroll>
                         </div>
                     </div>
                 </div>
@@ -144,12 +141,9 @@
                             </div>
                         </div>
                         <div class="table-responsive dshb-parse-log-c">
-                            <te-infinity config="dashboardCtrl.parseLogScrlCnfg" selector=".dshb-parse-log-c">
-                                <ng-include src="'app/dashboard/components/dashboard/partials/parse-logs.html'">
-                                </ng-include>
-                                <te-scroll-top selector=".dshb-parse-log-c" button-class="dshb-t-scroll-up-btn">
-                                </te-scroll-top>
-                            </te-infinity>
+                            <te-infinity-scroll config="dashboardCtrl.parseLogScrlCnfg" selector=".dshb-parse-log-c"
+                                         view="app/dashboard/components/dashboard/partials/parse-logs.html">
+                            </te-infinity-scroll>
                         </div>
                     </div>
                 </div>
