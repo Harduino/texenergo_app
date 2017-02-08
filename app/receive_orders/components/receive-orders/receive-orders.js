@@ -1,5 +1,5 @@
 class ReceiveOrdersCtrl {
-    constructor($state, $stateParams, serverApi, CanCan, funcFactory) {
+    constructor($state, $stateParams, serverApi, funcFactory) {
         let self = this;
 
         this.$state = $state;
@@ -84,7 +84,7 @@ class ReceiveOrdersCtrl {
     }
 }
 
-ReceiveOrdersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory'];
+ReceiveOrdersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
 
 angular.module('app.receive_orders').component('receiveOrders', {
     controller: ReceiveOrdersCtrl,

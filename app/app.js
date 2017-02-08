@@ -64,8 +64,6 @@ appConfig.sound_on = true;
         'auth0.lockPasswordless',
         'angular-jwt',
         
-        // Permissions
-        'cancan.export',
         // App
         'app.api',
         'app.layout',

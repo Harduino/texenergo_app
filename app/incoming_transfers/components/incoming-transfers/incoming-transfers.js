@@ -1,5 +1,5 @@
 class IncomingTransfersCtrl {
-    constructor($state, $stateParams, serverApi, CanCan, funcFactory) {
+    constructor($state, $stateParams, serverApi, funcFactory) {
         let self = this;
 
         this.visual = {
@@ -36,10 +36,6 @@ class IncomingTransfersCtrl {
                     }
                 }
             ],
-            role:{
-                can_edit: CanCan.can('edit', 'IncomingTransfer'),
-                can_destroy: CanCan.can('destroy', 'IncomingTransfer')
-            },
             titles: ['Входящие платежи']
         };
 
@@ -48,7 +44,7 @@ class IncomingTransfersCtrl {
     }
 }
 
-IncomingTransfersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory'];
+IncomingTransfersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
 
 angular.module('app.incoming_transfers').component('incomingTransfers', {
     controller: IncomingTransfersCtrl,

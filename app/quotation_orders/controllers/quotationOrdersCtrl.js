@@ -5,7 +5,7 @@
 
     'use strict';
 
-    angular.module('app.quotation_orders').controller('QuotationOrdersCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory', function($scope, $state, $stateParams, serverApi, CanCan, funcFactory){
+    angular.module('app.quotation_orders').controller('QuotationOrdersCtrl', ['$scope', '$state', '$stateParams', 'serverApi', 'funcFactory', function($scope, $state, $stateParams, serverApi, funcFactory){
         var sc = $scope;
 
         sc.visual = {

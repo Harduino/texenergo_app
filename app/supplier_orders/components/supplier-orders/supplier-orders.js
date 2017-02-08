@@ -1,5 +1,5 @@
 class SupplierOrdersCtrl {
-    constructor($state, $stateParams, serverApi, CanCan, funcFactory) {
+    constructor($state, $stateParams, serverApi, funcFactory) {
         let self = this;
         this.$state = $state;
         this.funcFactory = funcFactory;
@@ -55,7 +55,6 @@ class SupplierOrdersCtrl {
                     }
                 }
             ],
-            canAddPartner: CanCan.can('see_multiple', 'Partner'),
             titles: ['Заказы поставщикам']
         };
 
@@ -89,7 +88,7 @@ class SupplierOrdersCtrl {
     };
 }
 
-SupplierOrdersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory'];
+SupplierOrdersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
 
 angular.module('app.supplier_orders').component('supplierOrders', {
     controller: SupplierOrdersCtrl,

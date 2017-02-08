@@ -1,5 +1,5 @@
 class OutgoingTransfersCtrl {
-    constructor($state, $stateParams, serverApi, CanCan, funcFactory) {
+    constructor($state, $stateParams, serverApi, funcFactory) {
         let self = this;
 
         this.visual = {
@@ -36,10 +36,6 @@ class OutgoingTransfersCtrl {
                     }
                 }
             ],
-            role: {
-                can_edit: CanCan.can('edit', 'OutgoingTransfer'),
-                can_destroy: CanCan.can('destroy', 'OutgoingTransfer')
-            },
             titles: ['Исходящий платёж']
         };
 
@@ -48,7 +44,7 @@ class OutgoingTransfersCtrl {
     }
 }
 
-OutgoingTransfersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory'];
+OutgoingTransfersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
 
 angular.module('app.outgoing_transfers').component('outgoingTransfers', {
     controller: OutgoingTransfersCtrl,

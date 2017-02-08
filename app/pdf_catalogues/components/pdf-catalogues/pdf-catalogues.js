@@ -1,5 +1,5 @@
 class PdfCataloguesCtrl {
-    constructor($state, $stateParams, serverApi, CanCan, funcFactory) {
+    constructor($state, $stateParams, serverApi, funcFactory) {
         let self = this;
 
         this.visual = {
@@ -47,7 +47,7 @@ class PdfCataloguesCtrl {
     }
 }
 
-PdfCataloguesCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'CanCan', 'funcFactory'];
+PdfCataloguesCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
 
 angular.module('app.pdf_catalogues').component('pdfCatalogues', {
     controller: PdfCataloguesCtrl,

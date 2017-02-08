@@ -84,10 +84,7 @@ gulp.task('libs', function(){
         'assets/plugin/x-editable/x-editable-custom.js',
         'bower_components/ion.rangeSlider/js/ion.rangeSlider.min.js',
 
-        // Consider remove both cancan below
-        'assets/plugin/cancan/export.js',
         'assets/plugin/cable/cable.js',
-        'assets/plugin/cancan/export-angular.js',
 
         //TinyMCE
         'bower_components/tinymce/tinymce.min.js',

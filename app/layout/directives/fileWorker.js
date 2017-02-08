@@ -6,7 +6,7 @@
  * dropzoneConfig - object with dropzone options that should overwrite fileWorker standard options
  */
 (function(){
-    angular.module('app.layout').directive('fileWorker', ['funcFactory', 'CanCan', function(funcFactory, CanCan){
+    angular.module('app.layout').directive('fileWorker', ['funcFactory', function(funcFactory){
         return {
             restrict:'E',
             scope:{
@@ -18,7 +18,7 @@
                     _drop = modal.find('div[smart-dropzone]')[0],//dropzone element
                     _value, //config value
                     _isConfigured = false;
-                var canDestroy = CanCan.can('destroy', 'Attachments::Document'); // check, can user remove file
+                var canDestroy = false; // check, can user remove file
 
                 scope.fullQueue = false; // show upload button or not
 

@@ -37,7 +37,7 @@
        };
     });
 
-    module.factory('Abilities', ['serverApi', '$q', '$state', 'CanCan', 'User', function(serverApi, $q, $state, CanCan, User){
+    module.factory('Abilities', ['serverApi', '$q', '$state', 'User', function(serverApi, $q, $state, User){
         var dfd = $q.defer(),
             s,
             p;
@@ -59,7 +59,6 @@
         var getInfo = function(){
             serverApi.getAbilities(function(result){
                 window.gon = result.data;
-                CanCan.getAbility(window.gon);
                 setUserInfo();
                 dfd.resolve();
                 $state.go(s, p);
