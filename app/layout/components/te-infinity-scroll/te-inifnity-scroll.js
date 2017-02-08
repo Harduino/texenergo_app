@@ -5,15 +5,9 @@
     "use strict";
 
     angular.module('te.infinity.scroll', []).component('teInfinityScroll', {
-        bindings: {config: '=', listId: '@', selector: '@', view: '@'},
+        bindings: {config: '=', loadData: '=', listId: '@', selector: '@', view: '@'},
         controller: function($q, Observer, $scope, $element) {
-            var config = {
-                startFrom: 0,
-                startPage: 1,
-                scrollDistance: 30,
-                loadAfterInit: true
-            };
-
+            var config = {startFrom: 0, startPage: 1, scrollDistance: 30, loadAfterInit: true};
             var block = $(this.selector);
             var self = this;
             $scope.resultCollection = [];
@@ -28,7 +22,6 @@
             config = angular.extend(config, this.config);
             this.startFrom = config.startFrom;
             block.scroll(scroll);
-
             config.loadAfterInit && setQueryValue('');
 
             Observer.subscribe('FILTER_LIST', filterData => {
@@ -71,7 +64,7 @@
                 $scope.searchStatus = notShowStatus ? 'result' : 'inload';
                 canceler = $q.defer();
 
-                config.dataMethod(page, query, {timeout: canceler.promise}, function(result) {
+                self.loadData(page, query, {timeout: canceler.promise}, function(result) {
                     if(result.status == 200) {
                         inLoad = result.data.length == 0;
 

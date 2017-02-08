@@ -29,7 +29,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="order in dashboardCtrl.data.customerOrders">
+                                        <tr ng-repeat="order in $ctrl.data.customerOrders">
                                             <td>{{order.number}}</td>
                                             <td>{{order.total | currency}}</td>
                                             <td class="center-item-text">
@@ -64,7 +64,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="order in dashboardCtrl.data.dispatchOrders">
+                                    <tr ng-repeat="order in $ctrl.data.dispatchOrders">
                                         <td>{{order.number}}</td>
                                         <td>{{order.total | currency}}</td>
                                         <td class="center-item-text">
@@ -95,7 +95,7 @@
                             </div>
                         </div>
                         <div class="table-responsive dshb-srch-log-c">
-                            <te-infinity-scroll config="dashboardCtrl.searchLogScrlCnfg" selector=".dshb-srch-log-c"
+                            <te-infinity-scroll load-data="$ctrl.dataMethods.search" selector=".dshb-srch-log-c"
                                                 view="app/dashboard/components/dashboard/partials/search-logs.html"
                                                 list-id="search">
                             </te-infinity-scroll>
@@ -116,7 +116,7 @@
                             </div>
                         </div>
                         <div class="table-responsive dshb-parse-log-c">
-                            <te-infinity-scroll config="dashboardCtrl.parseLogScrlCnfg" selector=".dshb-parse-log-c"
+                            <te-infinity-scroll load-data="$ctrl.dataMethods.parse" selector=".dshb-parse-log-c"
                                                 view="app/dashboard/components/dashboard/partials/parse-logs.html"
                                                 list-id="parse">
                             </te-infinity-scroll>
