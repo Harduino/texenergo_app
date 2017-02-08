@@ -7,10 +7,10 @@
     angular.module('te.infinity.scroll', []).component('teInfinityScroll', {
         bindings: {config: '=', loadData: '=', listId: '@', selector: '@', view: '@'},
         controller: function($q, Observer, $scope, $element) {
+            var self = this;
             var config = {startFrom: 0, startPage: 1, scrollDistance: 30, loadAfterInit: true};
             var block = $(this.selector);
-            var self = this;
-            $scope.resultCollection = [];
+            this.resultCollection = [];
 
             var page,                                       // current page for load
                 content,                                    // content of scroll
@@ -36,7 +36,7 @@
                     page = config.startPage;
                     inLoad = false;
                     query = value;
-                    $scope.resultCollection = [];
+                    self.resultCollection = [];
 
                     if(value.length >= config.startFrom) {
                         load();
@@ -69,7 +69,7 @@
                         inLoad = result.data.length == 0;
 
                         result.data.hasOwnProperty('length') && result.data.map(function(item) {
-                            $scope.resultCollection.push(item);
+                            self.resultCollection.push(item);
                         });
 
                         $scope.searchStatus = (page == config.startPage) && inLoad ? 'noresult' : 'result';
