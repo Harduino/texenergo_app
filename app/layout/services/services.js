@@ -37,41 +37,6 @@
        };
     });
 
-    module.factory('Abilities', ['serverApi', '$q', '$state', 'User', function(serverApi, $q, $state, User){
-        var dfd = $q.defer(),
-            s,
-            p;
-
-        var o = {
-            get ready () {
-                return dfd.promise;
-            }
-        };
-
-        window.gon && setUserInfo();
-
-        o.getGon = function(stateName, params){
-            s = stateName;
-            p = params;
-            getInfo();
-        };
-
-        var getInfo = function(){
-            serverApi.getAbilities(function(result){
-                window.gon = result.data;
-                setUserInfo();
-                dfd.resolve();
-                $state.go(s, p);
-            });
-        };
-
-        function setUserInfo(){
-            User.username = window.gon.user.first_name + ' ' +window.gon.user.last_name;
-            User.dfd.resolve();
-        }
-        return o;
-    }]);
-
     /**
      * Subscribe to Rails Websocket server channels
      */

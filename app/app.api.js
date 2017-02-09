@@ -388,9 +388,6 @@
         o.resetPassword = function(data, success, fail){
             $http.post('/users/password', data).then(success, fail);
         };
-        o.getAbilities = function(success, fail){
-            $http.get('/system_info').then(success, fail);
-        };
 
         // Logs
         o.getSearchLogs = function(page, query, config, success, fail){
