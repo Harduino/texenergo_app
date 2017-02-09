@@ -6,7 +6,7 @@
 
     angular.module('te.infinity.scroll', []).component('teInfinityScroll', {
         bindings: {config: '<', loadData: '=', listId: '@', selector: '@', view: '@'},
-        controller: function($q, Observer, $scope, $element) {
+        controller: function($q, Observer, $element) {
             var self = this;
             var START_PAGE = 1;
             var DEFAULT_CONFIG = {searchPatternMinimalLength: 0, scrollDistance: 30, loadAfterInit: true};
@@ -41,7 +41,7 @@
                     if(value.length >= self.config.searchPatternMinimalLength) {
                         load();
                     } else {
-                        $scope.searchStatus = 'before';
+                        self.searchStatus = 'before';
                     }
                 }
             }
@@ -61,7 +61,7 @@
 
             function load (hideLoadingStatus) {
                 inLoad = true;
-                $scope.searchStatus = hideLoadingStatus ? 'result' : 'inload';
+                self.searchStatus = hideLoadingStatus ? 'result' : 'inload';
                 canceler = $q.defer();
 
                 self.loadData(page, query, {timeout: canceler.promise}, function(result) {
@@ -72,17 +72,17 @@
                             self.resultCollection.push(item);
                         });
 
-                        $scope.searchStatus = (page == START_PAGE) && inLoad ? 'noresult' : 'result';
+                        self.searchStatus = (page == START_PAGE) && inLoad ? 'noresult' : 'result';
                     } else {
                         inLoad = false;
-                        $scope.searchStatus = 'noresult';
+                        self.searchStatus = 'noresult';
                     }
                 });
             }
 
-            $scope.$on('$destroy', function() {
+            this.$onDestroy = function() {
                 block.off('scroll');
-            });
+            };
         },
         controllerAs: '$ctrl',
         templateUrl: 'app/layout/components/te-infinity-scroll/te-infinity-scroll.html'

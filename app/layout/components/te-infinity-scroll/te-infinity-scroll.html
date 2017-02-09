@@ -1,7 +1,9 @@
 <div ng-include="$ctrl.view" class="te-infinity-scroll-content"></div>
 <div class="ui-select-status">
-    <span ng-if="searchStatus == 'before'">Введите еще хотя бы {{$ctrl.config.searchPatternMinimalLength}} символа</span>
-    <span ng-if="searchStatus == 'noresult'">Нет результатов</span>
-    <span ng-if="searchStatus == 'inload'">Загрузка...</span>
+    <span ng-if="$ctrl.searchStatus == 'before'">
+        Введите еще хотя бы {{$ctrl.config.searchPatternMinimalLength}} символа
+    </span>
+    <span ng-if="$ctrl.searchStatus == 'noresult'">Нет результатов</span>
+    <span ng-if="$ctrl.searchStatus == 'inload'">Загрузка...</span>
 </div>
 <te-scroll-top selector="{{$ctrl.selector}}" button-class="dshb-t-scroll-up-btn"></te-scroll-top>
