@@ -1,87 +1,83 @@
-/**
- * Created by Egor Lobanov on 01.03.16.
- */
-(function(){
-    "use strict";
+class InfinityScrollCtrl {
+    constructor($q, Observer, $element) {
+        let self = this;
+        this.$q = $q;
+        this.$element = $element;
 
-    angular.module('te.infinity.scroll', []).component('teInfinityScroll', {
-        bindings: {config: '<', loadData: '=', listId: '@', selector: '@', view: '@'},
-        controller: function($q, Observer, $element) {
-            var self = this;
-            this.START_PAGE = 1;
+        this.START_PAGE = 1;
+        this.containerElement = $(this.selector);
+        this.containerHeight = this.containerElement.outerHeight();
 
-            this.containerElement = $(this.selector);
-            this.containerHeight = this.containerElement.outerHeight();
+        const DEFAULT_CONFIG = {searchPatternMinimalLength: 0, scrollDistance: 30, loadAfterInit: true};
+        this.config = angular.extend(DEFAULT_CONFIG, this.config);
 
-            var DEFAULT_CONFIG = {searchPatternMinimalLength: 0, scrollDistance: 30, loadAfterInit: true};
-            this.config = angular.extend(DEFAULT_CONFIG, this.config);
+        this.inLoad = false;
+        this.resultCollection = [];
+        this.containerElement.scroll(this.handleScroll.bind(this));
+        this.config.loadAfterInit && self.setQuery('');
 
+        Observer.subscribe('FILTER_LIST', filterData => {
+            if(self.listId === filterData.listId) {
+                self.setQuery(filterData.filter);
+            }
+        });
+
+        this.$onDestroy = () => self.containerElement.off('scroll');
+    }
+
+    setQuery (query) {
+        if(query !== undefined) {
+            this.inLoad && this.abortSearch.resolve();
+            this.currentPage = this.START_PAGE;
             this.inLoad = false;
+            this.searchQuery = query;
             this.resultCollection = [];
-            this.containerElement.scroll(handleScroll);
-            this.config.loadAfterInit && setQuery('');
 
-            Observer.subscribe('FILTER_LIST', filterData => {
-                if(self.listId === filterData.listId) {
-                    setQuery(filterData.filter);
-                }
-            });
-
-            this.$onDestroy = function() {
-                self.containerElement.off('scroll');
-            };
-
-            function setQuery (query) {
-                if(query !== undefined) {
-                    self.inLoad && self.abortSearch.resolve();
-                    self.currentPage = self.START_PAGE;
-                    self.inLoad = false;
-                    self.searchQuery = query;
-                    self.resultCollection = [];
-
-                    if(query.length >= self.config.searchPatternMinimalLength) {
-                        appendNewItems();
-                    } else {
-                        self.searchStatus = 'before';
-                    }
-                }
+            if(query.length >= this.config.searchPatternMinimalLength) {
+                this.loadNewItems();
+            } else {
+                this.searchStatus = 'before';
             }
+        }
+    }
 
-            function handleScroll () {
-                if(self.listContentElement === undefined) {
-                    self.listContentElement = $($element.find('.te-infinity-scroll-content')[0].firstChild);
-                }
+    handleScroll () {
+        if(this.listContentElement === undefined) {
+            this.listContentElement = $(this.$element.find('.te-infinity-scroll-content')[0].firstChild);
+        }
 
-                var distance = self.listContentElement.outerHeight() - self.containerElement.scrollTop() - self.containerHeight;
+        const distance = this.listContentElement.outerHeight() - this.containerElement.scrollTop() - this.containerHeight;
 
-                if(!self.inLoad && (distance < self.config.scrollDistance) && (distance > -self.containerHeight / 2)) {
-                    self.currentPage++;
-                    appendNewItems(self.config.hideLoadingStatus);
-                }
+        if(!this.inLoad && (distance < this.config.scrollDistance) && (distance > -this.containerHeight / 2)) {
+            this.currentPage++;
+            this.loadNewItems(this.config.hideLoadingStatus);
+        }
+    }
+
+    loadNewItems (hideLoadingStatus) {
+        this.inLoad = true;
+        this.searchStatus = hideLoadingStatus ? 'result' : 'inload';
+        this.abortSearch = this.$q.defer();
+        let self = this;
+
+        this.loadData(this.currentPage, this.searchQuery, {timeout: self.abortSearch.promise}, res => {
+            if(res.status == 200) {
+                self.inLoad = res.data.length == 0;
+                res.data.hasOwnProperty('length') && res.data.map(item => self.resultCollection.push(item));
+                self.searchStatus = (self.currentPage == self.START_PAGE) && self.inLoad ? 'noresult' : 'result';
+            } else {
+                self.inLoad = false;
+                self.searchStatus = 'noresult';
             }
+        });
+    }
+}
 
-            function appendNewItems (hideLoadingStatus) {
-                self.inLoad = true;
-                self.searchStatus = hideLoadingStatus ? 'result' : 'inload';
-                self.abortSearch = $q.defer();
+InfinityScrollCtrl.$inject = ['$q', 'Observer', '$element'];
 
-                self.loadData(self.currentPage, self.searchQuery, {timeout: self.abortSearch.promise}, function (res) {
-                    if(res.status == 200) {
-                        self.inLoad = res.data.length == 0;
-
-                        res.data.hasOwnProperty('length') && res.data.map(function(item) {
-                            self.resultCollection.push(item);
-                        });
-
-                        self.searchStatus = (self.currentPage == self.START_PAGE) && self.inLoad ? 'noresult' : 'result';
-                    } else {
-                        self.inLoad = false;
-                        self.searchStatus = 'noresult';
-                    }
-                });
-            }
-        },
-        controllerAs: '$ctrl',
-        templateUrl: 'app/layout/components/te-infinity-scroll/te-infinity-scroll.html'
-    });
-}());
+angular.module('te.infinity.scroll', []).component('teInfinityScroll', {
+    bindings: {config: '<', loadData: '=', listId: '@', selector: '@', view: '@'},
+    controller: InfinityScrollCtrl,
+    controllerAs: '$ctrl',
+    templateUrl: 'app/layout/components/te-infinity-scroll/te-infinity-scroll.html'
+});
