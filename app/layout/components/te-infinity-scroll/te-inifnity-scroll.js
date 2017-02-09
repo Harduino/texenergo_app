@@ -10,61 +10,61 @@
             var self = this;
             var START_PAGE = 1;
             var DEFAULT_CONFIG = {searchPatternMinimalLength: 0, scrollDistance: 30, loadAfterInit: true};
-            var block = $(this.selector);
+            var containerElement = $(this.selector);
 
-            var page,                                       // current page for load
-                content,                                    // content of scroll
-                inLoad = false,                             // loading status
-                query,                                      // search query
-                canceler,                                   // request canceler
-                elHeight = block.outerHeight();
+            var currentPage,
+                listContentElement,
+                inLoad = false,
+                searchQuery,
+                abortSearch,
+                containerHeight = containerElement.outerHeight();
 
             this.config = angular.extend(DEFAULT_CONFIG, this.config);
             this.resultCollection = [];
-            block.scroll(scroll);
-            this.config.loadAfterInit && setQueryValue('');
+            containerElement.scroll(handleScroll);
+            this.config.loadAfterInit && setQuery('');
 
             Observer.subscribe('FILTER_LIST', filterData => {
                 if(self.listId === filterData.listId) {
-                    setQueryValue(filterData.filter);
+                    setQuery(filterData.filter);
                 }
             });
 
-            function setQueryValue (value) {
-                if(value !== undefined) {
-                    inLoad && canceler.resolve();
-                    page = START_PAGE;
+            function setQuery (query) {
+                if(query !== undefined) {
+                    inLoad && abortSearch.resolve();
+                    currentPage = START_PAGE;
                     inLoad = false;
-                    query = value;
+                    searchQuery = query;
                     self.resultCollection = [];
 
-                    if(value.length >= self.config.searchPatternMinimalLength) {
-                        load();
+                    if(query.length >= self.config.searchPatternMinimalLength) {
+                        appendNewItems();
                     } else {
                         self.searchStatus = 'before';
                     }
                 }
             }
 
-            function scroll() {
-                if(content === undefined) {
-                    content = $($element.find('.te-infinity-scroll-content')[0].firstChild);
+            function handleScroll () {
+                if(listContentElement === undefined) {
+                    listContentElement = $($element.find('.te-infinity-scroll-content')[0].firstChild);
                 }
 
-                var p = content.outerHeight() - block.scrollTop() - elHeight;
+                var p = listContentElement.outerHeight() - containerElement.scrollTop() - containerHeight;
 
-                if(!inLoad && (p < self.config.scrollDistance) && (p > -elHeight / 2)) {
-                    page++;
-                    load(self.config.hideLoadingStatus);
+                if(!inLoad && (p < self.config.scrollDistance) && (p > -containerHeight / 2)) {
+                    currentPage++;
+                    appendNewItems(self.config.hideLoadingStatus);
                 }
             }
 
-            function load (hideLoadingStatus) {
+            function appendNewItems (hideLoadingStatus) {
                 inLoad = true;
                 self.searchStatus = hideLoadingStatus ? 'result' : 'inload';
-                canceler = $q.defer();
+                abortSearch = $q.defer();
 
-                self.loadData(page, query, {timeout: canceler.promise}, function(result) {
+                self.loadData(currentPage, searchQuery, {timeout: abortSearch.promise}, function(result) {
                     if(result.status == 200) {
                         inLoad = result.data.length == 0;
 
@@ -72,7 +72,7 @@
                             self.resultCollection.push(item);
                         });
 
-                        self.searchStatus = (page == START_PAGE) && inLoad ? 'noresult' : 'result';
+                        self.searchStatus = (currentPage == START_PAGE) && inLoad ? 'noresult' : 'result';
                     } else {
                         inLoad = false;
                         self.searchStatus = 'noresult';
@@ -81,7 +81,7 @@
             }
 
             this.$onDestroy = function() {
-                block.off('scroll');
+                containerElement.off('scroll');
             };
         },
         controllerAs: '$ctrl',
