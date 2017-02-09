@@ -8,20 +8,17 @@
         bindings: {config: '<', loadData: '=', listId: '@', selector: '@', view: '@'},
         controller: function($q, Observer, $element) {
             var self = this;
-            var START_PAGE = 1;
+            this.START_PAGE = 1;
+
+            this.containerElement = $(this.selector);
+            this.containerHeight = this.containerElement.outerHeight();
+
             var DEFAULT_CONFIG = {searchPatternMinimalLength: 0, scrollDistance: 30, loadAfterInit: true};
-            var containerElement = $(this.selector);
-
-            var currentPage,
-                listContentElement,
-                inLoad = false,
-                searchQuery,
-                abortSearch,
-                containerHeight = containerElement.outerHeight();
-
             this.config = angular.extend(DEFAULT_CONFIG, this.config);
+
+            this.inLoad = false;
             this.resultCollection = [];
-            containerElement.scroll(handleScroll);
+            this.containerElement.scroll(handleScroll);
             this.config.loadAfterInit && setQuery('');
 
             Observer.subscribe('FILTER_LIST', filterData => {
@@ -30,12 +27,16 @@
                 }
             });
 
+            this.$onDestroy = function() {
+                self.containerElement.off('scroll');
+            };
+
             function setQuery (query) {
                 if(query !== undefined) {
-                    inLoad && abortSearch.resolve();
-                    currentPage = START_PAGE;
-                    inLoad = false;
-                    searchQuery = query;
+                    self.inLoad && self.abortSearch.resolve();
+                    self.currentPage = self.START_PAGE;
+                    self.inLoad = false;
+                    self.searchQuery = query;
                     self.resultCollection = [];
 
                     if(query.length >= self.config.searchPatternMinimalLength) {
@@ -47,42 +48,38 @@
             }
 
             function handleScroll () {
-                if(listContentElement === undefined) {
-                    listContentElement = $($element.find('.te-infinity-scroll-content')[0].firstChild);
+                if(self.listContentElement === undefined) {
+                    self.listContentElement = $($element.find('.te-infinity-scroll-content')[0].firstChild);
                 }
 
-                var p = listContentElement.outerHeight() - containerElement.scrollTop() - containerHeight;
+                var distance = self.listContentElement.outerHeight() - self.containerElement.scrollTop() - self.containerHeight;
 
-                if(!inLoad && (p < self.config.scrollDistance) && (p > -containerHeight / 2)) {
-                    currentPage++;
+                if(!self.inLoad && (distance < self.config.scrollDistance) && (distance > -self.containerHeight / 2)) {
+                    self.currentPage++;
                     appendNewItems(self.config.hideLoadingStatus);
                 }
             }
 
             function appendNewItems (hideLoadingStatus) {
-                inLoad = true;
+                self.inLoad = true;
                 self.searchStatus = hideLoadingStatus ? 'result' : 'inload';
-                abortSearch = $q.defer();
+                self.abortSearch = $q.defer();
 
-                self.loadData(currentPage, searchQuery, {timeout: abortSearch.promise}, function(result) {
-                    if(result.status == 200) {
-                        inLoad = result.data.length == 0;
+                self.loadData(self.currentPage, self.searchQuery, {timeout: self.abortSearch.promise}, function (res) {
+                    if(res.status == 200) {
+                        self.inLoad = res.data.length == 0;
 
-                        result.data.hasOwnProperty('length') && result.data.map(function(item) {
+                        res.data.hasOwnProperty('length') && res.data.map(function(item) {
                             self.resultCollection.push(item);
                         });
 
-                        self.searchStatus = (currentPage == START_PAGE) && inLoad ? 'noresult' : 'result';
+                        self.searchStatus = (self.currentPage == self.START_PAGE) && self.inLoad ? 'noresult' : 'result';
                     } else {
-                        inLoad = false;
+                        self.inLoad = false;
                         self.searchStatus = 'noresult';
                     }
                 });
             }
-
-            this.$onDestroy = function() {
-                containerElement.off('scroll');
-            };
         },
         controllerAs: '$ctrl',
         templateUrl: 'app/layout/components/te-infinity-scroll/te-infinity-scroll.html'
