@@ -9,7 +9,7 @@
         controller: function($q, Observer, $scope, $element) {
             var self = this;
             var START_PAGE = 1;
-            var DEFAULT_CONFIG = {startFrom: 0, scrollDistance: 30, loadAfterInit: true};
+            var DEFAULT_CONFIG = {searchPatternMinimalLength: 0, scrollDistance: 30, loadAfterInit: true};
             var block = $(this.selector);
 
             var page,                                       // current page for load
@@ -38,7 +38,7 @@
                     query = value;
                     self.resultCollection = [];
 
-                    if(value.length >= self.config.startFrom) {
+                    if(value.length >= self.config.searchPatternMinimalLength) {
                         load();
                     } else {
                         $scope.searchStatus = 'before';

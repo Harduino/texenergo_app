@@ -1,6 +1,6 @@
 <div ng-include="$ctrl.view" class="te-infinity-scroll-content"></div>
 <div class="ui-select-status">
-    <span ng-if="searchStatus == 'before'">Введите еще хотя бы {{$ctrl.config.startFrom}} символа</span>
+    <span ng-if="searchStatus == 'before'">Введите еще хотя бы {{$ctrl.config.searchPatternMinimalLength}} символа</span>
     <span ng-if="searchStatus == 'noresult'">Нет результатов</span>
     <span ng-if="searchStatus == 'inload'">Загрузка...</span>
 </div>
