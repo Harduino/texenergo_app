@@ -1,5 +1,5 @@
 class ViewCustomerOrderCtrl {
-    constructor($state, $stateParams, serverApi, funcFactory, $filter, $parse, $timeout, notifications, $uibModal) {
+    constructor($state, $stateParams, serverApi, funcFactory, $filter, $parse, $timeout, $uibModal) {
         let self = this;
 
         this.serverApi = serverApi;
@@ -9,7 +9,6 @@ class ViewCustomerOrderCtrl {
         this.$parse = $parse;
         this.$state = $state;
         this.$stateParams = $stateParams;
-        this.notifications = notifications;
         this.$filter = $filter;
 
         this.partnersList = [];
@@ -433,11 +432,6 @@ class ViewCustomerOrderCtrl {
             self.calculateTotals(order, 'incoming_transfers', 'total_paid_linked', 'total_paid');
             self.calculateTotals(order, 'dispatch_orders', 'total_dispatched_linked', 'total_dispatched');
             self.updateTotal();
-
-            self._subscription =  self.notifications.subscribe({
-                channel: 'CustomerOrdersChannel',
-                customer_order_id: self.$stateParams.id
-            }, self.order.customer_order_contents);
         });
     }
 
@@ -494,8 +488,7 @@ class ViewCustomerOrderCtrl {
     }
 }
 
-ViewCustomerOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', '$filter', '$parse', '$timeout',
-    'customerOrdersNotifications', '$uibModal'];
+ViewCustomerOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', '$filter', '$parse', '$timeout', '$uibModal'];
 
 angular.module('app.customer_orders').component('viewCustomerOrder', {
     controller: ViewCustomerOrderCtrl,

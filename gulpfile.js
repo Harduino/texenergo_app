@@ -84,8 +84,6 @@ gulp.task('libs', function(){
         'assets/plugin/x-editable/x-editable-custom.js',
         'bower_components/ion.rangeSlider/js/ion.rangeSlider.min.js',
 
-        'assets/plugin/cable/cable.js',
-
         //TinyMCE
         'bower_components/tinymce/tinymce.min.js',
         'bower_components/tinymce/plugins/*/plugin.js',
@@ -101,7 +99,6 @@ gulp.task('libs', function(){
 gulp.task('app', function(){
     buildJs('app-modules.js', [
         'app/env/production.js',
-        'app/layout/notifications.js',
         'app/*/module.js',
         'app/*/services/*.js',
         'app/layout/templates.js',

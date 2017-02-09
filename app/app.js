@@ -96,16 +96,51 @@ appConfig.sound_on = true;
         'authService',
         '$sessionStorage',
         '$location',
-        'CableApi'
+        'Pubnub'
     ];
 
-    function appRun ($rootScope, $state, $stateParams, lock, authService, $sessionStorage, $location, CableApi) {
+    function appRun ($rootScope, $state, $stateParams, lock, authService, $sessionStorage, $location, Pubnub) {
 
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
 
         const channelName = 'NotificationsChannel';
 
+        // Pubnub.init({
+        //     publishKey: 'pub-c-4a35e53c-9bb6-4467-921e-7f2148def73b',
+        //     subscribeKey: 'sub-c-4acef304-d658-11e6-978a-02ee2ddab7fe'
+        // });
+
+        // var pubnub = new PubNub({publishKey: 'pub-c-4a35e53c-9bb6-4467-921e-7f2148def73b',subscribeKey: 'sub-c-4acef304-d658-11e6-978a-02ee2ddab7fe'})
+        // pubnub.publish({channel: 'myChannel', message: 'Hello!', function(status, response){console.log("publish status", status); console.log("publish response", response);}})
+        // Pubnub.publish({
+        //     channel: 'myChannel',
+        //     message: 'Hello!'
+        //   }, function(status, response){
+        //         console.log("publish status", status);
+        //         console.log("publish response", response);
+        // });
+
+        // Pubnub.addListener({
+        //     status: function(statusEvent) {
+        //         if (statusEvent.category === "PNConnectedCategory") {
+        //             console.log("pubnub addListener status");
+        //         }
+        //     },
+        //     message: function(message) {
+        //         console.log("New Message!!", message);
+        //     },
+        //     presence: function(presenceEvent) {
+        //         // handle presence
+        //     }
+        // })      
+        // console.log("Subscribing..");
+        // Pubnub.subscribe({
+        //     channels: ['hello_world'] 
+        // });
+
+
+        // debugger;
         // Intercept the hash that comes back from authentication
         // to ensure the `authenticated` event fires
         lock.interceptHash();
@@ -120,7 +155,6 @@ appConfig.sound_on = true;
         //checking permissions of state while navigating
         $rootScope.$on('$stateChangeStart',
             function (event, toState, toParams, fromState, fromParams) {
-
                 var token = authService.token;
                 if((!token || authService.isTokenExpired(token)) && toState.name !== 'login'){
                     event.preventDefault();
@@ -128,25 +162,8 @@ appConfig.sound_on = true;
                     $sessionStorage.returnToUrl = $location.$$path;
                     $state.transitionTo('login', null, {reload:true});
                 }
-
-                if(token)sendState(toState, toParams, fromState, fromParams);
             }
         );
-
-        //send user state into notification channel
-        function sendState(toState, toParams, fromState, fromParams){
-
-            var subscription  = CableApi.getSubscription(channelName);
-            //if subscription not null send data
-            subscription && subscription.send({
-                type:'state_change',
-                toSource: $state.$current.source,
-                toState: toState,
-                toParams: toParams,
-                fromState: fromState,
-                fromParams: fromParams
-            });
-        }
     }
 
     Array.prototype.swapItemByindex = function(currentIndex, newIndex){

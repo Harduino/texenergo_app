@@ -6,7 +6,7 @@
 (function () {
 
     "use strict";
-    var module = angular.module('app.supplier_orders', ['ui.router', 'easypiechart', 'services.notifications']);
+    var module = angular.module('app.supplier_orders', ['ui.router', 'easypiechart']);
 
     module.config(function ($stateProvider) {
         $stateProvider.state('app.supplier_orders', {
@@ -42,106 +42,4 @@
             }
         });
     });
-
-    module.factory('supplierOrdersNotifications', ['notificationServiceBuilder', 'funcFactory', function(nsb, funcFactory){
-        var actions = {
-            // Обновить название, номер или тп по заказу
-            update: function(scope, serverResponse){
-                var data = serverResponse.data,
-                    localObject = scope.data.supplierOrder;
-                if( data !== undefined) {
-                    for (var i = 0; i < Object.keys(data).length; i++) {
-                        var k = Object.keys(data)[i];
-                        localObject[k] = data[k];
-                    }
-                    funcFactory.showNotification("Обновил заказ", "Номер " + localObject.number +'.', true);
-                } else if (serverResponse.errors !== undefined) {
-                    funcFactory.showNotification("Ошибка при обновлении заказа", "Номер " + localObject.number +'. ' + serverResponse.errors, false);
-                } else {
-                    funcFactory.showNotification("Ошибка при обновлении заказа", "Номер " + localObject.number +'.', false);
-                }
-            },
-            // Перещёлкнуть статус
-            update_status: function(scope, serverResponse){
-                var data = serverResponse.data,
-                    localObject = scope.data.supplierOrder;
-                if( data !== undefined) {
-                    scope.$apply(function(){
-                        localObject.status = data.status;
-                        localObject.can_edit = data.can_edit;
-                        localObject.events = data.events;
-                        scope.data.supplierOrder = angular.extend({}, localObject);
-                    });
-                    funcFactory.showNotification("Обновил заказ", "Номер " + localObject.number +'.', true);
-                } else if (serverResponse.errors !== undefined) {
-                    funcFactory.showNotification("Ошибка при обновлении заказа", "Номер " + localObject.number +'. ' + serverResponse.errors, false);
-                } else {
-                    funcFactory.showNotification("Ошибка при обновлении заказа", "Номер " + localObject.number +'.', false);
-                }
-            },
-            // Обновить строку с товаром
-            update_content: function(scope, serverResponse){
-                var data = serverResponse.data,
-                    localObject = scope.data.supplierOrder;
-                if( data !== undefined) {
-                    for (var i = 0; i < localObject.supplier_order_contents.length; i++) {
-                        if(localObject.supplier_order_contents[i].id !== data.id) {
-                            continue;
-                        }
-
-                        localObject.supplier_order_contents[i] = data;
-                        break;
-                    }
-                    funcFactory.showNotification("Обновил товар", "Товар " + data.product.name +  " в заказе " + localObject.number +'.', true);
-                } else if (serverResponse.errors !== undefined) {
-                    funcFactory.showNotification("Ошибка при обновлении заказа", "Номер " + localObject.number +'. ' + serverResponse.errors, false);
-                } else {
-                    funcFactory.showNotification("Ошибка при обновлении заказа", "Номер " + localObject.number +'.', false);
-                }
-            },
-            // Добавить товар
-            create_content: function(scope, serverResponse){
-                var data = serverResponse.data,
-                    localObject = scope.data.supplierOrder;
-                if( data !== undefined) {
-                    localObject.supplier_order_contents.push(data);
-
-                    funcFactory.showNotification('Успешно добавлен продукт', data.product.name, true);
-
-                    scope.productForAppend = {};
-                    scope.data.selectedProduct = null;
-                    angular.element('#eso_prod_select').data().$uiSelectController.open=true;
-                } else if (serverResponse.errors !== undefined) {
-                    funcFactory.showNotification("Ошибка при добавлении товара", "Номер " + localObject.number +'. ' + serverResponse.errors, false);
-                } else {
-                    funcFactory.showNotification("Ошибка при добавлении товара", "Номер " + localObject.number +'.', false);
-                }
-            },
-
-            // Удалить товар
-            destroy_content: function(scope, serverResponse){
-                var data = serverResponse.data,
-                    localObject = scope.data.supplierOrder;
-                if( data !== undefined) {
-                    for (var i = 0; i < localObject.supplier_order_contents.length; i++) {
-                        if (localObject.supplier_order_contents[i].id === data.supplier_order_content_id) {
-                            var t = localObject.supplier_order_contents[i];
-                            localObject.supplier_order_contents.splice(i, 1);
-                            funcFactory.showNotification(
-                                'Успешно удалил строку',
-                                ('Товар '+ t.product.name + ', кол-во ' + t.quantity + ' ед.'),
-                                true
-                            );
-                        }
-                    }
-                } else if (serverResponse.errors !== undefined) {
-                    funcFactory.showNotification("Ошибка при удалении строки", serverResponse.errors, false);
-                } else {
-                    funcFactory.showNotification("Ошибка при удалении строки", serverResponse.errors, false);
-                }
-            }
-        };
-
-        return nsb.build(module, 'supplierOrdersNotifications', actions);
-    }]);
 }());
