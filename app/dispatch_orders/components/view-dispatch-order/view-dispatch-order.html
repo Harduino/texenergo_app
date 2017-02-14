@@ -52,7 +52,7 @@
 
     </div>
     
-    <div class="well well-white" ng-if="viewDispatchOrderCtrl.dispatchOrder.transportation=='Самовывоз'">
+    <div class="well well-white" ng-if="viewDispatchOrderCtrl.dispatchOrder.transportation.value.substring(0,3) === 'EXF'">
         <div class="row" ng-if="viewDispatchOrderCtrl.dispatchOrder.person.id">
             <div class="col-xs-7">
                 <div class="row">

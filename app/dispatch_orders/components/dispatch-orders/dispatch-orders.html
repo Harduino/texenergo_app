@@ -64,8 +64,8 @@
             <tbody>
                 <tr ng-repeat="row in dispatchOrdersCtrl.data.ordersList">
                     <td class="hidden-xs">{{$index +1}}</td>
-                    <td uib-tooltip="{{ row.transportation }}" tooltip-append-to-body="true" class="hidden-xs">
-                        {{row.transportation[0]}}
+                    <td>
+                        {{ row.transportation.value.substring(0,3) }}
                     </td>
                     <td>
                         <te-copy-to-buffer>
