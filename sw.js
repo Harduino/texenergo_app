@@ -1,5 +1,5 @@
 CACHE_NAME = "texenergo-sw-v";
-CACHE_VERSION = 1;
+CACHE_VERSION = 2;
 var urlsToCache = [
   '/app/auth/components/login/login.html',
   '/app/auth/components/login-info/login-info.html',

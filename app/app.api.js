@@ -148,9 +148,6 @@
         o.updateStatusSupplierOrder = function(id, data, success, fail){
             $http.put('/supplier_orders/' + id + '/update_status', data).then(success, fail);
         };
-//        o.createSupplierOrderContent = function(id, data, success, fail){
-//            $http.put('/supplier_orders/' + id + '/supplier_order_contents', data).then(success, fail);
-//        };
 
         // Products' catalogues
         o.getCatalogues = function(page, query, config, success, fail){

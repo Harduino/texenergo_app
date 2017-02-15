@@ -1,18 +1,26 @@
 class ViewSupplierOrderCtrl {
-    constructor ($state, $stateParams, serverApi, funcFactory, notifications, $filter, $localStorage) {
+    constructor ($state, $stateParams, serverApi, funcFactory, $filter, $localStorage) {
         let self = this;
-        this._subscription = {};
+        // this._subscription = {};
         this.data = {supplierOrder: {}, partnersList: [], productsList: [], total: 0};
 
         this.serverApi = serverApi;
         this.$filter = $filter;
+        this.funcFactory = funcFactory;
 
         this.visual = {
             navButtsOptions:[
-                {type: 'back', callback: () => $state.go('app.supplier_orders', {})},
+                { type: 'back', callback: () => $state.go('app.supplier_orders', {}) },
                 {
                     type: 'confirm_order',
-                    callback: (subdata, item) => self.notifyListener('update_status', {event: item.event})
+                    callback: (subdata, item) => {
+                        serverApi.updateStatusSupplierOrder($stateParams.id, { supplier_order: { event: item.event } }, r => {
+                            console.log("r", r);
+                            this.data.supplierOrder.status = r.data.status;
+                            this.data.supplierOrder.can_edit = r.data.can_edit;
+                            this.data.supplierOrder.events = r.data.events;
+                        })
+                    }
                 },
                 {
                     type: 'send_email',
@@ -70,23 +78,7 @@ class ViewSupplierOrderCtrl {
             self.updateTotal();
             self.amontPercent = funcFactory.getPercent(order.paid_amount, order.total);
             self.dispatchedPercent = funcFactory.getPercent(order.received_amount, order.total);
-            self.visual.roles = {can_edit: order.can_edit, can_confirm: order.can_confirm};
-
-            self.fileModalOptions = {
-                url:'/api/supplier_orders/'+ order.id +'/documents',
-                files: order.documents,
-                r_delete: serverApi.deleteFile,
-                view: 'supplier_orders',
-                id: order.id
-            };
-
-            self._subscription =  notifications.subscribe({
-                channel: 'SupplierOrdersChannel',
-                supplier_order_id: $stateParams.id
-            }, self);
         });
-
-        this.$onDestroy = () => self._subscription && self._subscription.unsubscribe();
     }
 
     selectProductForAppend (item) {
@@ -98,7 +90,19 @@ class ViewSupplierOrderCtrl {
     appendProduct (event) {
         if(!event || (event.keyCode == 13)) {
             let product = this.productForAppend;
-            this.notifyListener('create_content', {product_id: product.id, quantity: product.quantity});
+            let data = {
+                product_id: product.id,
+                quantity: product.quantity
+            }
+            this.serverApi.addSupplierOrderProduct(this.data.supplierOrder.id, data, r => {
+                this.data.supplierOrder.supplier_order_contents.push(r.data);
+
+                this.funcFactory.showNotification('Успешно добавлен продукт', r.data.product.name, true);
+
+                this.productForAppend = {};
+                this.data.selectedProduct = null;
+                angular.element('#eso_prod_select').data().$uiSelectController.open=true;
+            })
         }
     }
 
@@ -125,15 +129,35 @@ class ViewSupplierOrderCtrl {
     }
 
     removeProduct (item) {
-        this.notifyListener('destroy_content', item);
+        let row = item;
+        this.serverApi.removeSupplierOrderProduct(this.data.supplierOrder.id, item.id, r => {
+            for (var i = 0; i < this.data.supplierOrder.supplier_order_contents.length; i++) {
+                if (this.data.supplierOrder.supplier_order_contents[i].id === row.id) {
+                    this.data.supplierOrder.supplier_order_contents.splice(i, 1);
+                    this.funcFactory.showNotification(
+                        'Успешно удалил строку',
+                        ('Товар '+ row.product.name + ', кол-во ' + row.quantity + ' ед.'),
+                        true
+                    );
+                    break;
+                }
+            }
+        })
     }
 
-    saveProductChange (data) {
-        this.notifyListener('update_content', data.item);
-    }
-
-    notifyListener (action, data) {
-        this._subscription.send({action: action, data: data});
+    saveProductChange (row) {
+        let data = {
+            quantity: row.item.quantity,
+            price: row.item.price
+        }
+        this.serverApi.updateSupplierOrderProduct(this.data.supplierOrder.id, row.item.id, data, r => {
+            for (var i = 0; i < this.data.supplierOrder.supplier_order_contents.length; i++) {
+                if(this.data.supplierOrder.supplier_order_contents[i].id !== r.data.id) continue;
+                this.data.supplierOrder.supplier_order_contents[i] = r.data;
+                this.funcFactory.showNotification('Успешно обновил строку', 'Обвновил ' + row.item.product.name, true);
+                break;
+            }
+        })
     }
 
     updateTotal () {
@@ -153,8 +177,7 @@ class ViewSupplierOrderCtrl {
     }
 }
 
-ViewSupplierOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', 'supplierOrdersNotifications',
-    '$filter', '$localStorage'];
+ViewSupplierOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', '$filter', '$localStorage'];
 
 angular.module('app.supplier_orders').component('viewSupplierOrder', {
     controller: ViewSupplierOrderCtrl,
