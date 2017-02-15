@@ -27,9 +27,39 @@ class TopSearchCtrl {
         this.$onDestroy = () => angular.element(window).off('keydown', self.navigateInTable.bind(self));
     }
 
+    // We are looking for popular document numbering pattern. If one is matched, then navigate there.
+    // i.e. consider it a command instead of a search request.
     getSearchProductHandler () {
         let serverApi = this.serverApi;
-        return (pageNumber, query, options, callback) => serverApi.getSearch(pageNumber, query, options, callback);
+        let n;
+        switch(true){
+            case /р-\d{2}-[а-я]{2,4}-\d+/i.test(this.data.searchText):
+                n = this.data.searchText.match(/р-\d{2}-[а-я]{2,4}-\d+/i)[0];
+                serverApi.getDispatchOrders(1, n, {}, r => {
+                    for (var i = 0; i < r.data.length; i++) {
+                        var order = r.data[i];
+                        if (order.number === n) {
+                            return this.$state.go('app.dispatch_orders.view', {id: order.id});
+                        }
+
+                    }
+                });
+                break;
+            case /\d{2}-[а-я]{2,4}-\d+/i.test(this.data.searchText):
+                n = this.data.searchText.match(/\d{2}-[а-я]{2,4}-\d+/i)[0];
+                serverApi.getCustomerOrders(1, n, {}, r => {
+                    for (var i = 0; i < r.data.length; i++) {
+                        var order = r.data[i];
+                        if (order.number === n) {
+                            return this.$state.go('app.customer_orders.view', {id: order.id});
+                        }
+                    }
+                });
+                break;
+            default:
+                return (pageNumber, query, options, callback) => serverApi.getSearch(pageNumber, query, options, callback);
+                break;
+        }        
     }
 
     selectRow (index) {
@@ -58,8 +88,9 @@ class TopSearchCtrl {
             scrollTop = _window.scrollTop(),
             outerHeight = _window.outerHeight() + scrollTop;
 
-
         if (([ARROW_UP, ARROW_DOWN].indexOf(key) !== -1) && (list.length > 0)) {
+            // Blur away from search input if focused
+            if(event.target.id === "search-fld" && event.target.tagName === "INPUT") document.activeElement.blur();
             //select row first time
             if (this.selectedRowIndex < 0) {
                 this.selectedRowIndex = 0;
