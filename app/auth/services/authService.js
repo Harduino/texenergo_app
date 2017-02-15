@@ -112,13 +112,8 @@ class AuthService {
 
     getProfile(idToken) {
         let self = this;
-
         this.lock.getProfile(idToken, (error, profile) => {
-            console.log(profile);
-
-            if (error) {
-                console.log(error);
-            }
+            if (error) console.log(error);
 
             self.$localStorage.profile = profile;
             self._profile = profile;
