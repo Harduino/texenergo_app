@@ -14,15 +14,15 @@
         <link rel="shortcut icon" href="/assets/img/favicon.gif" type="image/x-icon">
 
         <!-- #GOOGLE FONT -->
-        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
 
         <!-- #APP SCREEN / ICONS -->
         <!-- Specifying a Webpage Icon for Web Clip
         Ref: https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
-        <link rel="apple-touch-icon" href="http://cdn.texenergo.com/site/images/touch-icon-ipad-retina.png">
-        <link rel="apple-touch-icon" sizes="76x76" href="http://cdn.texenergo.com/site/images/touch-icon-ipad.png">
-        <link rel="apple-touch-icon" sizes="120x120" href="http://cdn.texenergo.com/site/images/touch-icon-iphone-retina.png">
-        <link rel="apple-touch-icon" sizes="152x152" href="http://cdn.texenergo.com/site/images/touch-icon-ipad-retina.png">
+        <link rel="apple-touch-icon" href="https://cdn.texenergo.com/site/images/touch-icon-ipad-retina.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="https://cdn.texenergo.com/site/images/touch-icon-ipad.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="https://cdn.texenergo.com/site/images/touch-icon-iphone-retina.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://cdn.texenergo.com/site/images/touch-icon-ipad-retina.png">
     </head>
 
     <body ng-app="app" data-smart-device-detect
@@ -46,13 +46,7 @@
     </body>
     <script type="text/javascript">
         if ('serviceWorker' in navigator) {
-            var sw_path;
-            if(window.location.host.match(/localhost|127\.0\.0\.1/) == null) {
-                sw_path = 'https://app.texenergo.com/sw.js';
-            } else {
-                sw_path = '/sw.js';
-            }
-            navigator.serviceWorker.register(sw_path).catch(function(error) {
+            navigator.serviceWorker.register('sw.js').catch(function(error) {
                 console.log('Registration failed with ' + error);
             });
         }
