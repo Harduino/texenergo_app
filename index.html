@@ -48,9 +48,9 @@
         if ('serviceWorker' in navigator) {
             var sw_path;
             if(window.location.host.match(/localhost|127\.0\.0\.1/) == null) {
-                sw_path = 'http://www.texenergo.com/assets/app_sw.js'
+                sw_path = 'https://app.texenergo.com/sw.js';
             } else {
-                sw_path = '/sw.js'
+                sw_path = '/sw.js';
             }
             navigator.serviceWorker.register(sw_path).catch(function(error) {
                 console.log('Registration failed with ' + error);

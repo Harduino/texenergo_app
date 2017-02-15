@@ -45,6 +45,12 @@ if [ "index.html" -nt "$LAST_UPLOAD_STAMP" ]; then
     root_files=("index.html")
 fi
 
+# Check sw.js
+sw_files=()
+if [ "sw.js" -nt "$LAST_UPLOAD_STAMP" ]; then
+    sw_files=("sw.js")
+fi
+
 # Check public files
 public_files=()
 while IFS= read -d $'\0' -r file ; do
@@ -64,7 +70,7 @@ while IFS= read -d $'\0' -r file ; do
 done < <(find assets/plugin/tinymce -type f -newer "$LAST_UPLOAD_STAMP" -print0)
 
 # Create array with all modified files
-updated_list=("${root_files[@]}" "${public_files[@]}" "${app_files[@]}" "${tinymce_files[@]}")
+updated_list=("${root_files[@]}" "${sw_files[@]}" "${public_files[@]}" "${app_files[@]}" "${tinymce_files[@]}")
 
 # Upload to S3
 aws_s3_cp "${updated_list[@]}"
@@ -83,9 +89,7 @@ fi
 # Update timestamp last upload with current time
 touch "$LAST_UPLOAD_STAMP"
 
-echo "${#updated_list[@]} file(s) updated." 
-
-scp sw.js ubuntu@texenergo.com:~/texenergo_v3/shared/public/assets/app_sw.js
+echo "${#updated_list[@]} file(s) updated."
 
 
 
