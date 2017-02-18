@@ -13,6 +13,7 @@
     "angular-lock-passwordless": "latest",
     "angular-sanitize": "1.5.8",
     "angular-ui-router": "0.2.11",
+    "angular-ui-select": "^0.19.6",
     "angular-ui-tinymce": "0.0.11",
     "auth0-lock": "latest",
     "auth0-lock-passwordless": "latest",
@@ -32,6 +33,7 @@
   },
   "analytics": false,
   "resolutions": {
-    "angular": "1.5.8"
+    "angular": "1.5.8",
+    "angular-ui-select": "^0.19.6"
   }
 }

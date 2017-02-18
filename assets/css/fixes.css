@@ -59,7 +59,6 @@
 .error-text-2 {
   text-align: center;
   font-size: 700%;
-  font-weight: bold;
   font-weight: 100;
   color: #333;
   line-height: 1;
@@ -600,7 +599,7 @@ a[ng-click]:hover {
   display: block;
   position: absolute;
   z-index: 200;
-  right: 0px;
+  right: 0;
   padding: 3px;
   border: 1px rgba(0, 0, 0, 0.4) solid;
   background-color: white;
@@ -630,4 +629,6 @@ a[ng-click]:hover {
 .menu-on-top aside#left-panel .collapse-sign {
   display: none; }
 
-  
+.ui-select-dropdown.select2-drop-active {
+  opacity: 1 !important;
+}

@@ -20,11 +20,10 @@ gulp.task('styles', function() {
         'assets/css/fixes.css',
         // 'assets/css/smartadmin-rtl.css',
         'assets/css/project.css',
-        'assets/css/select.min.css',
+        'bower_components/angular-ui-select/dist/select.min.css',
         'assets/plugin/x-editable/xeditable.css',
         'bower_components/ion.rangeSlider/css/normalize.css',
         'bower_components/ion.rangeSlider/css/ion.rangeSlider.css'
-
     ];
 
     gulp.src(files)
@@ -71,7 +70,7 @@ gulp.task('libs', function(){
         'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
         'bower_components/angular-file-upload/dist/angular-file-upload.js',
         
-        'assets/plugin/ui-select/select.min.js',
+        'bower_components/angular-ui-select/dist/select.min.js',
         'bower_components/fastclick/lib/fastclick.js',
         'assets/plugin/chartjs/chart.min.js',
         'assets/plugin/dropzone/downloads/dropzone.min.js',
