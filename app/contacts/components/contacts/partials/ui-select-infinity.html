@@ -1,0 +1,7 @@
+<ui-select ui-select-infinity="contactsCtrl.partnerSelectConfig" theme="select2" class="td-ui-select"
+           ng-model="contactsCtrl.newContact.partner">
+    <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
+    <ui-select-choices repeat="partner in contactsCtrl.data.partnersList|filter:$select.search">
+        <div ng-bind-html="partner.name | highlight: $select.search"></div>
+    </ui-select-choices>
+</ui-select>

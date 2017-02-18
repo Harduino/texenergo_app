@@ -1,0 +1,14 @@
+<ui-select ui-select-infinity="$ctrl.pSelectConfig" id="vco_prod_select" reset-search-input="false" style="width: 100%;"
+           on-select="$ctrl.selectProductForAppend($item, $model)" ng-model="$ctrl.productForAppend" theme="select2">
+    <ui-select-match placeholder="Введите товар для добавления...">{{$select.selected.name}}</ui-select-match>
+    <ui-select-choices repeat="product in $ctrl.data.productsList | filter:$select.search" class="search-item">
+        <div class="search-tr">
+            <div class="search-td col-md-1"><img ng-src="{{product.image_url}}"></div>
+            <div class="search-td col-md-7"
+                 ng-bind-html="(product.name + ' ' + product.article) | highlight: $select.search">
+            </div>
+            <div class="search-td col-md-2">{{product.stock}} ед.</div>
+            <div class="search-td col-md-2">{{product.price | currency}}</div>
+        </div>
+    </ui-select-choices>
+</ui-select>

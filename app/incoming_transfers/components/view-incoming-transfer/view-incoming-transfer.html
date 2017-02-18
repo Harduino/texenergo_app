@@ -53,16 +53,7 @@
             <tbody>
                 <tr>
                     <td>
-                        <ui-select id="vit_order_select"  ui-select-infinity="viewIncomingTransferCtrl.orderSelectConf"
-                                   on-select="viewIncomingTransferCtrl.onOrderSelect()" class="td-ui-select"
-                                   ng-model="viewIncomingTransferCtrl.data.orderForAppend" theme="select2">
-                            <ui-select-match placeholder="Выберите заказ">
-                                {{$select.selected.number || $select.selected.incoming_code}}
-                            </ui-select-match>
-                            <ui-select-choices repeat="order in viewIncomingTransferCtrl.data.ordersList">
-                                <div ng-bind-html="order | f_incomingT | highlight: $select.search"></div>
-                            </ui-select-choices>
-                        </ui-select>
+                        <div ng-include="'app/incoming_transfers/components/view-incoming-transfer/partials/ui-select-infinity.html'"></div>
                     </td>
                     <td ng-keypress="viewIncomingTransferCtrl.data.orderForAppend.id && viewIncomingTransferCtrl.appendOrder($event)">
                         <input id="append_order_amount" class="form-control table-input" filter-name="te_number"
@@ -81,11 +72,11 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th/>
+                    <th></th>
                     <th>Заказ клиента</th>
                     <th>Исходящий платёж</th>
                     <th>Сумма</th>
-                    <th/>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -112,7 +103,7 @@
                 <tr>
                     <td colspan="3" class="text-right">Итого:</td>
                     <td>{{ viewIncomingTransferCtrl.incomingTransfer.amount | currency }}</td>
-                    <td/>
+                    <td></td>
                 </tr>
             </tbody>
         </table>

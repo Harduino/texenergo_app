@@ -1,0 +1,12 @@
+<ui-select id="eqo_cp_modal_p_select" ui-select-infinity="pSelectConfig" ng-model="data.selectedProduct" theme="select2"
+           reset-search-input="false" class="full-width" ng-init="initProdSelect()">
+    <ui-select-match placeholder="Введите товар для добавления...">{{$select.selected.name}}</ui-select-match>
+    <ui-select-choices repeat="product in data.productsList | filter:$select.search" class="search-item">
+        <div class="search-tr">
+            <div class="search-td col-md-1"><img ng-src="{{product.image_url}}"></div>
+            <div class="search-td col-md-7" ng-bind-html="product.name | highlight: $select.search"></div>
+            <div class="search-td col-md-2">{{product.stock}} ед.</div>
+            <div class="search-td col-md-2">{{product.price | currency}}</div>
+        </div>
+    </ui-select-choices>
+</ui-select>

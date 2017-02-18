@@ -54,13 +54,7 @@
                 <div class="modal-body">
                     <section class="form-group">
                         <label class="control-label">Партнер</label>
-                        <ui-select ui-select-infinity="receiveOrdersCtrl.partnerSelectConfig" theme="select2"
-                                   ng-model="receiveOrdersCtrl.newOrderData.partner" class="td-ui-select">
-                            <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
-                            <ui-select-choices repeat="partner in receiveOrdersCtrl.data.partnersList|filter:$select.search">
-                                <div ng-bind-html="partner.name | highlight: $select.search"></div>
-                            </ui-select-choices>
-                        </ui-select>
+                        <span ng-include="'app/receive_orders/components/receive-orders/partials/ui-select-infinity.html'"></span>
                     </section>
                     <section class="form-group">
                         <label class="control-label">Дата</label>

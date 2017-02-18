@@ -2,20 +2,7 @@
     <h3 class="modal-title">{{$ctrl.resolve.config.title}}</h3>
 </div>
 <div class="modal-body">
-    <ui-select ng-model="$ctrl.data.selectedProduct" reset-search-input="false" class="full-width" theme="select2"
-               ui-select-infinity="$ctrl.pSelectConfig">
-        <ui-select-match placeholder="Введите товар для добавления...">{{$select.selected.name}}</ui-select-match>
-        <ui-select-choices repeat="product in $ctrl.data.productsList | filter:$select.search" class="search-item">
-            <div class="search-tr">
-                <div class="search-td col-md-1">
-                    <img ng-src="{{product.image_url}}">
-                </div>
-                <div class="search-td col-md-7" ng-bind-html="product.name | highlight: $select.search"></div>
-                <div class="search-td col-md-2">{{product.stock}} ед.</div>
-                <div class="search-td col-md-2">{{product.price | currency}}</div>
-            </div>
-        </ui-select-choices>
-    </ui-select>
+    <span ng-include="'app/customer_orders/components/eqo-change-customer-order-product-modal/partials/ui-select-infinity.html'"></span>
 </div>
 <div class="modal-footer">
     <button class="btn btn-danger" type="button" ng-click="$ctrl.cancel()">{{$ctrl.resolve.config.btnCancelText}}</button>

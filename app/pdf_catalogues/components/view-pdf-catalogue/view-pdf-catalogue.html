@@ -35,14 +35,7 @@
                     {{ iewPdfCatalogueCtrl.pdfCatalogue.manufacturer.name || 'Нет' }}
                 </a>
                 <div ng-if="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.x_editable_show">
-                    <ui-select ui-select-infinity="viewPdfCatalogueCtrl.manufacturerSelectConfig" theme="select2"
-                               ng-model="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer" style="width: 50%;" ng-disabled="disabled"
-                               on-select="viewPdfCatalogueCtrl.savePdfCatalogue()">
-                        <ui-select-match placeholder="Партнер не выбран">{{ $select.selected.name }}</ui-select-match>
-                        <ui-select-choices repeat="manufacturer in viewPdfCatalogueCtrl.data.manufacturersList|filter:$select.search">
-                            <div ng-bind-html="manufacturer.name | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
+                    <span ng-include="'app/pdf_catalogues/components/view-pdf-catalogue/partials/ui-select-infinity.html'"></span>
                     <button type="button" ng-click="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.x_editable_show=false;"
                             class="btn btn-default">
                         <span class="glyphicon glyphicon-remove"></span>
@@ -87,7 +80,7 @@
                     <td>{{ product.article }}</td>
                     <td class="center">
                         <div ng-click="viewPdfCatalogueCtrl.addProduct(product)" class="ng-scope btn btn-xs btn-danger">
-                            <i class="fa fa-plus">
+                            <i class="fa fa-plus"></i>
                         </div>
                     </td>
                 </tr>

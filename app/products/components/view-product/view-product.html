@@ -50,14 +50,7 @@
                                             {{viewProductCtrl.product.manufacturer.name || 'Нет'}}
                                         </a>
                                         <div ng-if="viewProductCtrl.product.manufacturer.x_editable_show">
-                                            <ui-select ui-select-infinity="viewProductCtrl.manufacturerSelectConfig" theme="select2"
-                                                       ng-model="viewProductCtrl.product.manufacturer" style="width: 50%;" ng-disabled="disabled"
-                                                       on-select="viewProductCtrl.saveProduct()">
-                                                <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
-                                                <ui-select-choices repeat="partner in viewProductCtrl.partnersList|filter:$select.search">
-                                                    <div ng-bind-html="partner.name | highlight: $select.search"></div>
-                                                </ui-select-choices>
-                                            </ui-select>
+                                            <span ng-include="'app/products/components/view-product/partials/ui-select-infinity.html'"></span>
                                             <button type="button" ng-click="viewProductCtrl.product.manufacturer.x_editable_show=false;"
                                                     class="btn btn-default">
                                                 <span class="glyphicon glyphicon-remove"></span>

@@ -34,14 +34,7 @@
                     {{viewContactCtrl.contact.partner.name || 'Нет'}}
                 </a>
                 <div ng-if="viewContactCtrl.contact.partner.x_editable_show">
-                    <ui-select ui-select-infinity="viewContactCtrl.partnerSelectConfig" theme="select2"
-                               ng-model="viewContactCtrl.contact.partner" style="width: 50%;" ng-disabled="disabled"
-                               on-select="viewContactCtrl.saveContact()">
-                        <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
-                        <ui-select-choices repeat="partner in viewContactCtrl.data.partnersList|filter:$select.search">
-                            <div ng-bind-html="partner.name | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
+                    <span ng-include="'app/contacts/components/view-contact/partials/ui-select-infinity.html'"></span>
                     <button type="button" ng-click="viewContactCtrl.contact.partner.x_editable_show=false;"
                             class="btn btn-default">
                         <span class="glyphicon glyphicon-remove"></span>

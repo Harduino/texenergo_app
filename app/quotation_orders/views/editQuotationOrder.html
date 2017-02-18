@@ -85,19 +85,7 @@
                                     <div class="display-inline bordered-container titled col-xs-12 col-sm-12 col-md-12 float-none">
                                         <span class="title">Добавить товар</span>
                                         <div class="col-xs-10 col-sm-10 col-md-11 item">
-                                            <ui-select ui-select-infinity="pSelectConfig" ng-model="data.selectedProduct" theme="select2" reset-search-input="false" style="width: 100%;">
-                                                <ui-select-match placeholder="Введите товар для добавления...">{{$select.selected.name}}</ui-select-match>
-                                                <ui-select-choices repeat="product in data.productsList | filter:$select.search" class="search-item">
-                                                    <div class="search-tr">
-                                                        <div class="search-td col-md-1">
-                                                            <img ng-src="{{product.image_url}}">
-                                                        </div>
-                                                        <div class="search-td col-md-7" ng-bind-html="product.name | highlight: $select.search"></div>
-                                                        <div class="search-td col-md-2">{{product.stock}} ед.</div>
-                                                        <div class="search-td col-md-2">{{product.price | currency}}</div>
-                                                    </div>
-                                                </ui-select-choices>
-                                            </ui-select>
+                                            <span ng-include="'app/quotation_orders/views/partials/ui-select-infinity-products.html'"></span>
                                         </div>
                                         <div class="col-xs-2 col-sm-2 col-md-1 text-align-center no-padding">
                                             <button class="btn btn-success" ng-click="addNewEquipment(data.selectedProduct, true)" ng-disabled="!data.selectedProduct">
@@ -282,19 +270,7 @@
             <h3 class="modal-title">{{config.title}}</h3>
         </div>
         <div class="modal-body">
-            <ui-select id="eqo_cp_modal_p_select" ui-select-infinity="pSelectConfig" ng-model="data.selectedProduct" theme="select2" reset-search-input="false" class="full-width" ng-init="initProdSelect()">
-                <ui-select-match placeholder="Введите товар для добавления...">{{$select.selected.name}}</ui-select-match>
-                <ui-select-choices repeat="product in data.productsList | filter:$select.search" class="search-item">
-                    <div class="search-tr">
-                        <div class="search-td col-md-1">
-                            <img ng-src="{{product.image_url}}">
-                        </div>
-                        <div class="search-td col-md-7" ng-bind-html="product.name | highlight: $select.search"></div>
-                        <div class="search-td col-md-2">{{product.stock}} ед.</div>
-                        <div class="search-td col-md-2">{{product.price | currency}}</div>
-                    </div>
-                </ui-select-choices>
-            </ui-select>
+            <div ng-include="'app/quotation_orders/views/partials/ui-select-infinity.html'"></div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-danger" type="button" ng-click="cancel()">{{config.btnCancelText}}</button>

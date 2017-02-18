@@ -74,16 +74,7 @@
                                         {{$ctrl.order.issued_by.name || 'Нет'}}
                                     </a>
                                     <div ng-if="$ctrl.order.issued_by.x_editable_show">
-                                        <ui-select theme="select2" ui-select-infinity="$ctrl.partnerSelectConfig"
-                                                   ng-disabled="disabled" on-select="$ctrl.saveOrderInfo()"
-                                                   style="width: 50%;" ng-model="$ctrl.order.issued_by">
-                                            <ui-select-match placeholder="Партнер не выбран">
-                                                {{$select.selected.name}}
-                                            </ui-select-match>
-                                            <ui-select-choices repeat="partner in $ctrl.partnersList | filter:$select.search">
-                                                <div ng-bind-html="partner.name | highlight: $select.search"></div>
-                                            </ui-select-choices>
-                                        </ui-select>
+                                        <span ng-include="'app/customer_orders/components/view-customer-order/partials/ui-select-infinity-seller.html'"></span>
                                         <button ng-click="$ctrl.order.issued_by.x_editable_show=false;" type="button"
                                                 class="btn btn-default">
                                             <span class="glyphicon glyphicon-remove"></span>
@@ -107,15 +98,7 @@
                                         {{$ctrl.order.partner.name || 'Нет'}}
                                     </a>
                                     <div ng-if="$ctrl.order.partner.x_editable_show">
-                                        <ui-select ui-select-infinity="$ctrl.partnerSelectConfig" style="width: 50%;"
-                                                   theme="select2" on-select="$ctrl.saveOrderInfo()"
-                                                   ng-model="$ctrl.order.partner" ng-disabled="disabled">
-                                            <ui-select-match placeholder="Партнер не выбран">
-                                                {{$select.selected.name}}</ui-select-match>
-                                            <ui-select-choices repeat="partner in $ctrl.partnersList | filter:$select.search">
-                                                <div ng-bind-html="partner.name | highlight: $select.search"></div>
-                                            </ui-select-choices>
-                                        </ui-select>
+                                        <span ng-include="'app/customer_orders/components/view-customer-order/partials/ui-select-infinity-buyer.html'"></span>
                                         <button type="button" ng-click="$ctrl.order.partner.x_editable_show=false;"
                                                 class="btn btn-default">
                                             <span class="glyphicon glyphicon-remove"></span>
@@ -245,28 +228,10 @@
                     </header>
                     <div class="widget-body">
                         <div class="well well-clean well-white no-padding">
-                            <div>
-                            <ui-select ng-if="$ctrl.visual.roles.can_edit" id="vco_prod_select" theme="select2"
-                                       ui-select-infinity="$ctrl.pSelectConfig" ng-model="$ctrl.productForAppend"
-                                       on-select="$ctrl.selectProductForAppend($item, $model)" reset-search-input="false"
-                                       style="width: 100%;">
-                                <ui-select-match placeholder="Введите товар для добавления...">
-                                    {{$select.selected.name}}
-                                </ui-select-match>
-                                <ui-select-choices repeat="product in $ctrl.data.productsList | filter:$select.search"
-                                                   class="search-item">
-                                    <div class="search-tr">
-                                        <div class="search-td col-md-1">
-                                            <img ng-src="{{product.image_url}}">
-                                        </div>
-                                        <div class="search-td col-md-7"
-                                             ng-bind-html="(product.name + ' ' + product.article) | highlight: $select.search">
-                                        </div>
-                                        <div class="search-td col-md-2">{{product.stock}} ед.</div>
-                                        <div class="search-td col-md-2">{{product.price | currency}}</div>
-                                    </div>
-                                </ui-select-choices>
-                            </ui-select>
+                            <div ng-include="'app/customer_orders/components/view-customer-order/partials/ui-select-infinity-products.html'"
+                                 ng-if="$ctrl.visual.roles.can_edit">
+                            </div>
+
                             <table class="table table-hover table-bordered margin-top-10">
                                 <thead>
                                     <tr>
@@ -367,7 +332,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            </div>
                         </div>
                     </div>
                 </div>

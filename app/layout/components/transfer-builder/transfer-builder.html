@@ -13,13 +13,7 @@
                 </section>
                 <section class="form-group">
                     <label class="control-label">Партнер</label>
-                    <ui-select  ui-select-infinity="$ctrl.partnerSelectConfig" ng-model="$ctrl.newTransfer.partner"
-                                theme="select2" class="td-ui-select">
-                        <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
-                        <ui-select-choices repeat="partner in $ctrl.data.partnersList | filter:$select.search">
-                            <div ng-bind-html="partner.name | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
+                    <span ng-include="'app/layout/components/transfer-builder/partials/ui-select-infinity.html'"></span>
                 </section>
                 <section class="form-group">
                     <label class="control-label" for="datePickerConfig">Дата поступления</label>

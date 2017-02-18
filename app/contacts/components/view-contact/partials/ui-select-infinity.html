@@ -1,0 +1,7 @@
+<ui-select ui-select-infinity="viewContactCtrl.partnerSelectConfig" on-select="viewContactCtrl.saveContact()"
+           ng-model="viewContactCtrl.contact.partner" style="width: 50%;" ng-disabled="disabled" theme="select2">
+    <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
+    <ui-select-choices repeat="partner in viewContactCtrl.data.partnersList|filter:$select.search">
+        <div ng-bind-html="partner.name | highlight: $select.search"></div>
+    </ui-select-choices>
+</ui-select>

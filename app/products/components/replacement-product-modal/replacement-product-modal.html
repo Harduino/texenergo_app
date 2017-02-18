@@ -2,19 +2,7 @@
     <h3 class="modal-title">Заменить продукт</h3>
 </div>
 <div class="modal-body">
-    <ui-select ui-select-infinity="replacementProductModalCtrl.pSelectConfig" ng-model="replacementProductModalCtrl.selectedProduct" theme="select2" reset-search-input="false" class="full-width">
-        <ui-select-match placeholder="Введите товар для замены...">{{ $select.selected.name }}</ui-select-match>
-        <ui-select-choices repeat="product in replacementProductModalCtrl.productsList | filter:$select.search" class="search-item">
-            <div class="search-tr">
-                <div class="search-td col-md-1">
-                    <img ng-src="{{ product.image_url }}">
-                </div>
-                <div class="search-td col-md-7" ng-bind-html="product.name | highlight: $select.search"></div>
-                <div class="search-td col-md-2">{{ product.stock }} ед.</div>
-                <div class="search-td col-md-2">{{ product.price | currency }}</div>
-            </div>
-        </ui-select-choices>
-    </ui-select>
+    <div ng-include="'app/products/components/replacement-product-modal/partials/ui-select-infinity.html'"></div>
 </div>
 <div class="modal-footer">
     <button class="btn btn-danger" type="button" ng-click="replacementProductModalCtrl.cancel()">Отмена</button>

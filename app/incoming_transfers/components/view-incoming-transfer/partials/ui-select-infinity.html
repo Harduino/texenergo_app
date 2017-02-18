@@ -1,0 +1,10 @@
+<ui-select id="vit_order_select" ui-select-infinity="viewIncomingTransferCtrl.orderSelectConf" class="td-ui-select"
+           on-select="viewIncomingTransferCtrl.onOrderSelect()" ng-model="viewIncomingTransferCtrl.data.orderForAppend"
+           theme="select2">
+    <ui-select-match placeholder="Выберите заказ">
+        {{$select.selected.number || $select.selected.incoming_code}}
+    </ui-select-match>
+    <ui-select-choices repeat="order in viewIncomingTransferCtrl.data.ordersList">
+        <div ng-bind-html="order | f_incomingT | highlight: $select.search"></div>
+    </ui-select-choices>
+</ui-select>

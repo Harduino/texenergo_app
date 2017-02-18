@@ -71,13 +71,7 @@
                     </section>
                     <section class="form-group">
                         <label class="control-label">Партнер</label>
-                        <ui-select  ui-select-infinity="supplierOrdersCtrl.partnerSelectConfig" class="td-ui-select"
-                                    ng-model="supplierOrdersCtrl.newOrderData.partner" theme="select2">
-                            <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
-                            <ui-select-choices repeat="partner in supplierOrdersCtrl.data.partnersList|filter:$select.search">
-                                <div ng-bind-html="partner.name | highlight: $select.search"></div>
-                            </ui-select-choices>
-                        </ui-select>
+                        <span ng-include="'app/supplier_orders/components/supplier-orders/partials/ui-select-infinity.html'"></span>
                     </section>
                     <section>
                         <i class="fa-fw fa fa-warning"></i>

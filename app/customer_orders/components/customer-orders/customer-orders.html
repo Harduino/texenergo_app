@@ -59,13 +59,13 @@
                 </div>
                 <div class="modal-body">
                     <section class="form-group">
-                        <label class="control-label">Свой номер</label>
+                        <label class="control-label" for="newOrderData.title">Свой номер</label>
                         <input ng-model="customerOrdersCtrl.newOrderData.title" class="input-sm form-control"
-                               type="text" />
+                               type="text" id="newOrderData.title" />
                     </section>
                     <section class="form-group">
-                        <label class="control-label">Описание</label>
-                        <textarea ng-model="customerOrdersCtrl.newOrderData.description"
+                        <label class="control-label" for="newOrderData.description">Описание</label>
+                        <textarea ng-model="customerOrdersCtrl.newOrderData.description" id="newOrderData.description"
                                   class="custom-scroll form-control">
                         </textarea>
                         <div class="note">
@@ -74,22 +74,16 @@
                     </section>
                     <section class="form-group">
                         <label class="control-label">Партнер</label>
-                        <ui-select  ui-select-infinity="customerOrdersCtrl.partnerSelectConfig" class="td-ui-select"
-                                    ng-model="customerOrdersCtrl.newOrderData.partner" theme="select2">
-                            <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
-                            <ui-select-choices repeat="partner in customerOrdersCtrl.data.partnersList|filter:$select.search">
-                                <div ng-bind-html="partner.name | highlight: $select.search"></div>
-                            </ui-select-choices>
-                        </ui-select>
+                        <span ng-include="'app/customer_orders/components/customer-orders/partials/ui-select-infinity.html'"></span>
                     </section>
                     <section class="form-group">
                         <label class="control-label">Дата</label>
                         <div class="form-control">{{customerOrdersCtrl.newOrderData.date|date:'dd.MM.yyyy HH:mm'}}</div>
                     </section>
                     <section class="form-group">
-                        <label class="control-label">Текст заявки</label>
-                        <textarea ng-model="customerOrdersCtrl.newOrderData.request_original"
-                                  class="custom-scroll form-control" style="height: 100px;">
+                        <label class="control-label" for="newOrderData.request_original">Текст заявки</label>
+                        <textarea ng-model="customerOrdersCtrl.newOrderData.request_original" style="height: 100px;"
+                                  class="custom-scroll form-control" id="newOrderData.request_original">
                         </textarea>
                     </section>
                     <section class="margin-top-10">
