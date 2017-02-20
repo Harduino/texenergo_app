@@ -1,7 +1,6 @@
-<ui-select  ui-select-infinity="supplierOrdersCtrl.partnerSelectConfig" class="td-ui-select"
-            ng-model="supplierOrdersCtrl.newOrderData.partner" theme="select2">
+<ui-select class="td-ui-select" ng-model="$ctrl.ngModel" theme="select2" uis-open-close="$ctrl.focusSearchBox()">
     <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
-    <ui-select-choices repeat="partner in supplierOrdersCtrl.data.partnersList|filter:$select.search">
+    <ui-select-choices repeat="partner in $ctrl.items | filter:$select.search">
         <div ng-bind-html="partner.name | highlight: $select.search"></div>
     </ui-select-choices>
 </ui-select>

@@ -74,7 +74,12 @@
                     </section>
                     <section class="form-group">
                         <label class="control-label">Партнер</label>
-                        <span ng-include="'app/contacts/components/contacts/partials/ui-select-infinity.html'"></span>
+                        <span>
+                            <ui-select-infinity config="contactsCtrl.partnerSelectConfig"
+                                                view="app/contacts/components/contacts/partials/ui-select-infinity.html"
+                                                ng-model="contactsCtrl.newContact.partner">
+                            </ui-select-infinity>
+                        </span>
                     </section>
                 </div>
                 <div class="modal-footer">

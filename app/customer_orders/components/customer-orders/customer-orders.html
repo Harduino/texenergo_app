@@ -74,7 +74,12 @@
                     </section>
                     <section class="form-group">
                         <label class="control-label">Партнер</label>
-                        <span ng-include="'app/customer_orders/components/customer-orders/partials/ui-select-infinity.html'"></span>
+                        <span>
+                            <ui-select-infinity config="customerOrdersCtrl.partnerSelectConfig"
+                                                view="app/customer_orders/components/customer-orders/partials/ui-select-infinity.html"
+                                                ng-model="customerOrdersCtrl.newOrderData.partner">
+                            </ui-select-infinity>
+                        </span>
                     </section>
                     <section class="form-group">
                         <label class="control-label">Дата</label>

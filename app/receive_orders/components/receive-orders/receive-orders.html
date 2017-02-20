@@ -54,12 +54,18 @@
                 <div class="modal-body">
                     <section class="form-group">
                         <label class="control-label">Партнер</label>
-                        <span ng-include="'app/receive_orders/components/receive-orders/partials/ui-select-infinity.html'"></span>
+                        <span>
+                            <ui-select-infinity config="receiveOrdersCtrl.partnerSelectConfig"
+                                                view="app/receive_orders/components/receive-orders/partials/ui-select-infinity.html"
+                                                ng-model="receiveOrdersCtrl.newOrderData.partner">
+                            </ui-select-infinity>
+                        </span>
                     </section>
                     <section class="form-group">
-                        <label class="control-label">Дата</label>
+                        <label class="control-label" for="newOrderData.date">Дата</label>
                         <div class="input-group">
-                            <input type="text" ng-model="receiveOrdersCtrl.newOrderData.date" class="full-width input-sm form-control" style="position: initial;">
+                            <input type="text" ng-model="receiveOrdersCtrl.newOrderData.date" style="position: initial;"
+                                   class="full-width input-sm form-control" id="newOrderData.date" />
                             <span class="input-group-addon">
                                 <i class="glyphicon glyphicon-calendar"></i>
                             </span>

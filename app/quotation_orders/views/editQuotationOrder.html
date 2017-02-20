@@ -85,7 +85,9 @@
                                     <div class="display-inline bordered-container titled col-xs-12 col-sm-12 col-md-12 float-none">
                                         <span class="title">Добавить товар</span>
                                         <div class="col-xs-10 col-sm-10 col-md-11 item">
-                                            <span ng-include="'app/quotation_orders/views/partials/ui-select-infinity-products.html'"></span>
+                                            <ui-select-infinity config="pSelectConfig" ng-model="data.selectedProduct"
+                                                                view="app/quotation_orders/views/partials/ui-select-infinity-products.html">
+                                            </ui-select-infinity>
                                         </div>
                                         <div class="col-xs-2 col-sm-2 col-md-1 text-align-center no-padding">
                                             <button class="btn btn-success" ng-click="addNewEquipment(data.selectedProduct, true)" ng-disabled="!data.selectedProduct">
@@ -270,7 +272,9 @@
             <h3 class="modal-title">{{config.title}}</h3>
         </div>
         <div class="modal-body">
-            <div ng-include="'app/quotation_orders/views/partials/ui-select-infinity.html'"></div>
+            <ui-select-infinity config="pSelectConfig" ng-model="data.selectedProduct" ng-init="initProdSelect()"
+                                view="app/quotation_orders/views/partials/ui-select-infinity.html">
+            </ui-select-infinity>
         </div>
         <div class="modal-footer">
             <button class="btn btn-danger" type="button" ng-click="cancel()">{{config.btnCancelText}}</button>

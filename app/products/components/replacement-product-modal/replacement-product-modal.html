@@ -2,7 +2,10 @@
     <h3 class="modal-title">Заменить продукт</h3>
 </div>
 <div class="modal-body">
-    <div ng-include="'app/products/components/replacement-product-modal/partials/ui-select-infinity.html'"></div>
+    <ui-select-infinity config="replacementProductModalCtrl.pSelectConfig"
+                        view="app/products/components/replacement-product-modal/partials/ui-select-infinity.html"
+                        ng-model="replacementProductModalCtrl.selectedProduct">
+    </ui-select-infinity>
 </div>
 <div class="modal-footer">
     <button class="btn btn-danger" type="button" ng-click="replacementProductModalCtrl.cancel()">Отмена</button>

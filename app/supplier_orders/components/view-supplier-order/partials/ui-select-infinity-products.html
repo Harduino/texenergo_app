@@ -1,14 +1,9 @@
-<ui-select ng-if="$ctrl.data.supplierOrder.can_edit" ui-select-infinity="$ctrl.pSelectConfig"
-           ng-model="$ctrl.data.selectedProduct" theme="select2" id="eso_prod_select"
-           style="width: 100%;" on-select="$ctrl.selectProductForAppend($item, $model)">
-    <ui-select-match placeholder="Введите товар для добавления...">
-        {{$select.selected.name}}
-    </ui-select-match>
-    <ui-select-choices repeat="product in $ctrl.data.productsList|filter:$select.search" class="search-item">
+<ui-select ng-model="$ctrl.ngModel" theme="select2" id="eso_prod_select" style="width: 100%;"
+           on-select="$ctrl.onSelect()" uis-open-close="$ctrl.focusSearchBox()">
+    <ui-select-match placeholder="Введите товар для добавления...">{{$select.selected.name}}</ui-select-match>
+    <ui-select-choices repeat="product in $ctrl.items | filter:$select.search" class="search-item">
         <div class="search-tr">
-            <div class="search-td col-md-1">
-                <img ng-src="{{product.image_url}}">
-            </div>
+            <div class="search-td col-md-1"><img ng-src="{{product.image_url}}"></div>
             <div class="search-td col-md-8" ng-bind-html="product.name | highlight: $select.search"></div>
             <div class="search-td col-md-3">{{product.price | currency}}</div>
         </div>

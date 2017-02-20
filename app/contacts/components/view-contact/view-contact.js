@@ -1,7 +1,6 @@
 class ViewContactCtrl {
     constructor($state, $stateParams, serverApi, funcFactory) {
         this.contact = {};
-        this.data = {partnersList: []};
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
 
         this.$state = $state;

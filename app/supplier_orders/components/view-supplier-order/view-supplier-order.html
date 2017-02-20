@@ -56,9 +56,10 @@
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Партнер:</p>
             <p class="col-md-9">
-                <div ng-include="'app/supplier_orders/components/view-supplier-order/partials/ui-select-infinity-partners.html'"
-                     ng-switch-when="true">
-                </div>
+                <ui-select-infinity config="$ctrl.partnerSelectConfig" on-select="$ctrl.saveSupplierOrderInfo()"
+                                    view="app/supplier_orders/components/view-supplier-order/partials/ui-select-infinity-partners.html"
+                                    ng-model="$ctrl.data.supplierOrder.partner" ng-switch-when="true">
+                </ui-select-infinity>
             </p>
             <p class="col-md-9">
                 <a ng-switch-default ng-href="/#/partners/{{$ctrl.data.supplierOrder.partner.id}}">
@@ -80,7 +81,11 @@
     </nav-tabs>
     <div class="tab-content padding-10" id="myTabContent1" style="background: white;">
         <div class="tab-pane fade in active" id="s1">
-            <div ng-include="'app/supplier_orders/components/view-supplier-order/partials/ui-select-infinity-products.html'"></div>
+            <div ></div>
+            <ui-select-infinity ng-if="$ctrl.data.supplierOrder.can_edit" ng-model="$ctrl.data.selectedProduct"
+                                view="app/supplier_orders/components/view-supplier-order/partials/ui-select-infinity-products.html"
+                                config="$ctrl.pSelectConfig" on-select="$ctrl.selectProductForAppend($item, $model)">
+            </ui-select-infinity>
             <table class="table table-hover table-bordered">
                 <thead>
                     <tr>

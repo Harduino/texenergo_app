@@ -1,7 +1,7 @@
-<ui-select ui-select-infinity="$ctrl.pSelectConfig" id="vco_prod_select" reset-search-input="false" style="width: 100%;"
-           on-select="$ctrl.selectProductForAppend($item, $model)" ng-model="$ctrl.productForAppend" theme="select2">
+<ui-select on-select="$ctrl.onSelect()" ng-model="$ctrl.ngModel" uis-open-close="$ctrl.focusSearchBox()"
+           id="vco_prod_select" reset-search-input="false" theme="select2" style="width: 100%;">
     <ui-select-match placeholder="Введите товар для добавления...">{{$select.selected.name}}</ui-select-match>
-    <ui-select-choices repeat="product in $ctrl.data.productsList | filter:$select.search" class="search-item">
+    <ui-select-choices repeat="product in $ctrl.items | filter:$select.search" class="search-item">
         <div class="search-tr">
             <div class="search-td col-md-1"><img ng-src="{{product.image_url}}"></div>
             <div class="search-td col-md-7"

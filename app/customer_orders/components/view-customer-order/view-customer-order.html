@@ -74,7 +74,13 @@
                                         {{$ctrl.order.issued_by.name || 'Нет'}}
                                     </a>
                                     <div ng-if="$ctrl.order.issued_by.x_editable_show">
-                                        <span ng-include="'app/customer_orders/components/view-customer-order/partials/ui-select-infinity-seller.html'"></span>
+                                        <span>
+                                            <ui-select-infinity config="$ctrl.partnerSelectConfig"
+                                                                on-select="$ctrl.saveOrderInfo()"
+                                                                view="app/customer_orders/components/view-customer-order/partials/ui-select-infinity-seller.html"
+                                                                ng-model="$ctrl.order.issued_by">
+                                            </ui-select-infinity>
+                                        </span>
                                         <button ng-click="$ctrl.order.issued_by.x_editable_show=false;" type="button"
                                                 class="btn btn-default">
                                             <span class="glyphicon glyphicon-remove"></span>
@@ -98,7 +104,13 @@
                                         {{$ctrl.order.partner.name || 'Нет'}}
                                     </a>
                                     <div ng-if="$ctrl.order.partner.x_editable_show">
-                                        <span ng-include="'app/customer_orders/components/view-customer-order/partials/ui-select-infinity-buyer.html'"></span>
+                                        <span>
+                                            <ui-select-infinity config="$ctrl.partnerSelectConfig"
+                                                                view="app/customer_orders/components/view-customer-order/partials/ui-select-infinity-buyer.html"
+                                                                on-select="$ctrl.saveOrderInfo()"
+                                                                ng-model="$ctrl.order.partner">
+                                            </ui-select-infinity>
+                                        </span>
                                         <button type="button" ng-click="$ctrl.order.partner.x_editable_show=false;"
                                                 class="btn btn-default">
                                             <span class="glyphicon glyphicon-remove"></span>
@@ -228,8 +240,11 @@
                     </header>
                     <div class="widget-body">
                         <div class="well well-clean well-white no-padding">
-                            <div ng-include="'app/customer_orders/components/view-customer-order/partials/ui-select-infinity-products.html'"
-                                 ng-if="$ctrl.visual.roles.can_edit">
+                            <div ng-if="$ctrl.visual.roles.can_edit">
+                                <ui-select-infinity config="$ctrl.pSelectConfig" ng-model="$ctrl.productForAppend"
+                                                    view="app/customer_orders/components/view-customer-order/partials/ui-select-infinity-products.html"
+                                                    on-select="$ctrl.selectProductForAppend($item, $model)">
+                                </ui-select-infinity>
                             </div>
 
                             <table class="table table-hover table-bordered margin-top-10">

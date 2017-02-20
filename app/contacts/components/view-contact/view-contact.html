@@ -34,7 +34,13 @@
                     {{viewContactCtrl.contact.partner.name || 'Нет'}}
                 </a>
                 <div ng-if="viewContactCtrl.contact.partner.x_editable_show">
-                    <span ng-include="'app/contacts/components/view-contact/partials/ui-select-infinity.html'"></span>
+                    <span>
+                        <ui-select-infinity config="viewContactCtrl.partnerSelectConfig"
+                                            on-select="viewContactCtrl.saveContact()"
+                                            view="app/contacts/components/view-contact/partials/ui-select-infinity.html"
+                                            ng-model="viewContactCtrl.contact.partner">
+                        </ui-select-infinity>
+                    </span>
                     <button type="button" ng-click="viewContactCtrl.contact.partner.x_editable_show=false;"
                             class="btn btn-default">
                         <span class="glyphicon glyphicon-remove"></span>

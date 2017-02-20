@@ -1,8 +1,7 @@
-<ui-select ui-select-infinity="replacementProductModalCtrl.pSelectConfig" class="full-width"
-           ng-model="replacementProductModalCtrl.selectedProduct" theme="select2" reset-search-input="false">
+<ui-select ng-model="$ctrl.ngModel" uis-open-close="$ctrl.focusSearchBox()"
+           class="full-width" theme="select2" reset-search-input="false">
     <ui-select-match placeholder="Введите товар для замены...">{{ $select.selected.name }}</ui-select-match>
-    <ui-select-choices repeat="product in replacementProductModalCtrl.productsList | filter:$select.search"
-                       class="search-item">
+    <ui-select-choices repeat="product in $ctrl.items | filter:$select.search" class="search-item">
         <div class="search-tr">
             <div class="search-td col-md-1"><img ng-src="{{ product.image_url }}"></div>
             <div class="search-td col-md-7" ng-bind-html="product.name | highlight: $select.search"></div>

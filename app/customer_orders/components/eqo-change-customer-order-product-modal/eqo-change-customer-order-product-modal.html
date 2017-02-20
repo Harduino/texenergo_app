@@ -2,7 +2,9 @@
     <h3 class="modal-title">{{$ctrl.resolve.config.title}}</h3>
 </div>
 <div class="modal-body">
-    <span ng-include="'app/customer_orders/components/eqo-change-customer-order-product-modal/partials/ui-select-infinity.html'"></span>
+    <ui-select-infinity config="$ctrl.pSelectConfig" ng-model="$ctrl.data.selectedProduct"
+                        view="app/customer_orders/components/eqo-change-customer-order-product-modal/partials/ui-select-infinity.html">
+    </ui-select-infinity>
 </div>
 <div class="modal-footer">
     <button class="btn btn-danger" type="button" ng-click="$ctrl.cancel()">{{$ctrl.resolve.config.btnCancelText}}</button>

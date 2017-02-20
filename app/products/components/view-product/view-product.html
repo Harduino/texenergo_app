@@ -50,7 +50,13 @@
                                             {{viewProductCtrl.product.manufacturer.name || 'Нет'}}
                                         </a>
                                         <div ng-if="viewProductCtrl.product.manufacturer.x_editable_show">
-                                            <span ng-include="'app/products/components/view-product/partials/ui-select-infinity.html'"></span>
+                                            <span>
+                                                <ui-select-infinity config="viewProductCtrl.manufacturerSelectConfig"
+                                                                    ng-model="viewProductCtrl.product.manufacturer"
+                                                                    view="app/products/components/view-product/partials/ui-select-infinity.html"
+                                                                    on-select="viewProductCtrl.saveProduct()">
+                                                </ui-select-infinity>
+                                            </span>
                                             <button type="button" ng-click="viewProductCtrl.product.manufacturer.x_editable_show=false;"
                                                     class="btn btn-default">
                                                 <span class="glyphicon glyphicon-remove"></span>

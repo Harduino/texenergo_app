@@ -13,7 +13,11 @@
                 </section>
                 <section class="form-group">
                     <label class="control-label">Партнер</label>
-                    <span ng-include="'app/layout/components/transfer-builder/partials/ui-select-infinity.html'"></span>
+                    <span>
+                        <ui-select-infinity config="$ctrl.partnerSelectConfig" ng-model="$ctrl.newTransfer.partner"
+                                            view="app/layout/components/transfer-builder/partials/ui-select-infinity.html">
+                        </ui-select-infinity>
+                    </span>
                 </section>
                 <section class="form-group">
                     <label class="control-label" for="datePickerConfig">Дата поступления</label>

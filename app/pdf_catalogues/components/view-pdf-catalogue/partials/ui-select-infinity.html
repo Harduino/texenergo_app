@@ -1,8 +1,7 @@
-<ui-select ui-select-infinity="viewPdfCatalogueCtrl.manufacturerSelectConfig" theme="select2" ng-disabled="disabled"
-           ng-model="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer" style="width: 50%;"
-           on-select="viewPdfCatalogueCtrl.savePdfCatalogue()">
+<ui-select theme="select2" ng-disabled="disabled" style="width: 50%;"
+           ng-model="$ctrl.ngModel" on-select="$ctrl.onSelect()" uis-open-close="$ctrl.focusSearchBox()">
     <ui-select-match placeholder="Партнер не выбран">{{ $select.selected.name }}</ui-select-match>
-    <ui-select-choices repeat="manufacturer in viewPdfCatalogueCtrl.data.manufacturersList|filter:$select.search">
+    <ui-select-choices repeat="manufacturer in $ctrl.items | filter:$select.search">
         <div ng-bind-html="manufacturer.name | highlight: $select.search"></div>
     </ui-select-choices>
 </ui-select>

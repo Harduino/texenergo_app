@@ -35,7 +35,13 @@
                     {{ iewPdfCatalogueCtrl.pdfCatalogue.manufacturer.name || 'Нет' }}
                 </a>
                 <div ng-if="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.x_editable_show">
-                    <span ng-include="'app/pdf_catalogues/components/view-pdf-catalogue/partials/ui-select-infinity.html'"></span>
+                    <span>
+                        <ui-select-infinity config="viewPdfCatalogueCtrl.manufacturerSelectConfig"
+                                            ng-model="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer"
+                                            view="app/pdf_catalogues/components/view-pdf-catalogue/partials/ui-select-infinity.html"
+                                            on-select="viewPdfCatalogueCtrl.savePdfCatalogue()">
+                        </ui-select-infinity>
+                    </span>
                     <button type="button" ng-click="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.x_editable_show=false;"
                             class="btn btn-default">
                         <span class="glyphicon glyphicon-remove"></span>

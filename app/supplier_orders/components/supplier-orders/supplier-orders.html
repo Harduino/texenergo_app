@@ -71,7 +71,12 @@
                     </section>
                     <section class="form-group">
                         <label class="control-label">Партнер</label>
-                        <span ng-include="'app/supplier_orders/components/supplier-orders/partials/ui-select-infinity.html'"></span>
+                        <span>
+                            <ui-select-infinity config="supplierOrdersCtrl.partnerSelectConfig"
+                                                view="app/supplier_orders/components/supplier-orders/partials/ui-select-infinity.html"
+                                                ng-model="supplierOrdersCtrl.newOrderData.partner">
+                            </ui-select-infinity>
+                        </span>
                     </section>
                     <section>
                         <i class="fa-fw fa fa-warning"></i>

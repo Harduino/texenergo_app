@@ -53,7 +53,11 @@
             <tbody>
                 <tr>
                     <td>
-                        <div ng-include="'app/incoming_transfers/components/view-incoming-transfer/partials/ui-select-infinity.html'"></div>
+                        <ui-select-infinity config="viewIncomingTransferCtrl.orderSelectConf"
+                                            on-select="viewIncomingTransferCtrl.onOrderSelect()"
+                                            view="app/incoming_transfers/components/view-incoming-transfer/partials/ui-select-infinity.html"
+                                            ng-model="viewIncomingTransferCtrl.data.orderForAppend">
+                        </ui-select-infinity>
                     </td>
                     <td ng-keypress="viewIncomingTransferCtrl.data.orderForAppend.id && viewIncomingTransferCtrl.appendOrder($event)">
                         <input id="append_order_amount" class="form-control table-input" filter-name="te_number"
