@@ -23,8 +23,9 @@ class TopSearchCtrl {
             ]
         };
 
-        angular.element(window).on('keydown', self.navigateInTable.bind(self));
-        this.$onDestroy = () => angular.element(window).off('keydown', self.navigateInTable.bind(self));
+        let tableNavigationHandler = self.navigateInTable.bind(self);
+        angular.element(window).on('keydown', tableNavigationHandler);
+        this.$onDestroy = () => angular.element(window).off('keydown', tableNavigationHandler);
     }
 
     // We are looking for popular document numbering pattern. If one is matched, then navigate there.
