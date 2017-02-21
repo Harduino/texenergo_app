@@ -74,6 +74,6 @@ ViewContactCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory']
 
 angular.module('app.contacts').component('viewContact', {
     controller: ViewContactCtrl,
-    controllerAs: 'viewContactCtrl',
+    controllerAs: '$ctrl',
     templateUrl: '/app/contacts/components/view-contact/view-contact.html'
 });

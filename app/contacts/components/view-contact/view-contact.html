@@ -1,102 +1,95 @@
 <div id="content">
-    <div class="well well-white" ng-switch="viewContactCtrl.contact.can_edit">
+    <div class="well well-white" ng-switch="$ctrl.contact.can_edit">
         <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">
-            {{viewContactCtrl.visual.titles + viewContactCtrl.contact.email}}
+            {{$ctrl.visual.titles + $ctrl.contact.email}}
         </h2>
-        <form-nav-buttons options="viewContactCtrl.visual.navButtsOptions" class="btn-group margin-top-10">
+        <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group margin-top-10">
         </form-nav-buttons>
         <hr />
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Имя:</p>
             <p class="col-md-9" ng-switch-when="true">
-                <a editable-text="viewContactCtrl.contact.first_name" buttons="no"
-                   onaftersave="viewContactCtrl.saveContact()">
-                    {{viewContactCtrl.contact.first_name || 'Нет'}}
+                <a editable-text="$ctrl.contact.first_name" buttons="no" onaftersave="$ctrl.saveContact()">
+                    {{$ctrl.contact.first_name || 'Нет'}}
                 </a>
             </p>
-            <p ng-switch-default class="col-md-9">{{viewContactCtrl.contact.first_name}}</p>
+            <p ng-switch-default class="col-md-9">{{$ctrl.contact.first_name}}</p>
         </div>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Фамилия:</p>
             <p class="col-md-9" ng-switch-when="true">
-                <a editable-text="viewContactCtrl.contact.last_name" buttons="no"
-                   onaftersave="viewContactCtrl.saveContact()">
-                    {{viewContactCtrl.contact.last_name || 'Нет'}}
+                <a editable-text="$ctrl.contact.last_name" buttons="no" onaftersave="$ctrl.saveContact()">
+                    {{$ctrl.contact.last_name || 'Нет'}}
                 </a>
             </p>
-            <p ng-switch-default class="col-md-9">{{viewContactCtrl.contact.last_name}}</p>
+            <p ng-switch-default class="col-md-9">{{$ctrl.contact.last_name}}</p>
         </div>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Партнёр:</p>
             <div class="col-md-9" ng-switch-when="true">
-                <a ng-hide="viewContactCtrl.contact.partner.x_editable_show" class="editable-click"
-                   ng-click="viewContactCtrl.contact.partner.x_editable_show=true;">
-                    {{viewContactCtrl.contact.partner.name || 'Нет'}}
+                <a ng-hide="$ctrl.contact.partner.x_editable_show" class="editable-click"
+                   ng-click="$ctrl.contact.partner.x_editable_show=true;">
+                    {{$ctrl.contact.partner.name || 'Нет'}}
                 </a>
-                <div ng-if="viewContactCtrl.contact.partner.x_editable_show">
+                <div ng-if="$ctrl.contact.partner.x_editable_show">
                     <span>
-                        <ui-select-infinity config="viewContactCtrl.partnerSelectConfig"
-                                            on-select="viewContactCtrl.saveContact()"
+                        <ui-select-infinity config="$ctrl.partnerSelectConfig" on-select="$ctrl.saveContact()"
                                             view="app/contacts/components/view-contact/partials/ui-select-infinity.html"
-                                            ng-model="viewContactCtrl.contact.partner">
+                                            ng-model="$ctrl.contact.partner">
                         </ui-select-infinity>
                     </span>
-                    <button type="button" ng-click="viewContactCtrl.contact.partner.x_editable_show=false;"
+                    <button type="button" ng-click="$ctrl.contact.partner.x_editable_show=false;"
                             class="btn btn-default">
                         <span class="glyphicon glyphicon-remove"></span>
                     </button>
-                    <button ng-click="viewContactCtrl.goToPartner()" type="button" class="btn btn-default">
+                    <button ng-click="$ctrl.goToPartner()" type="button" class="btn btn-default">
                         <span class="fa fa-eye"></span>
                     </button>
                 </div>
             </div>
             <p class="col-md-9" ng-switch-default>
-                <a ng-href="/#/partners/{{viewContactCtrl.contact.partner.id }}">
-                    {{viewContactCtrl.contact.partner.name}}
-                </a>
+                <a ng-href="/#/partners/{{$ctrl.contact.partner.id }}">{{$ctrl.contact.partner.name}}</a>
             </p>
         </div>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Мобильный тел:</p>
             <p class="col-md-9" ng-switch-when="true">
-                <a editable-text="viewContactCtrl.contact.mobile" buttons="no"
-                   onaftersave="viewContactCtrl.saveContact()">
-                    {{viewContactCtrl.contact.mobile || 'Нет'}}
+                <a editable-text="$ctrl.contact.mobile" buttons="no" onaftersave="$ctrl.saveContact()">
+                    {{$ctrl.contact.mobile || 'Нет'}}
                 </a>
             </p>
-            <p ng-switch-default class="col-md-9">{{viewContactCtrl.contact.mobile}}</p>
+            <p ng-switch-default class="col-md-9">{{$ctrl.contact.mobile}}</p>
         </div>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Email:</p>
             <p class="col-md-9" ng-switch-when="true">
-                <a editable-text="viewContactCtrl.contact.email" buttons="no"
-                   onaftersave="viewContactCtrl.saveContact()">
-                    {{viewContactCtrl.contact.email}}
+                <a editable-text="$ctrl.contact.email" buttons="no" onaftersave="$ctrl.saveContact()">
+                    {{$ctrl.contact.email}}
                 </a>
             </p>
-            <p ng-switch-default class="col-md-9">{{viewContactCtrl.contact.email}}</p>
+            <p ng-switch-default class="col-md-9">{{$ctrl.contact.email}}</p>
         </div>
         <div class="row margin-top-10" ng-switch-when="true">
             <p class="col-xs-12 col-md-3 font-bold">Не высылать email-ы:</p>
             <p class="col-md-9">
-                <a editable-checkbox="viewContactCtrl.contact.do_not_email" onaftersave="viewContactCtrl.saveContact()">
-                    {{viewContactCtrl.contact.do_not_email && 'Высылать!' || 'Не высылать'}}
+                <a editable-checkbox="$ctrl.contact.do_not_email" onaftersave="$ctrl.saveContact()">
+                    {{$ctrl.contact.do_not_email && 'Высылать!' || 'Не высылать'}}
                 </a>
             </p>
         </div>
         <div class="row margin-top-10" ng-switch-when="true">
             <p class="col-xs-12 col-md-3 font-bold">Отправка заказов поставщика:</p>
             <p class="col-md-9">
-                <a editable-checkbox="viewContactCtrl.contact.procurement_emails" onaftersave="viewContactCtrl.saveContact()">
-                    {{viewContactCtrl.contact.procurement_emails && 'Высылать!' || 'Не высылать'}}
+                <a editable-checkbox="$ctrl.contact.procurement_emails" onaftersave="$ctrl.saveContact()">
+                    {{$ctrl.contact.procurement_emails && 'Высылать!' || 'Не высылать'}}
                 </a>
             </p>
         </div>
-        <div class="row margin-top-10" ng-if="viewContactCtrl.contact.can_api_token">
+        <div class="row margin-top-10" ng-if="$ctrl.contact.can_api_token">
             <p class="col-xs-12 col-md-3 font-bold">Ключ API:</p>
             <p class="col-md-9">
-                {{ viewContactCtrl.contact.api_token || "Надо сгенерировать ключ"}}
-                <a ng-click="viewContactCtrl.generateApiToken()">(сгенерировать)</a>
+                {{ $ctrl.contact.api_token || "Надо сгенерировать ключ"}}
+                <a ng-click="$ctrl.generateApiToken()">(сгенерировать)</a>
             </p>
         </div>
     </div>
@@ -116,7 +109,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat='item in viewContactCtrl.contact.last_viewed_products'>
+                    <tr ng-repeat='item in $ctrl.contact.last_viewed_products'>
                         <td>{{ item.created_at | date:'dd MMMM yy' }}</td>
                         <td>{{ item.product.name }}, {{ item.product.article }}</td>
                     </tr>
@@ -133,7 +126,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="item in viewContactCtrl.contact.last_search_queries">
+                    <tr ng-repeat="item in $ctrl.contact.last_search_queries">
                         <td>{{ item.created_at | date:'dd MMMM yy' }}</td>
                         <td>{{ item.query }}</td>
                         <td>{{ item.products_found }}</td>
