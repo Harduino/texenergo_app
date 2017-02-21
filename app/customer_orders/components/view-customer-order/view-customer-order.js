@@ -11,7 +11,6 @@ class ViewCustomerOrderCtrl {
         this.$stateParams = $stateParams;
         this.$filter = $filter;
 
-        this.partnersList = [];
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
         this.order = {};
         this.total = 0;
@@ -130,7 +129,6 @@ class ViewCustomerOrderCtrl {
 
         this.data = {
             networkData: null,
-            productsList: [],//селект выбора продукта
             networkConfig: {
                 actions:[
                     {
