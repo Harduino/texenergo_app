@@ -53,7 +53,7 @@ class CustomerOrdersCtrl {
             titles: ['Заказы клиентов']
         };
 
-        this.data = {ordersList:[], partnersList:[], searchQuery:$stateParams.q};
+        this.data = {ordersList: [], searchQuery: $stateParams.q};
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
         this.clearCreateOrder();
     }
@@ -88,6 +88,6 @@ CustomerOrdersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactor
 
 angular.module('app.customer_orders').component('customerOrders', {
     controller: CustomerOrdersCtrl,
-    controllerAs: 'customerOrdersCtrl',
+    controllerAs: '$ctrl',
     templateUrl: '/app/customer_orders/components/customer-orders/customer-orders.html'
 });
