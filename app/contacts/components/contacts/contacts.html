@@ -1,15 +1,14 @@
 <div id="content">
     <div class="row">
-        <big-breadcrumbs items="contactsCtrl.visual.titles"
-                         data-icon="group" class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <big-breadcrumbs items="$ctrl.visual.titles" data-icon="group" class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
         </big-breadcrumbs>
     </div>
     <div class="well">
-        <form-nav-buttons options="contactsCtrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
+        <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
         <hr>
-        <orders-filter data-search-query="contactsCtrl.data.searchQuery" data-to-state="app.contacts"></orders-filter>
+        <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.contacts"></orders-filter>
         <table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"
-               data-list="contactsCtrl.data.contactsList" data-search-query="contactsCtrl.data.searchQuery"
+               data-list="$ctrl.data.contactsList" data-search-query="$ctrl.data.searchQuery"
                te-lazy-helper data-server-api-method="getContacts">
             <thead>
                 <tr>
@@ -22,7 +21,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="row in contactsCtrl.data.contactsList">
+                <tr ng-repeat="row in $ctrl.data.contactsList">
                     <td>{{$index +1}}</td>
                     <td>{{row.email}}</td>
                     <td>{{row.first_name}}</td>
@@ -30,7 +29,7 @@
                     <td>{{row.partner.name}}</td>
                     <td class="center-item-text">
                         <form-nav-buttons data-role="row" class="btn-group" subdata="row" data-template="table"
-                                          content-class="btn btn-xs" data-options="contactsCtrl.visual.navTableButts">
+                                          content-class="btn btn-xs" data-options="$ctrl.visual.navTableButts">
                         </form-nav-buttons>
                     </td>
                 </tr>
@@ -51,41 +50,39 @@
                 <div class="modal-body">
                     <section class="form-group">
                         <label class="control-label" for="newContact.first_name">Имя</label>
-                        <input uib-typeahead="name for name in contactsCtrl.getSuggestions('fio', $viewValue, 'value')"
-                               type="text" ng-model="contactsCtrl.newContact.first_name" class="input-sm form-control"
+                        <input uib-typeahead="name for name in $ctrl.getSuggestions('fio', $viewValue, 'value')"
+                               type="text" ng-model="$ctrl.newContact.first_name" class="input-sm form-control"
                                id="newContact.first_name" />
                     </section>
                     <section class="form-group">
                         <label class="control-label" for="newContact.last_name">Фамилия</label>
-                        <input uib-typeahead="item for item in contactsCtrl.getSuggestions('fio', $viewValue, 'value')"
-                               type="text" ng-model="contactsCtrl.newContact.last_name" class="input-sm form-control"
+                        <input uib-typeahead="item for item in $ctrl.getSuggestions('fio', $viewValue, 'value')"
+                               type="text" ng-model="$ctrl.newContact.last_name" class="input-sm form-control"
                                id="newContact.last_name" />
                     </section>
                     <section class="form-group">
                         <label class="control-label" for="newContact.email">Email</label>
-                        <input uib-typeahead="item for item in contactsCtrl.getSuggestions('email', $viewValue, 'value')"
-                               type="text" ng-model="contactsCtrl.newContact.email" class="input-sm form-control"
+                        <input uib-typeahead="item for item in $ctrl.getSuggestions('email', $viewValue, 'value')"
+                               type="text" ng-model="$ctrl.newContact.email" class="input-sm form-control"
                                id="newContact.email" />
                     </section>
                     <section class="form-group">
                         <label class="control-label" for="newContact.mobile">Мобильный</label>
-                        <input type="text" ng-model="contactsCtrl.newContact.mobile" class="input-sm form-control"
+                        <input type="text" ng-model="$ctrl.newContact.mobile" class="input-sm form-control"
                                id="newContact.mobile" />
                     </section>
                     <section class="form-group">
                         <label class="control-label">Партнер</label>
                         <span>
-                            <ui-select-infinity config="contactsCtrl.partnerSelectConfig"
-                                                view="app/contacts/components/contacts/partials/ui-select-infinity.html"
-                                                ng-model="contactsCtrl.newContact.partner">
+                            <ui-select-infinity view="app/contacts/components/contacts/partials/ui-select-infinity.html"
+                                                config="$ctrl.partnerSelectConfig" ng-model="$ctrl.newContact.partner">
                             </ui-select-infinity>
                         </span>
                     </section>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal"
-                            ng-click="contactsCtrl.createContact()">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="$ctrl.createContact()">
                         Сохранить
                     </button>
                 </div>

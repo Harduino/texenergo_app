@@ -22,7 +22,7 @@ class ContactsCtrl {
             titles: ["Контакты"]
         };
 
-        this.data = {contactsList:[], searchQuery: $stateParams.q, partnersList: []};
+        this.data = {contactsList:[], searchQuery: $stateParams.q};
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
     }
 
@@ -59,6 +59,6 @@ ContactsCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', '$
 
 angular.module('app.contacts').component('contacts', {
     controller: ContactsCtrl,
-    controllerAs: 'contactsCtrl',
+    controllerAs: '$ctrl',
     templateUrl: '/app/contacts/components/contacts/contacts.html'
 });
