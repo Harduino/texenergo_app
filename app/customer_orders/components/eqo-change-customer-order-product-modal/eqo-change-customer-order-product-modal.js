@@ -1,14 +1,12 @@
 class EqoChangeCustomerOrderProductModalCtrl {
     constructor(serverApi) {
-        let self = this;
         this.pSelectConfig = {startPage: 0, dataMethod: serverApi.getSearch};
-        this.data = {selectedProduct: self.resolve.product};
         this.resolve.config = angular.extend({title: 'Изменить товар', btnOkText: 'Изменить', btnCancelText: 'Отмена'},
-            self.resolve.config);
+            this.resolve.config);
     }
 
     ok () {
-        this.modalInstance.close(this.data.selectedProduct);
+        this.modalInstance.close(this.resolve.product);
     }
 
     cancel () {
