@@ -70,7 +70,7 @@ class ViewIncomingTransferCtrl {
             titles: 'Входящий платеж: №'
         };
 
-        this.data = {ordersList: [], orderForAppend: {amount: 0}};
+        this.orderForAppend = {amount: 0};
 
         serverApi.getIncomingTransferDetails($stateParams.id, result => {
             let transfer = self.incomingTransfer = result.data;
@@ -117,7 +117,7 @@ class ViewIncomingTransferCtrl {
     }
 
     onOrderSelect () {
-        let order = this.data.orderForAppend;
+        let order = this.orderForAppend;
 
         if (order.hasOwnProperty('type') && (order.type.search(/transfer/gi) > -1)) {
             order.total = new Number(order.amount);
@@ -127,45 +127,35 @@ class ViewIncomingTransferCtrl {
     }
 
     appendOrder (event) {
-        let
-            self = this,
-            data = this.data.orderForAppend,
-            append = () => {
-                self.data.orderForAppend = {};
-                let postData = {amount: data.amount};
-                let transfer = false;
+        if (!event || (event.keyCode == 13)) {
+            let self = this, order = this.orderForAppend, postData = {amount: order.amount}, transfer = false;
+            this.orderForAppend = {};
 
-                if (data.type === 'OutgoingTransfer') {
-                    transfer = true;
-                    postData.outgoing_transfer_id = data.id;
+            if (order.type === 'OutgoingTransfer') {
+                transfer = true;
+                postData.outgoing_transfer_id = order.id;
+            } else {
+                postData.customer_order_id = order.id;
+            }
+
+            this.serverApi.appendIncomingTransferOrder(this.incomingTransfer.id, postData, res => {
+                let transferInfo = transfer ? 'Платеж ' + order.number : 'Заказ ' + order.number;
+
+                if (!res.data.errors) {
+                    self.incomingTransfer.remaining_amount = res.data.money_transfer.remaining_amount;
+                    self.incomingTransfer.money_to_orders.push(res.data);
+                    self.calculateRemainingAmount();
+                    self.funcFactory.showNotification('Успешно', transferInfo + ' успешно добавлен', true);
+                    angular.element('#vit_order_select').data().$uiSelectController.open = true;
                 } else {
-                    postData.customer_order_id = data.id;
+                    self.funcFactory.showNotification('Не удалось прикрепить ' + transferInfo, res.data.errors);
                 }
-
-                self.serverApi.appendIncomingTransferOrder(self.incomingTransfer.id, postData, res => {
-                    let transferInfo = transfer ? 'Платеж ' + data.number : 'Заказ ' + data.number;
-
-                    if (!res.data.errors) {
-                        self.incomingTransfer.remaining_amount = res.data.money_transfer.remaining_amount;
-                        self.incomingTransfer.money_to_orders.push(res.data);
-                        self.calculateRemainingAmount();
-                        self.funcFactory.showNotification('Успешно', transferInfo + ' успешно добавлен', true);
-                        angular.element('#vit_order_select').data().$uiSelectController.open = true;
-                    } else {
-                        self.funcFactory.showNotification('Не удалось прикрепить ' + transferInfo, res.data.errors);
-                    }
-                });
-            };
-
-        if (event) {
-            event.keyCode == 13 && append();
-        } else {
-            append();
+            });
         }
     }
 
     getMax () {
-        return Math.min(this.data.orderForAppend.total, this.incomingTransfer.remaining_amount);
+        return Math.min(this.orderForAppend.total, this.incomingTransfer.remaining_amount);
     }
 
     calculateRemainingAmount () {
@@ -179,6 +169,6 @@ ViewIncomingTransferCtrl.$inject = ['$state', '$stateParams', 'serverApi', '$q',
 
 angular.module('app.incoming_transfers').component('viewIncomingTransfer', {
     controller: ViewIncomingTransferCtrl,
-    controllerAs: 'viewIncomingTransferCtrl',
+    controllerAs: '$ctrl',
     templateUrl: '/app/incoming_transfers/components/view-incoming-transfer/view-incoming-transfer.html'
 });

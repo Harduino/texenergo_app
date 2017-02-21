@@ -1,24 +1,23 @@
 <div id="content">
     <div class="well well-white">
         <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">
-            {{viewIncomingTransferCtrl.visual.titles + viewIncomingTransferCtrl.incomingTransfer.number}}
+            {{$ctrl.visual.titles + $ctrl.incomingTransfer.number}}
         </h2>
-        <form-nav-buttons options="viewIncomingTransferCtrl.visual.navButtsOptions" class="btn-group margin-top-10">
-        </form-nav-buttons>
+        <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
         <hr>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">
                 Входящий номер:
             </p>
-            <p class="col-md-9">{{viewIncomingTransferCtrl.incomingTransfer.number}}</p>
+            <p class="col-md-9">{{$ctrl.incomingTransfer.number}}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">
                 Партнёр:
             </p>
             <p class="col-md-9">
-                <a ng-href="/#/partners/{{viewIncomingTransferCtrl.incomingTransfer.partner.id}}">
-                    {{viewIncomingTransferCtrl.incomingTransfer.partner.name}}
+                <a ng-href="/#/partners/{{$ctrl.incomingTransfer.partner.id}}">
+                    {{$ctrl.incomingTransfer.partner.name}}
                 </a>
             </p>
         </div>
@@ -26,23 +25,23 @@
             <p class="col-xs-12 col-md-3 font-bold">
                 Входящая дата:
             </p>
-            <p class="col-md-9">{{viewIncomingTransferCtrl.incomingTransfer.date | date:'dd MMMM yy'}}</p>
+            <p class="col-md-9">{{$ctrl.incomingTransfer.date | date:'dd MMMM yy'}}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">
                 Назчание:
             </p>
-            <p class="col-md-9">{{viewIncomingTransferCtrl.incomingTransfer.description}}</p>
+            <p class="col-md-9">{{$ctrl.incomingTransfer.description}}</p>
         </div>
     </div>
 
     <div class="well well-white">
         <div class="margin-bottom-10 m-r-10">
-            Свободно средств: {{viewIncomingTransferCtrl.incomingTransfer.remaining_amount | currency}}
+            Свободно средств: {{$ctrl.incomingTransfer.remaining_amount | currency}}
         </div>
 
         <table class="table table-bordered margin-top-10"
-               ng-if="viewIncomingTransferCtrl.incomingTransfer.can_edit && (viewIncomingTransferCtrl.incomingTransfer.remaining_amount > 0)">
+               ng-if="$ctrl.incomingTransfer.can_edit && ($ctrl.incomingTransfer.remaining_amount > 0)">
             <thead>
             <tr>
                 <th>Заказ клиента/Исходящий платеж</th>
@@ -53,20 +52,19 @@
             <tbody>
                 <tr>
                     <td>
-                        <ui-select-infinity config="viewIncomingTransferCtrl.orderSelectConf"
-                                            on-select="viewIncomingTransferCtrl.onOrderSelect()"
+                        <ui-select-infinity config="$ctrl.orderSelectConf" on-select="$ctrl.onOrderSelect()"
                                             view="app/incoming_transfers/components/view-incoming-transfer/partials/ui-select-infinity.html"
-                                            ng-model="viewIncomingTransferCtrl.data.orderForAppend">
+                                            ng-model="$ctrl.orderForAppend">
                         </ui-select-infinity>
                     </td>
-                    <td ng-keypress="viewIncomingTransferCtrl.data.orderForAppend.id && viewIncomingTransferCtrl.appendOrder($event)">
+                    <td ng-keypress="$ctrl.orderForAppend.id && $ctrl.appendOrder($event)">
                         <input id="append_order_amount" class="form-control table-input" filter-name="te_number"
-                               model-filter="{min: 0, number: true, max: viewIncomingTransferCtrl.getMax()}" type="text"
-                               ng-model="viewIncomingTransferCtrl.data.orderForAppend.amount">
+                               model-filter="{min: 0, number: true, max: $ctrl.getMax()}" type="text"
+                               ng-model="$ctrl.orderForAppend.amount">
                     </td>
                     <td class="center-item-text">
-                        <div ng-click="viewIncomingTransferCtrl.appendOrder()" class="btn btn-success"
-                             ng-disabled="!viewIncomingTransferCtrl.data.orderForAppend.id">
+                        <div ng-click="$ctrl.appendOrder()" ng-disabled="!$ctrl.orderForAppend.id"
+                             class="btn btn-success">
                             <i class="fa fa-plus"></i>
                         </div>
                     </td>
@@ -84,7 +82,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in viewIncomingTransferCtrl.incomingTransfer.money_to_orders">
+                <tr ng-repeat="item in $ctrl.incomingTransfer.money_to_orders">
                     <td>{{ $index + 1 }}</td>
                     <td>
                         <span ng-if="item.hasOwnProperty('customer_order')">
@@ -98,21 +96,19 @@
                     </td>
                     <td>{{ item.amount | currency }}</td>
                     <td>
-                        <form-nav-buttons data-role="viewIncomingTransferCtrl.visual.roles" content-class="btn btn-xs"
-                                          data-options="viewIncomingTransferCtrl.visual.navTableButts"
-                                          data-template="table" subdata="{data:item, index:$index}" class="btn-group">
+                        <form-nav-buttons data-role="$ctrl.visual.roles" content-class="btn btn-xs" class="btn-group"
+                                          data-options="$ctrl.visual.navTableButts" data-template="table"
+                                          subdata="{data:item, index:$index}">
                         </form-nav-buttons>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="3" class="text-right">Итого:</td>
-                    <td>{{ viewIncomingTransferCtrl.incomingTransfer.amount | currency }}</td>
+                    <td>{{ $ctrl.incomingTransfer.amount | currency }}</td>
                     <td></td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <file-worker data-trigger="viewIncomingTransferCtrl.visual.showFileModal"
-                 data-config="viewIncomingTransferCtrl.fileModalOptions">
-    </file-worker>
+    <file-worker data-trigger="$ctrl.visual.showFileModal" data-config="$ctrl.fileModalOptions"></file-worker>
 </div>
