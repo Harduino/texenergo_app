@@ -1,10 +1,11 @@
 class ScrollTopCtrl {
     constructor() {
         this.block = $(this.selector || window);
-        this.block.scroll(this.setVisibility.bind(this));
-
         let self = this;
-        this.$onDestroy = () => self.block.off('scroll', self.setVisibility.bind(self));
+        let visibilityHandler = this.setVisibility.bind(this);
+
+        this.block.scroll(visibilityHandler);
+        this.$onDestroy = () => self.block.off('scroll', visibilityHandler);
     }
 
     scrollTop () {
