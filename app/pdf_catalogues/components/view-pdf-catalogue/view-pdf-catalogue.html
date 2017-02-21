@@ -1,74 +1,69 @@
 <div id="content">
-    <div class="well well-white" ng-switch="viewPdfCatalogueCtrl.pdfCatalogue.can_edit">
-        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">PDF Каталог "{{ viewPdfCatalogueCtrl.pdfCatalogue.name }}"</h2>
-        <form-nav-buttons options="viewPdfCatalogueCtrl.visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
+    <div class="well well-white" ng-switch="$ctrl.pdfCatalogue.can_edit">
+        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">
+            PDF Каталог "{{ $ctrl.pdfCatalogue.name }}"
+        </h2>
+        <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
         <hr>
         <div class="row margin-top-10">
-            <p class="col-xs-12 col-md-3 font-bold">
-                Название:
-            </p>
+            <p class="col-xs-12 col-md-3 font-bold">Название:</p>
             <p class="col-md-9">
-                <a ng-if="viewPdfCatalogueCtrl.pdfCatalogue.can_edit" editable-text="viewPdfCatalogueCtrl.pdfCatalogue.name" onaftersave="viewPdfCatalogueCtrl.savePdfCatalogue()">
-                    {{ viewPdfCatalogueCtrl.pdfCatalogue.name || 'Нет названия' }}
+                <a ng-if="$ctrl.pdfCatalogue.can_edit" editable-text="$ctrl.pdfCatalogue.name"
+                   onaftersave="$ctrl.savePdfCatalogue()">
+                    {{ $ctrl.pdfCatalogue.name || 'Нет названия' }}
                 </a>
-                <span ng-if="!viewPdfCatalogueCtrl.pdfCatalogue.can_edit">
-                    {{ viewPdfCatalogueCtrl.pdfCatalogue.name || 'Нет названия' }}
-                </span>
+                <span ng-if="!$ctrl.pdfCatalogue.can_edit">{{ $ctrl.pdfCatalogue.name || 'Нет названия' }}</span>
             </p>
         </div>
         <div class="row">
-            <p class="col-xs-12 col-md-3 font-bold">
-                Описание:
-            </p>
+            <p class="col-xs-12 col-md-3 font-bold">Описание:</p>
             <div class="col-md-9" ng-switch-when="true">
-                <pre class="full-editable-area"><a editable-textarea="viewPdfCatalogueCtrl.pdfCatalogue.description" onaftersave="viewPdfCatalogueCtrl.savePdfCatalogue()">{{ viewPdfCatalogueCtrl.pdfCatalogue.description || 'Нет' }}</a></pre>
+                <pre class="full-editable-area">
+                    <a editable-textarea="$ctrl.pdfCatalogue.description" onaftersave="$ctrl.savePdfCatalogue()">
+                        {{ $ctrl.pdfCatalogue.description || 'Нет' }}
+                    </a>
+                </pre>
             </div>
-            <p ng-switch-default class="col-md-9">{{ viewPdfCatalogueCtrl.pdfCatalogue.description || 'Нет описания' }}</p>
+            <p ng-switch-default class="col-md-9">{{ $ctrl.pdfCatalogue.description || 'Нет описания' }}</p>
         </div>
         <div class="row">
-            <p class="col-xs-12 col-md-3 font-bold">
-                Производитель:
-            </p>
+            <p class="col-xs-12 col-md-3 font-bold">Производитель:</p>
             <div class="col-md-9" ng-switch-when="true">
-                <a ng-hide="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.x_editable_show" class="editable-click"
-                   ng-click="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.x_editable_show=true;">
+                <a ng-hide="$ctrl.pdfCatalogue.manufacturer.x_editable_show" class="editable-click"
+                   ng-click="$ctrl.pdfCatalogue.manufacturer.x_editable_show=true;">
                     {{ iewPdfCatalogueCtrl.pdfCatalogue.manufacturer.name || 'Нет' }}
                 </a>
-                <div ng-if="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.x_editable_show">
+                <div ng-if="$ctrl.pdfCatalogue.manufacturer.x_editable_show">
                     <span>
-                        <ui-select-infinity config="viewPdfCatalogueCtrl.manufacturerSelectConfig"
-                                            ng-model="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer"
+                        <ui-select-infinity config="$ctrl.manufacturerSelectConfig" on-select="$ctrl.savePdfCatalogue()"
                                             view="app/pdf_catalogues/components/view-pdf-catalogue/partials/ui-select-infinity.html"
-                                            on-select="viewPdfCatalogueCtrl.savePdfCatalogue()">
+                                            ng-model="$ctrl.pdfCatalogue.manufacturer">
                         </ui-select-infinity>
                     </span>
-                    <button type="button" ng-click="viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.x_editable_show=false;"
+                    <button type="button" ng-click="$ctrl.pdfCatalogue.manufacturer.x_editable_show=false;"
                             class="btn btn-default">
                         <span class="glyphicon glyphicon-remove"></span>
                     </button>
-                    <button ng-click="viewPdfCatalogueCtrl.goToManufacturer()" type="button" class="btn btn-default">
+                    <button ng-click="$ctrl.goToManufacturer()" type="button" class="btn btn-default">
                         <span class="fa fa-eye"></span>
                     </button>
                 </div>
             </div>
             <p class="col-md-9" ng-switch-default>
-                <a ng-href="/#/manufacturers/{{viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.id }}">
-                    {{ viewPdfCatalogueCtrl.pdfCatalogue.manufacturer.name }}
+                <a ng-href="/#/manufacturers/{{$ctrl.pdfCatalogue.manufacturer.id }}">
+                    {{ $ctrl.pdfCatalogue.manufacturer.name }}
                 </a>
             </p>
         </div>
         <div class="row">
-            <p class="col-xs-12 col-md-3 font-bold">
-                Ссылка на каталог:
-            </p>
-            <p class="col-md-9">
-                <a href="#" ng-href="{{ viewPdfCatalogueCtrl.pdfCatalogue.file_url }}" target="_blank">Скачать</a>
-            </p>
+            <p class="col-xs-12 col-md-3 font-bold">Ссылка на каталог:</p>
+            <p class="col-md-9"><a href="#" ng-href="{{ $ctrl.pdfCatalogue.file_url }}" target="_blank">Скачать</a></p>
         </div>
     </div>
     <div class="well well-white">
         <div>
-            <input class="form-control" ng-model="viewPdfCatalogueCtrl.addableQuery" placeholder="Поисковый запрс" type="text" ng-change="viewPdfCatalogueCtrl.addableSearch()">
+            <input class="form-control" ng-model="$ctrl.addableQuery" placeholder="Поисковый запрс" type="text"
+                   ng-change="$ctrl.addableSearch()">
         </div>
         <table class="table table-hover table-bordered">
             <thead>
@@ -80,24 +75,23 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat='product in viewPdfCatalogueCtrl.addableProductsList'>
+                <tr ng-repeat='product in $ctrl.addableProductsList'>
                     <td class="hidden-xs"></td>
                     <td>{{ product.name }}</td>
                     <td>{{ product.article }}</td>
                     <td class="center">
-                        <div ng-click="viewPdfCatalogueCtrl.addProduct(product)" class="ng-scope btn btn-xs btn-danger">
+                        <div ng-click="$ctrl.addProduct(product)" class="ng-scope btn btn-xs btn-danger">
                             <i class="fa fa-plus"></i>
                         </div>
                     </td>
                 </tr>
-                <tr ng-repeat='product in viewPdfCatalogueCtrl.pdfCatalogue.products'>
+                <tr ng-repeat='product in $ctrl.pdfCatalogue.products'>
                     <td class="hidden-xs">{{ $index + 1 }}</td>
-                    <td>
-                        <a ng-href="/#/products/{{ product.id }}">{{ product.name }}</a>
-                    </td>
+                    <td><a ng-href="/#/products/{{ product.id }}">{{ product.name }}</a></td>
                     <td class="hidden-xs">{{ product.article }}</td>
                     <td class="center">
-                        <div ng-disabled="product.can_destroy" ng-click="viewPdfCatalogueCtrl.removeProduct(product)" class="ng-scope btn btn-xs btn-danger">
+                        <div ng-disabled="product.can_destroy" ng-click="$ctrl.removeProduct(product)"
+                             class="ng-scope btn btn-xs btn-danger">
                             <i class="fa fa-trash-o"></i>
                         </div>
                     </td>

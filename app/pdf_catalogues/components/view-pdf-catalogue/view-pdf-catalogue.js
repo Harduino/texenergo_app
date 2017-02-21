@@ -5,7 +5,6 @@ class ViewPdfCatalogueCtrl {
         this.funcFactory = funcFactory;
 
         this.pdfCatalogue = {};
-        this.data = { manufacturersList: []};
         this.manufacturerSelectConfig = {dataMethod: self.serverApi.getManufacturers};
 
         // For adding product BEGIN
@@ -124,11 +123,11 @@ class ViewPdfCatalogueCtrl {
             }
         })
     }
-};
+}
 
 ViewPdfCatalogueCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
 angular.module('app.pdf_catalogues').component('viewPdfCatalogue', {
     controller: ViewPdfCatalogueCtrl,
-    controllerAs: 'viewPdfCatalogueCtrl',
+    controllerAs: '$ctrl',
     templateUrl: '/app/pdf_catalogues/components/view-pdf-catalogue/view-pdf-catalogue.html'
 });
