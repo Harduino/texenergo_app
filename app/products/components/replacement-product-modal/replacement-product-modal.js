@@ -1,11 +1,10 @@
 class ReplacementProductModalCtrl{
     constructor(serverApi) {
         this.pSelectConfig = {startPage: 0, dataMethod: serverApi.getSearch};
-        this.selectedProduct = {};
     }
 
     ok () {
-        this.modalInstance.close();
+        this.modalInstance.close(this.resolve.product);
     }
 
     cancel () {
@@ -16,7 +15,8 @@ class ReplacementProductModalCtrl{
 ReplacementProductModalCtrl.$inject = ['serverApi'];
 
 angular.module('app.products').component('replacementProductModal', {
+    bindings: {modalInstance: '<', resolve: '<'},
     controller: ReplacementProductModalCtrl,
     controllerAs: '$ctrl',
-    bindings: {modalInstance: '<', resolve: '<'}
+    templateUrl: 'app/products/components/replacement-product-modal/replacement-product-modal.html'
 });

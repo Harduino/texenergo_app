@@ -1,13 +1,12 @@
 class ViewProductCtrl {
-    constructor($stateParams, serverApi, $state, funcFactory, $uibModal, FileUploader, $localStorage){
+    constructor($stateParams, serverApi, $state, funcFactory, $uibModal, FileUploader, $localStorage) {
         let self = this;
-        this.product = {};
         this.serverApi = serverApi;
         this.funcFactory = funcFactory;
         this.localStoraj = $localStorage;
         this.uibModal = $uibModal;
-        this.state = $state;
 
+        this.product = {};
         this.partnersList = [];
         this.manufacturerSelectConfig = {dataMethod: serverApi.getManufacturers};
 
@@ -31,15 +30,12 @@ class ViewProductCtrl {
         };
 
         this.tinymceOptions = funcFactory.getTinymceOptions();
-
-        this.data = {
-            quantity:0
-        };
+        this.data = {quantity: 0};
 
         this.uploader = new FileUploader({
             queueLimit: 1,
             onCompleteItem: (fileItem, response, status) => {
-                if(status===200){
+                if(status === 200) {
                     self.product.image_url = response.image_url;
                     self.uploader.clearQueue();
                     funcFactory.showNotification("Успешно", 'Изменил картинку.', true);
@@ -49,89 +45,89 @@ class ViewProductCtrl {
             }
         });
 
-        this.loadProduct = () => {
-            if (window.products !== undefined && window.products[$stateParams.id] !== undefined) {
-                self.product = window.products[$stateParams.id];
+        if (window.products !== undefined && window.products[$stateParams.id] !== undefined) {
+            this.product = window.products[$stateParams.id];
+            this.uploader.url = 'https://v2.texenergo.com/api/products/' + this.product.id + '/image?token=' + $localStorage.id_token;
+        } else {
+            serverApi.getProduct($stateParams.id, r => {
+                self.product = r.data;
                 self.uploader.url = 'https://v2.texenergo.com/api/products/' + self.product.id + '/image?token=' + $localStorage.id_token;
-            } else {
-                serverApi.getProduct($stateParams.id, r => {
-                    self.product = r.data;
-                    self.uploader.url = 'https://v2.texenergo.com/api/products/' + self.product.id + '/image?token=' + $localStorage.id_token;
-                    if(!window.products) window.products = {};
-                    window.products[$stateParams.id] = r.data;
-                });
-            }
+                if(!window.products) window.products = {};
+                window.products[$stateParams.id] = r.data;
+            });
         }
-
-        this.loadProduct();
     }
 
     getLeadTime(id, quantity, event) {
-        if(event.keyCode == 13){
+        if(event.keyCode == 13) {
+            let self = this;
+
             this.serverApi.getLeadTime(id, quantity, r => {
-                var info = r.data.lead_time_info;
+                let info = r.data.lead_time_info;
+
                 if (window.yaCounter7987369 != undefined) {
-                    var yaParams = {};
+                    let yaParams = {};
+
                     if (self.localStoraj && self.localStoraj.profile && self.localStoraj.profile.user_metadata) {
                         yaParams.user_email = self.localStoraj.profile.user_metadata.email;
                         yaParams.user_id = self.localStoraj.profile.user_metadata.contact_id;
                     }
+
                     yaCounter7987369.reachGoal("SeLeadTime", yaParams);
                 }
-                this.funcFactory.showNotification(
-                    info.obsolete ? "Снят с производства" : "Успешно",
-                    'Тариф: ' + info.price_tarif + " руб., Скидка: " + info.discount + "%, Закупка: " + info.cost + " руб., Срок поставки: " + info.delivery_date + ", Мин. кол-во: " + info.quantity_min + ", Остаток у Шнейдера: " + info.schneider_stock,
-                    !info.obsolete
-                );
+
+                self.funcFactory.showNotification(info.obsolete ? "Снят с производства" : "Успешно", 'Тариф: ' +
+                    info.price_tarif + " руб., Скидка: " + info.discount + "%, Закупка: " + info.cost +
+                    " руб., Срок поставки: " + info.delivery_date + ", Мин. кол-во: " + info.quantity_min +
+                    ", Остаток у Шнейдера: " + info.schneider_stock, !info.obsolete);
             });
         }
-    };
+    }
 
     saveProduct() {
-        var product = this.product;
-        var data = {
-            product:{
-                name: product.name,
-                description: product.description,
-                article: product.article,
-                manufacturer_id: product.manufacturer.id,
-                catalogue_ids: (product.catalogues || []).map( i => { return i.id; } )
-            }
-        };
+        let self = this, product = this.product,
+            data = {
+                product:{
+                    name: product.name,
+                    description: product.description,
+                    article: product.article,
+                    manufacturer_id: product.manufacturer.id,
+                    catalogue_ids: (product.catalogues || []).map(i => {return i.id;})
+                }
+            };
+
         this.serverApi.updateProduct(product.id, data, r => {
-            if(!r.data.errors){
-                this.funcFactory.showNotification("Успешно", 'Товар ' + product.name + ' успешно отредактирована.', true);
+            if(!r.data.errors) {
+                self.funcFactory.showNotification("Успешно", 'Товар ' + product.name + ' успешно отредактирована.', true);
             } else {
-                this.funcFactory.showNotification('Не удалось отредактировать категорию ' + product.name, r.data.errors);
+                self.funcFactory.showNotification('Не удалось отредактировать категорию ' + product.name, r.data.errors);
             }
         });
-    };
+    }
 
     goToManufacturer() {
         this.state.go('app.manufacturers.view', {id: this.product.manufacturer.id});
     }
 
     changeCatalogues() {
-        var modalInstance = $uibModal.open({
+        let self = this;
+
+        this.uibModal.open({
             templateUrl: 'spChangeCataloguesModal.tmpl.html',
             controller: 'productCatalogueModalCtrl',
             windowClass: 'eqo-centred-modal',
-            resolve: {
-                data: { catalogues: self.product.catalogues}
-            }
-        });
-
-        modalInstance.result.then( selected => {
+            resolve: {data: {catalogues: self.product.catalogues}}
+        }).result.then(selected => {
             self.product.catalogues = selected;
             self.saveProduct();
         });
-    };
+    }
 
     // Persists a product obsolete by sending request to server
     makeObsolete(enable, r_id) {
-        var product = self.product;
-        var data = {
-                product:{
+        let self = this, product = this.product,
+            data = {
+                product: {
                     obsolete: {
                         // Historically this one is called 'enable' on server side.
                         // Could handle and translate from 'flag' on server side, but leaving on client side until the issue escalates
@@ -140,35 +136,30 @@ class ViewProductCtrl {
                     }
                 }
             };
+
         this.serverApi.updateProduct(product.id, data, result => {
-            if(!result.data.errors){
+            if(!result.data.errors) {
                 self.product = result.data;
-                this.funcFactory.showNotification("Успешно", 'Товар '+product.name+' успешно отредактирована.',true);
+                self.funcFactory.showNotification("Успешно", 'Товар ' + product.name + ' успешно отредактирована.', true);
             } else {
-                this.funcFactory.showNotification('Не удалось отредактировать категорию '+product.name, result.data.errors);
+                self.funcFactory.showNotification('Не удалось отредактировать категорию ' + product.name, result.data.errors);
             }
         });
-    };
+    }
 
     selectReplacementProduct() {
+        let self = this;
+
         this.uibModal.open({
             component: 'replacementProductModal',
             windowClass: 'eqo-centred-modal',
-            resolve: { product : self.product, config: {} },
-            templateUrl: 'app/products/components/replacement-product-modal/replacement-product-modal.html'
-        }).result.then(function (selectedProduct) {
-            debugger;
-            self.saveProductSubstitute({
-                id: p.id,
-                quantity: p.quantity,
-                product_id: selectedProduct._id || selectedProduct.id
-            });
-        });
+            resolve: {product : self.product.obsolete}
+        }).result.then(selectedProduct => self.makeObsolete(true, selectedProduct._id || selectedProduct.id));
     }
-    
 }
 
 ViewProductCtrl.$inject = ['$stateParams', 'serverApi', '$state', 'funcFactory', '$uibModal', 'FileUploader', '$localStorage'];
+
 angular.module('app.products').component('viewProduct', {
     controller: ViewProductCtrl,
     controllerAs: 'viewProductCtrl',
