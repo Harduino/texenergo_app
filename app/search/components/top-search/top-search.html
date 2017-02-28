@@ -23,8 +23,7 @@
                 <tr ng-repeat="item in $ctrl.data.searchResults" ng-click="$ctrl.selectRow($index)"
                     class="cursor-pointer" ng-class="{selected: $index === $ctrl.selectedRowIndex}">
                     <td class="hidden-xs">
-                        <img ng-src="{{item.image_url}}" style="max-height: 40px; max-width: 40px;"
-                             class="img img-responsive" img-error="http://cdn.texenergo.com/no_image.png" />
+                        <img ng-src="{{item.image_url}}" style="max-height: 40px; max-width: 40px;" class="img img-responsive"/>
                     </td>
                     <td>
                         <te-copy-to-buffer>
