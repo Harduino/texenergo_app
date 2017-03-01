@@ -84,7 +84,7 @@
             <div ></div>
             <ui-select-infinity ng-if="$ctrl.data.supplierOrder.can_edit" ng-model="$ctrl.data.selectedProduct"
                                 view="app/supplier_orders/components/view-supplier-order/partials/ui-select-infinity-products.html"
-                                config="$ctrl.pSelectConfig" on-select="$ctrl.selectProductForAppend($item, $model)">
+                                config="$ctrl.pSelectConfig">
             </ui-select-infinity>
             <table class="table table-hover table-bordered">
                 <thead>
@@ -99,23 +99,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-if="$ctrl.productForAppend.id" class="append-product-row a-row-add"
+                    <tr ng-if="$ctrl.data.selectedProduct.id" class="append-product-row a-row-add"
                         ng-keypress="$ctrl.appendProduct($event)">
                         <td></td>
-                        <td>{{ $ctrl.productForAppend.name }}</td>
-                        <td>{{ $ctrl.productForAppend.article }}</td>
+                        <td>{{ $ctrl.data.selectedProduct.name }}</td>
+                        <td>{{ $ctrl.data.selectedProduct.article }}</td>
                         <td>
                             <input id="append_product_price" class="form-control table-input" filter-name="te_number"
-                                   ng-model="$ctrl.productForAppend.price" model-filter="{min:0, number: true}"
+                                   ng-model="$ctrl.data.selectedProduct.price" model-filter="{min:0, number: true}"
                                    type="text" ng-init="focusOnProduct()">
                         </td>
                         <td>
                             <input id="append_product_quantity" class="form-control table-input" filter-name="te_number"
-                                   ng-model="$ctrl.productForAppend.quantity" model-filter="{min:0}" type="text"
+                                   ng-model="$ctrl.data.selectedProduct.quantity" model-filter="{min:0}" type="text"
                                    ng-init="focusOnProduct()">
                         </td>
                         <td>
-                            {{ $ctrl.productForAppend.price * $ctrl.productForAppend.quantity }}
+                            {{ $ctrl.data.selectedProduct.price * $ctrl.data.selectedProduct.quantity }}
                         </td>
                         <td class="center-item-text">
                             <div ng-click="$ctrl.appendProduct()" class="btn btn-success">

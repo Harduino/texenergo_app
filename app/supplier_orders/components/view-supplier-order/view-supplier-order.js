@@ -1,7 +1,6 @@
 class ViewSupplierOrderCtrl {
     constructor ($state, $stateParams, serverApi, funcFactory, $filter, $localStorage) {
         let self = this;
-        // this._subscription = {};
         this.data = {supplierOrder: {}, partnersList: [], productsList: [], total: 0};
 
         this.serverApi = serverApi;
@@ -15,7 +14,6 @@ class ViewSupplierOrderCtrl {
                     type: 'confirm_order',
                     callback: (subdata, item) => {
                         serverApi.updateStatusSupplierOrder($stateParams.id, { supplier_order: { event: item.event } }, r => {
-                            console.log("r", r);
                             this.data.supplierOrder.status = r.data.status;
                             this.data.supplierOrder.can_edit = r.data.can_edit;
                             this.data.supplierOrder.events = r.data.events;
@@ -81,15 +79,9 @@ class ViewSupplierOrderCtrl {
         });
     }
 
-    selectProductForAppend (item) {
-        this.productForAppend = item;
-        this.productForAppend.id = item.id || item._id;
-        this.productForAppend.quantity = 1;
-    }
-
     appendProduct (event) {
         if(!event || (event.keyCode == 13)) {
-            let product = this.productForAppend;
+            let product = this.data.selectedProduct;
             let data = {
                 product_id: product.id,
                 quantity: product.quantity
@@ -99,7 +91,6 @@ class ViewSupplierOrderCtrl {
 
                 this.funcFactory.showNotification('Успешно добавлен продукт', r.data.product.name, true);
 
-                this.productForAppend = {};
                 this.data.selectedProduct = null;
                 angular.element('#eso_prod_select').data().$uiSelectController.open=true;
             })
