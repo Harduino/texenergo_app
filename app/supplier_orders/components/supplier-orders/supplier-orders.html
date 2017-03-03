@@ -1,17 +1,16 @@
 <div id="content">
     <div class="row">
-        <big-breadcrumbs items="supplierOrdersCtrl.visual.titles" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"
-                         data-icon="book">
+        <big-breadcrumbs items="$ctrl.visual.titles" class="col-xs-12 col-sm-7 col-md-7 col-lg-4" data-icon="book">
         </big-breadcrumbs>
     </div>
     <div class="well">
-        <form-nav-buttons options="supplierOrdersCtrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
+        <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
         <hr>
-        <orders-filter data-search-query="supplierOrdersCtrl.data.searchQuery" data-to-state="app.supplier_orders">
+        <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.supplier_orders">
         </orders-filter>
         <table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"
-               data-list="supplierOrdersCtrl.data.ordersList" data-search-query="supplierOrdersCtrl.data.searchQuery"
-               te-lazy-helper data-server-api-method="getSupplierOrders">
+               data-list="$ctrl.data.ordersList" data-search-query="$ctrl.data.searchQuery" te-lazy-helper
+               data-server-api-method="getSupplierOrders">
             <thead>
                 <tr>
                     <th>#</th>
@@ -24,7 +23,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="row in supplierOrdersCtrl.data.ordersList">
+                <tr ng-repeat="row in $ctrl.data.ordersList">
                     <td>{{$index +1}}</td>
                     <td>{{row.number}}</td>
                     <td>{{row.status}}</td>
@@ -32,9 +31,9 @@
                     <td>{{row.partner.name}}</td>
                     <td>{{row.total | currency}}</td>
                     <td class="center-item-text">
-                        <form-nav-buttons data-options="supplierOrdersCtrl.visual.navTableButts" data-role="row"
+                        <form-nav-buttons data-options="$ctrl.visual.navTableButts" content-class="btn btn-xs"
                                           subdata="{data:row, index:$index}" data-template="table" class="btn-group"
-                                          content-class="btn btn-xs">
+                                          data-role="row">
                         </form-nav-buttons>
                     </td>
                 </tr>
@@ -54,27 +53,26 @@
                 <div class="modal-body">
                     <section class="form-group">
                         <label class="control-label" for="supplier-order-number">Номер</label>
-                        <input type="text" ng-model="supplierOrdersCtrl.newOrderData.number"
-                               class="input-sm form-control" id="supplier-order-number">
+                        <input type="text" ng-model="$ctrl.newOrderData.number" class="input-sm form-control"
+                               id="supplier-order-number">
                     </section>
                     <section class="form-group">
                         <label class="control-label" for="supplier-order-title">Название</label>
-                        <input type="text" ng-model="supplierOrdersCtrl.newOrderData.title"
-                               class="input-sm form-control" id="supplier-order-title">
+                        <input type="text" ng-model="$ctrl.newOrderData.title" class="input-sm form-control"
+                               id="supplier-order-title">
                     </section>
                     <section class="form-group">
                         <label class="control-label" for="supplier-order-description">Описание</label>
-                        <textarea type="text" ng-model="supplierOrdersCtrl.newOrderData.description"
-                                  class="input-sm form-control" id="supplier-order-description">
+                        <textarea type="text" ng-model="$ctrl.newOrderData.description" class="input-sm form-control"
+                                  id="supplier-order-description">
                         </textarea>
                         <div class="note">Будет также отображаться в содержимом письма при отправке счёта.</div>
                     </section>
                     <section class="form-group">
                         <label class="control-label">Партнер</label>
                         <span>
-                            <ui-select-infinity config="supplierOrdersCtrl.partnerSelectConfig"
-                                                view="app/supplier_orders/components/supplier-orders/partials/ui-select-infinity.html"
-                                                ng-model="supplierOrdersCtrl.newOrderData.partner">
+                            <ui-select-infinity config="$ctrl.partnerSelectConfig" ng-model="$ctrl.newOrderData.partner"
+                                                view="app/supplier_orders/components/supplier-orders/partials/ui-select-infinity.html">
                             </ui-select-infinity>
                         </span>
                     </section>
@@ -85,10 +83,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"
-                            ng-click="supplierOrdersCtrl.clearSupplierCreateOrder()">
+                            ng-click="$ctrl.clearSupplierCreateOrder()">
                         Отмена
                     </button>
-                    <button type="button" class="btn btn-primary" ng-click="supplierOrdersCtrl.addNewSupplierOrder()">
+                    <button type="button" class="btn btn-primary" ng-click="$ctrl.addNewSupplierOrder()">
                         Сохранить
                     </button>
                 </div>

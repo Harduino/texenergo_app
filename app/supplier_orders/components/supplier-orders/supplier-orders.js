@@ -58,7 +58,7 @@ class SupplierOrdersCtrl {
             titles: ['Заказы поставщикам']
         };
 
-        this.data = {ordersList: [], searchQuery: $stateParams.q, partnersList: []};
+        this.data = {ordersList: [], searchQuery: $stateParams.q};
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
         this.newOrderData = {};
     }
@@ -92,6 +92,6 @@ SupplierOrdersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactor
 
 angular.module('app.supplier_orders').component('supplierOrders', {
     controller: SupplierOrdersCtrl,
-    controllerAs: 'supplierOrdersCtrl',
+    controllerAs: '$ctrl',
     templateUrl: '/app/supplier_orders/components/supplier-orders/supplier-orders.html'
 });
