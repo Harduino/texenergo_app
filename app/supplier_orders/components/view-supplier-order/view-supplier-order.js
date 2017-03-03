@@ -1,7 +1,7 @@
 class ViewSupplierOrderCtrl {
     constructor ($state, $stateParams, serverApi, funcFactory, $filter, $localStorage) {
         let self = this;
-        this.data = {supplierOrder: {}, partnersList: [], productsList: [], total: 0};
+        this.data = {supplierOrder: {}, total: 0};
 
         this.serverApi = serverApi;
         this.$filter = $filter;
@@ -82,10 +82,8 @@ class ViewSupplierOrderCtrl {
     appendProduct (event) {
         if(!event || (event.keyCode == 13)) {
             let product = this.data.selectedProduct;
-            let data = {
-                product_id: product.id,
-                quantity: product.quantity
-            }
+            let data = {product_id: product.id, quantity: product.quantity};
+
             this.serverApi.addSupplierOrderProduct(this.data.supplierOrder.id, data, r => {
                 this.data.supplierOrder.supplier_order_contents.push(r.data);
 
@@ -121,7 +119,7 @@ class ViewSupplierOrderCtrl {
 
     removeProduct (item) {
         let row = item;
-        this.serverApi.removeSupplierOrderProduct(this.data.supplierOrder.id, item.id, r => {
+        this.serverApi.removeSupplierOrderProduct(this.data.supplierOrder.id, item.id, () => {
             for (var i = 0; i < this.data.supplierOrder.supplier_order_contents.length; i++) {
                 if (this.data.supplierOrder.supplier_order_contents[i].id === row.id) {
                     this.data.supplierOrder.supplier_order_contents.splice(i, 1);
@@ -137,10 +135,8 @@ class ViewSupplierOrderCtrl {
     }
 
     saveProductChange (row) {
-        let data = {
-            quantity: row.item.quantity,
-            price: row.item.price
-        }
+        let data = {quantity: row.item.quantity, price: row.item.price};
+
         this.serverApi.updateSupplierOrderProduct(this.data.supplierOrder.id, row.item.id, data, r => {
             for (var i = 0; i < this.data.supplierOrder.supplier_order_contents.length; i++) {
                 if(this.data.supplierOrder.supplier_order_contents[i].id !== r.data.id) continue;
