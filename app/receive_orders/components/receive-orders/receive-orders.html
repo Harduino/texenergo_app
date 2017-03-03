@@ -1,17 +1,16 @@
 <div id="content">
     <div class="row">
-        <big-breadcrumbs items="receiveOrdersCtrl.visual.titles" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"
-                         data-icon="edit">
+        <big-breadcrumbs items="$ctrl.visual.titles" class="col-xs-12 col-sm-7 col-md-7 col-lg-4" data-icon="edit">
         </big-breadcrumbs>
     </div>
     <div class="well">
-        <form-nav-buttons options="receiveOrdersCtrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
+        <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
         <hr>
-        <orders-filter data-search-query="receiveOrdersCtrl.data.searchQuery" data-to-state="app.receive_orders">
+        <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.receive_orders">
         </orders-filter>
         <table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"
-               te-lazy-helper data-list="receiveOrdersCtrl.data.ordersList"
-               data-search-query="receiveOrdersCtrl.data.searchQuery" data-server-api-method="getReceiveOrders">
+               te-lazy-helper data-list="$ctrl.data.ordersList" data-search-query="$ctrl.data.searchQuery"
+               data-server-api-method="getReceiveOrders">
             <thead>
                 <tr>
                     <th class="hidden-xs">№</th>
@@ -24,7 +23,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="row in receiveOrdersCtrl.data.ordersList">
+                <tr ng-repeat="row in $ctrl.data.ordersList">
                     <td class="hidden-xs">{{$index +1}}</td>
                     <td>{{row.number}}</td>
                     <td class="hidden-xs">{{row.date | date:'dd/MM/yy HH:mm'}}</td>
@@ -32,8 +31,8 @@
                     <td class="hidden-xs">{{row.partner.name}}</td>
                     <td class="hidden-xs">{{row.total | currency}}</td>
                     <td class="center-item-text">
-                        <form-nav-buttons data-role="receiveOrdersCtrl.visual.role" subdata="{data:row, index:$index}"
-                                          data-options="receiveOrdersCtrl.visual.navTableButts" data-template="table"
+                        <form-nav-buttons data-role="$ctrl.visual.role" subdata="{data:row, index:$index}"
+                                          data-options="$ctrl.visual.navTableButts" data-template="table"
                                           content-class="btn btn-xs" class="btn-group">
                         </form-nav-buttons>
                     </td>
@@ -55,16 +54,15 @@
                     <section class="form-group">
                         <label class="control-label">Партнер</label>
                         <span>
-                            <ui-select-infinity config="receiveOrdersCtrl.partnerSelectConfig"
-                                                view="app/receive_orders/components/receive-orders/partials/ui-select-infinity.html"
-                                                ng-model="receiveOrdersCtrl.newOrderData.partner">
+                            <ui-select-infinity config="$ctrl.partnerSelectConfig" ng-model="$ctrl.newOrderData.partner"
+                                                view="app/receive_orders/components/receive-orders/partials/ui-select-infinity.html">
                             </ui-select-infinity>
                         </span>
                     </section>
                     <section class="form-group">
                         <label class="control-label" for="newOrderData.date">Дата</label>
                         <div class="input-group">
-                            <input type="text" ng-model="receiveOrdersCtrl.newOrderData.date" style="position: initial;"
+                            <input type="text" ng-model="$ctrl.newOrderData.date" style="position: initial;"
                                    class="full-width input-sm form-control" id="newOrderData.date" />
                             <span class="input-group-addon">
                                 <i class="glyphicon glyphicon-calendar"></i>
@@ -73,22 +71,21 @@
                     </section>
                     <section class="form-group">
                         <label class="control-label" for="new-order-number">Номер накладной</label>
-                        <input type="text" ng-model="receiveOrdersCtrl.newOrderData.number"
-                               class="input-sm form-control" id="new-order-number">
+                        <input type="text" ng-model="$ctrl.newOrderData.number" class="input-sm form-control"
+                               id="new-order-number">
                     </section>
                     <section class="form-group">
                         <label class="control-label" for="new-order-vat-code">Номер счёт-фактуры</label>
-                        <input type="text" ng-model="receiveOrdersCtrl.newOrderData.vat_code"
-                               class="input-sm form-control" id="new-order-vat-code">
+                        <input type="text" ng-model="$ctrl.newOrderData.vat_code" class="input-sm form-control"
+                               id="new-order-vat-code">
                     </section>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default" data-dismiss="modal" ng-click="receiveOrdersCtrl.clearCreateOrder()"
+                    <button class="btn btn-default" data-dismiss="modal" ng-click="$ctrl.clearCreateOrder()"
                             type="button">
                         Отмена
                     </button>
-                    <button class="btn btn-primary" data-dismiss="modal" ng-click="receiveOrdersCtrl.addNewOrder()"
-                            type="button">
+                    <button class="btn btn-primary" data-dismiss="modal" ng-click="$ctrl.addNewOrder()" type="button">
                         Сохранить
                     </button>
                 </div>

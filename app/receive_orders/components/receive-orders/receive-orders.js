@@ -52,7 +52,7 @@ class ReceiveOrdersCtrl {
             titles: ['Поступления']
         };
 
-        this.data = {ordersList:[], partnersList:[], searchQuery: $stateParams.q};
+        this.data = {ordersList: [], searchQuery: $stateParams.q};
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
         this.newOrderData = {};
     }
@@ -88,6 +88,6 @@ ReceiveOrdersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory
 
 angular.module('app.receive_orders').component('receiveOrders', {
     controller: ReceiveOrdersCtrl,
-    controllerAs: 'receiveOrdersCtrl',
+    controllerAs: '$ctrl',
     templateUrl: '/app/receive_orders/components/receive-orders/receive-orders.html'
 });
