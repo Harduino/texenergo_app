@@ -2,12 +2,11 @@
     angular.module('app.quotation_orders').run(['editableOptions', function(editableOptions) {
         editableOptions.theme = 'bs3';
 
-    }]).controller('EditQuotationOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', '$filter', 'funcFactory', '$uibModal', '$parse', function($scope, $state, $stateParams, serverApi, $filter, funcFactory, $uibModal, $parse){
+    }]).controller('EditQuotationOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', '$filter', 'funcFactory', '$uibModal', function($scope, $state, $stateParams, serverApi, $filter, funcFactory, $uibModal){
         var sc = $scope;
         
         sc.data ={
             quotationOrder:{},
-            productsList: [], // Используестя при поиске нового товара для добавления. Хранит список найденных.
             selectedProduct: null, // Используется при поиске нового товара для добавления. Хранит выбранный.
             total:0 // Считаем итого в руб по смете
         };
@@ -106,7 +105,7 @@
                     
                 }
             }
-        }
+        };
         
         /**
          * Проверяет связан ли данный элемент с каким-либо товаром
@@ -168,7 +167,7 @@
                 default:
                     alert("Hightlight default case");
             }
-        }
+        };
         
         // Снимает подсвечение
         // @param where - таблица где снять подсвеченивание. Например, 'equipment' или 'elements'
@@ -188,7 +187,7 @@
                 default:
                     alert("Unhighlight default case");
             }
-        }
+        };
         
         // Сворачивает все несвязанные строки в обоих таблицах
         // @param initiator - На кого кликнули. Для него найти все НЕ связанные строки и их свернуть
@@ -264,12 +263,8 @@
                     }
                 }
             }
-        }
-        
-        
-        
-        
-        
+        };
+
         // ЗДЕСЬ ДОБАВЛЕНИЕ НОВЫЙ ЭЛЕМЕНТОВ И КОМПЛЕКТАЦИЙ
         // Общий метод для создания связи
         // @param f - От from. Берёт строку комплектации или элемент и ищёт её id.
@@ -324,13 +319,12 @@
         // Возвращает запрос, понятный сервер для добавления товара.
         // В будущем будем рефакторить.
         function addNewEquipmentRequest(p){
-            var dataForNewEquipment = {
+            return {
                 add_equipment: {
                     product_id: (p.id || p._id),
                     quantity: 1
                 }
             };
-            return dataForNewEquipment;
         }
         
         /**
@@ -382,7 +376,7 @@
                     funcFactory.showNotification("Неудача", 'Не удалось добавить элемент');
                 }
             });
-        }
+        };
 
 
         /**
@@ -414,7 +408,6 @@
             element.highlight = true;
 
             modalInstance.result.then(function (selectedProduct) {
-                var newProduct;
                 var match = (element.comment||"").match(/(\d+)\s*шт/i);
                 selectedProduct.element_id = element.id;
                 if(match !== null){
@@ -706,8 +699,7 @@
 
         // Implements persistently changes rows position for Elements
         function updateElementRowPosition(e, ui){
-            var $this = $(this),
-                last_ind = angular.element(ui.item).scope().$index,
+            var last_ind = angular.element(ui.item).scope().$index,
                 new_ind = ui.item.index();
             var data = {
                 change_rows: {
@@ -727,8 +719,7 @@
 
         // Implements persistently changes rows position for Equipment
         function updateEquipmentRowPosition(e, ui){
-            var $this = $(this),
-                last_ind = angular.element(ui.item).scope().$index,
+            var last_ind = angular.element(ui.item).scope().$index,
                 new_ind = ui.item.index();
             var data = {
                 change_rows: {
@@ -753,10 +744,10 @@
          * Для удобства работы подставляет в поиск товара его описание. Если такое описание есть.
          * Иногда в описании есть количество. Убираем его регексом.
          */
-        sc.initProdSelect = function(){
-            if(config.searchText){
-                var x = config.searchText.replace(/\s*\d+\s*шт/i,"");
-                angular.element('#eqo_cp_modal_p_select').data().$uiSelectController.search = x;
+        sc.initProdSelect = function() {
+            if(config.searchText) {
+                angular.element('#eqo_cp_modal_p_select').data().$uiSelectController.search =
+                    config.searchText.replace(/\s*\d+\s*шт/i,"");
             }
         };
 
@@ -764,10 +755,7 @@
             startPage: 0,
             dataMethod: serverApi.getSearch
         };
-        sc.data = {
-            selectedProduct: product,
-            productsList: []
-        };
+        sc.data = {selectedProduct: product};
         sc.config = angular.extend({
             title: 'Изменить товар',
             btnOkText: 'Изменить',
