@@ -7,7 +7,6 @@ class ViewProductCtrl {
         this.uibModal = $uibModal;
 
         this.product = {};
-        this.partnersList = [];
         this.manufacturerSelectConfig = {dataMethod: serverApi.getManufacturers};
 
         this.visual = {
@@ -109,20 +108,6 @@ class ViewProductCtrl {
         this.state.go('app.manufacturers.view', {id: this.product.manufacturer.id});
     }
 
-    changeCatalogues() {
-        let self = this;
-
-        this.uibModal.open({
-            templateUrl: 'spChangeCataloguesModal.tmpl.html',
-            controller: 'productCatalogueModalCtrl',
-            windowClass: 'eqo-centred-modal',
-            resolve: {data: {catalogues: self.product.catalogues}}
-        }).result.then(selected => {
-            self.product.catalogues = selected;
-            self.saveProduct();
-        });
-    }
-
     // Persists a product obsolete by sending request to server
     makeObsolete(enable, r_id) {
         let self = this, product = this.product,
@@ -162,6 +147,6 @@ ViewProductCtrl.$inject = ['$stateParams', 'serverApi', '$state', 'funcFactory',
 
 angular.module('app.products').component('viewProduct', {
     controller: ViewProductCtrl,
-    controllerAs: 'viewProductCtrl',
+    controllerAs: '$ctrl',
     templateUrl: 'app/products/components/view-product/view-product.html'
 });
