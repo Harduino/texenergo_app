@@ -1,35 +1,36 @@
 <div id="content">
     <div class="well well-white">
         <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">
-            Поступление: {{ viewReceiveOrderCtrl.receiveOrder.number }}
+            Поступление: {{ $ctrl.receiveOrder.number }}
         </h2>
-        <form-nav-buttons options="viewReceiveOrderCtrl.visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
+        <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group margin-top-10">
+        </form-nav-buttons>
         <hr>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">
                 Номер накладной:
             </p>
-            <p class="col-md-9">{{ viewReceiveOrderCtrl.receiveOrder.number }}</p>
+            <p class="col-md-9">{{ $ctrl.receiveOrder.number }}</p>
         </div>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">
                 Номер счёт-фактуры:
             </p>
-            <p class="col-md-9">{{ viewReceiveOrderCtrl.receiveOrder.vat_code }}</p>
+            <p class="col-md-9">{{ $ctrl.receiveOrder.vat_code }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">
                 Дата:
             </p>
-            <p class="col-md-9">{{ viewReceiveOrderCtrl.receiveOrder.date | date:'dd MMMM yy' }}</p>
+            <p class="col-md-9">{{ $ctrl.receiveOrder.date | date:'dd MMMM yy' }}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">
                 Партнёр:
             </p>
             <p class="col-md-9">
-                <a ui-sref="app.partners.view({id: viewReceiveOrderCtrl.receiveOrder.partner.id })">
-                    {{ viewReceiveOrderCtrl.receiveOrder.partner.name }}
+                <a ui-sref="app.partners.view({id: $ctrl.receiveOrder.partner.id })">
+                    {{ $ctrl.receiveOrder.partner.name }}
                 </a>
             </p>
         </div>
@@ -37,7 +38,7 @@
             <p class="col-xs-12 col-md-3 font-bold">
                 Статус:
             </p>
-            <p class="col-md-9">{{ viewReceiveOrderCtrl.receiveOrder.status }}</p>
+            <p class="col-md-9">{{ $ctrl.receiveOrder.status }}</p>
         </div>
     </div>
     
@@ -51,41 +52,48 @@
                     <th>Итого</th>
                     <th>ГТД/Страна</th>
                     <th>Заказ</th>
-                    <th ng-if="viewReceiveOrderCtrl.receiveOrder.can_edit"></th>
+                    <th ng-if="$ctrl.receiveOrder.can_edit"></th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-if="viewReceiveOrderCtrl.receiveOrder.can_edit">
+                <tr ng-if="$ctrl.receiveOrder.can_edit">
                     <td></td>
                     <td>
-                        <input class="form-control" ng-model="viewReceiveOrderCtrl.addableProduct.product.name" placeholder="Поисковый запрос" type="text" ng-change="viewReceiveOrderCtrl.productSearch()" id="vro_prod_select">
-                        <div style="position: absolute; background: white; border: 1px solid; padding: 5px;" ng-show="viewReceiveOrderCtrl.searchProductsList.length">
-                            <p ng-repeat='item in viewReceiveOrderCtrl.searchProductsList' ng-click="viewReceiveOrderCtrl.setAddableProduct(item)">
+                        <input class="form-control" ng-model="$ctrl.addableProduct.product.name" id="vro_prod_select"
+                               placeholder="Поисковый запрос" type="text" ng-change="$ctrl.productSearch()">
+                        <div style="position: absolute; background: white; border: 1px solid; padding: 5px;"
+                             ng-show="$ctrl.searchProductsList.length">
+                            <p ng-repeat='item in $ctrl.searchProductsList' ng-click="$ctrl.setAddableProduct(item)">
                                 {{ item.product.name }}
                             </p>
                         </div>
                     </td>
                     <td>
-                        <input class="form-control table-input" ng-model="viewReceiveOrderCtrl.addableProduct.quantity" model-filter="{min:0}" filter-name="te_number" type="text" ng-keypress="viewReceiveOrderCtrl.addProduct($event)">
+                        <input class="form-control table-input" ng-model="$ctrl.addableProduct.quantity" type="text"
+                               model-filter="{min:0}" filter-name="te_number" ng-keypress="$ctrl.addProduct($event)">
                     </td>
                     <td>
-                        <input class="form-control table-input" ng-model="viewReceiveOrderCtrl.addableProduct.total" model-filter="{min:0, number:true}" filter-name="te_number" type="text" ng-keypress="viewReceiveOrderCtrl.addProduct($event)">
+                        <input class="form-control table-input" ng-model="$ctrl.addableProduct.total" type="text"
+                               model-filter="{min:0, number:true}" filter-name="te_number"
+                               ng-keypress="$ctrl.addProduct($event)">
                     </td>
                     <td>
                         <div class="display-flex" style="align-items: center;">
-                            <input class="form-control table-input" ng-model="viewReceiveOrderCtrl.addableProduct.gtd" type="text" placeholder="ГТД" ng-keypress="viewReceiveOrderCtrl.addProduct($event)">
+                            <input class="form-control table-input" ng-model="$ctrl.addableProduct.gtd" type="text"
+                                   placeholder="ГТД" ng-keypress="$ctrl.addProduct($event)">
                             &nbsp;/&nbsp;
-                            <input class="form-control table-input" ng-model="viewReceiveOrderCtrl.addableProduct.country" type="text" placeholder="Страна" ng-keypress="viewReceiveOrderCtrl.addProduct($event)">
+                            <input class="form-control table-input" ng-model="$ctrl.addableProduct.country" type="text"
+                                   placeholder="Страна" ng-keypress="$ctrl.addProduct($event)">
                         </div>
                     </td>
-                    <td>{{viewReceiveOrderCtrl.addableProduct.supplier_order.number || 'не указан'}}</td>
+                    <td>{{$ctrl.addableProduct.supplier_order.number || 'не указан'}}</td>
                     <td class="center-item-text">
-                        <div ng-click="viewReceiveOrderCtrl.addProduct()" class="btn btn-success">
+                        <div ng-click="$ctrl.addProduct()" class="btn btn-success">
                             <i class="fa fa-plus"></i>
                         </div>
                     </td>
                 </tr>
-                <tr ng-repeat="item in viewReceiveOrderCtrl.receiveOrder.product_order_contents" class="order-items">
+                <tr ng-repeat="item in $ctrl.receiveOrder.product_order_contents" class="order-items">
                     <td>{{ $index + 1 }}</td>
                     <td>
                         <a ng-href="#/products/{{ item.product.id }}">
@@ -93,39 +101,51 @@
                         </a>
                     </td>
                     <td>
-                        <a ng-if="viewReceiveOrderCtrl.receiveOrder.can_edit" editable-number="item.quantity" onaftersave="viewReceiveOrderCtrl.updateContentsProduct({data:item, index:$index})" e-min="0" buttons="no">
+                        <a ng-if="$ctrl.receiveOrder.can_edit" editable-number="item.quantity"
+                           onaftersave="$ctrl.updateContentsProduct({data:item, index:$index})" e-min="0" buttons="no">
                             {{ item.quantity }}
                         </a>
-                        <span ng-if="!viewReceiveOrderCtrl.receiveOrder.can_edit">{{ item.quantity || 0}}</span>
+                        <span ng-if="!$ctrl.receiveOrder.can_edit">{{ item.quantity || 0}}</span>
                     </td>
                     <td class="text-right">
-                        <a ng-if="viewReceiveOrderCtrl.receiveOrder.can_edit" editable-text="item.total" onaftersave="viewReceiveOrderCtrl.updateContentsProduct({data:item, index:$index})" buttons="no">{{ (item.total || 0) | currency}}</a>
-                        <span ng-if="!viewReceiveOrderCtrl.receiveOrder.can_edit">{{ item.total | currency }}</span>
+                        <a ng-if="$ctrl.receiveOrder.can_edit" editable-text="item.total" buttons="no"
+                           onaftersave="$ctrl.updateContentsProduct({data:item, index:$index})">
+                            {{ (item.total || 0) | currency}}
+                        </a>
+                        <span ng-if="!$ctrl.receiveOrder.can_edit">{{ item.total | currency }}</span>
                     </td>
                     <td>
-                        <span ng-if="viewReceiveOrderCtrl.receiveOrder.can_edit">
-                            <a editable-text="item.gtd" buttons="no" onaftersave="viewReceiveOrderCtrl.updateContentsProduct({data:item, index:$index})">{{ item.gtd || 'Пусто'}}</a>
+                        <span ng-if="$ctrl.receiveOrder.can_edit">
+                            <a editable-text="item.gtd" buttons="no"
+                               onaftersave="$ctrl.updateContentsProduct({data:item, index:$index})">
+                                {{ item.gtd || 'Пусто'}}
+                            </a>
                             <span>&nbsp; / &nbsp;</span>
-                            <a editable-text="item.country" buttons="no" onaftersave="viewReceiveOrderCtrl.updateContentsProduct({data:item, index:$index})">{{ item.country || 'Пусто'}}</a>
+                            <a editable-text="item.country" buttons="no"
+                               onaftersave="$ctrl.updateContentsProduct({data:item, index:$index})">
+                                {{ item.country || 'Пусто'}}
+                            </a>
                         </span>
-                        <span ng-if="item.gtd && !viewReceiveOrderCtrl.receiveOrder.can_edit">{{ item.gtd + ' / ' + item.country }}</span>
+                        <span ng-if="item.gtd && !$ctrl.receiveOrder.can_edit">
+                            {{ item.gtd + ' / ' + item.country }}
+                        </span>
                     </td>
                     <td>
                         <a href="/#/supplier_orders/{{item.supplier_order.id}}">
                             {{ item.supplier_order.number }}
                         </a>
                     </td>
-                    <td ng-if="viewReceiveOrderCtrl.receiveOrder.can_edit">
-                        <div ng-click="viewReceiveOrderCtrl.deleteProduct(item)" class="btn btn-danger">
+                    <td ng-if="$ctrl.receiveOrder.can_edit">
+                        <div ng-click="$ctrl.deleteProduct(item)" class="btn btn-danger">
                             <i class="fa fa-trash-o"></i>
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="3" class="text-right">Итого:</td>
-                    <td>{{ viewReceiveOrderCtrl.receiveOrder.total | currency }}</td>
+                    <td>{{ $ctrl.receiveOrder.total | currency }}</td>
                     <td colspan="2"></td>
-                    <td ng-if="viewReceiveOrderCtrl.receiveOrder.can_edit"></td>
+                    <td ng-if="$ctrl.receiveOrder.can_edit"></td>
                 </tr>
             </tbody>
         </table>
@@ -142,7 +162,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in viewReceiveOrderCtrl.unreceivedProducts" ng-click="viewReceiveOrderCtrl.setAddableProduct(item)">
+                <tr ng-repeat="item in $ctrl.unreceivedProducts" ng-click="$ctrl.setAddableProduct(item)">
                     <td>
                         <a ng-href="#/products/{{ item.product.id }}">
                             {{ item.product.name }} ({{ item.product.article }})
