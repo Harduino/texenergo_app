@@ -9,20 +9,15 @@
         bindings: {config: '<', onSelect: '&', view: '@', ngModel: '='},
         templateUrl: 'app/layout/components/ui-select-infinity/ui-select-infinity.html',
         controllerAs: '$ctrl',
-        controller: function($scope, $element, $q, $compile, $timeout) {
+        controller: function($scope, $element, $q, $timeout) {
             var config = {
-                startFrom:2,
-                startPage:1,
-                scrollDistance:30,
+                startFrom: 2,
+                startPage: 1,
+                scrollDistance: 30,
                 maxHeight: 200,
                 delay: 500,
                 notShowLoadStatus: false,
-                dataMethod: angular.noop,
-                searchStatusTmpl: '<div class="ui-select-status">' +
-                    '<span ng-if="searchStatus == \'before\'">Введите еще хотя бы {{config.startFrom}} символа</span>'+
-                    '<span ng-if="searchStatus == \'noresult\'">Поиск не дал результатов</span>'+
-                    '<span ng-if="searchStatus == \'inload\'">Поиск...</span>'+
-                    '</div>'
+                dataMethod: angular.noop
             };
 
             var self = this, searchBox;
@@ -36,11 +31,23 @@
                 timeout_p,              // $timeout promise
                 defer = $q.defer();     // defer to append scroll listener
 
+            this.setSearchStatus = function(searchStatus) {
+                ['before', 'noresult', 'inload'].forEach(function(status) {
+                    document.getElementById('UiSelectInfinitySearchStatus-' + status).style.display =
+                        status === searchStatus ? 'block' : 'none';
+                });
+            };
+
             config = $scope.config = angular.extend(config, this.config);
-            $scope.searchStatus = 'before';
 
             $timeout(function() {
-                $element.find('.ui-select-choices').append($compile(config.searchStatusTmpl)($scope));
+                $element.find('.ui-select-choices').append('<div class="ui-select-status">' +
+                    '<span id="UiSelectInfinitySearchStatus-before">Введите еще хотя бы ' + config.startFrom + ' символа</span>'+
+                    '<span id="UiSelectInfinitySearchStatus-noresult">Поиск не дал результатов</span>'+
+                    '<span id="UiSelectInfinitySearchStatus-inload">Поиск...</span>'+
+                '</div>');
+
+                self.setSearchStatus('before');
                 searchBox = $element.find('.ui-select-search')[0];
 
                 searchBox.addEventListener('input', function(e) {
@@ -59,7 +66,7 @@
                 if (value !== '' && value.length >= config.startFrom) {
                     timeout_p = $timeout(load, config.delay);
                 } else {
-                    $scope.searchStatus = 'before';
+                    self.setSearchStatus('before');
                 }
             };
 
@@ -84,13 +91,13 @@
 
             function load (hideStatus){
                 inLoad = true;
-                $scope.searchStatus = hideStatus ? 'result' : 'inload';
+                self.setSearchStatus(hideStatus ? 'result' : 'inload');
                 canceler = $q.defer();
 
                 config.dataMethod(page, query, {timeout:canceler.promise}, function(result) {
                     inLoad = result.data.length == 0;
                     self.items = self.items.concat(result.data);
-                    $scope.searchStatus = (page == config.startPage) && (result.data.length == 0) ? 'noresult' : 'result';
+                    self.setSearchStatus((page == config.startPage) && (result.data.length == 0) ? 'noresult' : 'result');
                 });
             }
 
