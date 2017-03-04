@@ -6,7 +6,7 @@
  */
 (function(){
     angular.module('app.layout').component('uiSelectInfinity', {
-        bindings: {config: '=', onSelect: '&', view: '@', ngModel: '='},
+        bindings: {config: '<', onSelect: '&', view: '@', ngModel: '='},
         templateUrl: 'app/layout/components/ui-select-infinity/ui-select-infinity.html',
         controllerAs: '$ctrl',
         controller: function($scope, $element, $q, $compile, $timeout) {
