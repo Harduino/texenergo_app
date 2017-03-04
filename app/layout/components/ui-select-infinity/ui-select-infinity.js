@@ -9,8 +9,8 @@
         bindings: {config: '<', onSelect: '&', view: '@', ngModel: '='},
         templateUrl: 'app/layout/components/ui-select-infinity/ui-select-infinity.html',
         controllerAs: '$ctrl',
-        controller: function($scope, $element, $q, $timeout) {
-            var config = {
+        controller: function($element, $q, $timeout) {
+            var DEFAULT_CONFIG = {
                 startFrom: 2,
                 startPage: 1,
                 scrollDistance: 30,
@@ -38,11 +38,11 @@
                 });
             };
 
-            config = $scope.config = angular.extend(config, this.config);
+            this.config = angular.extend(DEFAULT_CONFIG, this.config);
 
             $timeout(function() {
                 $element.find('.ui-select-choices').append('<div class="ui-select-status">' +
-                    '<span id="UiSelectInfinitySearchStatus-before">Введите еще хотя бы ' + config.startFrom + ' символа</span>'+
+                    '<span id="UiSelectInfinitySearchStatus-before">Введите еще хотя бы ' + self.config.startFrom + ' символа</span>'+
                     '<span id="UiSelectInfinitySearchStatus-noresult">Поиск не дал результатов</span>'+
                     '<span id="UiSelectInfinitySearchStatus-inload">Поиск...</span>'+
                 '</div>');
@@ -58,13 +58,13 @@
             var triggerSearch = function(value) {
                 inLoad && canceler.resolve();
                 $timeout.cancel(timeout_p);
-                page = config.startPage;
+                page = self.config.startPage;
                 inLoad = false;
                 query = value;
                 self.items = [];
 
-                if (value !== '' && value.length >= config.startFrom) {
-                    timeout_p = $timeout(load, config.delay);
+                if (value !== '' && value.length >= self.config.startFrom) {
+                    timeout_p = $timeout(load, self.config.delay);
                 } else {
                     self.setSearchStatus('before');
                 }
@@ -83,9 +83,9 @@
             };
 
             function scroll(){
-                if(!inLoad && ((list.outerHeight() - content.scrollTop() - config.maxHeight) < config.scrollDistance)) {
+                if(!inLoad && ((list.outerHeight() - content.scrollTop() - self.config.maxHeight) < self.config.scrollDistance)) {
                     page++;
-                    load(config.notShowLoadStatus);
+                    load(self.config.notShowLoadStatus);
                 }
             }
 
@@ -94,16 +94,16 @@
                 self.setSearchStatus(hideStatus ? 'result' : 'inload');
                 canceler = $q.defer();
 
-                config.dataMethod(page, query, {timeout:canceler.promise}, function(result) {
+                self.config.dataMethod(page, query, {timeout:canceler.promise}, function(result) {
                     inLoad = result.data.length == 0;
                     self.items = self.items.concat(result.data);
-                    self.setSearchStatus((page == config.startPage) && (result.data.length == 0) ? 'noresult' : 'result');
+                    self.setSearchStatus((page == self.config.startPage) && (result.data.length == 0) ? 'noresult' : 'result');
                 });
             }
 
-            $scope.$on('$destroy', function(){
+            this.$onDestroy = function() {
                 content && content.off('scroll');
-            });
+            };
         }
     });
 }());
