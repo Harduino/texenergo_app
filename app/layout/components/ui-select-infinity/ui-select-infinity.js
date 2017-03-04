@@ -20,24 +20,8 @@
                 dataMethod: angular.noop
             };
 
-            var self = this, searchBox;
-
-            var page,                   // current page for load
-                content,                // ui-select-choices-content
-                list,                   // list of items
-                inLoad,                 // loading status
-                query,                  // search query
-                canceler,               // request canceler
-                timeout_p,              // $timeout promise
-                defer = $q.defer();     // defer to append scroll listener
-
-            this.setSearchStatus = function(searchStatus) {
-                ['before', 'noresult', 'inload'].forEach(function(status) {
-                    document.getElementById('UiSelectInfinitySearchStatus-' + status).style.display =
-                        status === searchStatus ? 'block' : 'none';
-                });
-            };
-
+            var self = this;
+            this.defer = $q.defer();
             this.config = angular.extend(DEFAULT_CONFIG, this.config);
 
             $timeout(function() {
@@ -48,62 +32,70 @@
                 '</div>');
 
                 self.setSearchStatus('before');
-                searchBox = $element.find('.ui-select-search')[0];
+                self.searchBox = $element.find('.ui-select-search')[0];
 
-                searchBox.addEventListener('input', function(e) {
+                self.searchBox.addEventListener('input', function(e) {
                     triggerSearch(e.target.value);
                 });
             }, 500);
 
+            this.defer.promise.then(function() {
+                self.content = $element.find('.ui-select-choices-content').scroll(scroll);
+                self.list = self.content.find('.ui-select-choices-group');
+            });
+
+            this.$onDestroy = function() {
+                self.content && self.content.off('scroll');
+                self.searchBox && self.searchBox.off('input');
+            };
+
             var triggerSearch = function(value) {
-                inLoad && canceler.resolve();
-                $timeout.cancel(timeout_p);
-                page = self.config.startPage;
-                inLoad = false;
-                query = value;
+                self.inLoad && self.canceler.resolve();
+                $timeout.cancel(self.timerId);
+                self.page = self.config.startPage;
+                self.inLoad = false;
+                self.query = value;
                 self.items = [];
 
                 if (value !== '' && value.length >= self.config.startFrom) {
-                    timeout_p = $timeout(load, self.config.delay);
+                    self.timerId = $timeout(load, self.config.delay);
                 } else {
                     self.setSearchStatus('before');
                 }
             };
 
-            defer.promise.then(function() {
-                content = $element.find('.ui-select-choices-content').scroll(scroll);
-                list = content.find('.ui-select-choices-group');
-            });
+            this.setSearchStatus = function(searchStatus) {
+                ['before', 'noresult', 'inload'].forEach(function(status) {
+                    document.getElementById('UiSelectInfinitySearchStatus-' + status).style.display =
+                        status === searchStatus ? 'block' : 'none';
+                });
+            };
 
             self.focusSearchBox = function() {
-                defer.resolve();
+                self.defer.resolve();
                 $timeout(function(){
-                    searchBox.focus()
+                    self.searchBox.focus();
                 }, 100);
             };
 
             function scroll(){
-                if(!inLoad && ((list.outerHeight() - content.scrollTop() - self.config.maxHeight) < self.config.scrollDistance)) {
-                    page++;
+                if(!self.inLoad && ((self.list.outerHeight() - self.content.scrollTop() - self.config.maxHeight) < self.config.scrollDistance)) {
+                    self.page++;
                     load(self.config.notShowLoadStatus);
                 }
             }
 
             function load (hideStatus){
-                inLoad = true;
+                self.inLoad = true;
                 self.setSearchStatus(hideStatus ? 'result' : 'inload');
-                canceler = $q.defer();
+                self.canceler = $q.defer();
 
-                self.config.dataMethod(page, query, {timeout:canceler.promise}, function(result) {
-                    inLoad = result.data.length == 0;
-                    self.items = self.items.concat(result.data);
-                    self.setSearchStatus((page == self.config.startPage) && (result.data.length == 0) ? 'noresult' : 'result');
+                self.config.dataMethod(self.page, self.query, {timeout: self.canceler.promise}, function(res) {
+                    self.inLoad = res.data.length == 0;
+                    self.items = self.items.concat(res.data);
+                    self.setSearchStatus((self.page == self.config.startPage) && (res.data.length == 0) ? 'noresult' : 'result');
                 });
             }
-
-            this.$onDestroy = function() {
-                content && content.off('scroll');
-            };
         }
     });
 }());
