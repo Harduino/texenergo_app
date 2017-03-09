@@ -10,7 +10,7 @@
     <data-notifications></data-notifications>
     <te-pubnub></te-pubnub>
 </div>
-
+<hot-keys></hot-keys>
 <!--<div data-smart-include="/assets/admin/app/components/projects/recent-projects.tpl.html"></div>-->
 
 
@@ -70,7 +70,7 @@
 
     <!-- input: search field -->
     <form class="header-search pull-right">
-        <input id="search-fld" type="text" ng-model="layoutCtrl.searchText" name="param" placeholder="Поиск товаров" hot-search-key>
+        <input id="search-fld" type="text" ng-model="layoutCtrl.searchText" name="param" placeholder="Поиск товаров">
         <button type="submit" ng-click="layoutCtrl.executeSearch()"><i class="fa fa-search"></i></button>
         <a href="$" id="cancel-search-js" title="Cancel Search"><i class="fa fa-times"></i></a>
     </form>
