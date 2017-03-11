@@ -14,10 +14,11 @@
             template: '@'
         },
         controller: function() {
-            var options = this.options;
+            var self = this;
             var roles = this.role || {};
+            this.showText = (this.template === undefined) || (this.template !== 'table');
 
-            var buttons = {
+            var AVAILABLE_BUTTONS = {
                 new:{name: 'Новый', ico: 'plus'},
                 show: {name:'Смотреть', ico:'search'},
                 edit:{name:'Изменить',ico:'pencil'},
@@ -41,32 +42,29 @@
                 command: {ico: "keyboard-o", name: "Комманды"}
             };
 
-            var self = this;
-            var temp = [];
+            this.buttons = [];
             //пробегаемся по списку кнопок и проверяем существуют ли настроки для кнопки
-            if (angular.isArray(options) && options.length > 0) {
-                options.map(function(item) {
-                    var btn = buttons[item.type], role = btn.role;
+            if (angular.isArray(this.options) && this.options.length > 0) {
+                this.options.map(function(item) {
+                    var button = AVAILABLE_BUTTONS[item.type], role = button.role;
 
-                    if (btn) {
-                        btn.callback = item.callback;
-                        btn.class = (self.contentClass || 'btn btn-success') + ' ' + (btn.class || '');
+                    if (button) {
+                        button.callback = item.callback;
+                        button.class = (self.contentClass || 'btn btn-success') + ' ' + (button.class || '');
 
-                        if(btn.hasOwnProperty('disabled') && role && roles[role]) {
-                            btn.disabled = !roles[role];
+                        if(button.hasOwnProperty('disabled') && role && roles[role]) {
+                            button.disabled = !roles[role];
                         }
 
                         if(item.type === 'confirm_order') {
-                            createConfirmOrderControls(self.subdata, btn, temp);
+                            createConfirmOrderControls(self.subdata, button, self.buttons);
                             return 0;
                         }
 
-                        temp.push(btn);
+                        self.buttons.push(button);
                     }
                 });
             }
-
-            self.buttons = temp;
 
             var createConfirmOrderControls = function (data, button, btnList) {
                 if(data && data.events && angular.isArray(data.events)) {
@@ -76,13 +74,8 @@
                 }
             };
 
-            this.buttonClick = function (item) {
-                //вызываем callback кнопки
-                !item.disabled && item.callback && item.callback(self.subdata, item);
-            };
-
-            this.showText = function() {
-                return (self.template === undefined) || (self.template !== "table");
+            this.handleClick = function (button) {
+                !button.disabled && button.callback && button.callback(self.subdata, button);
             };
         },
         controllerAs: '$ctrl',
