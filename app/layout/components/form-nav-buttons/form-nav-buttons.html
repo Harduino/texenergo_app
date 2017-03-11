@@ -1,5 +1,5 @@
-<div ng-repeat="item in buttons track by $index" ng-class="item.class" ng-click="buttonClick(item)"
-     ng-if="item.hasOwnProperty('disabled') || !item.role || role[item.role] === true" ng-disabled="item.disabled">
+<div ng-repeat="item in $ctrl.buttons track by $index" ng-class="item.class" ng-click="$ctrl.buttonClick(item)"
+     ng-if="item.hasOwnProperty('disabled') || !item.role || $ctrl.role[item.role] === true" ng-disabled="item.disabled">
     <i class="fa fa-{{item.ico}}"></i>
-    <span class="hidden-xs" ng-if="showText()">{{ item.name }}</span>
+    <span class="hidden-xs" ng-if="$ctrl.showText()">{{ item.name }}</span>
 </div>
