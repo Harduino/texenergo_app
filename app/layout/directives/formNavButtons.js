@@ -3,10 +3,9 @@
  * Директива создающая кнопки навигации на основе прав пользователя и наличия тех или иных кнопок на странице
  */
 (function(){
-
     'use strict';
 
-    angular.module('app.layout').directive('formNavButtons', ['$templateCache', function($templateCache){
+    angular.module('app.layout').directive('formNavButtons', [function() {
         return {
             restrict: 'E',
             scope:{
@@ -48,10 +47,12 @@
                 buildButtons();
 
                 if(attrs.subdata ){
-                    scope.$watch('subdata', function(value){
-                        value && Object.keys(Object(value)).length>0 && buildButtons();
+                    scope.$watch('subdata', function(value) {
+                        value && Object.keys(Object(value)).length > 0 && buildButtons();
                     });
-                } else buttons = roles = null;
+                } else {
+                    buttons = roles = null;
+                }
 
                 function buildButtons(){
                     temp = [];
@@ -87,18 +88,16 @@
                     });
                 }
 
-                scope.buttonClick = function(item){
+                scope.buttonClick = function (item) {
                     //вызываем callback кнопки
                     !item.disabled && item.callback && item.callback(scope.subdata, item);
-                }
+                };
                 
                 scope.showText = function(){
                     return (scope.template === undefined) || (scope.template !== "table");
-                    
-                }
-                
+                };
             },
-            template: $templateCache.get('formNavButtons.tmpl.html')
+            templateUrl: 'app/layout/components/form-nav-buttons/form-nav-buttons.html'
         }
     }]);
 }());
