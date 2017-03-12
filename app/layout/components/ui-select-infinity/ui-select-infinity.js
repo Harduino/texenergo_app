@@ -16,6 +16,7 @@ class UiSelectInfinityCtrl {
 
         this.defer = $q.defer();
         this.config = angular.extend(DEFAULT_CONFIG, this.config);
+        let triggerSearch = e => self.triggerSearch(e.target.value);
 
         $timeout(() => {
             $element.find('.ui-select-choices').append('<div class="ui-select-status">' +
@@ -26,7 +27,7 @@ class UiSelectInfinityCtrl {
 
             UiSelectInfinityCtrl.setSearchStatus('before');
             self.searchBox = $element.find('.ui-select-search')[0];
-            self.searchBox.addEventListener('input', e => self.triggerSearch(e.target.value));
+            self.searchBox.addEventListener('input', triggerSearch);
         }, 500);
 
         this.defer.promise.then(() => {
@@ -36,7 +37,7 @@ class UiSelectInfinityCtrl {
 
         this.$onDestroy = () => {
             self.content && self.content.off('scroll');
-            self.searchBox && self.searchBox.off('input');
+            self.searchBox && self.searchBox.removeEventListener('input', triggerSearch);
         };
     }
 
