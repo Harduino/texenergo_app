@@ -46,14 +46,27 @@ class FormNavButtonsCtrl {
                         return self.createConfirmOrderControls(button);
                     }
 
+                    button.prototype.disable = function(disabled, $event){
+                      var $elem = $($event.currentTarget || $event.srcElement);
+                      if(disabled){
+                        $elem.attr('disabled', 'disabled');
+                      }else{
+                        $elem.removeAttr('disabled');
+                      }
+                    };
                     self.buttons.push(button);
                 }
             });
         }
     }
 
-    handleClick (button) {
-        !button.disabled && button.callback && button.callback(this.subdata, button);
+    /**
+    * @description Handle click on nav-button
+    * @param {Object} button - data of button
+    * @param {event} $event - event
+    */
+    handleClick (button, $event) {
+        !button.disabled && button.callback && button.callback(this.subdata, button, $event);
     }
 
     createConfirmOrderControls (button) {

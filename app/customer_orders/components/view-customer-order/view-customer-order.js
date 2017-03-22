@@ -41,7 +41,8 @@ class ViewCustomerOrderCtrl {
                 },
                 {
                     type: 'send_email',
-                    callback: () => {
+                    callback: (subData, button, $event) => {
+                        button.disable(true, $event);
                         serverApi.sendCustomerOrderInvoice($stateParams.id, result => {
                             if(result.status == 200 && !result.data.errors) {
                                 funcFactory.showNotification('Успешно', 'Заказ успешно отправлен.', true);
@@ -50,6 +51,9 @@ class ViewCustomerOrderCtrl {
                             } else {
                                 funcFactory.showNotification('Неудача', 'Ошибка при попытке отправить заказ.', true);
                             }
+                            button.disable(false, $event);
+                        }, result => {
+                          button.disable(false, $event);
                         });
                     }
                 },
