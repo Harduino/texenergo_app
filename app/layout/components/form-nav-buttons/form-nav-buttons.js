@@ -46,14 +46,18 @@ class FormNavButtonsCtrl {
                         return self.createConfirmOrderControls(button);
                     }
 
-                    // button.prototype.disable = function(disabled, $event){
-                    //   var $elem = $($event.currentTarget || $event.srcElement);
-                    //   if(disabled){
-                    //     $elem.attr('disabled', 'disabled');
-                    //   }else{
-                    //     $elem.removeAttr('disabled');
-                    //   }
-                    // };
+                    button.disableOnLoad = function(disabled, $event){
+                      var $elem = $($event.currentTarget || $event.srcElement);
+                      if(disabled){
+                        $elem.attr('disabled', 'disabled')
+                        .addClass('no-events');
+                        this.isDisabledOnLoad = true;
+                      }else{
+                        $elem.removeAttr('disabled')
+                        .removeClass('no-events');
+                        this.isDisabledOnLoad = false;
+                      }
+                    };
                     self.buttons.push(button);
                 }
             });
@@ -66,7 +70,7 @@ class FormNavButtonsCtrl {
     * @param {event} $event - event
     */
     handleClick (button, $event) {
-        !button.disabled && button.callback && button.callback(this.subdata, button, $event);
+        !button.disabled && !button.isDisabledOnLoad && button.callback && button.callback(this.subdata, button, $event);
     }
 
     createConfirmOrderControls (button) {

@@ -20,7 +20,7 @@ class ViewCustomerOrderCtrl {
                 {type: 'back', callback: () => $state.go('app.customer_orders', {})},
                 {
                     type: 'command',
-                    callback: () => {
+                    callback: (subData, button, $event) => {
                         $uibModal.open({
                             component: 'commandCustomerOrderModal',
                             windowClass: 'eqo-centred-modal',
@@ -28,6 +28,7 @@ class ViewCustomerOrderCtrl {
                         }).result.then(command => {
                             let data = {customer_order: {command: command}};
 
+                            button.disableOnLoad(true, $event);
                             serverApi.updateCommandCustomerOrder(self.order.id, data, res => {
                                 if(res.status == 200) {
                                     self.order = res.data;
@@ -35,14 +36,17 @@ class ViewCustomerOrderCtrl {
                                 } else {
                                     funcFactory.showNotification('Не удалось переместить сторку', res.data.errors);
                                 }
-                            }, angular.noop);
+                                button.disableOnLoad(false, $event);
+                            }, function(){
+                              button.disableOnLoad(false, $event);
+                            });
                         });
                     }
                 },
                 {
                     type: 'send_email',
                     callback: (subData, button, $event) => {
-                        button.disable(true, $event);
+                        button.disableOnLoad(true, $event);
                         serverApi.sendCustomerOrderInvoice($stateParams.id, result => {
                             if(result.status == 200 && !result.data.errors) {
                                 funcFactory.showNotification('Успешно', 'Заказ успешно отправлен.', true);
@@ -51,9 +55,9 @@ class ViewCustomerOrderCtrl {
                             } else {
                                 funcFactory.showNotification('Неудача', 'Ошибка при попытке отправить заказ.', true);
                             }
-                            button.disable(false, $event);
+                            button.disableOnLoad(false, $event);
                         }, result => {
-                          button.disable(false, $event);
+                          button.disableOnLoad(false, $event);
                         });
                     }
                 },
@@ -73,9 +77,10 @@ class ViewCustomerOrderCtrl {
                 {type: 'logs', callback: () => $state.go('app.customer_orders.view.logs', {})},
                 {
                     type: 'confirm_order',
-                    callback: (subdata, item) => {
+                    callback: (subdata, item, $event) => {
                         let data = {customer_order: {event: item.event}};
 
+                        button.disableOnLoad(true, $event);
                         serverApi.updateStatusCustomerOrder($stateParams.id, data, res => {
                             if(res.status == 200 && !res.data.errors) {
                                 funcFactory.showNotification('Успешно', 'Удалось ' + item.name.toLowerCase() + ' заказ',
@@ -85,6 +90,9 @@ class ViewCustomerOrderCtrl {
                                 funcFactory.showNotification('Не удалось ' + item.name.toLowerCase() + ' заказ',
                                     res.data.errors);
                             }
+                            button.disableOnLoad(false, $event);
+                        }, function(){
+                          button.disableOnLoad(false, $event);
                         });
                     }
                 },
