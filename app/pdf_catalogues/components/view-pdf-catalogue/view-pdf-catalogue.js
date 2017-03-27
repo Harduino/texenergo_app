@@ -25,7 +25,7 @@ class ViewPdfCatalogueCtrl {
                       serverApi.getPdfCatalogueDetails($stateParams.id, (r) => {
                         button.disableOnLoad(false, $event);
                         self.pdfCatalogue = r.data;
-                      }, function(){
+                      }, () => {
                         button.disableOnLoad(false, $event);
                       });
                     }

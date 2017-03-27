@@ -22,7 +22,7 @@ class LogsCustomerOrderCtrl {
                               funcFactory.showNotification('Неудача', 'Ошибка при попытке отправить заказ.', true);
                           }
                           button.disableOnLoad(false, $event);
-                      }, function(){
+                      }, () => {
                         button.disableOnLoad(false, $event);
                       });
                     }

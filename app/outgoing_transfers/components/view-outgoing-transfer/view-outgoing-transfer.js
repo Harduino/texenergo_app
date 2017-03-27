@@ -13,7 +13,7 @@ class ViewOutgoingTransferCtrl {
                         serverApi.getOutgoingTransferDetails($stateParams.id, res => {
                           button.disableOnLoad(false, $event);
                           self.outgoingTransfer = res.data;
-                        }, function(){
+                        }, () => {
                           button.disableOnLoad(false, $event);
                         });
                     }

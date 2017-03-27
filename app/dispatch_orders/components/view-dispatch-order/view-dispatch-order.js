@@ -31,7 +31,7 @@ class ViewDispatchOrderCtrl {
                                     result.data.errors);
                             }
                             item.disableOnLoad(false, $event);
-                        }, function(){
+                        }, () => {
                           item.disableOnLoad(false, $event);
                         });
                     }
@@ -103,7 +103,7 @@ class ViewDispatchOrderCtrl {
                 self.amontPercent = self.funcFactory.getPercent(dispatchOrder.paid_amount, dispatchOrder.total);
                 self.dispatchedPercent = self.funcFactory.getPercent(dispatchOrder.dispatched_amount, dispatchOrder.total);
                 self.setFileUploadOptions(dispatchOrder);
-            }, function(){
+            }, () => {
               button && button.disableOnLoad(false, $event);
             });
         }

@@ -37,7 +37,7 @@ class ViewCustomerOrderCtrl {
                                     funcFactory.showNotification('Не удалось переместить сторку', res.data.errors);
                                 }
                                 button.disableOnLoad(false, $event);
-                            }, function(){
+                            }, () => {
                               button.disableOnLoad(false, $event);
                             });
                         });
@@ -73,7 +73,7 @@ class ViewCustomerOrderCtrl {
                             } else {
                                 funcFactory.showNotification('Неудача', 'Ошибка при пересчёте заказа.', true);
                             }
-                        }, function(){
+                        }, () => {
                           button.disableOnLoad(false, $event);
                         });
                     }
@@ -95,7 +95,7 @@ class ViewCustomerOrderCtrl {
                                     res.data.errors);
                             }
                             item.disableOnLoad(false, $event);
-                        }, function(){
+                        }, () => {
                           item.disableOnLoad(false, $event);
                         });
                     }

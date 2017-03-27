@@ -13,7 +13,7 @@ class ViewContactCtrl {
           serverApi.getContactDetails($stateParams.id, (res) => {
             button && button.disableOnLoad(false, $event);
             self.contact = res.data;
-          }, function(){
+          },() => {
             button && button.disableOnLoad(false, $event);
           });
         };

@@ -46,7 +46,7 @@ class CustomerOrdersCtrl {
                                         funcFactory.showNotification('Не удалось удалить заказ ' + item.data.number,
                                             result.data.errors);
                                     }
-                                }, function(){
+                                },() => {
                                   button.disableOnLoad(false, $event);
                                 });
                             }

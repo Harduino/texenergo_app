@@ -55,7 +55,7 @@ class ViewPartnerCtrl {
                     if(!window.partners) window.partners = {};
                     window.partners[$stateParams.id] = r.data;
                     loadResources();
-                }, function(){
+                }, () => {
                   button && button.disableOnLoad(false, $event);
                 });
             }

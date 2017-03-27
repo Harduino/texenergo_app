@@ -45,10 +45,10 @@
         // Загружаем рассчёт с сервера для начала работы
         function getQuotationOrderDetails(subData, button, $event){
             button && button.disableOnLoad(true, $event);
-            serverApi.getQuotationOrderDetails($stateParams.id, function(result){
+            serverApi.getQuotationOrderDetails($stateParams.id, (result) => {
                 button && button.disableOnLoad(false, $event);
                 sc.data.quotationOrder = result.data;
-            }, function(){
+            }, () => {
               button && button.disableOnLoad(false, $event);
             });
         }

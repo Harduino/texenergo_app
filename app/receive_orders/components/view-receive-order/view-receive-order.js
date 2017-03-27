@@ -19,7 +19,7 @@ class ViewReceiveOrderCtrl {
                       serverApi.getReceiveOrderDetails($stateParams.id, r => {
                         button.disableOnLoad(false, $event);
                         self.receiveOrder = r.data;
-                      }, function(){
+                      }, () => {
                         button.disableOnLoad(false, $event);
                       });
                     }

@@ -19,7 +19,7 @@ class ViewSupplierOrderCtrl {
                             this.data.supplierOrder.status = r.data.status;
                             this.data.supplierOrder.can_edit = r.data.can_edit;
                             this.data.supplierOrder.events = r.data.events;
-                        }, function(){
+                        }, () => {
                           item.disableOnLoad(false, $event);
                         });
                     }
@@ -37,7 +37,7 @@ class ViewSupplierOrderCtrl {
                             } else {
                                 funcFactory.showNotification('Неудача', 'Ошибка при попытке отправить заказ.', true);
                             }
-                        }, function(){
+                        }, () => {
                           button.disableOnLoad(false, $event);
                         });
                     }
@@ -58,7 +58,7 @@ class ViewSupplierOrderCtrl {
                             self.amontPercent = funcFactory.getPercent(order.paid_amount, order.total);
                             self.dispatchedPercent = funcFactory.getPercent(order.received_amount, order.total);
                             self.visual.roles = {can_confirm: order.can_confirm};
-                        }, function(){
+                        }, () => {
                           button.disableOnLoad(false, $event);
                         });
                     }
