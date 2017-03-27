@@ -20,7 +20,15 @@ class ViewPdfCatalogueCtrl {
                 },
                 {
                     type: 'refresh',
-                    callback: () => serverApi.getPdfCatalogueDetails($stateParams.id, r => self.pdfCatalogue = r.data)
+                    callback: (subData, button, $event) => {
+                      button.disableOnLoad(true, $event);
+                      serverApi.getPdfCatalogueDetails($stateParams.id, (r) => {
+                        button.disableOnLoad(false, $event);
+                        self.pdfCatalogue = r.data;
+                      }, function(){
+                        button.disableOnLoad(false, $event);
+                      });
+                    }
                 }
             ],
             chartOptions: {
@@ -40,9 +48,9 @@ class ViewPdfCatalogueCtrl {
     savePdfCatalogue() {
         let self = this;
         let pdfCatalogue = this.pdfCatalogue;
-        let data = { 
-            pdf_catalogue: { 
-                name: pdfCatalogue.name, 
+        let data = {
+            pdf_catalogue: {
+                name: pdfCatalogue.name,
                 description: pdfCatalogue.description,
                 manufacturer_id: pdfCatalogue.manufacturer.id
             }

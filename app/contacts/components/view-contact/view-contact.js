@@ -8,7 +8,15 @@ class ViewContactCtrl {
         this.funcFactory = funcFactory;
 
         let self = this;
-        let getContactDetails = () => serverApi.getContactDetails($stateParams.id, res => self.contact = res.data);
+        let getContactDetails = (subData, button, $event) => {
+          if(button) button.disableOnLoad(true, $event);
+          serverApi.getContactDetails($stateParams.id, (res) => {
+            button && button.disableOnLoad(false, $event);
+            self.contact = res.data;
+          }, function(){
+            button && button.disableOnLoad(false, $event);
+          });
+        };
 
         this.visual = {
             navButtsOptions:[

@@ -14,7 +14,7 @@ class ViewPartnerCtrl {
                 {type: 'logs', callback: () => $state.go('app.partners.view.logs', {})},
                 {
                     type: 'refresh',
-                    callback: () => loadPartner(true)
+                    callback: (subData, button, $event) => loadPartner(true, button, $event)
                 }
             ],
             chartOptions: {
@@ -43,15 +43,20 @@ class ViewPartnerCtrl {
             }, {}, self.partner.id);
         }
 
-        var loadPartner = (force_reload) => {
+        var loadPartner = (force_reload, button, $event) => {
+            button && button.disableOnLoad(true, $event);
             if (window.partners !== undefined && window.partners[$stateParams.id] !== undefined && force_reload !== true) {
+                button && button.disableOnLoad(false, $event);
                 self.partner = window.partners[$stateParams.id];
             } else {
                 serverApi.getPartnerDetails($stateParams.id, r => {
+                    button && button.disableOnLoad(false, $event);
                     self.partner = r.data;
                     if(!window.partners) window.partners = {};
                     window.partners[$stateParams.id] = r.data;
                     loadResources();
+                }, function(){
+                  button && button.disableOnLoad(false, $event);
                 });
             }
         }

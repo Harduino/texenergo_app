@@ -6,7 +6,7 @@ class ViewDispatchOrderCtrl {
         this.funcFactory = funcFactory;
         this.$localStorage = $localStorage;
 
-        
+
         this.dispatchOrder = {};
 
         this.visual = {
@@ -17,9 +17,10 @@ class ViewDispatchOrderCtrl {
                 {type: 'packing_list_pdf', callback: () => self.openPdf('/packing_list')},
                 {
                     type: 'confirm_order',
-                    callback: (subdata, item) => {
+                    callback: (subdata, item, $event) => {
                         let data = {dispatch_order: {event: item.event}};
 
+                        item.disableOnLoad(true, $event);
                         serverApi.updateStatusDispatchOrder($stateParams.id, data, result => {
                             if(result.status == 200 && !result.data.errors) {
                                 funcFactory.showNotification('Успешно', 'Удалось ' + item.name.toLowerCase() + ' заказ',
@@ -29,10 +30,13 @@ class ViewDispatchOrderCtrl {
                                 funcFactory.showNotification('Не удалось ' + item.name.toLowerCase() + ' заказ',
                                     result.data.errors);
                             }
+                            item.disableOnLoad(false, $event);
+                        }, function(){
+                          item.disableOnLoad(false, $event);
                         });
                     }
                 },
-                {type: 'refresh', callback: () => self.getDispatchOrderDetails(true)},
+                {type: 'refresh', callback: (subData, button, $event) => self.getDispatchOrderDetails(true, button, $event)},
                 {type: 'logs', callback: () => $state.go('app.dispatch_orders.view.logs', {})}
             ],
             chartOptions: {
@@ -77,11 +81,13 @@ class ViewDispatchOrderCtrl {
         });
     }
 
-    getDispatchOrderDetails(force_reload) {
+    getDispatchOrderDetails(force_reload, button, $event) {
         let self = this;
 
+        button && button.disableOnLoad(true, $event);
         if (window.dispatch_orders !== undefined && window.dispatch_orders[self.$stateParams.id] !== undefined && force_reload !== true) {
             self.dispatchOrder = window.dispatch_orders[self.$stateParams.id];
+            button && button.disableOnLoad(false, $event);
         } else {
             let data = {
                 dispatch_order: {
@@ -90,12 +96,15 @@ class ViewDispatchOrderCtrl {
             };
 
             this.serverApi.getDispatchOrderDetails(self.$stateParams.id, result => {
+                button && button.disableOnLoad(false, $event);
                 if(!window.dispatch_orders) window.dispatch_orders = {};
                 let dispatchOrder = self.dispatchOrder = result.data;
                 window.dispatch_orders[self.$stateParams.id] = self.dispatchOrder;
                 self.amontPercent = self.funcFactory.getPercent(dispatchOrder.paid_amount, dispatchOrder.total);
                 self.dispatchedPercent = self.funcFactory.getPercent(dispatchOrder.dispatched_amount, dispatchOrder.total);
                 self.setFileUploadOptions(dispatchOrder);
+            }, function(){
+              button && button.disableOnLoad(false, $event);
             });
         }
     }

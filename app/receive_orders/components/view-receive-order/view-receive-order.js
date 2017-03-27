@@ -14,7 +14,15 @@ class ViewReceiveOrderCtrl {
                 {type: 'logs', callback: () => $state.go('app.receive_orders.view.logs', {})},
                 {
                     type: 'refresh',
-                    callback: () => serverApi.getReceiveOrderDetails($stateParams.id, r => self.receiveOrder = r.data)
+                    callback: (subData, button, $event) => {
+                      button.disableOnLoad(true, $event);
+                      serverApi.getReceiveOrderDetails($stateParams.id, r => {
+                        button.disableOnLoad(false, $event);
+                        self.receiveOrder = r.data;
+                      }, function(){
+                        button.disableOnLoad(false, $event);
+                      });
+                    }
                 }
             ],
             // Пока не используется
@@ -34,7 +42,7 @@ class ViewReceiveOrderCtrl {
         };
 
         this.goToPartner = () => $state.go('app.partners.view', {id: (this.receiveOrder.partner.id || this.receiveOrder.partner._id)});
-        
+
         // Load ReceiverOrder details and any other required details.
         serverApi.getReceiveOrderDetails($stateParams.id, result => {
             self.receiveOrder = result.data;

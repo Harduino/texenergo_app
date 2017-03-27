@@ -80,7 +80,7 @@ class ViewCustomerOrderCtrl {
                     callback: (subdata, item, $event) => {
                         let data = {customer_order: {event: item.event}};
 
-                        button.disableOnLoad(true, $event);
+                        item.disableOnLoad(true, $event);
                         serverApi.updateStatusCustomerOrder($stateParams.id, data, res => {
                             if(res.status == 200 && !res.data.errors) {
                                 funcFactory.showNotification('Успешно', 'Удалось ' + item.name.toLowerCase() + ' заказ',
@@ -90,9 +90,9 @@ class ViewCustomerOrderCtrl {
                                 funcFactory.showNotification('Не удалось ' + item.name.toLowerCase() + ' заказ',
                                     res.data.errors);
                             }
-                            button.disableOnLoad(false, $event);
+                            item.disableOnLoad(false, $event);
                         }, function(){
-                          button.disableOnLoad(false, $event);
+                          item.disableOnLoad(false, $event);
                         });
                     }
                 },

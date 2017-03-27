@@ -10,8 +10,10 @@ class SupplierOrdersCtrl {
                 {type: 'new', callback: () => $('#createNewOrderModal').modal('show')},
                 {
                     type: 'automatically',
-                    callback: () => {
+                    callback: (subData, button, $event) => {
+                        button.disableOnLoad(true, $event);
                         serverApi.automaticallyCreateSupplierOrders(result => {
+                            button.disableOnLoad(false, $event);
                             if(!result.data.errors){
                                 for(let i = 0; i < result.data.supplier_orders.length; i++) {
                                     self.data.ordersList.unshift(result.data.supplier_orders[i]);
@@ -21,6 +23,8 @@ class SupplierOrdersCtrl {
                             } else {
                                 funcFactory.showNotification('Не удалось создать заказы');
                             }
+                        }, function(){
+                          button.disableOnLoad(false, $event);
                         });
                     }
                 },

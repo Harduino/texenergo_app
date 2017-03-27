@@ -12,18 +12,24 @@ class ViewSupplierOrderCtrl {
                 { type: 'back', callback: () => $state.go('app.supplier_orders', {}) },
                 {
                     type: 'confirm_order',
-                    callback: (subdata, item) => {
+                    callback: (subdata, item, $event) => {
+                        item.disableOnLoad(true, $event);
                         serverApi.updateStatusSupplierOrder($stateParams.id, { supplier_order: { event: item.event } }, r => {
+                            item.disableOnLoad(false, $event);
                             this.data.supplierOrder.status = r.data.status;
                             this.data.supplierOrder.can_edit = r.data.can_edit;
                             this.data.supplierOrder.events = r.data.events;
-                        })
+                        }, function(){
+                          item.disableOnLoad(false, $event);
+                        });
                     }
                 },
                 {
                     type: 'send_email',
-                    callback: () => {
+                    callback: (subData, button, $event) => {
+                        button.disableOnLoad(true, $event);
                         serverApi.sendSupplierOrderRFQ($stateParams.id, result => {
+                            button.disableOnLoad(false, $event);
                             if(result.status == 200 && !result.data.errors) {
                                 funcFactory.showNotification('Успешно', 'Заказ успешно отправлен.', true);
                             } else if (result.status == 200 && result.data.errors) {
@@ -31,6 +37,8 @@ class ViewSupplierOrderCtrl {
                             } else {
                                 funcFactory.showNotification('Неудача', 'Ошибка при попытке отправить заказ.', true);
                             }
+                        }, function(){
+                          button.disableOnLoad(false, $event);
                         });
                     }
                 },
@@ -41,13 +49,17 @@ class ViewSupplierOrderCtrl {
                 },
                 {
                     type: 'refresh',
-                    callback: () => {
+                    callback: (subdata, button, $event) => {
+                        button.disableOnLoad(true, $event);
                         serverApi.getSupplierOrderDetails($stateParams.id, result => {
+                            button.disableOnLoad(false, $event);
                             let order = self.data.supplierOrder = result.data;
                             self.updateTotal();
                             self.amontPercent = funcFactory.getPercent(order.paid_amount, order.total);
                             self.dispatchedPercent = funcFactory.getPercent(order.received_amount, order.total);
                             self.visual.roles = {can_confirm: order.can_confirm};
+                        }, function(){
+                          button.disableOnLoad(false, $event);
                         });
                     }
                 }

@@ -14,13 +14,14 @@ class IncomingTransfersCtrl {
                 },
                 {
                     type: 'remove',
-                    callback: item => {
+                    callback: (item, button, $event) => {
                         $.SmartMessageBox({
                             title: 'Удалить входящий платёж?',
                             content: 'Вы действительно хотите удалить входящий платёж ' + item.data.number,
                             buttons: '[Нет][Да]'
                         }, ButtonPressed => {
                             if (ButtonPressed === 'Да') {
+                                button.disableOnLoad(true, $event);
                                 serverApi.deleteIncomingTransfer(item.data.id, result => {
                                     if(!result.data.errors) {
                                         self.data.incomingTransfersList.splice(item.index, 1);
@@ -30,6 +31,9 @@ class IncomingTransfersCtrl {
                                         funcFactory.showNotification('Не удалось удалить платеж ' + item.data.number,
                                             result.data.errors);
                                     }
+                                    button.disableOnLoad(false, $event);
+                                }, function(){
+                                  button.disableOnLoad(false, $event);
                                 });
                             }
                         });

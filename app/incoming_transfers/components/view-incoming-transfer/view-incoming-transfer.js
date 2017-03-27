@@ -12,10 +12,14 @@ class ViewIncomingTransferCtrl {
                 {type: 'logs', callback: () => $state.go('app.incoming_transfers.view.logs', {})},
                 {
                     type: 'refresh',
-                    callback: () => {
+                    callback: (subData, button, $event) => {
+                        button.disableOnLoad(true, $event);
                         serverApi.getIncomingTransferDetails($stateParams.id, res => {
+                            button.disableOnLoad(false, $event);
                             self.incomingTransfer = res.data;
                             self.calculateRemainingAmount();
+                        }, function(){
+                          button.disableOnLoad(false, $event);
                         });
                     }
                 }

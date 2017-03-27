@@ -8,8 +8,14 @@ class ViewOutgoingTransferCtrl {
                 {type: 'back', callback: () => $state.go('app.outgoing_transfers', {})},
                 {
                     type: 'refresh',
-                    callback: () => {
-                        serverApi.getOutgoingTransferDetails($stateParams.id, res => self.outgoingTransfer = res.data)
+                    callback: (subData, button, $event) => {
+                        button.disableOnLoad(true, $event);
+                        serverApi.getOutgoingTransferDetails($stateParams.id, res => {
+                          button.disableOnLoad(false, $event);
+                          self.outgoingTransfer = res.data;
+                        }, function(){
+                          button.disableOnLoad(false, $event);
+                        });
                     }
                 }
             ],

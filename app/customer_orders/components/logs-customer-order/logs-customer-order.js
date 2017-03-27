@@ -9,18 +9,22 @@ class LogsCustomerOrderCtrl {
                 {type: 'files'},
                 {
                     type: 'send_email',
-                    callback: () => {
-                        serverApi.sendCustomerOrderInvoice($stateParams.id, result => {
-                            if(result.status == 200) {
-                                if(result.data.errors) {
-                                    funcFactory.showNotification('Неудача', result.data.errors, true);
-                                } else {
-                                    funcFactory.showNotification('Успешно', 'Заказ успешно отправлен.', true);
-                                }
-                            } else {
-                                funcFactory.showNotification('Неудача', 'Ошибка при попытке отправить заказ.', true);
-                            }
-                        });
+                    callback: (subData, button, $event) => {
+                      button.disableOnLoad(true, $event);
+                      serverApi.sendCustomerOrderInvoice($stateParams.id, result => {
+                          if(result.status == 200) {
+                              if(result.data.errors) {
+                                  funcFactory.showNotification('Неудача', result.data.errors, true);
+                              } else {
+                                  funcFactory.showNotification('Успешно', 'Заказ успешно отправлен.', true);
+                              }
+                          } else {
+                              funcFactory.showNotification('Неудача', 'Ошибка при попытке отправить заказ.', true);
+                          }
+                          button.disableOnLoad(false, $event);
+                      }, function(){
+                        button.disableOnLoad(false, $event);
+                      });
                     }
                 },
                 {type: 'recalculate'},

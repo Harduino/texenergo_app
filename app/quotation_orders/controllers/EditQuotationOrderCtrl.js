@@ -4,7 +4,7 @@
 
     }]).controller('EditQuotationOrderCtrl', ['$scope', '$state', '$stateParams', 'serverApi', '$filter', 'funcFactory', '$uibModal', function($scope, $state, $stateParams, serverApi, $filter, funcFactory, $uibModal){
         var sc = $scope;
-        
+
         sc.data ={
             quotationOrder:{},
             selectedProduct: null, // Используется при поиске нового товара для добавления. Хранит выбранный.
@@ -15,7 +15,7 @@
 
         // получаем scope графа
         var _quotationSchemaInstance;
-        
+
         sc.visual = {
             navButtsOptions: [{type:'refresh', callback:getQuotationOrderDetails}],
             title: "Рассчет",//window.gon.index.QuotationOrders.indexTitle
@@ -30,11 +30,11 @@
             showSchemeElements: true,
             showSchemeProducts: true
         };
-        
-        
+
+
         sc.newElement = {}; // Данные нового элемента для добавления в рассчёт
-        
-        
+
+
         //config для селекта продуктов
         sc.pSelectConfig = {
             startPage: 0,
@@ -43,12 +43,16 @@
 
         getQuotationOrderDetails();
         // Загружаем рассчёт с сервера для начала работы
-        function getQuotationOrderDetails(){
+        function getQuotationOrderDetails(subData, button, $event){
+            button && button.disableOnLoad(true, $event);
             serverApi.getQuotationOrderDetails($stateParams.id, function(result){
+                button && button.disableOnLoad(false, $event);
                 sc.data.quotationOrder = result.data;
+            }, function(){
+              button && button.disableOnLoad(false, $event);
             });
         }
-        
+
         /**
          * Обновляем информацию по заказу
          * Простой отправляем update с новым названием. Например, обновляем название.
@@ -66,7 +70,7 @@
                 }else funcFactory.showNotification("Неудача", 'Не удалось отредактировать заказ '+order.number,true);
             });
         };
-        
+
         /**
          * Следим за изменениями в выбранных товарах. Чтобы при изменении пересчитываем total.
          */
@@ -81,12 +85,12 @@
                 sc.data.total = total;
             }
         }, true);
-        
-        
-        
-        
+
+
+
+
         // ЗДЕСЬ ФУНКЦИИ ДЛЯ ПОИСК СВЯЗЕЙ
-        
+
         // Ищёт в Links ПЕРВЫЙ связанный элемент.
         // @param equipment - Товар/строка из комлектации для которого найти элемент.
         // Используем чтобы в таблице показывать связанный элемент. Не очень юзабельно в силу появления схемы.
@@ -94,7 +98,7 @@
             for(var i=0; i<sc.data.quotationOrder.links.length; i++){
                 var q = sc.data.quotationOrder.links[i];
                 if(q.from.type==="equipment" && q.from.id===equipment.id && q.to.type==="element"){
-                    
+
                     // Нашли связь в Links. Теперь ищем нужный элемент.
                     for(var j=0; j<sc.data.quotationOrder.elements.length; j++){
                         var element = sc.data.quotationOrder.elements[j];
@@ -102,11 +106,11 @@
                             return element;
                         }
                     }
-                    
+
                 }
             }
         };
-        
+
         /**
          * Проверяет связан ли данный элемент с каким-либо товаром
          * Для этого он ищет в Links что-то из серии:
@@ -122,13 +126,13 @@
             }
             return false;
         };
-        
-        
-        
-        
-        
+
+
+
+
+
         // ЗДЕСЬ ПОДСВЕЧИВАНИЯ И УБИРАНИЯ
-        
+
         // Подсвечивает связанные элементы и товары
         // @param where - Где подсвечивать. Например, equipment или elements
         // @param source - Это элемент для которого в where надо выделить связанные
@@ -139,7 +143,7 @@
                 case "equipment":
                     for(var i=0; i < sc.data.quotationOrder.links.length; i++){
                         var link = sc.data.quotationOrder.links[i];
-                        
+
                         if(link.from.type==="equipment" && link.to.type==="element" && link.to.id===source.id){
                             for(var j=0; j < sc.data.quotationOrder.equipment.length; j++){
                                 var equipment_row = sc.data.quotationOrder.equipment[j];
@@ -153,7 +157,7 @@
                 case "elements":
                     for(var i=0; i < sc.data.quotationOrder.links.length; i++){
                         var link = sc.data.quotationOrder.links[i];
-                        
+
                         if(link.from.type==="equipment" && link.to.type==="element" && link.from.id===source.id){
                             for(var j=0; j < sc.data.quotationOrder.elements.length; j++){
                                 var element = sc.data.quotationOrder.elements[j];
@@ -168,10 +172,10 @@
                     alert("Hightlight default case");
             }
         };
-        
+
         // Снимает подсвечение
         // @param where - таблица где снять подсвеченивание. Например, 'equipment' или 'elements'
-        // where используется для определения противоположного массива. Сбрасывает все записи на невыделенные. 
+        // where используется для определения противоположного массива. Сбрасывает все записи на невыделенные.
         sc.unhighlight = function(where){
             switch(where){
                 case "equipment":
@@ -188,14 +192,14 @@
                     alert("Unhighlight default case");
             }
         };
-        
+
         // Сворачивает все несвязанные строки в обоих таблицах
         // @param initiator - На кого кликнули. Для него найти все НЕ связанные строки и их свернуть
         // @param initiator_type - Его типа equipment или element. Это удобства поиска в массивах.
         // Работает только для связей, когда товар завязан на элемент.
         // Если таблицы большие, то сложно визуально найти. Поэтому сворачиваем в обоих таблицах.
         sc.hideTableRows = function(initiator, initiator_type){
-            
+
             // Сначала все строки разворачиваем. Если такие есть.
             for(var i=0; i < sc.data.quotationOrder.equipment.length; i++){
                 sc.data.quotationOrder.equipment[i].hidden = false;
@@ -203,7 +207,7 @@
             for(var i=0; i < sc.data.quotationOrder.elements.length; i++){
                 sc.data.quotationOrder.elements[i].hidden = false;
             }
-            
+
             // Если надо отменить уже существующее свертывания, тогда делаем отметку и выходим из функции.
             // Иначе, делаем пометку на будущее и поехали!
             if(initiator.hideIndependentRows){
@@ -212,7 +216,7 @@
             } else {
                 initiator.hideIndependentRows = true;
             }
-            
+
             // А вот и сама реализация
             // Сначала делаем переменные, куда будем складывать результаты для последующего сворачивания.
             var equipment_ids = [];
@@ -241,7 +245,7 @@
                 default:
                     alert("hideTableRows default case");
             }
-            
+
             // Бежим по всем товарам. Если товара нет в списке 'важных', то прячем его.
             for(var i=0; i < equipment_ids.length; i++){
                 for(var j=0; j < sc.data.quotationOrder.equipment.length; j++){
@@ -292,7 +296,7 @@
                 }
             });
         };
-        
+
         // Функция для добавления нового элемента
         // Вроде ничего хитрого.
         sc.addNewElement = function(e, invalid){
@@ -326,7 +330,7 @@
                 }
             };
         }
-        
+
         /**
          * Добавляем новую комплектацию. Прямо подобором из обычного поиска товаров в рассчёте.
          * @param createElement - Boolean. Если истина, то кроме самого товара ещё создать и связанный с ним элемент.
@@ -384,7 +388,7 @@
          * Добавляем новый товар, но, в отличие от addNewEquipment, из уже имеющегося элемента.
          * Отличие от обычного в том, что элемент уже есть и новый товар просто к нему привязывается.
          * Берёт элемент для которого надо создать товар. Сам товар лежит в select2-ском selectedProduct.
-         * 
+         *
          * Форма для подбора открывается в модальном окне. Человек может забыть с каким элемент имеет дело. Поэтому подсвечиваем рабочий элемент.
          * При закрытии модального окна снимаем выделение элемента.
          * После добавления товара отправляется запрос на создание связи между товаром и элементом
@@ -404,7 +408,7 @@
                     }
                 }
             });
-           
+
             element.highlight = true;
 
             modalInstance.result.then(function (selectedProduct) {
@@ -426,7 +430,7 @@
                     }
                 });
             });
-           
+
             modalInstance.closed.then(function(){
                 element.highlight = !element.highlight;
             })
@@ -504,11 +508,11 @@
             }else sc.setNewLinkFrom(item);
         });
 
-        
-        
+
+
         // ЗДЕСЬ ОБНОВЛЕНИЕ И УДАЛЕНИЕ УЖЕ СУЩЕСТВУЮЩИХ
-        
-        
+
+
         /**
          * Обновляем информацию по заказу
          * Простой отправляем update с новым названием
@@ -526,7 +530,7 @@
                 }else funcFactory.showNotification("Неудача", 'Не удалось отредактировать рассчёт', true);
             });
         };
-        
+
         /**
          * Обновляем существующий элемент. Вроде всё просто.
          */
@@ -553,7 +557,7 @@
                 }
             });
         };
-        
+
         /**
          * Обновляем строку комплектации. Вроде всё просто.
          * Напрямую можно обновлять только количество
@@ -574,7 +578,7 @@
                 }
             });
         };
-        
+
         // Удаляем существующий элемент. Вроде всё просто.
         // Если сервер возвращает нам объект links, то значит, что какие-то связи были удалены.  А links содержит актуальные связи.
         sc.removeElement = function(item, index){
@@ -586,7 +590,7 @@
             serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
                 if(result.status == 200 && !result.data.errors){
                     sc.data.quotationOrder.elements.splice(index, 1);
-                    
+
                     // Сбрасываем все связи на новые если сервер и передал
                     if(result.data.links !== undefined) {
                         sc.data.quotationOrder.links = result.data.links;
@@ -598,7 +602,7 @@
                 }
             });
         };
-        
+
         /**
          * Удаляем строку комплектации
          * Если есть связанный по-умолчанию элемент, то и его тоже удаляем
@@ -613,7 +617,7 @@
             serverApi.updateQuotationOrder(sc.data.quotationOrder.id, data, function(result){
                 if(result.status == 200 && !result.data.errors){
                     sc.data.quotationOrder.equipment.splice(index, 1);
-                    
+
                     /**
                      * Ищем и удаляем связанные элементы
                      */
@@ -627,7 +631,7 @@
                     if(result.data.links !== undefined) {
                         sc.data.quotationOrder.links = result.data.links;
                     }
-                    
+
                     funcFactory.showNotification("Удача", "Удалил товар", true);
                 } else {
                     funcFactory.showNotification('Не удалось удалить товар', result.data.errors);
@@ -655,7 +659,7 @@
                 }
             });
         };
-        
+
         /**
          * Открываем модальное окно, чтобы заменить товар в Комплектации на другой
          * Opens modal window with ability to change product of Product item.

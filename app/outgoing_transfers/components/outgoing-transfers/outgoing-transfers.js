@@ -14,14 +14,16 @@ class OutgoingTransfersCtrl {
                 },
                 {
                     type:'remove',
-                    callback: item => {
+                    callback: (item, button, $event) => {
                         $.SmartMessageBox({
                             title: 'Удалить исходящий платёж?',
                             content: 'Вы действительно хотите удалить исходящий платёж ' + item.data.number,
                             buttons: '[Нет][Да]'
                         }, ButtonPressed => {
                             if (ButtonPressed === 'Да') {
+                                button.disableOnLoad(true, $event);
                                 serverApi.deleteOutgoingTransfer(item.data.id, result => {
+                                    button.disableOnLoad(false, $event);
                                     if(!result.data.errors) {
                                         self.data.outgoingTransfersList.splice(item.index, 1);
                                         funcFactory.showNotification('Исходящий платёж', 'Вы удалили исходящий платёж '
@@ -32,6 +34,8 @@ class OutgoingTransfersCtrl {
                                     }
                                 });
                             }
+                        }, function(){
+                          button.disableOnLoad(false, $event);
                         });
                     }
                 }

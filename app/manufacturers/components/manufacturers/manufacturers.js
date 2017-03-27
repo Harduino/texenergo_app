@@ -17,7 +17,7 @@ class ManufacturersCtrl {
                 },
                 {
                     type: 'remove',
-                    callback: item => {
+                    callback: (item, button, $event) => {
                         let data = item.data;
 
                         $.SmartMessageBox({
@@ -26,7 +26,9 @@ class ManufacturersCtrl {
                             buttons: '[Нет][Да]'
                         }, ButtonPressed => {
                             if (ButtonPressed === 'Да') {
+                                button.disableOnLoad(true, $event);
                                 serverApi.deleteManufacturer(data.id, result => {
+                                    button.disableOnLoad(false, $event);
                                     if(!result.data.errors) {
                                         self.data.manufacturersList.splice(item.index,1);
                                         funcFactory.showNotification('Производитель ' + data.name + ' успешно удален.',
@@ -35,6 +37,8 @@ class ManufacturersCtrl {
                                         funcFactory.showNotification('Не удалось удалить производителя ' + data.name,
                                             result.data.errors);
                                     }
+                                }, function(){
+                                  button.disableOnLoad(false, $event);
                                 });
                             }
                         });
