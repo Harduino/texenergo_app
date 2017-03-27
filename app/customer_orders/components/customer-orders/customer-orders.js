@@ -28,14 +28,16 @@ class CustomerOrdersCtrl {
                 },
                 {
                     type:'remove',
-                    callback: item => {
+                    callback: (item, button, $event) => {
                         $.SmartMessageBox({
                             title: 'Удалить заказ?',
                             content: 'Вы действительно хотите удалить заказ ' + item.data.number,
                             buttons: '[Нет][Да]'
                         }, ButtonPressed => {
                             if (ButtonPressed === 'Да') {
+                                button.disableOnLoad(true, $event);
                                 serverApi.deleteCustomerOrder(item.data.id, result => {
+                                    button.disableOnLoad(false, $event);
                                     if(!result.data.errors){
                                         self.data.ordersList.splice(item.index,1);
                                         funcFactory.showNotification('Заказ ' + item.data.number + ' успешно удален.',
@@ -44,6 +46,8 @@ class CustomerOrdersCtrl {
                                         funcFactory.showNotification('Не удалось удалить заказ ' + item.data.number,
                                             result.data.errors);
                                     }
+                                }, function(){
+                                  button.disableOnLoad(false, $event);
                                 });
                             }
                         });

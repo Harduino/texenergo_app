@@ -27,14 +27,16 @@ class ReceiveOrdersCtrl {
                 },
                 {
                     type: 'remove',
-                    callback: item => {
+                    callback: (item, button, $event) => {
                         $.SmartMessageBox({
                             title: 'Удалить заказ?',
                             content: 'Вы действительно хотите удалить поступление ' + item.data.number,
                             buttons: '[Нет][Да]'
                         }, ButtonPressed => {
                             if (ButtonPressed === 'Да') {
+                                button.disableOnLoad(true, $event);
                                 serverApi.deleteReceiveOrder(item.data.id, result => {
+                                    button.disableOnLoad(false, $event);
                                     if(!result.data.errors){
                                         self.data.ordersList.splice(item.index,1);
                                         funcFactory.showNotification('Поступление ' + item.data.number +
@@ -43,6 +45,8 @@ class ReceiveOrdersCtrl {
                                         funcFactory.showNotification('Не удалось удалить поступление ' +
                                             item.data.number, result.data.errors);
                                     }
+                                }, () => {
+                                  button.disableOnLoad(false, $event);
                                 });
                             }
                         });

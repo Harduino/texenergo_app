@@ -16,14 +16,16 @@ class DispatchOrdersCtrl {
                 },
                 {
                     type: 'remove',
-                    callback: item => {
+                    callback: (item, button, $event) => {
                         $.SmartMessageBox({
                             title: 'Удалить списание?',
                             content: 'Вы действительно хотите удалить списание ' + item.data.number,
                             buttons: '[Нет][Да]'
                         }, ButtonPressed => {
                             if (ButtonPressed === 'Да') {
+                                button.disableOnLoad(true, $event);
                                 serverApi.deleteDispatchOrder(item.data.id, result => {
+                                    button.disableOnLoad(false, $event);
                                     if(!result.data.errors){
                                         self.data.ordersList.splice(item.index,1);
                                         funcFactory.showNotification('Списание ' + item.data.number +
@@ -32,6 +34,8 @@ class DispatchOrdersCtrl {
                                         funcFactory.showNotification('Не удалось удалить списание ' +
                                             item.data.number, result.data.errors);
                                     }
+                                }, () => {
+                                  button.disableOnLoad(false, $event);
                                 });
                             }
                         });

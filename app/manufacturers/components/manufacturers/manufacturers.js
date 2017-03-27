@@ -37,7 +37,7 @@ class ManufacturersCtrl {
                                         funcFactory.showNotification('Не удалось удалить производителя ' + data.name,
                                             result.data.errors);
                                     }
-                                }, function(){
+                                }, () => {
                                   button.disableOnLoad(false, $event);
                                 });
                             }

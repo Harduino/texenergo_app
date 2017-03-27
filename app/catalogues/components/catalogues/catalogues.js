@@ -16,14 +16,16 @@ class CataloguesCtrl {
             },
             {
                 type: 'remove',
-                callback: data => {
+                callback: (data, button, $event) => {
                     $.SmartMessageBox({
                         title: 'Удалить категорию?',
                         content: 'Вы действительно хотите удалить категорию ' + data.name,
                         buttons: '[Нет][Да]'
                     }, ButtonPressed => {
                         if(ButtonPressed === 'Да') {
+                            button.disableOnLoad(true, $event);
                             serverApi.deleteCatalogue(data.id, result => {
+                                button.disableOnLoad(false, $event);
                                 if(!result.data.errors) {
                                     vm.cataloguesList.splice(data.index,1);
                                     funcFactory.showNotification('Категория ' + data.name + ' успешно удалена.', '',
@@ -32,6 +34,8 @@ class CataloguesCtrl {
                                     funcFactory.showNotification('Не удалось удалить категорию ' + data.name,
                                         result.data.errors);
                                 }
+                            }, function(){
+                              button.disableOnLoad(false, $event);
                             });
                         }
                     });

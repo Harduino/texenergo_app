@@ -19,7 +19,7 @@ class PdfCataloguesCtrl {
                 },
                 {
                     type: 'remove',
-                    callback: item => {
+                    callback: (item, button, $event) => {
                         let title = item.data.title;
 
                         $.SmartMessageBox({
@@ -28,13 +28,17 @@ class PdfCataloguesCtrl {
                             buttons: '[Нет][Да]'
                         }, ButtonPressed => {
                             if (ButtonPressed === 'Да') {
+                                button.disableOnLoad(true, $event);
                                 serverApi.deletePdfCatalogue(item.data.id, r => {
+                                    button.disableOnLoad(false, $event);
                                     if(!r.data.errors){
                                         funcFactory.showNotification('Успешно', 'Каталог ' + title + ' удален!', true);
                                         self.data.pdfCataloguesList.splice(item.index, 1);
                                     } else {
                                         funcFactory.showNotification('Не удалось удалить PDF каталог', r.data.errors);
                                     }
+                                }, () => {
+                                  button.disableOnLoad(false, $event);
                                 });
                             }
                         });

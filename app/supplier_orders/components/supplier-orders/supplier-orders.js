@@ -23,7 +23,7 @@ class SupplierOrdersCtrl {
                             } else {
                                 funcFactory.showNotification('Не удалось создать заказы');
                             }
-                        }, function(){
+                        }, () => {
                           button.disableOnLoad(false, $event);
                         });
                     }
@@ -37,7 +37,7 @@ class SupplierOrdersCtrl {
                 },
                 {
                     type:'remove',
-                    callback: item => {
+                    callback: (item, button, $event) => {
                         let data = item.data;
 
                         $.SmartMessageBox({
@@ -46,13 +46,17 @@ class SupplierOrdersCtrl {
                             buttons: '[Нет][Да]'
                         }, ButtonPressed => {
                             if (ButtonPressed === 'Да') {
+                                button.disableOnLoad(true, $event);
                                 serverApi.deleteSupplierOrder(data.id, result => {
+                                    button.disableOnLoad(false, $event);
                                     if(result.data.errors) {
                                         funcFactory.showNotification('Не удалось удалить заказ ' + data.number);
                                     } else {
                                         self.data.ordersList.splice(item.index, 1);
                                         funcFactory.showNotification('Успешно', 'Заказ ' + data.number + ' удален', true);
                                     }
+                                }, () => {
+                                  button.disableOnLoad(false, $event);
                                 });
                             }
                         });

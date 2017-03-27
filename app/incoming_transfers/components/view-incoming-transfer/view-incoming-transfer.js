@@ -18,7 +18,7 @@ class ViewIncomingTransferCtrl {
                             button.disableOnLoad(false, $event);
                             self.incomingTransfer = res.data;
                             self.calculateRemainingAmount();
-                        }, function(){
+                        }, () => {
                           button.disableOnLoad(false, $event);
                         });
                     }
@@ -47,12 +47,14 @@ class ViewIncomingTransferCtrl {
                 },
                 {
                     type:'remove',
-                    callback: data => {
+                    callback: (data, button, $event) => {
                         let item = data.data;
 
+                        button.disableOnLoad(true, $event);
                         serverApi.removeIncomingTransferOrder(self.incomingTransfer.id, item.id, res => {
                             let transferInfo;
 
+                            button.disableOnLoad(false, $event);
                             if (item.hasOwnProperty('outgoing_transfer')) {
                                 transferInfo = 'Платеж ' + item.outgoing_transfer.incoming_code;
                             } else {
@@ -67,6 +69,8 @@ class ViewIncomingTransferCtrl {
                                 self.calculateRemainingAmount();
                                 self.funcFactory.showNotification(transferInfo + ' успешно удален', '', true);
                             }
+                        }, () => {
+                          button.disableOnLoad(false, $event);
                         });
                     }
                 }

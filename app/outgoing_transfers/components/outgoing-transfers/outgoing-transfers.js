@@ -34,7 +34,7 @@ class OutgoingTransfersCtrl {
                                     }
                                 });
                             }
-                        }, function(){
+                        }, () => {
                           button.disableOnLoad(false, $event);
                         });
                     }

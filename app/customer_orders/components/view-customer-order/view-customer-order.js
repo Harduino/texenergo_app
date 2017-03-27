@@ -63,14 +63,18 @@ class ViewCustomerOrderCtrl {
                 },
                 {
                     type: 'recalculate',
-                    callback: () => {
+                    callback: (subData, button, $event) => {
+                        button.disableOnLoad(true, $event);
                         serverApi.recalculateCustomerOrder($stateParams.id, result => {
+                            button.disableOnLoad(false, $event);
                             if(result.status == 200 && !result.data.errors) {
                                 funcFactory.showNotification('Успешно', 'Заказ успешно пересчитан.', true);
                                 self.data.order = result.data;
                             } else {
                                 funcFactory.showNotification('Неудача', 'Ошибка при пересчёте заказа.', true);
                             }
+                        }, function(){
+                          button.disableOnLoad(false, $event);
                         });
                     }
                 },
@@ -133,8 +137,16 @@ class ViewCustomerOrderCtrl {
                 {
                     type: 'remove',
                     disabled: false,
-                    callback: item => serverApi.removeCustomerOrderProduct(self.order.id, item.data.id,
-                        self.getRemovePositionHandler(item.data))
+                    callback: (item, button, $event) => {
+                      button.disableOnLoad(true, $event);
+                      serverApi.removeCustomerOrderProduct(self.order.id, item.data.id,
+                        () => {
+                          button.disableOnLoad(false, $event);
+                          self.getRemovePositionHandler(item.data);
+                        }, () => {
+                          button.disableOnLoad(false, $event);
+                        });
+                    }
                 }
             ]
         };

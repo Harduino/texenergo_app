@@ -32,7 +32,7 @@ class IncomingTransfersCtrl {
                                             result.data.errors);
                                     }
                                     button.disableOnLoad(false, $event);
-                                }, function(){
+                                }, () => {
                                   button.disableOnLoad(false, $event);
                                 });
                             }
