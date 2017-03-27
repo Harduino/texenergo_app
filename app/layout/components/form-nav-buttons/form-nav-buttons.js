@@ -46,14 +46,14 @@ class FormNavButtonsCtrl {
                         return self.createConfirmOrderControls(button);
                     }
 
-                    button.prototype.disable = function(disabled, $event){
-                      var $elem = $($event.currentTarget || $event.srcElement);
-                      if(disabled){
-                        $elem.attr('disabled', 'disabled');
-                      }else{
-                        $elem.removeAttr('disabled');
-                      }
-                    };
+                    // button.prototype.disable = function(disabled, $event){
+                    //   var $elem = $($event.currentTarget || $event.srcElement);
+                    //   if(disabled){
+                    //     $elem.attr('disabled', 'disabled');
+                    //   }else{
+                    //     $elem.removeAttr('disabled');
+                    //   }
+                    // };
                     self.buttons.push(button);
                 }
             });
