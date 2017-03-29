@@ -542,31 +542,6 @@
 @media (min-width: 768px) {
   .bs-glyphicons li {
     width: 12.5%; } }
-.placeholder-header {
-  display: block;
-  height: 49px;
-  margin: 0;
-  padding: 0 13px 0 0;
-  background-color: #f3f3f3;
-  background-image: -webkit-linear-gradient(top, #f3f3f3 0%, #e2e2e2 100%);
-  background-image: linear-gradient(to bottom, #f3f3f3 0%, #e2e2e2 100%);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFF3F3F3', endColorstr='#FFE2E2E2', GradientType=0); }
-
-.placeholder-left-panel {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 904;
-  margin-top: 49px;
-  width: 220px;
-  display: block;
-  background: #3a3633;
-  background-image: -webkit-linear-gradient(left, color-stop(#3a3633 93%), color-stop(#2a2725 100%));
-  background-image: linear-gradient(to right, #3a3633 93%, #2a2725 100%);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF3A3633', endColorstr='#FF2A2725', GradientType=1);
-  min-height: 100%; }
 
 .placeholder-live-feeds {
   height: 386px; }
