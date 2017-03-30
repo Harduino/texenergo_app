@@ -3,103 +3,37 @@
     <login-info></login-info>
     <!-- end user info -->
 
-    <nav>
-        <!-- NOTE: Notice the gaps after each icon usage <i></i>..
-        Please note that these links work a bit different than
-        traditional href="" links. See documentation for details.
-        -->
-
-        <ul data-smart-menu>
-            <li data-ui-sref-active="active">
-                <a data-ui-sref="app.dashboard" title="Рабочий стол">
-                    <i class="fa fa-lg fa-fw fa-home"></i>
-                    <span class="menu-item-parent">Рабочий стол</span>
-                </a>
-            </li>
-            <li data-menu-collapse>
-                <a href="#">
-                    <i class="fa fa-lg fa-fw fa-briefcase"></i>
-                    <span class="menu-item-parent">Каталог</span>
-                </a>
-                <ul>
-                    <li data-ui-sref-active="active">
-                        <a data-ui-sref="app.catalogues">Каталоги</a>
-                    </li>
-                    <li data-ui-sref-active="active">
-                        <a data-ui-sref="app.manufacturers">Производители</a>
-                    </li>
-                    <li data-ui-sref-active="active">
-                        <a data-ui-sref="app.pdf_catalogues">PDF Каталоги</a>
-                    </li>
-                </ul>
-            </li>
-            <li data-menu-collapse>
-                <a href="#">
-                    <i class="fa fa-lg fa-fw fa-book"></i>
-                    <span class="menu-item-parent">Заказы</span>
-                </a>
-                <ul>
-                    <li data-ui-sref-active="active">
-                        <a data-ui-sref="app.customer_orders">Заказы клиентов</a>
-                    </li>
-                    <li data-ui-sref-active="active">
-                        <a data-ui-sref="app.supplier_orders">Заказы поставщикам</a>
-                    </li>
-                    <li data-ui-sref-active="active">
-                        <a data-ui-sref="app.quotation_orders">Производственные ордера</a>
-                    </li>
-                </ul>
-            </li>
-            <li data-menu-collapse>
-                <a href="#">
-                    <i class="fa fa-lg fa-fw fa-road"></i>
-                    <span class="menu-item-parent">Движения</span>
-                </a>
-                <ul>
-                    <li data-ui-sref-active="active">
-                        <a data-ui-sref="app.receive_orders">Поступления</a>
-                    </li>
-                    <li data-ui-sref-active="active">
-                        <a data-ui-sref="app.dispatch_orders">Списания</a>
-                    </li>
-                </ul>
-            </li>
-            <li data-menu-collapse>
-                <a href="#">
-                    <i class="fa fa-lg fa-fw fa-rub"></i>
-                    <span class="menu-item-parent">Денежные средства</span>
-                </a>
-                <ul>
-                    <li data-ui-sref-active="active">
-                        <a data-ui-sref="app.incoming_transfers">Входящие платежи</a>
-                    </li>
-                    <li data-ui-sref-active="active">
-                        <a data-ui-sref="app.outgoing_transfers">Исходящие платежи</a>
-                    </li>
-                </ul>
-            </li>
-            <li data-menu-collapse>
-                <a href="#">
-                    <i class="fa fa-lg fa-fw fa-desktop"></i>
-                    <span class="menu-item-parent">Пользователи</span>
-                </a>
-                <ul>
-                    <li data-ui-sref-active="active">
-                        <a data-ui-sref="app.partners">
-                            <i class="fa fa-lg fa-fw fa-male"></i>
-                            <span class="menu-item-parent">Партнёры</span>
-                        </a>
-                    </li>
-                    <li data-ui-sref-active="active">
-                        <a data-ui-sref="app.contacts">
-                            <i class="fa fa-lg fa-fw fa-user"></i>
-                            <span class="menu-item-parent">Контакты</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </nav>
+    <left-menu items="[
+        {title: 'Рабочий стол', icon: 'fa-home', state: 'app.dashboard'},
+        {title: 'Каталог', icon: 'fa-briefcase', items: [
+                {title: 'Каталоги', state: 'app.catalogues'},
+                {title: 'Производители', state: 'app.manufacturers'},
+                {title: 'PDF Каталоги', state: 'app.pdf_catalogues'}
+            ]
+        },
+        {title: 'Заказы', icon: 'fa-book', items: [
+                {title: 'Заказы клиентов', state: 'app.customer_orders'},
+                {title: 'Заказы поставщикам', state: 'app.supplier_orders'},
+                {title: 'Производственные ордера', state: 'app.quotation_orders'}
+            ]
+        },
+        {title: 'Движения', icon: 'fa-road', items: [
+                {title: 'Поступления', state: 'app.receive_orders'},
+                {title: 'Списания', state: 'app.dispatch_orders'}
+            ]
+        },
+        {title: 'Денежные средства', icon: 'fa-rub', items: [
+                {title: 'Входящие платежи', state: 'app.incoming_transfers'},
+                {title: 'Исходящие платежи', state: 'app.outgoing_transfers'}
+            ]
+        },
+        {title: 'Пользователи', icon: 'fa-desktop', items: [
+                {title: 'Партнёры', state: 'app.partners', icon: 'fa-male'},
+                {title: 'Контакты', state: 'app.contacts', icon: 'fa-user'}
+            ]
+        }
+    ]">
+    </left-menu>
 
     <minimize-menu></minimize-menu>
 </aside>

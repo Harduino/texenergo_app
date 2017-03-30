@@ -1,0 +1,30 @@
+<nav>
+    <ul>
+        <li data-ui-sref-active="active" ng-repeat="menuItem in $ctrl.items" ng-if="menuItem.state">
+            <a data-ui-sref="{{menuItem.state}}" title="{{menuItem.title}}">
+                <i class="fa fa-lg fa-fw {{menuItem.icon}}"></i>
+                <span class="menu-item-parent">{{menuItem.title}}</span>
+            </a>
+        </li>
+        <li ng-repeat="menuItem in $ctrl.items" ng-if="!menuItem.state" ng-class="{open: $ctrl.expandedMenuItem === $index, active: $ctrl.expandedByDefault === $index}">
+            <a ng-click="$ctrl.setExpandedItem($index)">
+                <i class="fa fa-lg fa-fw {{menuItem.icon}}"></i>
+                <span class="menu-item-parent">{{menuItem.title}}</span>
+                <b class="collapse-sign">
+                    <em class="fa" ng-class="{'fa-plus-square-o': $ctrl.expandedMenuItem !== $index, 'fa-minus-square-o': $ctrl.expandedMenuItem === $index}"></em>
+                </b>
+            </a>
+            <ul ng-style="{display: $ctrl.expandedMenuItem === $index ? 'block' : 'none'}">
+                <li data-ui-sref-active="active" ng-repeat="menuSubItem in menuItem.items">
+                    <a data-ui-sref="{{menuSubItem.state}}" ng-if="!menuSubItem.icon">
+                        {{menuSubItem.title}}
+                    </a>
+                    <a data-ui-sref="{{menuSubItem.state}}" ng-if="menuSubItem.icon">
+                        <i class="fa fa-lg fa-fw {{menuSubItem.icon}}"></i>
+                        <span class="menu-item-parent">{{menuSubItem.title}}</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</nav>
