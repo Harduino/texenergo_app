@@ -1,13 +1,13 @@
 class LeftMenuCtrl {
-    constructor($state) {
+    constructor($state, $timeout) {
         let self = this;
 
-        this.items.forEach(function(menuItem, menuItemIndex) {
+        this.items.forEach((menuItem, menuItemIndex) => {
             if(menuItem.items !== undefined) {
-                menuItem.items.forEach(function(menuSubItem) {
+                menuItem.items.forEach(menuSubItem => {
                     if(menuSubItem.state === $state.current.name) {
-                        self.expandedMenuItem = menuItemIndex;
-                        self.expandedByDefault = menuItemIndex;
+                        self.expandedMenuItem = self.expandedByDefault = menuItemIndex;
+                        $timeout(() => $('#left-menu-subitems-' + menuItemIndex).show());
                     }
                 });
             }
@@ -15,11 +15,16 @@ class LeftMenuCtrl {
     }
 
     setExpandedItem(menuItemIndex) {
+        if(this.expandedMenuItem !== menuItemIndex) {
+            $('#left-menu-subitems-' + this.expandedMenuItem).slideToggle(appConfig.menu_speed || 200);
+        }
+
         this.expandedMenuItem = this.expandedMenuItem === menuItemIndex ? undefined : menuItemIndex;
+        $('#left-menu-subitems-' + menuItemIndex).slideToggle(appConfig.menu_speed || 200);
     }
 }
 
-LeftMenuCtrl.$inject = ['$state'];
+LeftMenuCtrl.$inject = ['$state', '$timeout'];
 
 angular.module('app.layout').component('leftMenu', {
     bindings: {items: '<'},

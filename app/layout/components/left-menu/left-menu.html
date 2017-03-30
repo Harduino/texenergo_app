@@ -14,7 +14,7 @@
                     <em class="fa" ng-class="{'fa-plus-square-o': $ctrl.expandedMenuItem !== $index, 'fa-minus-square-o': $ctrl.expandedMenuItem === $index}"></em>
                 </b>
             </a>
-            <ul ng-style="{display: $ctrl.expandedMenuItem === $index ? 'block' : 'none'}">
+            <ul id="left-menu-subitems-{{$index}}">
                 <li data-ui-sref-active="active" ng-repeat="menuSubItem in menuItem.items">
                     <a data-ui-sref="{{menuSubItem.state}}" ng-if="!menuSubItem.icon">
                         {{menuSubItem.title}}
