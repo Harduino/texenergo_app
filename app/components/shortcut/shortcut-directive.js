@@ -1,52 +1,44 @@
-class ToggleShortcut{
-    constructor($timeout, authService, $compile, $state) {
-        let initDomEvents = function ($element, $scope) {
-            var shortcutBlock = $('#shortcut');
-            $compile(shortcutBlock)($scope);
+class ToggleShortcut {
+    constructor($state, $timeout, authService, Observer) {
+        this.$state = $state;
+        this.$timeout = $timeout;
+        this.authService = authService;
 
-            $scope.navigateToProfilePage = function() {
-                var authProfile = authService.profile;
-                $state.go('app.contacts.view', authProfile ? {id: authProfile.user_metadata.contact_id} : null);
-                $timeout(hideShortcutBlock, 300);
-            };
+        this.shortcutBlock = $('#shortcut');
+        let vm = this;
+        Observer.subscribe('SHOW_PROFILE_SHORTCUT', this.showShortcutBlock.bind(this));
 
-            $element.on('click', showShortcutBlock);
-
-            // SHORTCUT buttons goes away if mouse is clicked outside of the area
-            $(document).mouseup(function (e) {
-                if (shortcutBlock && !shortcutBlock.is(e.target) && shortcutBlock.has(e.target).length === 0) {
-                    hideShortcutBlock();
-                }
-            });
-
-            // SHORTCUT ANIMATE HIDE
-            function hideShortcutBlock() {
-                shortcutBlock.animate({height: 'hide'}, 300, 'easeOutCirc');
-                $('body').removeClass('shortcut-on');
+        $(document).mouseup(function (e) {
+            if (vm.shortcutBlock && !vm.shortcutBlock.is(e.target) && vm.shortcutBlock.has(e.target).length === 0) {
+                vm.hideShortcutBlock();
             }
+        });
+    }
 
-            // SHORTCUT ANIMATE SHOW
-            function showShortcutBlock() {
-                shortcutBlock.animate({height: 'show'}, 200, 'easeOutCirc');
-                $('body').addClass('shortcut-on');
-            }
-        };
+    navigateToProfilePage () {
+        let authProfile = this.authService.profile;
+        this.$state.go('app.contacts.view', authProfile ? {id: authProfile.user_metadata.contact_id} : null);
+        this.$timeout(this.hideShortcutBlock.bind(this), 300);
+    }
 
-        let link = function($scope, $element) {
-            $timeout(function(){
-                initDomEvents($element, $scope);
-            });
-        };
+    hideShortcutBlock() {
+        this.shortcutBlock.animate({height: 'hide'}, 300, 'easeOutCirc');
+        $('body').removeClass('shortcut-on');
+    }
 
-        this.restrict = 'EA';
-        this.link = link;
+    showShortcutBlock() {
+        this.shortcutBlock.animate({height: 'show'}, 200, 'easeOutCirc');
+        $('body').addClass('shortcut-on');
     }
 }
 
-ToggleShortcut.$inject = ['$timeout', 'authService', '$compile', '$state'];
+ToggleShortcut.$inject = ['$state', '$timeout', 'authService', 'Observer'];
 
-function toggleShortcut($timeout, authService, $compile, $state){
-    return new ToggleShortcut($timeout, authService, $compile, $state);
-}
-
-angular.module('app.layout').directive('toggleShortcut', toggleShortcut);
+angular.module('app.layout').directive('toggleShortcut', () => {
+    return {
+        restrict: 'EA',
+        controller: ToggleShortcut,
+        controllerAs: '$ctrl',
+        templateUrl: 'app/components/shortcut/shortcut.tpl.html'
+    };
+});

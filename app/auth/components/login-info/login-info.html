@@ -1,9 +1,8 @@
 <div class="login-info ng-cloak">
     <span> <!-- User image size is adjusted inside CSS, it should stay as it -->
-        <a toggle-shortcut>
-            <img ng-src="{{loginInfo.user.profile.picture}}" alt="я" class="online">
-                <span>{{loginInfo.user.profile.nickname}}
-                </span>
+        <a ng-click="$ctrl.showProfileShortcut()">
+            <img ng-src="{{$ctrl.user.profile.picture}}" alt="я" class="online">
+            <span>{{$ctrl.user.profile.nickname}}</span>
             <i class="fa fa-angle-down"></i>
         </a>
      </span>
