@@ -129,7 +129,6 @@ gulp.task('watch', function() {
     gulp.watch([
         'app/*/module.js',
         'app/layout/templates.js',
-        'app/auth/components/login-info/login-info.js',
         'app/*/services/*.js',
         'app/layout/actions/*.js',
         'app/layout/filters/filters.js',
