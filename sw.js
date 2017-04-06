@@ -7,7 +7,6 @@ var urlsToCache = [
   '/app/catalogues/components/edit-catalogue/edit-catalogue.html',
   '/app/catalogues/components/view-catalogue/view-catalogue.html',
   '/app/components/projects/recent-projects.tpl.html',
-  '/app/components/shortcut/shortcut.tpl.html',
   '/app/contacts/components/contacts/contacts.html',
   '/app/contacts/components/view-contact/view-contact.html',
   '/app/customer_orders/components/command-customer-order-modal/command-customer-order-modal.html',
@@ -34,6 +33,7 @@ var urlsToCache = [
   '/app/layout/components/minimize-menu/minimize-menu.html',
   '/app/layout/components/orders-filter/orders-filter.html',
   '/app/layout/components/product-to-customer-orer-modal/product-to-customer-orer-modal.html',
+  '/app/layout/components/profile-shortcut/profile-shortcut.html',
   '/app/layout/components/state-breadcrumbs/state-breadcrumbs.html',
   '/app/layout/components/te-copy-to-buffer/te-copy-to-buffer.html',
   '/app/layout/components/te-infinity-scroll/te-infinity-scroll.html',
@@ -66,7 +66,7 @@ var urlsToCache = [
   '/app/search/components/top-search/top-search.html',
   '/app/supplier_orders/components/supplier-orders/supplier-orders.html',
   '/app/supplier_orders/components/view-supplier-order/view-supplier-order.html'
-]
+];
 
 self.addEventListener('install', function(event) {
   event.waitUntil(
@@ -86,7 +86,7 @@ self.addEventListener('activate', function(event) {
     }
   });
   event.waitUntil(self.clients.claim());
-})
+});
 
 self.addEventListener('fetch', function(event) {
   event.respondWith(
@@ -124,7 +124,7 @@ function serveFromCache(request, response) {
 }
 
 // Избегаем кеширования инфы из Auth0.
-function avoidCache(request, response) {
+function avoidCache(request) {
   return request.url.indexOf("auth0") >= 0
 }
 
@@ -133,5 +133,5 @@ function cacheIt(cache, request, server_response) {
     var cloned = server_response.clone();
     cloned.ttl_timestamp = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 3; // 3 Days.
     cache.put(request, cloned);
-  };
+  }
 }

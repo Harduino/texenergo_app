@@ -2,37 +2,31 @@
 <div ng-include="'/app/layout/components/layout/partials/header.html'"></div>
 <!-- END HEADER -->
 
-
 <!-- Left panel : Navigation area -->
 <!-- Note: This width of the aside area can be adjusted through LESS variables -->
 <div ng-include="'/app/layout/components/layout/partials/navigation.html'"></div>
-
 <!-- END NAVIGATION -->
 
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-
     <!-- RIBBON -->
     <div id="ribbon">
-
         <!-- breadcrumb -->
         <state-breadcrumbs></state-breadcrumbs>
         <!-- end breadcrumb -->
-        <div class="font-lg ribbon-preloader" ng-show="layoutCtrl.globals.showRibbonLoader"><i class="fa fa-gear fa-spin"></i> Загрузка...</div>
-
+        <div class="font-lg ribbon-preloader" ng-show="layoutCtrl.globals.showRibbonLoader">
+            <i class="fa fa-gear fa-spin"></i> Загрузка...
+        </div>
     </div>
     <!-- END RIBBON -->
 
     <div data-smart-router-animation-wrap="content content@app" data-wrap-for="#content">
         <div data-ui-view="content" data-autoscroll="false"></div>
     </div>
-
 </div>
 <!-- END MAIN PANEL -->
 
 <!-- PAGE FOOTER -->
 <div ng-include="'/app/layout/components/layout/partials/footer.html'"></div>
-
-<toggle-shortcut></toggle-shortcut>
-
+<profile-shortcut></profile-shortcut>
 <!-- END PAGE FOOTER -->
