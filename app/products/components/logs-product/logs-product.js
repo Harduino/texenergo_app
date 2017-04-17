@@ -23,7 +23,7 @@ class LogsProductCtrl {
     }
 
     removePartnerLog(item){
-        serverApi.deleteProductPartnerLog(self.product.id, item.id, result => {
+        self.serverApi.deleteProductPartnerLog(self.product.id, item.id, result => {
             if(!result.data.errors){
                 for (var i=0; i < self.partner_logs.other_logs.length; i++) {
                     if(self.partner_logs.other_logs[i].id === item.id) {
