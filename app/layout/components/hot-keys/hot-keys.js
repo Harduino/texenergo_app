@@ -17,6 +17,10 @@ class HotKeysCtrl {
                 if(state.current.name !== 'app.partners') state.go('app.partners', {});
             } else if ( buffer === "кк" || buffer === 'rr' ) {
                 if(state.current.name !== 'app.contacts') state.go('app.contacts', {});
+            } else if ( buffer === "дд" || buffer === 'll' ) {
+                if(state.current.name !== 'app.incoming_transfers') state.go('app.incoming_transfers', {});
+            } else if ( buffer === "н" || buffer === "y") {
+                angular.element("i.fa.fa-plus").click();
             } else if (buffer.lastIndexOf('===') > 0) {
                 console.log("I'd handle Bar Code scanner here");
             } else {
