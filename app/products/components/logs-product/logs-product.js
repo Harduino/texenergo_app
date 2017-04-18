@@ -1,6 +1,7 @@
 class LogsProductCtrl {
-    constructor($stateParams, serverApi, $state, funcFactory){
+    constructor($state, $stateParams, funcFactory, serverApi) {
         let self = this;
+        this.funcFactory = funcFactory;
         this.serverApi = serverApi;
 
         this.visual = {
@@ -22,30 +23,32 @@ class LogsProductCtrl {
         serverApi.getProductPartnerLogs($stateParams.id, result => self.partner_logs = result.data );
     }
 
-    removePartnerLog(item){
-        self.serverApi.deleteProductPartnerLog(self.product.id, item.id, result => {
-            if(!result.data.errors){
-                for (var i=0; i < self.partner_logs.other_logs.length; i++) {
-                    if(self.partner_logs.other_logs[i].id === item.id) {
-                        self.partner_logs.other_logs.splice(i,1);
-                        break;
-                    }
-                };
-                for (var i=0; i < self.partner_logs.mfk_logs.length; i++) {
-                    if(self.partner_logs.mfk_logs[i].id === item.id) {
-                        self.partner_logs.mfk_logs.splice(i,1);
-                        break;
-                    }
-                }
-                funcFactory.showNotification('Лог удален:', item.human_name, true);
+    removePartnerLog(log) {
+        let self = this;
+
+        this.serverApi.deleteProductPartnerLog(this.product.id, log.id, result => {
+            if(!result.data.errors) {
+                self.removeLogType(log, 'other_logs');
+                self.removeLogType(log, 'mfk_logs');
+                self.funcFactory.showNotification('Лог удален:', log.human_name, true);
             } else {
-                funcFactory.showNotification('Не удалось удалить лог', result.data.errors);
+                self.funcFactory.showNotification('Не удалось удалить лог', result.data.errors);
             }
         });
     }
+
+    removeLogType(log, storageType) {
+        for (let logIndex = 0; logIndex < this.partner_logs[storageType].length; logIndex++) {
+            if (this.partner_logs[storageType][logIndex].id === log.id) {
+                this.partner_logs[storageType].splice(logIndex, 1);
+                break;
+            }
+        }
+    }
 }
 
-LogsProductCtrl.$inject = ['$stateParams', 'serverApi', '$state', 'funcFactory'];
+LogsProductCtrl.$inject = ['$state', '$stateParams', 'funcFactory', 'serverApi'];
+
 angular.module('app.products').component('logsProduct', {
     controller: LogsProductCtrl,
     controllerAs: 'logsProductCtrl',
