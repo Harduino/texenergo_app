@@ -20,15 +20,7 @@
                     </span>
                 </section>
                 <section class="form-group">
-                    <label class="control-label" for="datePickerConfig">Дата поступления</label>
-                    <div class="input-group">
-                        <input type="text" te-jq-ui="$ctrl.datePickerConfig" data-watch-options="true" te-jq-datepicker
-                               data-ui-type="datepicker" ng-model="$ctrl.newTransfer.date"
-                               class="full-width input-sm form-control" style="position: initial;" id="datePickerConfig">
-                        <span class="input-group-addon">
-                            <i class="glyphicon glyphicon-calendar"></i>
-                        </span>
-                    </div>
+                    <te-jq-datepicker ng-model="$ctrl.newTransfer.date" label="Дата поступления"></te-jq-datepicker>
                 </section>
                 <section class="form-group">
                     <label class="control-label">Описание</label>

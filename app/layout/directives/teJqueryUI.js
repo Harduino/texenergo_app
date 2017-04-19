@@ -6,24 +6,16 @@
     var module = angular.module('te-jq-ui', []);
 
     module.directive('teJqUi', function(){
-        return{
+        return {
             restrict: 'A',
             scope:{
                 options: '=teJqUi'
             },
-            link: function(scope, element, attrs){
+            link: function(scope, element, attrs) {
                 var type = attrs.uiType;
 
-                if(type && element[type]){
-
-                    var setOptions = function(value){
-                        element[type](value||{});
-                    };
-
-                    attrs.watchOptions ? scope.$watch('options', function(value){
-                            value && setOptions(value);
-                        })
-                    : setOptions(scope.options);
+                if(type && element[type]) {
+                    element[type](scope.options || {});
 
                     scope.$on('$destroy', function(){
                         element[type]('destroy');
@@ -32,24 +24,4 @@
             }
         };
     });
-    module.directive('teJqDatepicker', [ function(){
-        return {
-            restrict: 'A',
-            require: 'ngModel',
-            link: function(scope, element, attrs, ngModel){
-
-                ngModel.$formatters.push(function(value){
-                    if(value){
-                        return $.datepicker.formatDate('dd.mm.yy', value);
-                    }
-                });
-
-                scope.$watch(attrs.ngModel, function(value, oldValue){
-                    if(value !== oldValue) {
-                        ngModel.$setViewValue(element.datepicker("getDate"));
-                    }
-                }, true);
-            }
-        }
-    }]);
 }());
