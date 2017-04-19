@@ -35,8 +35,9 @@
                                             </button>
                                         </div>
                                     </form>
-                                    <table class="table table-bordered margin-top-10">
-                                        <thead>
+                                    <te-jq-ui options="visual.sortElementsOptions">
+                                        <table class="table table-bordered margin-top-10">
+                                            <thead>
                                             <tr>
                                                 <th class="eqo-th-iconed"></th>
                                                 <th>Описание</th>
@@ -44,8 +45,8 @@
                                                 <th>Комментарий</th>
                                                 <th class="eqo-th-iconed"></th>
                                             </tr>
-                                        </thead>
-                                        <tbody te-jq-ui="visual.sortElementsOptions" data-ui-type="sortable">
+                                            </thead>
+                                            <tbody data-ui-type="sortable">
                                             <tr ng-repeat="element in data.quotationOrder.elements" class="order-items a-row-add" ng-hide="element.hidden">
                                                 <td ng-class="{'danger': element.highlight }" ng-mouseover="highlight('equipment', element)" ng-mouseleave="unhighlight('equipment')" ng-click="hideTableRows(element, 'element')">
                                                     <i class="eqo-td-circle-ico" ng-class="{'active': element.hideIndependentRows}"></i>
@@ -67,8 +68,9 @@
                                                     <i class="fa fa-times-circle"></i>
                                                 </td>
                                             </tr>
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
+                                    </te-jq-ui>
                                 </div>
                             </div>
                         </div>
@@ -95,8 +97,9 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <table class="table table-bordered margin-top-10 table-fixed">
-                                        <thead>
+                                    <te-jq-ui options="visual.sortEquipmentOptions">
+                                        <table class="table table-bordered margin-top-10 table-fixed">
+                                            <thead>
                                             <tr>
                                                 <th class="eqo-th-iconed" style="width: 32px;"></th>
                                                 <th>Название</th>
@@ -105,8 +108,8 @@
                                                 <th>Элемент</th>
                                                 <th class="eqo-th-iconed" style="width: 32px;"></th>
                                             </tr>
-                                        </thead>
-                                        <tbody te-jq-ui="visual.sortEquipmentOptions" data-ui-type="sortable">
+                                            </thead>
+                                            <tbody data-ui-type="sortable">
                                             <tr ng-repeat="item in data.quotationOrder.equipment" class="order-items a-row-add" ng-hide="item.hidden">
                                                 <td ng-class="{'danger': item.highlight }" ng-mouseover="highlight('elements', item)" ng-mouseleave="unhighlight('elements')" ng-click="hideTableRows(item, 'equipment')">
                                                     <i class="eqo-td-circle-ico" ng-class="{'active': item.hideIndependentRows}"></i>
@@ -129,8 +132,9 @@
                                                     <i class="fa fa-times-circle"></i>
                                                 </td>
                                             </tr>
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
+                                    </te-jq-ui>
                                 </div>
                             </div>
                         </div>

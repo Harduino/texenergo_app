@@ -246,106 +246,108 @@
                                 </ui-select-infinity>
                             </div>
 
-                            <table class="table table-hover table-bordered margin-top-10">
-                                <thead>
-                                    <tr>
-                                        <th class="hidden-xs"></th>
-                                        <th>Наименование</th>
-                                        <th class="hidden-xs">Артикул</th>
-                                        <th class="hidden-xs text-right">Цена</th>
-                                        <th class="text-right">Кол-во</th>
-                                        <th class="text-right hidden-xs">Скидка</th>
-                                        <th class="text-right">Итого</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody te-jq-ui="$ctrl.visual.sortOpts" data-ui-type="sortable">
-                                    <tr ng-if="$ctrl.productForAppend.id" class="append-product-row a-row-add"
-                                        ng-keypress="$ctrl.appendProduct($event)">
-                                        <td></td>
-                                        <td>{{$ctrl.productForAppend.name}}</td>
-                                        <td>{{$ctrl.productForAppend.article}}</td>
-                                        <td>{{$ctrl.productForAppend | price_net | currency}}</td>
-                                        <td>
-                                            <input id="append_product_quantity" class="form-control table-input"
-                                                   ng-model="$ctrl.productForAppend.quantity" model-filter="{min:0}"
-                                                   ng-attr-placeholder="{{'доступно ' + $ctrl.productForAppend.stock +' шт.'}}"
-                                                   filter-name="te_number" type="text">
-                                            <div class="note">
-                                                <i class="fa fa-exclamation-triangle"></i>
-                                                <span class="font-sm">
-                                                    {{' доступно ' + $ctrl.productForAppend.stock +' шт.'}}
+                            <te-jq-ui options="$ctrl.visual.sortOpts">
+                                <table class="table table-hover table-bordered margin-top-10">
+                                    <thead>
+                                        <tr>
+                                            <th class="hidden-xs"></th>
+                                            <th>Наименование</th>
+                                            <th class="hidden-xs">Артикул</th>
+                                            <th class="hidden-xs text-right">Цена</th>
+                                            <th class="text-right">Кол-во</th>
+                                            <th class="text-right hidden-xs">Скидка</th>
+                                            <th class="text-right">Итого</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-ui-type="sortable">
+                                        <tr ng-if="$ctrl.productForAppend.id" class="append-product-row a-row-add"
+                                            ng-keypress="$ctrl.appendProduct($event)">
+                                            <td></td>
+                                            <td>{{$ctrl.productForAppend.name}}</td>
+                                            <td>{{$ctrl.productForAppend.article}}</td>
+                                            <td>{{$ctrl.productForAppend | price_net | currency}}</td>
+                                            <td>
+                                                <input id="append_product_quantity" class="form-control table-input"
+                                                       ng-model="$ctrl.productForAppend.quantity" model-filter="{min:0}"
+                                                       ng-attr-placeholder="{{'доступно ' + $ctrl.productForAppend.stock +' шт.'}}"
+                                                       filter-name="te_number" type="text">
+                                                <div class="note">
+                                                    <i class="fa fa-exclamation-triangle"></i>
+                                                    <span class="font-sm">
+                                                        {{' доступно ' + $ctrl.productForAppend.stock +' шт.'}}
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td></td>
+                                            <td>{{$ctrl.productForAppend | price_net: $ctrl.productForAppend.quantity | currency}}</td>
+                                            <td class="center-item-text">
+                                                <div ng-click="$ctrl.appendProduct()" class="btn btn-success">
+                                                    <i class="fa fa-plus"></i>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat='item in $ctrl.order.customer_order_contents' class="order-items"
+                                            ng-click="$ctrl.selectPosition($event, item)" ng-class="{selected: item.selected}">
+                                            <td class="hidden-xs">{{ $index + 1 }}</td>
+                                            <td hidden-buttons>
+                                                <span ng-if="item.messages.length > 0">
+                                                    <span class="badge alert-danger" ng-click="$ctrl.productDetailsModal(item)">!</span>
                                                 </span>
-                                            </div>
-                                        </td>
-                                        <td></td>
-                                        <td>{{$ctrl.productForAppend | price_net: $ctrl.productForAppend.quantity | currency}}</td>
-                                        <td class="center-item-text">
-                                            <div ng-click="$ctrl.appendProduct()" class="btn btn-success">
-                                                <i class="fa fa-plus"></i>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr ng-repeat='item in $ctrl.order.customer_order_contents' class="order-items"
-                                        ng-click="$ctrl.selectPosition($event, item)" ng-class="{selected: item.selected}">
-                                        <td class="hidden-xs">{{ $index + 1 }}</td>
-                                        <td hidden-buttons>
-                                            <span ng-if="item.messages.length > 0">
-                                                <span class="badge alert-danger" ng-click="$ctrl.productDetailsModal(item)">!</span>
-                                            </span>
-                                            <te-copy-to-buffer>
-                                                <a ng-href="/#/products/{{ item.product.id }}" te-buffer-value>
-                                                    {{ item.product.name }}
+                                                <te-copy-to-buffer>
+                                                    <a ng-href="/#/products/{{ item.product.id }}" te-buffer-value>
+                                                        {{ item.product.name }}
+                                                    </a>
+                                                </te-copy-to-buffer>
+                                                <i class="blue-hover" ng-if="item.can_edit"
+                                                   ng-click="$ctrl.changeCustomerOrderProductModal(item)">
+                                                    заменить
+                                                </i>
+                                                <i class="blue-hover" ng-click="$ctrl.productDetailsModal(item)">подробно</i>
+                                            </td>
+                                            <td class="hidden-xs">
+                                                <te-copy-to-buffer>
+                                                    <span te-buffer-value>{{ item.product.article}}</span>
+                                                </te-copy-to-buffer>
+                                            </td>
+                                            <td class="hidden-xs text-right">{{ item | price_net | currency}}</td>
+                                            <td class="text-right">
+                                                <a ng-if="$ctrl.order.can_edit" editable-number="item.quantity" buttons="no"
+                                                   onaftersave="$ctrl.saveProductChange({item: item, index: $index})" e-min="0">
+                                                    {{ item.quantity }}
                                                 </a>
-                                            </te-copy-to-buffer>
-                                            <i class="blue-hover" ng-if="item.can_edit"
-                                               ng-click="$ctrl.changeCustomerOrderProductModal(item)">
-                                                заменить
-                                            </i>
-                                            <i class="blue-hover" ng-click="$ctrl.productDetailsModal(item)">подробно</i>
-                                        </td>
-                                        <td class="hidden-xs">
-                                            <te-copy-to-buffer>
-                                                <span te-buffer-value>{{ item.product.article}}</span>
-                                            </te-copy-to-buffer>
-                                        </td>
-                                        <td class="hidden-xs text-right">{{ item | price_net | currency}}</td>
-                                        <td class="text-right">
-                                            <a ng-if="$ctrl.order.can_edit" editable-number="item.quantity" buttons="no"
-                                               onaftersave="$ctrl.saveProductChange({item: item, index: $index})" e-min="0">
-                                                {{ item.quantity }}
-                                            </a>
-                                            <span ng-if="!$ctrl.order.can_edit">{{ item.quantity }}</span>
-                                        </td>
-                                        <td class="text-right">
-                                            <a ng-if="$ctrl.order.can_edit" editable-number="item.discount" buttons="no"
-                                               onaftersave="$ctrl.saveProductChange({item: item, index: $index})"
-                                               uib-tooltip="{{item.discount_description}}">
-                                                {{ item.discount }}
-                                            </a>
-                                            <span ng-if="!$ctrl.order.can_edit">{{ item.discount }}</span>
-                                        </td>
-                                        <td class="text-right">{{ item | price_net : item.quantity | currency}}</td>
-                                        <td>
-                                            <form-nav-buttons ng-if="item.can_destroy" class="btn-group"
-                                                              subdata="{data:item, index:$index}" data-template="table"
-                                                              data-options="$ctrl.visual.navTableButts" data-role="item"
-                                                              content-class="btn btn-xs">
-                                            </form-nav-buttons>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="hidden-xs"></td>
-                                        <td></td>
-                                        <td class="hidden-xs"></td>
-                                        <td class="hidden-xs"></td>
-                                        <td></td>
-                                        <td class="text-right hidden-xs">Итого, руб:</td>
-                                        <td class="text-right">{{$ctrl.total | currency}}</td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                                <span ng-if="!$ctrl.order.can_edit">{{ item.quantity }}</span>
+                                            </td>
+                                            <td class="text-right">
+                                                <a ng-if="$ctrl.order.can_edit" editable-number="item.discount" buttons="no"
+                                                   onaftersave="$ctrl.saveProductChange({item: item, index: $index})"
+                                                   uib-tooltip="{{item.discount_description}}">
+                                                    {{ item.discount }}
+                                                </a>
+                                                <span ng-if="!$ctrl.order.can_edit">{{ item.discount }}</span>
+                                            </td>
+                                            <td class="text-right">{{ item | price_net : item.quantity | currency}}</td>
+                                            <td>
+                                                <form-nav-buttons ng-if="item.can_destroy" class="btn-group"
+                                                                  subdata="{data:item, index:$index}" data-template="table"
+                                                                  data-options="$ctrl.visual.navTableButts" data-role="item"
+                                                                  content-class="btn btn-xs">
+                                                </form-nav-buttons>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="hidden-xs"></td>
+                                            <td></td>
+                                            <td class="hidden-xs"></td>
+                                            <td class="hidden-xs"></td>
+                                            <td></td>
+                                            <td class="text-right hidden-xs">Итого, руб:</td>
+                                            <td class="text-right">{{$ctrl.total | currency}}</td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </te-jq-ui>
                         </div>
                     </div>
                 </div>
@@ -480,9 +482,9 @@
                             </force-layout-graph>
                             <section class="display-flex graph-zoom-zlider" style="float: right;">
                                 <i class="fa fa-minus"></i>
-                                <div id="graph_zoom_slider" te-jq-ui="$ctrl.sliderOptions" data-ui-type="slider"
-                                     class="pwm-card-size-slider">
-                                </div>
+                                <te-jq-ui options="$ctrl.sliderOptions">
+                                    <div id="graph_zoom_slider" data-ui-type="slider" class="pwm-card-size-slider"></div>
+                                </te-jq-ui>
                                 <i class="fa fa-plus"></i>
                             </section>
                         </div>
@@ -492,14 +494,16 @@
         </div>
     </section>
     <div class="summary-draggable-panel" ng-show="$ctrl.summaryData.show">
-        <div class="content" te-jq-ui="$ctrl.summaryPanelOptions" data-ui-type="draggable">
-            <b>Итого: {{$ctrl.summaryData.total | currency}}</b>
-            <div class="col-sm-6">
-                <a ng-href="" ng-click="$ctrl.deleteSelectedItems(false)">Оставить выделенные</a>
+        <te-jq-ui options="$ctrl.summaryPanelOptions">
+            <div class="content" data-ui-type="draggable">
+                <b>Итого: {{$ctrl.summaryData.total | currency}}</b>
+                <div class="col-sm-6">
+                    <a ng-href="" ng-click="$ctrl.deleteSelectedItems(false)">Оставить выделенные</a>
+                </div>
+                <div class="col-sm-6">
+                    <a ng-href="" ng-click="$ctrl.deleteSelectedItems(true)">Удалить выделенные</a>
+                </div>
             </div>
-            <div class="col-sm-6">
-                <a ng-href="" ng-click="$ctrl.deleteSelectedItems(true)">Удалить выделенные</a>
-            </div>
-        </div>
+        </te-jq-ui>
     </div>
 </div>
