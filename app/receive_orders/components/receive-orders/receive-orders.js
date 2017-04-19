@@ -56,6 +56,7 @@ class ReceiveOrdersCtrl {
             titles: ['Поступления']
         };
 
+        this.datePickerConfig = {dateFormat: 'dd.mm.yy'};
         this.data = {ordersList: [], searchQuery: $stateParams.q};
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
         this.newOrderData = {};
