@@ -1,5 +1,5 @@
 class JarvisWidgetCtrl {
-    constructor($rootScope) {
+    constructor(Observer) {
         let element = $('#' + this.for);
 
         if(element.data('widget-color')) {
@@ -8,11 +8,11 @@ class JarvisWidgetCtrl {
 
         element.find('.widget-body').prepend('<div class="jarviswidget-editbox"><input class="form-control" type="text"></div>');
         element.addClass('jarviswidget');
-        $rootScope.$emit('jarvisWidgetAdded', element);
+        Observer.notify('jarvisWidgetAdded', element);
     }
 }
 
-JarvisWidgetCtrl.$inject = ['$rootScope'];
+JarvisWidgetCtrl.$inject = ['Observer'];
 
 angular.module('app.layout').component('jarvisWidget', {
     bindings: {for: '@'},
