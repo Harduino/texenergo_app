@@ -1,34 +1,20 @@
-/**
- * Jarvis Widget Directive
- *
- *    colorbutton="false"
- *    editbutton="false"
-      togglebutton="false"
-       deletebutton="false"
-        fullscreenbutton="false"
-        custombutton="false"
-        collapsed="true"
-          sortable="false"
- *
- *
- */
-(function(){
+class JarvisWidgetCtrl {
+    constructor($rootScope) {
+        let element = $('#' + this.for);
 
-    "use strict";
-
-    angular.module('app.layout').directive('jarvisWidget', function($rootScope){
-        return {
-            restrict: "A",
-            compile: function(element, attributes){
-                if(element.data('widget-color'))
-                    element.addClass('jarviswidget-color-' + element.data('widget-color'));
-
-                element.find('.widget-body').prepend('<div class="jarviswidget-editbox"><input class="form-control" type="text"></div>');
-
-                element.addClass('jarviswidget');
-                $rootScope.$emit('jarvisWidgetAdded', element)
-
-            }
+        if(element.data('widget-color')) {
+            element.addClass('jarviswidget-color-' + element.data('widget-color'));
         }
-    })
-}());
+
+        element.find('.widget-body').prepend('<div class="jarviswidget-editbox"><input class="form-control" type="text"></div>');
+        element.addClass('jarviswidget');
+        $rootScope.$emit('jarvisWidgetAdded', element);
+    }
+}
+
+JarvisWidgetCtrl.$inject = ['$rootScope'];
+
+angular.module('app.layout').component('jarvisWidget', {
+    bindings: {for: '@'},
+    controller: JarvisWidgetCtrl
+});
