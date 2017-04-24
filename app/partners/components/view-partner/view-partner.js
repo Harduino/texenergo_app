@@ -1,12 +1,14 @@
 class ViewPartnerCtrl {
-    constructor($state, serverApi, $stateParams, funcFactory) {
+    constructor($state, serverApi, $stateParams, funcFactory, $parse) {
         let self = this;
         this.funcFactory = funcFactory;
         this.serverApi = serverApi;
+        this.$parse = $parse;
 
         this.partner = {};
         this.newPerson = {};
         this.newBankAccount = {};
+        this.newAddress = {};
 
         this.visual = {
             navButtsOptions:[
@@ -82,8 +84,6 @@ class ViewPartnerCtrl {
             partner:{
                 name: partner.name,
                 kpp: partner.kpp,
-                delivery_address: partner.delivery_address,
-                legal_address: partner.legal_address,
                 phone: partner.phone,
                 email: partner.email,
                 ceo_name: partner.ceo_name,
@@ -183,15 +183,85 @@ class ViewPartnerCtrl {
     }
     //BANK ACCOUNT END
 
-    getDaDataSuggestions (type, val, fieldName) {
-        return this.serverApi.validateViaDaData(type, {query: val}).then(result => {
+    // ADDRESS BEGIN
+    getDaDataSuggestions(type, value, fieldName) {
+        let self = this;
+
+        return this.serverApi.validateViaDaData(type, {query: value}).then(result => {
             return result.data.suggestions.map(item => {
-                return {label: item.data.name.payment, item: item, field: fieldName};
+                return {label: self.$parse(fieldName)(item) || value, item: item, field: fieldName};
             });
         });
     }
 
-    fillBySuggestion ($item) {
+    fillAddressBySuggestion($item) {
+        let data = $item.item.data,
+            addr = this.newAddress;
+
+        addr.postal_index =  data.postal_code;
+        addr.region = data.region_with_type;
+        addr.city = (data.city || data.settlement_with_type);
+        addr.street_kladr_id = data.street_kladr_id;
+        addr.street = data.street_with_type;
+        addr.house = data.house;
+    }
+    showNewAddressForm () {
+        $('#createAddressModal').modal('show');
+    }
+
+    clearNewAddress () {
+        this.newAddress = {};
+    }
+
+    addAddress () {
+        let self = this;
+        let data = { address: self.newAddress };
+
+        this.serverApi.createAddress(this.partner.id, data, result => {
+            if(!result.data.errors){
+                self.funcFactory.showNotification('Создал адрес', '', true);
+                self.partner.addresses.push(result.data);
+                self.clearNewAddress();
+            } else {
+                self.funcFactory.showNotification('Не удалось создать адрес', result.data.errors);
+            }
+        });
+    }
+
+    saveAddress (data) {
+        let self = this;
+        let addrEntry = data.item;
+
+        this.serverApi.updateAddress(this.partner.id, addrEntry.id, {
+            address: addrEntry
+        }, result => {
+            if(!result.data.errors) {
+                for (let j = 0; j < self.partner.addresses.length; j++) {
+                    let address = self.partner.addresses[j];
+
+                    if (address.id === result.data.id) {
+                        self.partner.addresses[j] = angular.extend(address, result.data);
+                        self.funcFactory.showNotification('Успешно обновлен адрес', (address.rs || ''),
+                            true);
+                        break;
+                    }
+                }
+            } else {
+                self.funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors);
+            }
+        });
+    }
+    // ADDRESS END
+
+    // getDaDataBankSuggestions (type, val, fieldName) {
+    //     return this.serverApi.validateViaDaData(type, {query: val}).then(result => {
+    //         return result.data.suggestions.map(item => {
+    //             return {label: item.data.name.payment, item: item, field: fieldName};
+    //         });
+    //     });
+    // }
+
+    fillBankBySuggestion ($item) {
         let data = $item.item.data;
         this.newBankAccount.bik = data.bic;
         this.newBankAccount.ks = data.correspondent_account;
@@ -199,7 +269,7 @@ class ViewPartnerCtrl {
     }
 }
 
-ViewPartnerCtrl.$inject = ['$state', 'serverApi', '$stateParams', 'funcFactory'];
+ViewPartnerCtrl.$inject = ['$state', 'serverApi', '$stateParams', 'funcFactory', '$parse'];
 
 angular.module('app.partners').component('viewPartner', {
     controller: ViewPartnerCtrl,

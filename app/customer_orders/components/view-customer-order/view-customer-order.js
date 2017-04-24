@@ -202,6 +202,16 @@ class ViewCustomerOrderCtrl {
         this.$onDestroy = () => self._subscription && self._subscription.unsubscribe();
     }
 
+    addressToString (addr) {
+        return [
+            (addr.postal_index || "Индекс"),
+            (addr.region || "Регион"),
+            (addr.city || "Город"),
+            (addr.street || "Улица"),
+            (addr.house || "Дом")
+        ].join(", ");
+    }
+
     saveOrderInfo () {
         let self = this,
             order = self.order,
@@ -212,13 +222,7 @@ class ViewCustomerOrderCtrl {
                     partner_id: order.partner.id,
                     issued_by_id: order.issued_by.id,
                     transportation: order.transportation_info.transportation,
-                    delivery_address: {
-                        postal_index: order.transportation_info.delivery_address.postal_index,
-                        region: order.transportation_info.delivery_address.region,
-                        city: order.transportation_info.delivery_address.city,
-                        street: order.transportation_info.delivery_address.street,
-                        house: order.transportation_info.delivery_address.house
-                    }
+                    delivery_address_id: (order.transportation_info.delivery_address !== null) ? order.transportation_info.delivery_address.id : null
                 }
             };
 
