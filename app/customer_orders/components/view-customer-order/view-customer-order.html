@@ -11,7 +11,7 @@
     <section id="widget-grid" widget-grid>
         <div class="row">
             <article class="col-md-12">
-                <div id="view-customer-order-1" jarvis-widget data-widget-color="blueDark"
+                <div id="view-customer-order-1" data-widget-color="blueDark"
                      data-widget-deletebutton="false" data-widget-collapsed="true">
                     <header>
                         <h2>Общая информация</h2>
@@ -142,9 +142,10 @@
                                     Отгрузка:
                                 </p>
                                 <p class="col-md-9" ng-if="$ctrl.order.can_edit">
-                                    <a href="#" editable-select="$ctrl.order.transportation_info.transportation"
-                                       e-ng-options="option for option in $ctrl.order.transportation_info.transportation_options"
-                                       onaftersave="$ctrl.saveOrderInfo()">
+                                    <a href="#"
+                                        editable-select="$ctrl.order.transportation_info.transportation"
+                                        e-ng-options="option for option in $ctrl.order.transportation_info.transportation_options"
+                                        onaftersave="$ctrl.saveOrderInfo()">
                                         {{ $ctrl.order.transportation_info.transportation || 'Нет'}}
                                     </a>
                                 </p>
@@ -157,84 +158,29 @@
                                     Адрес доставки:
                                 </p>
                                 <div class="col-md-9" ng-if="$ctrl.order.can_edit">
-                                    <form editable-form name="deliveryAddressForm" onaftersave="$ctrl.saveOrderInfo()">
-                                        <div>
-                                            <span class="postal_index w-88-f">Индекс: </span>
-                                            <span editable-text="$ctrl.order.transportation_info.delivery_address.postal_index"
-                                                  e-uib-typeahead="state.label for state in $ctrl.getDaDataSuggestions($viewValue, '$ctrl.data.postal_code')"
-                                                  e-typeahead-on-select="$ctrl.fillBySuggestion($item)"
-                                                  e-typeahead-template-url="typeAhead.tmpl.html"
-                                                  e-name="data.postal_code">
-                                                {{ $ctrl.order.transportation_info.delivery_address.postal_index || 'нет' }}
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <span class="region w-88-f">Регион: </span>
-                                            <span editable-text="$ctrl.order.transportation_info.delivery_address.region"
-                                                  e-uib-typeahead="state.label for state in $ctrl.getDaDataSuggestions($viewValue, '$ctrl.data.region_with_type')"
-                                                  e-typeahead-on-select="$ctrl.fillBySuggestion($item)"
-                                                  e-typeahead-template-url="typeAhead.tmpl.html"
-                                                  e-name="data.region_with_type">
-                                                {{ $ctrl.order.transportation_info.delivery_address.region || 'нет' }}
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <span class="city w-88-f">Город: </span>
-                                            <span editable-text="$ctrl.order.transportation_info.delivery_address.city"
-                                                  e-uib-typeahead="state.label for state in $ctrl.getDaDataSuggestions($viewValue, '$ctrl.data.city')"
-                                                  e-typeahead-on-select="$ctrl.fillBySuggestion($item)"
-                                                  e-typeahead-template-url="typeAhead.tmpl.html"
-                                                  e-name="data.city">
-                                                {{ $ctrl.order.transportation_info.delivery_address.city || 'нет' }}
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <span class="street w-88-f">Улица: </span>
-                                            <span editable-text="$ctrl.order.transportation_info.delivery_address.street"
-                                                  e-uib-typeahead="state.label for state in $ctrl.getDaDataSuggestions($viewValue, '$ctrl.data.street')"
-                                                  e-typeahead-on-select="$ctrl.fillBySuggestion($item)"
-                                                  e-typeahead-template-url="typeAhead.tmpl.html"
-                                                  e-name="data.street">
-                                                {{ $ctrl.order.transportation_info.delivery_address.street || 'нет' }}
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <span class="house w-88-f">Дом: </span>
-                                            <span editable-text="$ctrl.order.transportation_info.delivery_address.house"
-                                                  e-name="data.house">
-                                                {{ $ctrl.order.transportation_info.delivery_address.house || 'нет' }}
-                                            </span>
-                                        </div>
-                                        <div class="padding-top-15">
-                                            <button class="btn btn-default" ng-click="deliveryAddressForm.$show()"
-                                                    type="button" ng-show="!deliveryAddressForm.$visible">
-                                                Изменить
-                                            </button>
-                                            <span ng-show="deliveryAddressForm.$visible">
-                                                <button type="submit" class="btn btn-primary"
-                                                        ng-disabled="deliveryAddressForm.$waiting">
-                                                    Сохранить
-                                                </button>
-                                                <button type="button" ng-disabled="deliveryAddressForm.$waiting"
-                                                        class="btn btn-default" ng-click="deliveryAddressForm.$cancel()">
-                                                    Отменить
-                                                </button>
-                                            </span>
-                                        </div>
-                                    </form>
+                                    <a href="#"
+                                        editable-select="$ctrl.order.transportation_info.delivery_address" 
+                                        e-ng-options="option as $ctrl.addressToString(option) for option in $ctrl.order.transportation_info.delivery_address_options"
+                                        onaftersave="$ctrl.saveOrderInfo()">
+                                        <span ng-if="$ctrl.order.transportation_info.delivery_address">
+                                            {{ $ctrl.addressToString($ctrl.order.transportation_info.delivery_address) }}
+                                        </span>
+                                        <span ng-if="!$ctrl.order.transportation_info.delivery_address">Нет</span>
+                                    </a>
                                 </div>
                                 <p ng-if="!$ctrl.order.can_edit" class="col-md-9">
-                                    {{$ctrl.order.transportation_info.delivery_address.postal_index || "Индекс"}} {{$ctrl.order.transportation_info.delivery_address.region || "Регион"}} {{$ctrl.order.transportation_info.delivery_address.city || "Город"}} {{$ctrl.order.transportation_info.delivery_address.street || "Улица"}} {{$ctrl.order.transportation_info.delivery_address.house || "Дом"}}
+                                    {{ $ctrl.addressToString($ctrl.order.transportation_info.delivery_address) }}
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
+                <jarvis-widget for="view-customer-order-1"></jarvis-widget>
             </article>
         </div>
         <div class="row">
             <article class="col-md-12">
-                <div id="view-customer-order-2" jarvis-widget data-widget-color="blueDark" data-widget-deletebutton="false">
+                <div id="view-customer-order-2" data-widget-color="blueDark" data-widget-deletebutton="false">
                     <header>
                         <h2>Позиции заказа</h2>
                     </header>
@@ -246,114 +192,117 @@
                                 </ui-select-infinity>
                             </div>
 
-                            <table class="table table-hover table-bordered margin-top-10">
-                                <thead>
-                                    <tr>
-                                        <th class="hidden-xs"></th>
-                                        <th>Наименование</th>
-                                        <th class="hidden-xs">Артикул</th>
-                                        <th class="hidden-xs text-right">Цена</th>
-                                        <th class="text-right">Кол-во</th>
-                                        <th class="text-right hidden-xs">Скидка</th>
-                                        <th class="text-right">Итого</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody te-jq-ui="$ctrl.visual.sortOpts" data-ui-type="sortable">
-                                    <tr ng-if="$ctrl.productForAppend.id" class="append-product-row a-row-add"
-                                        ng-keypress="$ctrl.appendProduct($event)">
-                                        <td></td>
-                                        <td>{{$ctrl.productForAppend.name}}</td>
-                                        <td>{{$ctrl.productForAppend.article}}</td>
-                                        <td>{{$ctrl.productForAppend | price_net | currency}}</td>
-                                        <td>
-                                            <input id="append_product_quantity" class="form-control table-input"
-                                                   ng-model="$ctrl.productForAppend.quantity" model-filter="{min:0}"
-                                                   ng-attr-placeholder="{{'доступно ' + $ctrl.productForAppend.stock +' шт.'}}"
-                                                   filter-name="te_number" type="text">
-                                            <div class="note">
-                                                <i class="fa fa-exclamation-triangle"></i>
-                                                <span class="font-sm">
-                                                    {{' доступно ' + $ctrl.productForAppend.stock +' шт.'}}
+                            <te-jq-ui options="$ctrl.visual.sortOpts">
+                                <table class="table table-hover table-bordered margin-top-10">
+                                    <thead>
+                                        <tr>
+                                            <th class="hidden-xs"></th>
+                                            <th>Наименование</th>
+                                            <th class="hidden-xs">Артикул</th>
+                                            <th class="hidden-xs text-right">Цена</th>
+                                            <th class="text-right">Кол-во</th>
+                                            <th class="text-right hidden-xs">Скидка</th>
+                                            <th class="text-right">Итого</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-ui-type="sortable">
+                                        <tr ng-if="$ctrl.productForAppend.id" class="append-product-row a-row-add"
+                                            ng-keypress="$ctrl.appendProduct($event)">
+                                            <td></td>
+                                            <td>{{$ctrl.productForAppend.name}}</td>
+                                            <td>{{$ctrl.productForAppend.article}}</td>
+                                            <td>{{$ctrl.productForAppend | price_net | currency}}</td>
+                                            <td>
+                                                <input id="append_product_quantity" class="form-control table-input"
+                                                       ng-model="$ctrl.productForAppend.quantity" model-filter="{min:0}"
+                                                       ng-attr-placeholder="{{'доступно ' + $ctrl.productForAppend.stock +' шт.'}}"
+                                                       filter-name="te_number" type="text">
+                                                <div class="note">
+                                                    <i class="fa fa-exclamation-triangle"></i>
+                                                    <span class="font-sm">
+                                                        {{' доступно ' + $ctrl.productForAppend.stock +' шт.'}}
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td></td>
+                                            <td>{{$ctrl.productForAppend | price_net: $ctrl.productForAppend.quantity | currency}}</td>
+                                            <td class="center-item-text">
+                                                <div ng-click="$ctrl.appendProduct()" class="btn btn-success">
+                                                    <i class="fa fa-plus"></i>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat='item in $ctrl.order.customer_order_contents' class="order-items"
+                                            ng-click="$ctrl.selectPosition($event, item)" ng-class="{selected: item.selected}">
+                                            <td class="hidden-xs">{{ $index + 1 }}</td>
+                                            <td hidden-buttons>
+                                                <span ng-if="item.messages.length > 0">
+                                                    <span class="badge alert-danger" ng-click="$ctrl.productDetailsModal(item)">!</span>
                                                 </span>
-                                            </div>
-                                        </td>
-                                        <td></td>
-                                        <td>{{$ctrl.productForAppend | price_net: $ctrl.productForAppend.quantity | currency}}</td>
-                                        <td class="center-item-text">
-                                            <div ng-click="$ctrl.appendProduct()" class="btn btn-success">
-                                                <i class="fa fa-plus"></i>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr ng-repeat='item in $ctrl.order.customer_order_contents' class="order-items"
-                                        ng-click="$ctrl.selectPosition($event, item)" ng-class="{selected: item.selected}">
-                                        <td class="hidden-xs">{{ $index + 1 }}</td>
-                                        <td hidden-buttons>
-                                            <span ng-if="item.messages.length > 0">
-                                                <span class="badge alert-danger" ng-click="$ctrl.productDetailsModal(item)">!</span>
-                                            </span>
-                                            <te-copy-to-buffer>
-                                                <a ng-href="/#/products/{{ item.product.id }}" te-buffer-value>
-                                                    {{ item.product.name }}
+                                                <te-copy-to-buffer>
+                                                    <a ng-href="/#/products/{{ item.product.id }}" te-buffer-value>
+                                                        {{ item.product.name }}
+                                                    </a>
+                                                </te-copy-to-buffer>
+                                                <i class="blue-hover" ng-if="item.can_edit"
+                                                   ng-click="$ctrl.changeCustomerOrderProductModal(item)">
+                                                    заменить
+                                                </i>
+                                                <i class="blue-hover" ng-click="$ctrl.productDetailsModal(item)">подробно</i>
+                                            </td>
+                                            <td class="hidden-xs">
+                                                <te-copy-to-buffer>
+                                                    <span te-buffer-value>{{ item.product.article}}</span>
+                                                </te-copy-to-buffer>
+                                            </td>
+                                            <td class="hidden-xs text-right">{{ item | price_net | currency}}</td>
+                                            <td class="text-right">
+                                                <a ng-if="$ctrl.order.can_edit" editable-number="item.quantity" buttons="no"
+                                                   onaftersave="$ctrl.saveProductChange({item: item, index: $index})" e-min="0">
+                                                    {{ item.quantity }}
                                                 </a>
-                                            </te-copy-to-buffer>
-                                            <i class="blue-hover" ng-if="item.can_edit"
-                                               ng-click="$ctrl.changeCustomerOrderProductModal(item)">
-                                                заменить
-                                            </i>
-                                            <i class="blue-hover" ng-click="$ctrl.productDetailsModal(item)">подробно</i>
-                                        </td>
-                                        <td class="hidden-xs">
-                                            <te-copy-to-buffer>
-                                                <span te-buffer-value>{{ item.product.article}}</span>
-                                            </te-copy-to-buffer>
-                                        </td>
-                                        <td class="hidden-xs text-right">{{ item | price_net | currency}}</td>
-                                        <td class="text-right">
-                                            <a ng-if="$ctrl.order.can_edit" editable-number="item.quantity" buttons="no"
-                                               onaftersave="$ctrl.saveProductChange({item: item, index: $index})" e-min="0">
-                                                {{ item.quantity }}
-                                            </a>
-                                            <span ng-if="!$ctrl.order.can_edit">{{ item.quantity }}</span>
-                                        </td>
-                                        <td class="text-right">
-                                            <a ng-if="$ctrl.order.can_edit" editable-number="item.discount" buttons="no"
-                                               onaftersave="$ctrl.saveProductChange({item: item, index: $index})"
-                                               uib-tooltip="{{item.discount_description}}">
-                                                {{ item.discount }}
-                                            </a>
-                                            <span ng-if="!$ctrl.order.can_edit">{{ item.discount }}</span>
-                                        </td>
-                                        <td class="text-right">{{ item | price_net : item.quantity | currency}}</td>
-                                        <td>
-                                            <form-nav-buttons ng-if="item.can_destroy" class="btn-group"
-                                                              subdata="{data:item, index:$index}" data-template="table"
-                                                              data-options="$ctrl.visual.navTableButts" data-role="item"
-                                                              content-class="btn btn-xs">
-                                            </form-nav-buttons>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="hidden-xs"></td>
-                                        <td></td>
-                                        <td class="hidden-xs"></td>
-                                        <td class="hidden-xs"></td>
-                                        <td></td>
-                                        <td class="text-right hidden-xs">Итого, руб:</td>
-                                        <td class="text-right">{{$ctrl.total | currency}}</td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                                <span ng-if="!$ctrl.order.can_edit">{{ item.quantity }}</span>
+                                            </td>
+                                            <td class="text-right">
+                                                <a ng-if="$ctrl.order.can_edit" editable-number="item.discount" buttons="no"
+                                                   onaftersave="$ctrl.saveProductChange({item: item, index: $index})"
+                                                   uib-tooltip="{{item.discount_description}}">
+                                                    {{ item.discount }}
+                                                </a>
+                                                <span ng-if="!$ctrl.order.can_edit">{{ item.discount }}</span>
+                                            </td>
+                                            <td class="text-right">{{ item | price_net : item.quantity | currency}}</td>
+                                            <td>
+                                                <form-nav-buttons ng-if="item.can_destroy" class="btn-group"
+                                                                  subdata="{data:item, index:$index}" data-template="table"
+                                                                  data-options="$ctrl.visual.navTableButts" data-role="item"
+                                                                  content-class="btn btn-xs">
+                                                </form-nav-buttons>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="hidden-xs"></td>
+                                            <td></td>
+                                            <td class="hidden-xs"></td>
+                                            <td class="hidden-xs"></td>
+                                            <td></td>
+                                            <td class="text-right hidden-xs">Итого, руб:</td>
+                                            <td class="text-right">{{$ctrl.total | currency}}</td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </te-jq-ui>
                         </div>
                     </div>
                 </div>
+                <jarvis-widget for="view-customer-order-2"></jarvis-widget>
             </article>
         </div>
         <div class="row">
             <article class="col-md-12">
-                <div id="view-customer-order-3" jarvis-widget data-widget-color="blueDark"
+                <div id="view-customer-order-3" data-widget-color="blueDark"
                      data-widget-deletebutton="false" data-widget-collapsed="true">
                     <header>
                         <h2>Отгрузки</h2>
@@ -401,11 +350,12 @@
                         </div>
                     </div>
                 </div>
+                <jarvis-widget for="view-customer-order-3"></jarvis-widget>
             </article>
         </div>
         <div class="row">
             <article class="col-md-12">
-                <div id="view-customer-order-4" jarvis-widget data-widget-color="blueDark"
+                <div id="view-customer-order-4" data-widget-color="blueDark"
                      data-widget-deletebutton="false" data-widget-collapsed="true">
                     <header>
                         <h2>Связаные документы</h2>
@@ -485,26 +435,29 @@
                             </force-layout-graph>
                             <section class="display-flex graph-zoom-zlider" style="float: right;">
                                 <i class="fa fa-minus"></i>
-                                <div id="graph_zoom_slider" te-jq-ui="$ctrl.sliderOptions" data-ui-type="slider"
-                                     class="pwm-card-size-slider">
-                                </div>
+                                <te-jq-ui options="$ctrl.sliderOptions">
+                                    <div id="graph_zoom_slider" data-ui-type="slider" class="pwm-card-size-slider"></div>
+                                </te-jq-ui>
                                 <i class="fa fa-plus"></i>
                             </section>
                         </div>
                     </div>
                 </div>
+                <jarvis-widget for="view-customer-order-4"></jarvis-widget>
             </article>
         </div>
     </section>
     <div class="summary-draggable-panel" ng-show="$ctrl.summaryData.show">
-        <div class="content" te-jq-ui="$ctrl.summaryPanelOptions" data-ui-type="draggable">
-            <b>Итого: {{$ctrl.summaryData.total | currency}}</b>
-            <div class="col-sm-6">
-                <a ng-href="" ng-click="$ctrl.deleteSelectedItems(false)">Оставить выделенные</a>
+        <te-jq-ui options="$ctrl.summaryPanelOptions">
+            <div class="content" data-ui-type="draggable">
+                <b>Итого: {{$ctrl.summaryData.total | currency}}</b>
+                <div class="col-sm-6">
+                    <a ng-href="" ng-click="$ctrl.deleteSelectedItems(false)">Оставить выделенные</a>
+                </div>
+                <div class="col-sm-6">
+                    <a ng-href="" ng-click="$ctrl.deleteSelectedItems(true)">Удалить выделенные</a>
+                </div>
             </div>
-            <div class="col-sm-6">
-                <a ng-href="" ng-click="$ctrl.deleteSelectedItems(true)">Удалить выделенные</a>
-            </div>
-        </div>
+        </te-jq-ui>
     </div>
 </div>

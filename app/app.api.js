@@ -282,6 +282,14 @@
             $http.put('/partners/' + partner_id + '/bank_accounts/' + bank_account_id, data).then(success, fail);
         };
 
+        o.createAddress = function(partner_id, data, success, fail){
+            $http.post('/partners/' + partner_id + '/addresses/', data).then(success, fail);
+        };        
+
+        o.updateAddress = function(partner_id, address_id, data, success, fail){
+            $http.put('/partners/' + partner_id + '/addresses/' + address_id, data).then(success, fail);
+        };        
+
         // Контакты
         o.getContacts = function(page, query, config, success, fail){
             var path = '/contacts?page='+page + (query ? ('&q=' + query) : '');

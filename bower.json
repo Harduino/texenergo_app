@@ -9,7 +9,7 @@
     "angular-couch-potato": "0.1.1",
     "angular-file-upload": "2.2.0",
     "angular-jwt": "latest",
-    "angular-lock": "latest",
+    "angular-lock": "1.0.5",
     "angular-lock-passwordless": "latest",
     "angular-sanitize": "1.5.8",
     "angular-ui-router": "0.2.11",

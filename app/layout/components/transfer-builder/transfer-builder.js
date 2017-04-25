@@ -5,7 +5,6 @@ class TransferBuilderCtrl {
         this._modal = $element.find('.modal');
 
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
-        this.datePickerConfig = {dateFormat: 'dd.mm.yy'};
 
         this.config.showForm = () => {
             self.clearForm();

@@ -61,6 +61,7 @@ gulp.task('libs', function(){
         'bower_components/ngstorage/ngStorage.min.js',
 
         //Auth0
+        'bower_components/auth0.js/build/auth0.min.js',
         'bower_components/auth0-lock/build/lock.min.js',
         'bower_components/angular-lock/dist/angular-lock.min.js',
         'bower_components/auth0-lock-passwordless/build/lock-passwordless.min.js',

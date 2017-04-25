@@ -35,93 +35,6 @@
             </p>
         </div>
         <div class="row">
-            <p class="col-xs-12 col-md-3 font-bold">Адрес доставки:</p>
-            <span class="col-md-9">
-                <form editable-form name="editableFormDelivery" onaftersave="viewPartnerCtrl.savePartner()">
-                    <span e-placeholder="Индекс" e-name="postal_index" e-required
-                          editable-text="viewPartnerCtrl.partner.delivery_address.postal_index">
-                        {{ viewPartnerCtrl.partner.delivery_address.postal_index || 'Нет' }}
-                    </span>
-                    <span e-placeholder="Регион" e-name="region" e-required
-                          editable-text="viewPartnerCtrl.partner.delivery_address.region">
-                        {{ viewPartnerCtrl.partner.delivery_address.region || 'Нет' }}
-                    </span>
-                    <span e-placeholder="Город" e-name="city" e-required
-                          editable-text="viewPartnerCtrl.partner.delivery_address.city">
-                        {{ viewPartnerCtrl.partner.delivery_address.city || 'Нет' }}
-                    </span>
-                    <span e-placeholder="Улица" e-name="street" e-required
-                          editable-text="viewPartnerCtrl.partner.delivery_address.street">
-                        {{ viewPartnerCtrl.partner.delivery_address.street || 'Нет' }}
-                    </span>
-                    <span e-placeholder="Дом" e-name="house" e-required
-                          editable-text="viewPartnerCtrl.partner.delivery_address.house">
-                        {{ viewPartnerCtrl.partner.delivery_address.house || 'Нет' }}
-                    </span>
-                    <span class="buttons">
-                        <!-- button to show form -->
-                        <span type="button" ng-click="editableFormDelivery.$show()"
-                              ng-show="!editableFormDelivery.$visible">
-                            Изменить
-                        </span>
-                        <!-- buttons to submit / cancel form -->
-                        <span ng-show="editableFormDelivery.$visible">
-                            <button type="submit" class="btn btn-primary" ng-disabled="editableFormDelivery.$waiting">
-                                Сохранить
-                            </button>
-                            <span type="button" class="btn btn-default" ng-disabled="editableFormDelivery.$waiting"
-                                  ng-click="editableFormDelivery.$cancel()">
-                                Отменить
-                            </span>
-                        </span>
-                    </span>
-                </form>
-            </span>
-        </div>
-        <div class="row">
-            <p class="col-xs-12 col-md-3 font-bold">Адрес официальный:</p>
-            <span class="col-md-9">
-                <form editable-form name="editableFormLegal" onaftersave="viewPartnerCtrl.savePartner()">
-                    <span e-placeholder="Индекс" e-name="postal_index" e-required
-                          editable-text="viewPartnerCtrl.partner.legal_address.postal_index">
-                        {{ viewPartnerCtrl.partner.legal_address.postal_index || 'Нет' }}
-                    </span>
-                    <span e-placeholder="Регион" e-name="region" e-required
-                          editable-text="viewPartnerCtrl.partner.legal_address.region">
-                        {{ viewPartnerCtrl.partner.legal_address.region || 'Нет' }}
-                    </span>
-                    <span e-placeholder="Город" e-name="city" e-required
-                          editable-text="viewPartnerCtrl.partner.legal_address.city">
-                        {{ viewPartnerCtrl.partner.legal_address.city || 'Нет' }}
-                    </span>
-                    <span e-placeholder="Улица" e-name="street" e-required
-                          editable-text="viewPartnerCtrl.partner.legal_address.street">
-                        {{ viewPartnerCtrl.partner.legal_address.street || 'Нет' }}
-                    </span>
-                    <span e-placeholder="Дом" e-name="house" e-required
-                          editable-text="viewPartnerCtrl.partner.legal_address.house">
-                        {{ viewPartnerCtrl.partner.legal_address.house || 'Нет' }}
-                    </span>
-                    <span class="buttons">
-                        <!-- button to show form -->
-                        <span type="button" ng-click="editableFormLegal.$show()" ng-show="!editableFormLegal.$visible">
-                            Изменить
-                        </span>
-                        <!-- buttons to submit / cancel form -->
-                        <span ng-show="editableFormLegal.$visible">
-                            <button type="submit" class="btn btn-primary" ng-disabled="editableFormLegal.$waiting">
-                                Сохранить
-                            </button>
-                            <span type="button" ng-disabled="editableFormLegal.$waiting"
-                                  class="btn btn-default" ng-click="editableFormLegal.$cancel()">
-                                Отменить
-                            </span>
-                        </span>
-                    </span>
-                </form>
-            </span>
-        </div>
-        <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Телефон:</p>
             <p class="col-md-9" ng-switch-when="true">
                 <span editable-text="viewPartnerCtrl.partner.phone" onaftersave="viewPartnerCtrl.savePartner()" >
@@ -190,10 +103,13 @@
                     <a href="#s6" data-toggle="tab">Банковские счета</a>
                 </li>
                 <li class="dropdown">
-                    <a href="#s7" data-toggle="tab">Представители</a>
+                    <a href="#s7" data-toggle="tab">Адреса</a>
                 </li>
                 <li class="dropdown">
-                    <a href="#s8" data-toggle="tab">Условия в счетах</a>
+                    <a href="#s8" data-toggle="tab">Представители</a>
+                </li>
+                <li class="dropdown">
+                    <a href="#s9" data-toggle="tab">Условия в счетах</a>
                 </li>
             </ul>
         </nav-tabs>
@@ -391,6 +307,88 @@
                 </table>
             </div>
             <div class="tab-pane fade" id="s7">
+                <div ng-click="viewPartnerCtrl.showNewAddressForm()" ng-if="viewPartnerCtrl.partner.can_edit"
+                     class="ng-scope btn btn-success">
+                    <i class="fa fa-plus"></i>
+                    <span class="hidden-xs ng-binding">Новый</span>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Индекс</th>
+                            <th>Регион</th>
+                            <th>Город</th>
+                            <th>Улица</th>
+                            <th>Дом</th>
+                            <th>Юридический</th>
+                            <th>Доставки</th>
+                            <th>Терминал ТК Деловые Линии</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="addr in viewPartnerCtrl.partner.addresses"
+                            ng-switch="viewPartnerCtrl.partner.can_edit">
+                            <td>
+                                <a ng-switch-when="true" editable-text="addr.postal_index" buttons="no"
+                                   onaftersave="viewPartnerCtrl.saveAddress({item: addr})">
+                                    {{ addr.postal_index || "Нет" }}
+                                </a>
+                                <span ng-switch-default>{{ addr.postal_index }}</span>
+                            </td>
+                            <td>
+                                <a ng-switch-when="true" editable-text="addr.region" buttons="no"
+                                   onaftersave="viewPartnerCtrl.saveAddress({item: addr})">
+                                    {{ addr.region || "Нет" }}
+                                </a>
+                                <span ng-switch-default>{{ addr.region }}</span>
+                            </td>
+                            <td>
+                                <a ng-switch-when="true" editable-text="addr.city" buttons="no"
+                                   onaftersave="viewPartnerCtrl.saveAddress({item: addr})">
+                                    {{ addr.city || "Нет" }}
+                                </a>
+                                <span ng-switch-default>{{ addr.city }}</span>
+                            </td>
+                            <td>
+                                <a ng-switch-when="true" editable-text="addr.street" buttons="no"
+                                   onaftersave="viewPartnerCtrl.saveAddress({item: addr})">
+                                    {{ addr.street || "Нет" }}
+                                </a>
+                                <span ng-switch-default>{{ addr.street }}</span>
+                            </td>
+                            <td>
+                                <a ng-switch-when="true" editable-text="addr.house" buttons="no"
+                                   onaftersave="viewPartnerCtrl.saveAddress({item: addr})">
+                                    {{ addr.house || "Нет" }}
+                                </a>
+                                <span ng-switch-default>{{ addr.house }}</span>
+                            </td>
+                            <td>
+                                <a ng-switch-when="true" editable-text="addr.legal" buttons="no"
+                                   onaftersave="viewPartnerCtrl.saveAddress({item: addr})">
+                                    {{ addr.legal }}
+                                </a>
+                                <span ng-switch-default>{{ addr.legal }}</span>
+                            </td>
+                            <td>
+                                <a ng-switch-when="true" editable-text="addr.delivery" buttons="no"
+                                   onaftersave="viewPartnerCtrl.saveAddress({item: addr})">
+                                    {{ addr.delivery }}
+                                </a>
+                                <span ng-switch-default>{{ addr.delivery }}</span>
+                            </td>
+                            <td>
+                                <a ng-switch-when="true" editable-text="addr.dellin_terminal" buttons="no"
+                                   onaftersave="viewPartnerCtrl.saveAddress({item: item})">
+                                    {{ addr.dellin_terminal }}
+                                </a>
+                                <span ng-switch-default>{{ addr.dellin_terminal }}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="s8">
                 <div class="ng-scope btn btn-success" ng-click="viewPartnerCtrl.showNewPersonForm()">
                     <i class="fa fa-plus"></i>
                     <span class="hidden-xs ng-binding">Новый</span>
@@ -419,7 +417,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="tab-pane fade" id="s8">
+            <div class="tab-pane fade" id="s9">
                 <span class="editable-textarea-fw" editable-textarea="viewPartnerCtrl.partner.invoice_conditions"
                       onaftersave="viewPartnerCtrl.savePartner()">
                     {{ viewPartnerCtrl.partner.invoice_conditions || "Нет" }}
@@ -506,7 +504,7 @@
                                 <label class="input">
                                     <input type="text" ng-model="viewPartnerCtrl.newBankAccount.bik"
                                         uib-typeahead="name.label for name in viewPartnerCtrl.getDaDataSuggestions('bank', $viewValue, 'data.bik')"
-                                        typeahead-on-select="viewPartnerCtrl.fillBySuggestion($item, 'bik')"
+                                        typeahead-on-select="viewPartnerCtrl.fillBankBySuggestion($item, 'bik')"
                                         typeahead-template-url="typeAhead.tmpl.html"
                                         name="data.bik"
                                         class="input-sm">
@@ -538,6 +536,73 @@
                             </button>
                             <button type="button" class="btn btn-primary" data-dismiss="modal"
                                     ng-click="viewPartnerCtrl.addBankAccount()">
+                                Сохранить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="createAddressModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                            <h4 class="modal-title">Создать адрес</h4>
+                        </div>
+                        <div class="modal-body smart-form">
+                            <section class="p-l-15">
+                                <label class="label">Индекс:</label>
+                                <label class="input">
+                                    <input type="text" ng-model="viewPartnerCtrl.newAddress.postal_index"
+                                           uib-typeahead="name.label for name in viewPartnerCtrl.getDaDataSuggestions('address', $viewValue, 'data.postal_code')"
+                                           typeahead-on-select="viewPartnerCtrl.fillAddressBySuggestion($item)" class="input-sm"
+                                           typeahead-template-url="typeAhead.tmpl.html" name="data.postal_code">
+                                </label>
+                            </section>
+                            <section class="p-l-15">
+                                <label class="label">Регион:</label>
+                                <label class="input">
+                                    <input type="text" ng-model="viewPartnerCtrl.newAddress.region"
+                                           uib-typeahead="name.label for name in viewPartnerCtrl.getDaDataSuggestions('address', $viewValue, 'data.region_with_type')"
+                                           typeahead-on-select="viewPartnerCtrl.fillAddressBySuggestion($item)" class="input-sm"
+                                           typeahead-template-url="typeAhead.tmpl.html" name="data.region_with_type">
+                                </label>
+                            </section>
+                            <section class="p-l-15">
+                                <label class="label">Город:</label>
+                                <label class="input">
+                                    <input type="text" ng-model="viewPartnerCtrl.newAddress.city"
+                                           uib-typeahead="name.label for name in viewPartnerCtrl.getDaDataSuggestions('address', $viewValue, 'data.city')"
+                                           typeahead-on-select="viewPartnerCtrl.fillAddressBySuggestion($item)" class="input-sm"
+                                           typeahead-template-url="typeAhead.tmpl.html" name="data.city">
+                                </label>
+                            </section>
+                            <section class="p-l-15">
+                                <label class="label">Улица:</label>
+                                <label class="input">
+                                    <input type="text" ng-model="viewPartnerCtrl.newAddress.street"
+                                           uib-typeahead="name.label for name in viewPartnerCtrl.getDaDataSuggestions('address', $viewValue, 'data.street')"
+                                           typeahead-on-select="viewPartnerCtrl.fillAddressBySuggestion($item)" class="input-sm"
+                                           typeahead-template-url="typeAhead.tmpl.html" name="data.street">
+                                </label>
+                            </section>
+                            <section class="p-l-15">
+                                <label class="label">Дом:</label>
+                                <label class="input">
+                                    <input type="text" ng-model="viewPartnerCtrl.newAddress.house" name="data.house"
+                                           class="input-sm">
+                                </label>
+                            </section>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"
+                                    ng-click="viewPartnerCtrl.clearNewAddress()">
+                                Отмена
+                            </button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                    ng-click="viewPartnerCtrl.addAddress()">
                                 Сохранить
                             </button>
                         </div>

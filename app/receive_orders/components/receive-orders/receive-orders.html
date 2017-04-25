@@ -60,14 +60,7 @@
                         </span>
                     </section>
                     <section class="form-group">
-                        <label class="control-label" for="newOrderData.date">Дата</label>
-                        <div class="input-group">
-                            <input type="text" ng-model="$ctrl.newOrderData.date" style="position: initial;"
-                                   class="full-width input-sm form-control" id="newOrderData.date" />
-                            <span class="input-group-addon">
-                                <i class="glyphicon glyphicon-calendar"></i>
-                            </span>
-                        </div>
+                        <te-jq-datepicker ng-model="$ctrl.newOrderData.date" label="Дата"></te-jq-datepicker>
                     </section>
                     <section class="form-group">
                         <label class="control-label" for="new-order-number">Номер накладной</label>
