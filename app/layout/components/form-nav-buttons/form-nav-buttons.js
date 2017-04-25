@@ -1,6 +1,7 @@
 class FormNavButtonsCtrl {
-    constructor() {
+    constructor($parse) {
         this.showText = (this.template === undefined) || (this.template !== 'table');
+        this.$parse = $parse;
 
         const AVAILABLE_BUTTONS = {
             new:{name: 'Новый', ico: 'plus'},
@@ -28,40 +29,53 @@ class FormNavButtonsCtrl {
 
         let self = this;
         let roles = this.role || {};
-        this.buttons = [];
-        //пробегаемся по списку кнопок и проверяем существуют ли настроки для кнопки
-        if (angular.isArray(this.options) && this.options.length > 0) {
-            this.options.map(item => {
-                let button = AVAILABLE_BUTTONS[item.type], role = button.role;
 
-                if (button) {
-                    button.callback = item.callback;
-                    button.class = (self.contentClass || 'btn btn-success') + ' ' + (button.class || '');
+        this.whaitForChanges = false;
+        this.buttons;
 
-                    if(button.hasOwnProperty('disabled') && role && roles[role]) {
-                        button.disabled = !roles[role];
-                    }
+        this.buildButtons = function(){
 
-                    if(item.type === 'confirm_order') {
-                        return self.createConfirmOrderControls(button);
-                    }
+          //пробегаемся по списку кнопок и проверяем существуют ли настроки для кнопки
+          if (angular.isArray(this.options) && this.options.length > 0) {
+              // clear buttons
+              this.buttons = [];
 
-                    button.disableOnLoad = function(disabled, $event){
-                      var $elem = $($event.currentTarget || $event.srcElement);
-                      if(disabled){
-                        $elem.attr('disabled', 'disabled')
-                        .addClass('no-events');
-                        this.isDisabledOnLoad = true;
-                      }else{
-                        $elem.removeAttr('disabled')
-                        .removeClass('no-events');
-                        this.isDisabledOnLoad = false;
+              this.options.map(item => {
+                  let button = AVAILABLE_BUTTONS[item.type], role = button.role;
+
+                  if (button) {
+                      button.callback = item.callback;
+                      button.class = (self.contentClass || 'btn btn-success') + ' ' + (button.class || '');
+
+                      if(button.hasOwnProperty('disabled') && role && roles[role]) {
+                          button.disabled = !roles[role];
                       }
-                    };
-                    self.buttons.push(button);
-                }
-            });
+
+                      button.disableOnLoad = function(disabled, $event){
+                        var $elem = $($event.currentTarget || $event.srcElement);
+                        if(disabled){
+                          $elem.attr('disabled', 'disabled')
+                          .addClass('no-events');
+                          this.isDisabledOnLoad = true;
+                        }else{
+                          $elem.removeAttr('disabled')
+                          .removeClass('no-events');
+                          this.isDisabledOnLoad = false;
+                        }
+                      };
+
+                      if(item.type === 'confirm_order') {
+                          this.whaitForChanges = true;
+                          return self.createConfirmOrderControls(button);
+                      }
+
+                      self.buttons.push(button);
+                  }
+              });
+          }
         }
+
+        this.buildButtons();
     }
 
     /**
@@ -79,15 +93,27 @@ class FormNavButtonsCtrl {
             self.subdata.events.map(event => self.buttons.push(angular.extend(event, button)));
         }
     }
+
+    $onChanges(changes){
+      // ждать изменений если нужно
+      // сейчас используется только для subdata в случае ConfirmOrderControls
+      // если необходимо можно отслеживать изменения любого поля модели
+      if(this.whaitForChanges && this.$parse('subdata.currentValue.events')(changes)){
+        this.buildButtons();
+      }
+    }
 }
+
+FormNavButtonsCtrl.$inject = ['$parse'];
 
 angular.module('app.layout').component('formNavButtons', {
     bindings: {
         role: '=',
-        options:'=',//список кнопок которые необходимо отобразить
-        subdata: '=', // модель или данные которые необходимо вернуть в хендлер клика
+        options:'<',//список кнопок которые необходимо отобразить
+        subdata: '<', // модель или данные которые необходимо вернуть в хендлер клика
         contentClass: '@',
-        template: '@'
+        template: '@',
+        whaitForChanges: '@'
     },
     controller: FormNavButtonsCtrl,
     controllerAs: '$ctrl',
