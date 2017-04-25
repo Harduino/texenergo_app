@@ -361,6 +361,8 @@
                     <div class="widget-body">
                         <div class="well well-clean well-white no-padding">
                             <div>
+
+                            <te-table-tools summ-by="stock" track-by="product.id">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -372,26 +374,29 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="item in $ctrl.order.dispatched">
-                                        <td class="hidden-xs">{{ $index + 1 }}</td>
-                                        <td>
-                                            <a ng-href="/#/products/{{ item.product.id}}">
-                                                {{ item.product.name + ' '+ item.product.article }}
-                                            </a>
-                                        </td>
-                                        <td ng-hide="$ctrl.order.status === 'Не подтвержден'" class="success"
-                                            ng-class="{'warning': item.remains > 0}">
-                                            {{item.remains}}
-                                        </td>
-                                        <td class="hidden-xs" ng-hide="$ctrl.order.status === 'Закрыт'">
-                                            {{ item.stock }}
-                                        </td>
-                                        <td class="hidden-xs" ng-hide="$ctrl.order.status === 'Закрыт'">
-                                            {{ item.delivery_terms }}
-                                        </td>
-                                    </tr>
+                                  <tr ng-repeat="item in $ctrl.order.dispatched" te-summarize>
+                                      <td class="hidden-xs">{{ $index + 1 }}</td>
+                                      <td>
+                                          <a ng-href="/#/products/{{ item.product.id}}">
+                                              {{ item.product.name + ' '+ item.product.article }}
+                                          </a>
+                                      </td>
+                                      <td ng-hide="$ctrl.order.status === 'Не подтвержден'" class="success"
+                                          ng-class="{'warning': item.remains > 0}">
+                                          {{item.remains}}
+                                      </td>
+                                      <td class="hidden-xs" ng-hide="$ctrl.order.status === 'Закрыт'">
+                                          {{ item.stock }}
+                                          <te-summarize row="item"></te-summarize>
+                                      </td>
+                                      <td class="hidden-xs" ng-hide="$ctrl.order.status === 'Закрыт'">
+                                          {{ item.delivery_terms }}
+                                      </td>
+                                  </tr>
                                 </tbody>
                             </table>
+                            </te-table-tools>
+
                             </div>
                         </div>
                     </div>
