@@ -112,16 +112,21 @@ angular.module('app.layout').directive('widgetGrid', function ($rootScope, $comp
             element.attr('id', element.attr('id') + $state.current.name.replace(/\./g, '_'));
             var widgetIds = [];
 
+            function isElementOnView(){
+              return $('#' + element.attr('id')).length
+            }
+
             $viewContentLoadedOff = $rootScope.$on('$viewContentLoaded', function () {
                 $timeout(function () {
-                    setupWidgets(element, widgetIds)
+                    isElementOnView() && setupWidgets(element, widgetIds)
                 }, 100);
             });
 
             $stateChangeStartOff = $rootScope.$on('$stateChangeStart', function() {
+                destroyWidgets(element, widgetIds);
+                // widgetIds = [];
                 $viewContentLoadedOff();
                 $stateChangeStartOff();
-                destroyWidgets(element, widgetIds)
             });
 
             Observer.subscribe('jarvisWidgetAdded', function (widget) {
@@ -129,7 +134,7 @@ angular.module('app.layout').directive('widgetGrid', function ($rootScope, $comp
                     widgetIds.push(widget.attr('id'));
 
                     $timeout(function () {
-                        setupWidgets(element, widgetIds)
+                        isElementOnView() && setupWidgets(element, widgetIds)
                     }, 100);
                 }
             });
