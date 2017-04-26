@@ -6,14 +6,21 @@ class JarvisWidgetGridCtrl {
     constructor(Observer) {
         this.element = $('#' + this.for);
         this.widgetIds = [];
-        Observer.subscribe('jarvisWidgetAdded', this.addWidget.bind(this));
-        this.$onDestroy = this.destroyWidgets.bind(this);
+
+        let handler = this.addWidget.bind(this);
+        Observer.subscribe('jarvisWidgetAdded', handler);
+        let self = this;
+
+        this.$onDestroy = () => {
+            Observer.unsubscribe('jarvisWidgetAdded', handler);
+            self.destroyWidgets();
+        }
     }
 
     addWidget (widget) {
         let widgetId = JarvisWidgetGridCtrl.getWidgetId(widget);
 
-        if($('#' + JarvisWidgetGridCtrl.getWidgetId(this.element)).length && this.widgetIds.indexOf(widgetId) === -1) {
+        if(this.widgetIds.indexOf(widgetId) === -1) {
             this.destroyWidgets();
             this.widgetIds.push(widgetId);
             this.element.jarvisWidgets({
