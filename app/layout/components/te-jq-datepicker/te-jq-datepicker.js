@@ -13,7 +13,7 @@ class DatepickerCtrl {
     }
 }
 
-angular.module('te-jq-ui', []).component('teJqDatepicker', {
+angular.module('app.layout').component('teJqDatepicker', {
     bindings: {config: '<', label: '@', ngModel: '='},
     controller: DatepickerCtrl,
     controllerAs: '$ctrl',

@@ -17,7 +17,7 @@ class jQueryUiCtrl {
 
 jQueryUiCtrl.$inject = ['$element'];
 
-angular.module('te-jq-ui').component('teJqUi', {
+angular.module('app.layout').component('teJqUi', {
     bindings: {options: '='},
     controller: jQueryUiCtrl
 });

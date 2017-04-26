@@ -43,7 +43,7 @@ appConfig.sound_on = true;
     $.sound_path = appConfig.sound_path;
     $.sound_on = appConfig.sound_on;
 
-    var app = angular.module('app', [
+    let app = angular.module('app', [
         'ngSanitize',
         'ngCookies',
         'ngAnimate',
@@ -55,7 +55,6 @@ appConfig.sound_on = true;
         'ui.tinymce',
         'angular.d3',
         'te.infinity.scroll',
-        'te-jq-ui',
         'teBuffer',
         'angularFileUpload',
 
@@ -102,25 +101,21 @@ appConfig.sound_on = true;
     ];
 
     function appRun ($rootScope, $state, $stateParams, lock, authService, $sessionStorage, $location) {
-
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
-
-        const channelName = 'NotificationsChannel';
 
         lock.interceptHash();
 
         authService.registerAuthenticationListener();
 
         //scroll page top if page not search
-        $rootScope.$on('$stateChangeSuccess', function(){
+        $rootScope.$on('$stateChangeSuccess', () => {
             if($state.current.name !== "app.search")angular.element('body').scrollTop(0);
         });
 
         //checking permissions of state while navigating
-        $rootScope.$on('$stateChangeStart',
-            function (event, toState, toParams, fromState, fromParams) {
-                var token = authService.token;
+        $rootScope.$on('$stateChangeStart', (event, toState) => {
+                let token = authService.token;
                 if((!token || authService.isTokenExpired(token)) && toState.name !== 'login'){
                     event.preventDefault();
                     //remember url return to
@@ -131,8 +126,8 @@ appConfig.sound_on = true;
         );
     }
 
-    Array.prototype.swapItemByindex = function(currentIndex, newIndex){
-        var item = this.splice(currentIndex,1)[0];
+    Array.prototype.swapItemByindex = (currentIndex, newIndex) => {
+        let item = this.splice(currentIndex,1)[0];
         this.splice(newIndex,0,item);
     };
 }(window.angular));
