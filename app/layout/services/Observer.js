@@ -3,9 +3,9 @@ class Observer {
         this.subscribers = {};
     }
 
-    unsubscribe (eventName, callback) {
-        if(this.subscribers.hasOwnProperty(eventName) && (this.subscribers[eventName].indexOf(callback) !== -1)) {
-            this.subscribers[eventName].splice(this.subscribers[eventName].indexOf(callback), 1);
+    notify(eventName, data) {
+        if(this.subscribers.hasOwnProperty(eventName)) {
+            this.subscribers[eventName].forEach(callback => callback(data));
         }
     }
 
@@ -17,11 +17,9 @@ class Observer {
         this.subscribers[eventName].push(callback);
     }
 
-    notify(eventName, data) {
-        if(this.subscribers.hasOwnProperty(eventName)) {
-            this.subscribers[eventName].forEach(function(callback) {
-                callback(data);
-            });
+    unsubscribe (eventName, callback) {
+        if(this.subscribers.hasOwnProperty(eventName) && (this.subscribers[eventName].indexOf(callback) !== -1)) {
+            this.subscribers[eventName].splice(this.subscribers[eventName].indexOf(callback), 1);
         }
     }
 }
