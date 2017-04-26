@@ -323,66 +323,43 @@
                             <th>Юридический</th>
                             <th>Доставки</th>
                             <th>Терминал ТК Деловые Линии</th>
+                            <th/>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="addr in viewPartnerCtrl.partner.addresses"
                             ng-switch="viewPartnerCtrl.partner.can_edit">
                             <td>
-                                <a ng-switch-when="true" editable-text="addr.postal_index" buttons="no"
-                                   onaftersave="viewPartnerCtrl.saveAddress({item: addr})">
-                                    {{ addr.postal_index || "Нет" }}
-                                </a>
-                                <span ng-switch-default>{{ addr.postal_index }}</span>
+                                <span>{{ addr.postal_index }}</span>
                             </td>
                             <td>
-                                <a ng-switch-when="true" editable-text="addr.region" buttons="no"
-                                   onaftersave="viewPartnerCtrl.saveAddress({item: addr})">
-                                    {{ addr.region || "Нет" }}
-                                </a>
-                                <span ng-switch-default>{{ addr.region }}</span>
+                                <span>{{ addr.region }}</span>
                             </td>
                             <td>
-                                <a ng-switch-when="true" editable-text="addr.city" buttons="no"
-                                   onaftersave="viewPartnerCtrl.saveAddress({item: addr})">
-                                    {{ addr.city || "Нет" }}
-                                </a>
-                                <span ng-switch-default>{{ addr.city }}</span>
+                                <span>{{ addr.city }}</span>
                             </td>
                             <td>
-                                <a ng-switch-when="true" editable-text="addr.street" buttons="no"
-                                   onaftersave="viewPartnerCtrl.saveAddress({item: addr})">
-                                    {{ addr.street || "Нет" }}
-                                </a>
-                                <span ng-switch-default>{{ addr.street }}</span>
+                                <span>{{ addr.street }}</span>
                             </td>
                             <td>
-                                <a ng-switch-when="true" editable-text="addr.house" buttons="no"
-                                   onaftersave="viewPartnerCtrl.saveAddress({item: addr})">
-                                    {{ addr.house || "Нет" }}
-                                </a>
-                                <span ng-switch-default>{{ addr.house }}</span>
+                                <span>{{ addr.house }}</span>
                             </td>
                             <td>
-                                <a ng-switch-when="true" editable-text="addr.legal" buttons="no"
-                                   onaftersave="viewPartnerCtrl.saveAddress({item: addr})">
-                                    {{ addr.legal }}
-                                </a>
-                                <span ng-switch-default>{{ addr.legal }}</span>
+                                <span>{{ addr.legal }}</span>
                             </td>
                             <td>
-                                <a ng-switch-when="true" editable-text="addr.delivery" buttons="no"
-                                   onaftersave="viewPartnerCtrl.saveAddress({item: addr})">
-                                    {{ addr.delivery }}
-                                </a>
-                                <span ng-switch-default>{{ addr.delivery }}</span>
+                                <span>{{ addr.delivery }}</span>
                             </td>
                             <td>
-                                <a ng-switch-when="true" editable-text="addr.dellin_terminal" buttons="no"
-                                   onaftersave="viewPartnerCtrl.saveAddress({item: item})">
-                                    {{ addr.dellin_terminal }}
-                                </a>
-                                <span ng-switch-default>{{ addr.dellin_terminal }}</span>
+                                <span>{{ addr.dellin_terminal }}</span>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-xs" ng-click="viewPartnerCtrl.showUpdateAddressForm(addr)">
+                                    <span class="glyphicon glyphicon-pencil"/>
+                                </button>
+                                <button type="button" class="btn btn-danger btn-xs" ng-click="viewPartnerCtrl.showUpdateAddressForm(addr)">
+                                    <span class="glyphicon glyphicon-trash"/>
+                                </button>
                             </td>
                         </tr>
                     </tbody>
@@ -603,6 +580,84 @@
                             </button>
                             <button type="button" class="btn btn-primary" data-dismiss="modal"
                                     ng-click="viewPartnerCtrl.addAddress()">
+                                Сохранить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="updateAddressModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                            <h4 class="modal-title">Изменить адрес</h4>
+                        </div>
+                        <div class="modal-body smart-form">
+                            <section class="p-l-15">
+                                <label class="label">Индекс:</label>
+                                <label class="input">
+                                    <input type="text" ng-model="viewPartnerCtrl.updatableAddress.postal_index"
+                                           uib-typeahead="name.label for name in viewPartnerCtrl.getDaDataSuggestions('address', $viewValue, 'data.postal_code')"
+                                           typeahead-on-select="viewPartnerCtrl.fillAddressBySuggestion($item, viewPartnerCtrl.updatableAddress)" class="input-sm"
+                                           typeahead-template-url="typeAhead.tmpl.html" name="data.postal_code">
+                                </label>
+                            </section>
+                            <section class="p-l-15">
+                                <label class="label">Регион:</label>
+                                <label class="input">
+                                    <input type="text" ng-model="viewPartnerCtrl.updatableAddress.region"
+                                           uib-typeahead="name.label for name in viewPartnerCtrl.getDaDataSuggestions('address', $viewValue, 'data.region_with_type')"
+                                           typeahead-on-select="viewPartnerCtrl.fillAddressBySuggestion($item, viewPartnerCtrl.updatableAddress)" class="input-sm"
+                                           typeahead-template-url="typeAhead.tmpl.html" name="data.region_with_type">
+                                </label>
+                            </section>
+                            <section class="p-l-15">
+                                <label class="label">Город:</label>
+                                <label class="input">
+                                    <input type="text" ng-model="viewPartnerCtrl.updatableAddress.city"
+                                           uib-typeahead="name.label for name in viewPartnerCtrl.getDaDataSuggestions('address', $viewValue, 'data.city')"
+                                           typeahead-on-select="viewPartnerCtrl.fillAddressBySuggestion($item, viewPartnerCtrl.updatableAddress)" class="input-sm"
+                                           typeahead-template-url="typeAhead.tmpl.html" name="data.city">
+                                </label>
+                            </section>
+                            <section class="p-l-15">
+                                <label class="label">Улица:</label>
+                                <label class="input">
+                                    <input type="text" ng-model="viewPartnerCtrl.updatableAddress.street"
+                                           uib-typeahead="name.label for name in viewPartnerCtrl.getDaDataSuggestions('address', $viewValue, 'data.street')"
+                                           typeahead-on-select="viewPartnerCtrl.fillAddressBySuggestion($item, viewPartnerCtrl.updatableAddress)" class="input-sm"
+                                           typeahead-template-url="typeAhead.tmpl.html" name="data.street">
+                                </label>
+                            </section>
+                            <section class="p-l-15">
+                                <label class="label">Дом:</label>
+                                <label class="input">
+                                    <input type="text" ng-model="viewPartnerCtrl.updatableAddress.house" name="data.house" class="input-sm">
+                                </label>
+                            </section>
+                            <section class="p-l-15">
+                                <label class="label">Юридический адрес:</label>
+                                <label>
+                                    <input type="checkbox" class="" ng-model="viewPartnerCtrl.updatableAddress.legal">
+                                </label>
+                            </section>
+                            <section class="p-l-15">
+                                <label class="label">Адрес доставки:</label>
+                                <label>
+                                    <input type="checkbox" class="" ng-model="viewPartnerCtrl.updatableAddress.delivery">
+                                </label>
+                            </section>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"
+                                    ng-click="viewPartnerCtrl.clearUpdatableAddress()">
+                                Отмена
+                            </button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                    ng-click="viewPartnerCtrl.saveAddress(viewPartnerCtrl.updatableAddress)">
                                 Сохранить
                             </button>
                         </div>

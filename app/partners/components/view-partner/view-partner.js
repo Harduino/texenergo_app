@@ -9,6 +9,7 @@ class ViewPartnerCtrl {
         this.newPerson = {};
         this.newBankAccount = {};
         this.newAddress = {};
+        this.updatableAddress = {};
 
         this.visual = {
             navButtsOptions:[
@@ -194,9 +195,9 @@ class ViewPartnerCtrl {
         });
     }
 
-    fillAddressBySuggestion($item) {
-        let data = $item.item.data,
-            addr = this.newAddress;
+    fillAddressBySuggestion(daDataResponse, addr_item) {
+        let data = daDataResponse.item.data;
+        let addr = (addr_item === undefined) ? this.newAddress : addr_item; // Default to newAddress
 
         addr.postal_index =  data.postal_code;
         addr.region = data.region_with_type;
@@ -205,6 +206,7 @@ class ViewPartnerCtrl {
         addr.street = data.street_with_type;
         addr.house = data.house;
     }
+
     showNewAddressForm () {
         $('#createAddressModal').modal('show');
     }
@@ -228,11 +230,19 @@ class ViewPartnerCtrl {
         });
     }
 
-    saveAddress (data) {
-        let self = this;
-        let addrEntry = data.item;
+    showUpdateAddressForm (addr) {
+        this.updatableAddress = addr;
+        $('#updateAddressModal').modal('show');
+    }
 
-        this.serverApi.updateAddress(this.partner.id, addrEntry.id, {
+    clearUpdatableAddress () {
+        this.updatableAddress = {};
+    }
+
+    saveAddress (addrEntry) {
+        let self = this;
+
+        self.serverApi.updateAddress(self.partner.id, addrEntry.id, {
             address: addrEntry
         }, result => {
             if(!result.data.errors) {

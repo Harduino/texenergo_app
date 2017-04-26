@@ -2,13 +2,9 @@ class HotKeysCtrl {
     constructor($state) {
         var timeoutId;
         var buffer = '';
-
-        // setTimeout(function() {}, 10);
-
         var state = $state;
 
         var handleBuffer = () => {
-            console.log("buffer", buffer);
             if( buffer === "i" || buffer === 'ш'){
                 searchFocus();
             } else if ( buffer === "зз" || buffer === 'pp' ) {
@@ -33,7 +29,6 @@ class HotKeysCtrl {
         }
 
         angular.element(window).on('keydown', event => {
-            console.log("key", event.key);
             const localName = ['input', 'textarea'];
 
             if(localName.indexOf(event.target.localName) == -1) {

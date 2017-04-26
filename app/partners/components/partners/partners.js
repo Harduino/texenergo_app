@@ -60,6 +60,7 @@ class PartnersCtrl {
             addr.city = (data.city || data.settlement_with_type);
             addr.street = data.street_with_type;
             addr.house = data.house;
+            addr.street_kladr_id = data.street_kladr_id
         } else {
             this.newPartnerData.inn = data.inn;
             this.newPartnerData.kpp = (data.kpp || '0');
@@ -72,13 +73,14 @@ class PartnersCtrl {
             }
 
             if((data.address.data !== null) && (data.address.data !== undefined)) {
+                var d = data.address.data;
                 let address = {
-                    postal_index: data.address.data.postal_code,
-                    region: data.address.data.region_with_type,
-                    city: (data.address.data.city || data.address.data.settlement_with_type),
-                    street: data.address.data.street_with_type,
-                    house: data.address.data.house,
-                    street_kladr_id: data.address.datastreet_kladr_id
+                    postal_index: d.postal_code,
+                    region: d.region_with_type,
+                    city: (d.city || d.settlement_with_type),
+                    street: d.street_with_type,
+                    house: d.house,
+                    street_kladr_id: d.street_kladr_id
                 };
                 this.newAddress =  address;
             }
