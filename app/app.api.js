@@ -262,6 +262,9 @@
         o.getPartnerLogs = function(id, success, fail){
             $http.get('/partners/' + id + '/logs').then(success, fail);
         };
+        o.getDellinTerminals = (partner_id, success, fail) => {
+            $http.get('/partners/' + partner_id + '/dellin_terminals').then(success, fail);
+        }
 
         // Представители партнёра
         o.createPerson = function(partner_id, data, success, fail, config){

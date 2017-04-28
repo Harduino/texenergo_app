@@ -44,6 +44,17 @@ class ViewPartnerCtrl {
                 window.partners[$stateParams.id].receiveOrders = r.data;
                 self.partner.receiveOrders = r.data;
             }, {}, self.partner.id);
+
+            self.dellinTerminalsList = [];
+            serverApi.getDellinTerminals(self.partner.id, r => {
+                console.log("Dellin is on fire!");
+                r.data.forEach( city => {
+                    city.terminals.forEach(terminal => {
+                        terminal.dellin_terminal = terminal.id;
+                        self.dellinTerminalsList.push(terminal);
+                    })
+                });
+            });
         }
 
         var loadPartner = (force_reload, button, $event) => {
@@ -63,6 +74,7 @@ class ViewPartnerCtrl {
                 });
             }
         }
+
         loadPartner();
     }
 
@@ -219,7 +231,7 @@ class ViewPartnerCtrl {
         let self = this;
         let data = { address: self.newAddress };
 
-        this.serverApi.createAddress(this.partner.id, data, result => {
+        self.serverApi.createAddress(self.partner.id, data, result => {
             if(!result.data.errors){
                 self.funcFactory.showNotification('Создал адрес', '', true);
                 self.partner.addresses.push(result.data);
@@ -260,6 +272,13 @@ class ViewPartnerCtrl {
                 self.funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors);
             }
         });
+    }
+
+    dellinTerminals () {
+        console.log("Fired dellinTerminals");
+        let self = this;
+
+        
     }
     // ADDRESS END
 

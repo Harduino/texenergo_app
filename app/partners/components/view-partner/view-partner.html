@@ -312,6 +312,11 @@
                     <i class="fa fa-plus"></i>
                     <span class="hidden-xs ng-binding">Новый</span>
                 </div>
+                <div>
+                    <a href="#" editable-select="viewPartnerCtrl.newAddress" e-ng-options="del as del.address for del in viewPartnerCtrl.dellinTerminalsList" onaftersave="viewPartnerCtrl.addAddress()">
+                        {{ "Ничего" }}
+                    </a>
+                </div>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
