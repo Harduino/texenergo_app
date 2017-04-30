@@ -21,7 +21,7 @@ gulp.task('styles', function() {
         // 'assets/css/smartadmin-rtl.css',
         'assets/css/project.css',
         'bower_components/angular-ui-select/dist/select.min.css',
-        'assets/plugin/x-editable/xeditable.css',
+        'bower_components/angular-xeditable/dist/css/xeditable.css',
         'bower_components/ion.rangeSlider/css/normalize.css',
         'bower_components/ion.rangeSlider/css/ion.rangeSlider.css'
     ];
@@ -80,7 +80,7 @@ gulp.task('libs', function(){
         'app/smartadmin-plugin/smartwidgets/jarvis.widget.js',
         'assets/plugin/infinite-scroll/ng-infinite-scroll.js',
         'assets/plugin/easy-pie-chart/angular.easypiechart.min.js',
-        'assets/plugin/x-editable/xeditable.js',
+        'bower_components/angular-xeditable/dist/js/xeditable.js',
         'bower_components/ion.rangeSlider/js/ion.rangeSlider.min.js',
         'bower_components/pubnub/dist/web/pubnub.js',
         'bower_components/pubnub-angular/dist/pubnub-angular.js',
