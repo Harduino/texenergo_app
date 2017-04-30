@@ -19,6 +19,7 @@
     "auth0-lock-passwordless": "latest",
     "bootstrap": "3.3.1",
     "d3": "3.5.17",
+    "dropzone": "4.2.0",
     "fastclick": "1.0.3",
     "ion.rangeSlider": "ionrangeslider#2.1.4",
     "jquery": "3.0.0",
