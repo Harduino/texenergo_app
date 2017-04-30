@@ -81,7 +81,6 @@ gulp.task('libs', function(){
         'assets/plugin/infinite-scroll/ng-infinite-scroll.js',
         'assets/plugin/easy-pie-chart/angular.easypiechart.min.js',
         'assets/plugin/x-editable/xeditable.js',
-        'assets/plugin/x-editable/x-editable-custom.js',
         'bower_components/ion.rangeSlider/js/ion.rangeSlider.min.js',
         'bower_components/pubnub/dist/web/pubnub.js',
         'bower_components/pubnub-angular/dist/pubnub-angular.js',
