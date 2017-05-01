@@ -195,8 +195,6 @@ class ViewCustomerOrderCtrl {
             slide: (event, ui) => self.data.networkConfig.zoom = ui.value
         };
 
-        this.summaryPanelOptions = {appendTo: 'body', scroll: true, containment: 'body'};
-        this.summaryData = {show: false, positions: {}, total: 0};
         this.getOrderDetails();
         serverApi.getRelatedOrdersOfCustomer($stateParams.id, res => self.data.networkData = res.data);
         this.$onDestroy = () => self._subscription && self._subscription.unsubscribe();
@@ -269,22 +267,6 @@ class ViewCustomerOrderCtrl {
         });
     }
 
-    selectPosition ($event, item) {
-        if($event.shiftKey) {
-            $event.preventDefault();
-            $event.stopImmediatePropagation();
-            item.selected = !item.selected;
-
-            if(item.selected) {
-                this.summaryData.positions[item.id] = item;
-            } else {
-                delete this.summaryData.positions[item.id];
-            }
-
-            this.updateSelectedItemsSummary();
-        }
-    }
-
     selectProductForAppend (item) {
         this.productForAppend = item;
         this.productForAppend.id = item.id || item._id;
@@ -343,13 +325,8 @@ class ViewCustomerOrderCtrl {
         let self = this;
 
         this.order.customer_order_contents.forEach((item) => {
-            if (item.selected === useSelected) {
+            if (item.$selectedForSumm === useSelected) {
                 self.serverApi.removeCustomerOrderProduct(self.order.id, item.id, result => {
-                    if(!result.data.errors && useSelected) {
-                        delete self.summaryData.positions[item.id];
-                        self.updateSelectedItemsSummary();
-                    }
-
                     self.getRemovePositionHandler(item)(result);
                 });
             }
@@ -411,15 +388,9 @@ class ViewCustomerOrderCtrl {
         self.total = total;
     }
 
-    updateSelectedItemsSummary () {
-        let self = this;
-        let values = this.summaryData.positions;
-        let keys = Object.keys(values);
-        let total = 0;
-
-        this.summaryData.show = keys.length > 0;
-        keys.map(prop => total += self.$filter('price_net')(values[prop], values[prop].quantity));
-        this.summaryData.total = total;
+    // Used for each selected row to calculate sum
+    summarizeRows (row) {
+      return this.$filter('price_net')(row, row.quantity);
     }
 
     getPropertyByDocumentType (item) {

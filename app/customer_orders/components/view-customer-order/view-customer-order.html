@@ -160,7 +160,7 @@
                                 </p>
                                 <div class="col-md-9" ng-if="$ctrl.order.can_edit">
                                     <a href="#"
-                                        editable-select="$ctrl.order.transportation_info.delivery_address" 
+                                        editable-select="$ctrl.order.transportation_info.delivery_address"
                                         e-ng-options="option as $ctrl.addressToString(option) for option in $ctrl.order.transportation_info.delivery_address_options"
                                         onaftersave="$ctrl.saveOrderInfo()">
                                         <span ng-if="$ctrl.order.transportation_info.delivery_address">
@@ -194,6 +194,15 @@
                             </div>
 
                             <te-jq-ui options="$ctrl.visual.sortOpts">
+                              <te-table-tools summ-fn="$ctrl.summarizeRows" track-by="id">
+                                <te-table-tools-controls>
+                                  <div class="col-sm-6">
+                                      <a ng-href="" ng-click="$ctrl.deleteSelectedItems(false)">Оставить выделенные</a>
+                                  </div>
+                                  <div class="col-sm-6">
+                                      <a ng-href="" ng-click="$ctrl.deleteSelectedItems(true)">Удалить выделенные</a>
+                                  </div>
+                                </te-table-tools-controls>
                                 <table class="table table-hover table-bordered margin-top-10">
                                     <thead>
                                         <tr>
@@ -264,6 +273,7 @@
                                                     {{ item.quantity }}
                                                 </a>
                                                 <span ng-if="!$ctrl.order.can_edit">{{ item.quantity }}</span>
+                                                <te-summarize row="item"></te-summarize>
                                             </td>
                                             <td class="text-right">
                                                 <a ng-if="$ctrl.order.can_edit" editable-number="item.discount" buttons="no"
@@ -294,6 +304,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                              </te-table-tools>
                             </te-jq-ui>
                         </div>
                     </div>
@@ -311,8 +322,6 @@
                     <div class="widget-body">
                         <div class="well well-clean well-white no-padding">
                             <div>
-
-                            <te-table-tools summ-by="stock" track-by="product.id">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -337,7 +346,6 @@
                                       </td>
                                       <td class="hidden-xs" ng-hide="$ctrl.order.status === 'Закрыт'">
                                           {{ item.stock }}
-                                          <te-summarize row="item"></te-summarize>
                                       </td>
                                       <td class="hidden-xs" ng-hide="$ctrl.order.status === 'Закрыт'">
                                           {{ item.delivery_terms }}
@@ -345,7 +353,6 @@
                                   </tr>
                                 </tbody>
                             </table>
-                            </te-table-tools>
 
                             </div>
                         </div>
@@ -448,17 +455,4 @@
             </article>
         </div>
     </section>
-    <div class="summary-draggable-panel" ng-show="$ctrl.summaryData.show">
-        <te-jq-ui options="$ctrl.summaryPanelOptions">
-            <div class="content" data-ui-type="draggable">
-                <b>Итого: {{$ctrl.summaryData.total | currency}}</b>
-                <div class="col-sm-6">
-                    <a ng-href="" ng-click="$ctrl.deleteSelectedItems(false)">Оставить выделенные</a>
-                </div>
-                <div class="col-sm-6">
-                    <a ng-href="" ng-click="$ctrl.deleteSelectedItems(true)">Удалить выделенные</a>
-                </div>
-            </div>
-        </te-jq-ui>
-    </div>
 </div>

@@ -759,7 +759,7 @@ td .editable-controls>input[type="number"]{
     width: 0;
     height: 0;
 }
-.summary-draggable-panel>.content{
+.summary-draggable-panel .content{
     padding: 30px;
     width: 300px;
     background-color: white;

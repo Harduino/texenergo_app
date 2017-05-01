@@ -1,5 +1,8 @@
-<div class="summary-draggable-panel">
-    <div class="content">
-        <b>Итого: {{$teTableTools.summ | currency}}</b>
+<div class="summary-draggable-panel not-selectable">
+  <te-jq-ui options="$teTableTools.draggableOptions">
+    <div class="content" data-ui-type="draggable">
+      <b>Итого: {{$teTableTools.summ | currency}}</b>
+      <div class="te-summarize-controls"></div>
     </div>
+  </te-jq-ui>
 </div>

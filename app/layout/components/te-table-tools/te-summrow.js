@@ -1,3 +1,5 @@
+// Component provides ability to
+// select/unselect table row and add it to Sum
 class TeSummRowCtrl{
   constructor($element){
     this.$element = $element;
@@ -8,11 +10,10 @@ class TeSummRowCtrl{
 
     if(event.shiftKey){
       let selectedForSumm = this.row.$selectedForSumm;
+      let selectedNewValue = !selectedForSumm;
 
       event.preventDefault();
       event.stopImmediatePropagation();
-
-      console.log('click on ', event, this.row);
 
       if(selectedForSumm){
         this.table.removeFromSumm(this.row);
@@ -20,7 +21,8 @@ class TeSummRowCtrl{
         this.table.addToSumm(this.row);
       }
 
-      this.row.$selectedForSumm = !selectedForSumm;
+      this.row.$selectedForSumm = selectedNewValue;
+      this.$tr.toggleClass('active', selectedNewValue);
     }
   }
 
@@ -45,16 +47,3 @@ angular.module('app.layout').component('teSummarize', {
   },
   bindings: {row: '<'}
 });
-
-// angular.module('app.layout').directive('teSummarize', () => {
-//   return {
-//     controller: TeSummarizeCtrl,
-//     controllerAs: '$teSummarize',
-//     require: {
-//       table: '^teTableTools'
-//     },
-//     link: function(scope, element, attrs, require){
-//
-//     }
-//   };
-// });
