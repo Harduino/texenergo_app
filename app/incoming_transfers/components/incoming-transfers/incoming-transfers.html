@@ -1,18 +1,16 @@
 <div id="content">
     <div class="row">
-        <big-breadcrumbs items="incomingTransfersCtrl.visual.titles" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"
-                         data-icon="book">
+        <big-breadcrumbs items="$ctrl.visual.titles" class="col-xs-12 col-sm-7 col-md-7 col-lg-4" data-icon="book">
         </big-breadcrumbs>
     </div>
     <div class="well">
-        <form-nav-buttons options="incomingTransfersCtrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
+        <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
         <hr>
-        <orders-filter data-search-query="incomingTransfersCtrl.data.searchQuery"
-                       data-to-state="app.incoming_transfers">
+        <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.incoming_transfers">
         </orders-filter>
         <table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"
-               te-lazy-helper data-list="incomingTransfersCtrl.data.incomingTransfersList"
-               data-search-query="incomingTransfersCtrl.data.searchQuery" data-server-api-method="getIncomingTransfers">
+               te-lazy-helper data-list="$ctrl.data.incomingTransfersList"
+               data-search-query="$ctrl.data.searchQuery" data-server-api-method="getIncomingTransfers">
             <thead>
                 <tr>
                     <th>#</th>
@@ -25,7 +23,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="row in incomingTransfersCtrl.data.incomingTransfersList">
+                <tr ng-repeat="row in $ctrl.data.incomingTransfersList">
                     <td>{{$index +1}}</td>
                     <td>{{row.number}}</td>
                     <td>{{row.date | date:'dd/MM/yy'}}</td>
@@ -33,9 +31,9 @@
                     <td>{{row.remaining_amount | currency}}</td>
                     <td>{{row.partner.name}}</td>
                     <td class="center-item-text">
-                        <form-nav-buttons data-role="incomingTransfersCtrl.visual.role" content-class="btn btn-xs"
+                        <form-nav-buttons data-role="$ctrl.visual.role" content-class="btn btn-xs"
                                           subdata="{data:row, index:$index}" class="btn-group" data-template="table"
-                                          data-options="incomingTransfersCtrl.visual.navTableButts">
+                                          data-options="$ctrl.visual.navTableButts">
                         </form-nav-buttons>
                     </td>
                 </tr>
@@ -44,7 +42,6 @@
         <te-scroll-top></te-scroll-top>
     </div>
 <!--    В зависимости от прав показывать форму создания нового-->
-    <transfer-builder config="incomingTransfersCtrl.newTransferConfig"
-                      transfers-list="incomingTransfersCtrl.data.incomingTransfersList">
+    <transfer-builder config="$ctrl.newTransferConfig" transfers-list="$ctrl.data.incomingTransfersList">
     </transfer-builder>
 </div>
