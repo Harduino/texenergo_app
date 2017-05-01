@@ -4,12 +4,12 @@
         </big-breadcrumbs>
     </div>
     <div class="well">
-        <form-nav-buttons options="cataloguesCtrl.navButtsOptions" class="btn-group"></form-nav-buttons>
+        <form-nav-buttons options="$ctrl.navButtsOptions" class="btn-group"></form-nav-buttons>
         <hr>
-        <orders-filter data-search-query="cataloguesCtrl.searchQuery" data-to-state="app.catalogues"></orders-filter>
+        <orders-filter data-search-query="$ctrl.searchQuery" data-to-state="app.catalogues"></orders-filter>
         <table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"
-               te-lazy-helper data-list="cataloguesCtrl.cataloguesList"
-               data-search-query="cataloguesCtrl.searchQuery" data-server-api-method="getCatalogues">
+               te-lazy-helper data-list="$ctrl.cataloguesList"
+               data-search-query="$ctrl.searchQuery" data-server-api-method="getCatalogues">
             <thead>
                 <tr>
                     <th>#</th>
@@ -18,11 +18,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="row in cataloguesCtrl.cataloguesList">
+                <tr ng-repeat="row in $ctrl.cataloguesList">
                     <td>{{ $index + 1 }}</td>
                     <td>{{row.name}}</td>
                     <td class="center-item-text">
-                        <form-nav-buttons data-role="row" class="btn-group" data-options="cataloguesCtrl.navTableButts"
+                        <form-nav-buttons data-role="row" class="btn-group" data-options="$ctrl.navTableButts"
                                           subdata="row" data-template="table" content-class="btn btn-xs">
                         </form-nav-buttons>
                     </td>

@@ -1,11 +1,11 @@
 class CataloguesCtrl {
     constructor($state, $stateParams, serverApi, funcFactory) {
-        var vm = this;
-        vm.cataloguesList = [];
-        vm.searchQuery = $stateParams.q;
-        vm.navButtsOptions = [{type: 'new', callback: () => {}}];
+        var self = this;
+        this.cataloguesList = [];
+        this.searchQuery = $stateParams.q;
+        this.navButtsOptions = [{type: 'new', callback: () => {}}];
 
-        vm.navTableButts = [
+        this.navTableButts = [
             {
                 type: 'view',
                 callback: data => $state.go('app.catalogues.view', {id: data.id || data._id})
@@ -27,7 +27,7 @@ class CataloguesCtrl {
                             serverApi.deleteCatalogue(data.id, result => {
                                 button.disableOnLoad(false, $event);
                                 if(!result.data.errors) {
-                                    vm.cataloguesList.splice(data.index,1);
+                                    self.cataloguesList.splice(data.index, 1);
                                     funcFactory.showNotification('Категория ' + data.name + ' успешно удалена.', '',
                                         true);
                                 } else {
@@ -50,5 +50,5 @@ CataloguesCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
 angular.module('app.catalogues').component('catalogues', {
     templateUrl: '/app/catalogues/components/catalogues/catalogues.html',
     controller: CataloguesCtrl,
-    controllerAs: 'cataloguesCtrl'
+    controllerAs: '$ctrl'
 });
