@@ -22,6 +22,7 @@ class IncomingTransfersCtrl {
                         }, ButtonPressed => {
                             if (ButtonPressed === 'Да') {
                                 button.disableOnLoad(true, $event);
+
                                 serverApi.deleteIncomingTransfer(item.data.id, result => {
                                     if(!result.data.errors) {
                                         self.data.incomingTransfersList.splice(item.index, 1);
@@ -31,6 +32,7 @@ class IncomingTransfersCtrl {
                                         funcFactory.showNotification('Не удалось удалить платеж ' + item.data.number,
                                             result.data.errors);
                                     }
+
                                     button.disableOnLoad(false, $event);
                                 }, () => {
                                   button.disableOnLoad(false, $event);
@@ -52,6 +54,6 @@ IncomingTransfersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFac
 
 angular.module('app.incoming_transfers').component('incomingTransfers', {
     controller: IncomingTransfersCtrl,
-    controllerAs: 'incomingTransfersCtrl',
+    controllerAs: '$ctrl',
     templateUrl: '/app/incoming_transfers/components/incoming-transfers/incoming-transfers.html'
 });

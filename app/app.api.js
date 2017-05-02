@@ -51,47 +51,47 @@
         };
 
         //Customer Orders
-        o.getCustomerOrders = function(page, query, config, success, fail, partner_id){
+        o.getCustomerOrders = (page, query, config, success, fail, partner_id) => {
             var path = '/customer_orders?page='+page + (query ? ('&q=' + query) : '') + (partner_id ? ('&partner_id=' + partner_id) : '');
             $http.get(path, config).then(success, fail);
         };
-        o.createCustomerOrder = function(data, success, fail){
+        o.createCustomerOrder = (data, success, fail) => {
             $http.post('/customer_orders', data).then(success, fail);
         };
-        o.deleteCustomerOrder = function(order_id, success, fail){
+        o.deleteCustomerOrder = (order_id, success, fail) => {
             $http.delete('/customer_orders/' + order_id).then(success, fail)
         };
-        o.getCustomerOrderDetails = function(id, success, fail){
+        o.getCustomerOrderDetails = (id, success, fail) => {
             $http.get('/customer_orders/' + id).then(success, fail);
         };
-        o.updateCustomerOrder = function(id, data, success, fail){
+        o.updateCustomerOrder = (id, data, success, fail) => {
             $http.put('/customer_orders/' + id, data).then(success, fail);
         };
-        o.addCustomerOrderProduct = function(id, data, success, fail){
-            $http.post('/customer_orders/'+id+'/customer_order_contents', data).then(success, fail);
+        o.addCustomerOrderProduct = (id, data, success, fail) =>{
+            $http.post('/customer_orders/' + id + '/customer_order_contents', data).then(success, fail);
         };
-        o.updateCustomerOrderProduct = function(order_id, row_id, data, success, fail){
-            $http.put('/customer_orders/'+order_id+'/customer_order_contents/' + row_id, data).then(success, fail);
+        o.updateCustomerOrderProduct = (order_id, row_id, data, success, fail) => {
+            $http.put('/customer_orders/' + order_id + '/customer_order_contents/' + row_id, data).then(success, fail);
         };
-        o.removeCustomerOrderProduct = function(order_id, row_id, success, fail){
-            $http.delete('/customer_orders/'+order_id+'/customer_order_contents/' + row_id).then(success);
+        o.removeCustomerOrderProduct = (order_id, row_id, success, fail) => {
+            $http.delete('/customer_orders/' + order_id + '/customer_order_contents/' + row_id).then(success);
         };
-        o.getCustomerOrderLogs = function(id, success, fail){
+        o.getCustomerOrderLogs = (id, success, fail) => {
             $http.get('/customer_orders/' + id + '/logs').then(success, fail);
         };
-        o.sendCustomerOrderInvoice = function(id, success, fail){
+        o.sendCustomerOrderInvoice = (id, success, fail) => {
             $http.put('/customer_orders/' + id + '/send_invoice').then(success, fail);
         };
-        o.recalculateCustomerOrder = function(id, success, fail){
+        o.recalculateCustomerOrder = (id, success, fail) => {
             $http.get('/customer_orders/' + id + '/recalculate').then(success, fail);
         };
-        o.updateStatusCustomerOrder = function(id, data, success, fail){
+        o.updateStatusCustomerOrder = (id, data, success, fail) => {
             $http.put('/customer_orders/' + id + '/update_status', data).then(success, fail);
         };
-        o.updateCommandCustomerOrder = function(id, data, success, fail){
+        o.updateCommandCustomerOrder = (id, data, success, fail) => {
             $http.put('/customer_orders/' + id + '/update_command', data).then(success, fail);
         };
-        o.getRelatedOrdersOfCustomer = function(id, success, fail){
+        o.getRelatedOrdersOfCustomer = (id, success, fail) => {
             $http.get('/customer_orders/' + id + '/trace').then(success, fail);
         };
 
@@ -246,21 +246,21 @@
         };
 
         // Партнёры
-        o.getPartners = function(page, query, config, success, fail){
-            var path = '/partners?page='+page + (query ? ('&q=' + query) : '');
+        o.getPartners = (page, query, config, success, fail) => {
+            var path = '/partners?page=' + page + (query ? ('&q=' + query) : '');
             $http.get(path, config).then(success, fail);
         };
-        o.getPartnerDetails = function(id, success, fail){
-            $http.get('/partners/' + id).then(success, fail);
+        o.getPartnerDetails = (partner_id, success, fail) => {
+            $http.get('/partners/' + partner_id).then(success, fail);
         };
-        o.updatePartner = function(id, data, success, fail){
-            $http.put('/partners/' + id, data).then(success, fail);
+        o.updatePartner = (partner_id, data, success, fail) => {
+            $http.put('/partners/' + partner_id, data).then(success, fail);
         };
-        o.createPartner = function(data, success, fail){
+        o.createPartner = (data, success, fail) => {
             $http.post('/partners/', data).then(success, fail);
         };
-        o.getPartnerLogs = function(id, success, fail){
-            $http.get('/partners/' + id + '/logs').then(success, fail);
+        o.getPartnerLogs = (partner_id, success, fail) => {
+            $http.get('/partners/' + partner_id + '/logs').then(success, fail);
         };
         o.getDellinTerminals = (partner_id, success, fail) => {
             $http.get('/partners/' + partner_id + '/dellin_terminals').then(success, fail);

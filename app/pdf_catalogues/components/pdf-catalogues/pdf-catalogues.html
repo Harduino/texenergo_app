@@ -4,33 +4,10 @@
         </big-breadcrumbs>
     </div>
     <div class="well">
-        <form-nav-buttons options="pdfCataloguesCtrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
+        <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
         <hr>
-        <orders-filter data-search-query="pdfCataloguesCtrl.data.searchQuery" data-to-state="app.pdf_catalogues">
-        </orders-filter>
-        <table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"
-               te-lazy-helper data-list="pdfCataloguesCtrl.data.pdfCataloguesList"
-               data-search-query="pdfCataloguesCtrl.data.searchQuery" data-server-api-method="getPdfCatalogues">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Наименование</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="row in pdfCataloguesCtrl.data.pdfCataloguesList">
-                    <td>{{ $index + 1 }}</td>
-                    <td>{{ row.title }}</td>
-                    <td class="center-item-text">
-                        <form-nav-buttons data-role="pdfCataloguesCtrl.visual.role" data-template="table"
-                                          data-options="pdfCataloguesCtrl.visual.navTableButts" class="btn-group"
-                                          subdata="{data:row, index:$index}" content-class="btn btn-xs">
-                        </form-nav-buttons>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.pdf_catalogues"></orders-filter>
+        <ng-include src="'app/pdf_catalogues/components/pdf-catalogues/partials/list.html'"></ng-include>
         <te-scroll-top></te-scroll-top>
     </div>
 </div>

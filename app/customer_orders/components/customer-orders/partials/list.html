@@ -1,0 +1,35 @@
+<table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false" te-lazy-helper
+       data-list="$ctrl.data.ordersList" data-search-query="$ctrl.data.searchQuery" data-server-api-method="getCustomerOrders">
+    <thead>
+    <tr>
+        <th class="hidden-xs"><i class="fa fa-truck"></i></th>
+        <th>Номер</th>
+        <th>Свой номер</th>
+        <th class="hidden-xs">Статус</th>
+        <th>Дата</th>
+        <th>Партнер</th>
+        <th>Итого</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="row in $ctrl.data.ordersList">
+        <td ng-attr-title="{{row.transportation}}" class="hidden-xs">{{row.transportation[0]}}</td>
+        <td>
+            <te-copy-to-buffer>
+                <span te-buffer-value>{{row.number}}</span>
+            </te-copy-to-buffer>
+        </td>
+        <td>{{ row.title }}</td>
+        <td class="hidden-xs">{{row.status}}</td>
+        <td>{{row.date | date:'dd/MM/yy HH:mm'}}</td>
+        <td>{{row.partner.name}}</td>
+        <td>{{row.total | currency}}</td>
+        <td class="center-item-text">
+            <form-nav-buttons data-template="table" content-class="btn btn-xs" data-options="$ctrl.visual.navTableButts"
+                              data-role="row" class="btn-group" subdata="{data:row, index:$index}">
+            </form-nav-buttons>
+        </td>
+    </tr>
+    </tbody>
+</table>

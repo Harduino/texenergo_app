@@ -1,0 +1,26 @@
+<table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"
+       data-list="$ctrl.data.partnersList" data-search-query="$ctrl.data.searchQuery"
+       te-lazy-helper data-server-api-method="getPartners">
+    <thead>
+    <tr>
+        <th>№</th>
+        <th>Префикс</th>
+        <th>Официальное наименование</th>
+        <th>ИНН</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="row in $ctrl.data.partnersList">
+        <td>{{$index +1}}</td>
+        <td>{{ row.prefix }}</td>
+        <td>{{ row.legal_name }}</td>
+        <td>{{ row.inn }}</td>
+        <td class="center-item-text">
+            <form-nav-buttons data-role="row" class="btn-group" subdata="row" data-template="table"
+                              content-class="btn btn-xs" data-options="$ctrl.visual.navTableButts">
+            </form-nav-buttons>
+        </td>
+    </tr>
+    </tbody>
+</table>

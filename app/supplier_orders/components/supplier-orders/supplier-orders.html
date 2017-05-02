@@ -8,37 +8,7 @@
         <hr>
         <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.supplier_orders">
         </orders-filter>
-        <table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"
-               data-list="$ctrl.data.ordersList" data-search-query="$ctrl.data.searchQuery" te-lazy-helper
-               data-server-api-method="getSupplierOrders">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Номер</th>
-                    <th>Статус</th>
-                    <th>Дата</th>
-                    <th>Партнер</th>
-                    <th>Итого</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="row in $ctrl.data.ordersList">
-                    <td>{{$index +1}}</td>
-                    <td>{{row.number}}</td>
-                    <td>{{row.status}}</td>
-                    <td>{{row.date | date:'dd/MM/yy HH:mm'}}</td>
-                    <td>{{row.partner.name}}</td>
-                    <td>{{row.total | currency}}</td>
-                    <td class="center-item-text">
-                        <form-nav-buttons data-options="$ctrl.visual.navTableButts" content-class="btn btn-xs"
-                                          subdata="{data:row, index:$index}" data-template="table" class="btn-group"
-                                          data-role="row">
-                        </form-nav-buttons>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <ng-include src="'app/supplier_orders/components/supplier-orders/partials/list.html'"></ng-include>
         <te-scroll-top></te-scroll-top>
     </div>
     <div class="modal fade" id="createNewOrderModal" tabindex="-1" role="dialog" aria-hidden="true">

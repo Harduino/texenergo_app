@@ -1,14 +1,12 @@
 <div id="content">
     <div class="row">
-        <big-breadcrumbs items="dispatchOrdersCtrl.visual.titles" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"
-                         data-icon="edit">
+        <big-breadcrumbs items="$ctrl.visual.titles" class="col-xs-12 col-sm-7 col-md-7 col-lg-4" data-icon="edit">
         </big-breadcrumbs>
     </div>
     <div class="well">
-        <form-nav-buttons options="dispatchOrdersCtrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
+        <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
         <hr>
-        <orders-filter data-search-query="dispatchOrdersCtrl.data.searchQuery" data-to-state="app.dispatch_orders">
-        </orders-filter>
+        <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.dispatch_orders"></orders-filter>
         <table class="table table-bordered table-margined-top">
             <thead>
                 <tr>
@@ -23,7 +21,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in dispatchOrdersCtrl.data.dispatchableProducts" ng-class="item.dispatchable ? '' : 'danger'">
+                <tr ng-repeat="item in $ctrl.data.dispatchableProducts" ng-class="item.dispatchable ? '' : 'danger'">
                     <td>
                         <a href="#/partners/{{item.partner.id}}">{{ item.partner.name }}</a>
                     </td>
@@ -38,53 +36,15 @@
                     <td>{{ item.remains_to_dispatch }}</td>
                     <td>{{ item.stock }}</td>
                     <td>
-                        <span class="btn btn-success" ng-click="dispatchOrdersCtrl.dispatchItem(item)" ng-if="item.dispatchable">В отгрузку</span>
-                        <span class="btn btn-warning" ng-if="!item.automatically_dispatchable" ng-click="dispatchOrdersCtrl.allowAutomatic(item)">Не отгрузится автоматически</span>
-                        <span class="btn btn-warning" ng-if="item.automatically_dispatchable" ng-click="dispatchOrdersCtrl.disallowAutomatic(item)">Отгрузится автоматически</span>
+                        <span class="btn btn-success" ng-click="$ctrl.dispatchItem(item)" ng-if="item.dispatchable">В отгрузку</span>
+                        <span class="btn btn-warning" ng-if="!item.automatically_dispatchable" ng-click="$ctrl.allowAutomatic(item)">Не отгрузится автоматически</span>
+                        <span class="btn btn-warning" ng-if="item.automatically_dispatchable" ng-click="$ctrl.disallowAutomatic(item)">Отгрузится автоматически</span>
                         <span ng-if="!item.dispatchable">{{item.reason}}</span>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <table data-search-query="dispatchOrdersCtrl.data.searchQuery" class="table table-bordered table-margined-top"
-               data-list="dispatchOrdersCtrl.data.ordersList" infinite-scroll infinite-scroll-disabled="false"
-               data-server-api-method="getDispatchOrders" te-lazy-helper>
-            <thead>
-                <tr>
-                    <th class="hidden-xs">#</th>
-                    <th class="hidden-xs"><i class="fa fa-truck"></i></th>
-                    <th>Номер</th>
-                    <th>Дата</th>
-                    <th>Статус</th>
-                    <th>Партнер</th>
-                    <th>Итого</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="row in dispatchOrdersCtrl.data.ordersList">
-                    <td class="hidden-xs">{{$index +1}}</td>
-                    <td>
-                        {{ row.transportation.value.substring(0,3) }}
-                    </td>
-                    <td>
-                        <te-copy-to-buffer>
-                            <span te-buffer-value>{{row.number}}</span>
-                        </te-copy-to-buffer>
-                    </td>
-                    <td>{{row.date | date:'dd/MM/yy HH:mm'}}</td>
-                    <td>{{row.status}}</td>
-                    <td>{{row.partner.name}}</td>
-                    <td>{{row.total | currency}}</td>
-                    <td class="center-item-text">
-                        <form-nav-buttons data-role="row" class="btn-group" content-class="btn btn-xs"
-                                          data-options="dispatchOrdersCtrl.visual.navTableButts" data-template="table"
-                                          subdata="{data:row, index:$index}">
-                        </form-nav-buttons>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <ng-include src="'app/dispatch_orders/components/dispatch-orders/partials/list.html'"></ng-include>
         <te-scroll-top></te-scroll-top>
     </div>
 </div>

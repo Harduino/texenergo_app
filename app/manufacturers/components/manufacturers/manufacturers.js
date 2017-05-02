@@ -55,6 +55,6 @@ ManufacturersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory
 
 angular.module('app.manufacturers').component('manufacturers', {
     controller: ManufacturersCtrl,
-    controllerAs: 'manufacturersCtrl',
+    controllerAs: '$ctrl',
     templateUrl: '/app/manufacturers/components/manufacturers/manufacturers.html'
 });

@@ -22,8 +22,10 @@ class OutgoingTransfersCtrl {
                         }, ButtonPressed => {
                             if (ButtonPressed === 'Да') {
                                 button.disableOnLoad(true, $event);
+
                                 serverApi.deleteOutgoingTransfer(item.data.id, result => {
                                     button.disableOnLoad(false, $event);
+
                                     if(!result.data.errors) {
                                         self.data.outgoingTransfersList.splice(item.index, 1);
                                         funcFactory.showNotification('Исходящий платёж', 'Вы удалили исходящий платёж '
@@ -52,6 +54,6 @@ OutgoingTransfersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFac
 
 angular.module('app.outgoing_transfers').component('outgoingTransfers', {
     controller: OutgoingTransfersCtrl,
-    controllerAs: 'outgoingTransfersCtrl',
+    controllerAs: '$ctrl',
     templateUrl: '/app/outgoing_transfers/components/outgoing-transfers/outgoing-transfers.html'
 });

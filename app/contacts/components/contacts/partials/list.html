@@ -1,0 +1,27 @@
+<table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false" te-lazy-helper
+       data-list="$ctrl.data.contactsList" data-search-query="$ctrl.data.searchQuery" data-server-api-method="getContacts">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Email</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Партнер</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="row in $ctrl.data.contactsList">
+        <td>{{$index +1}}</td>
+        <td>{{row.email}}</td>
+        <td>{{row.first_name}}</td>
+        <td>{{row.last_name}}</td>
+        <td>{{row.partner.name}}</td>
+        <td class="center-item-text">
+            <form-nav-buttons data-role="row" class="btn-group" subdata="row" data-template="table"
+                              content-class="btn btn-xs" data-options="$ctrl.visual.navTableButts">
+            </form-nav-buttons>
+        </td>
+    </tr>
+    </tbody>
+</table>
