@@ -50,7 +50,7 @@ class PartnersCtrl {
         });
     }
 
-    fillBySuggestion($item, prop) {
+    fillBySuggestion($item) {
         let data = $item.item.data,
             addr = this.newAddress;
 
@@ -73,16 +73,15 @@ class PartnersCtrl {
             }
 
             if((data.address.data !== null) && (data.address.data !== undefined)) {
-                var d = data.address.data;
-                let address = {
-                    postal_index: d.postal_code,
-                    region: d.region_with_type,
-                    city: (d.city || d.settlement_with_type),
-                    street: d.street_with_type,
-                    house: d.house,
-                    street_kladr_id: d.street_kladr_id
+                var addressData = data.address.data;
+                this.newAddress =  {
+                    postal_index: addressData.postal_code,
+                    region: addressData.region_with_type,
+                    city: (addressData.city || addressData.settlement_with_type),
+                    street: addressData.street_with_type,
+                    house: addressData.house,
+                    street_kladr_id: addressData.street_kladr_id
                 };
-                this.newAddress =  address;
             }
         }
     }
@@ -91,16 +90,12 @@ class PartnersCtrl {
         this.newAddress = {};
         this.newPartnerData = {inn: '', name: '', delivery_address: '', phone: ''};
     }
-
-    onAddFile() {
-        //this.parentNode.nextSibling.value = this.value;
-    }
 }
 
 PartnersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', '$parse'];
 
 angular.module('app.partners').component('partners', {
     controller: PartnersCtrl,
-    controllerAs: 'partnersCtrl',
+    controllerAs: '$ctrl',
     templateUrl: '/app/partners/components/partners/partners.html'
 });
