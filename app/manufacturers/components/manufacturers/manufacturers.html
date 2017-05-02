@@ -8,29 +8,7 @@
         <hr>
         <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.manufacturers">
         </orders-filter>
-        <table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"
-               te-lazy-helper data-list="$ctrl.data.manufacturersList"
-               data-search-query="$ctrl.data.searchQuery" data-server-api-method="getManufacturers">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Наименование</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="row in $ctrl.data.manufacturersList">
-                    <td>{{ $index + 1 }}</td>
-                    <td>{{row.name}}</td>
-                    <td class="center-item-text">
-                        <form-nav-buttons class="btn-group" content-class="btn btn-xs" data-template="table"
-                                          data-role="row" data-options="$ctrl.visual.navTableButts"
-                                          subdata="{data:row, index:$index}">
-                        </form-nav-buttons>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <ng-include src="'app/manufacturers/components/manufacturers/partials/list.html'"></ng-include>
         <te-scroll-top></te-scroll-top>
     </div>
 </div>

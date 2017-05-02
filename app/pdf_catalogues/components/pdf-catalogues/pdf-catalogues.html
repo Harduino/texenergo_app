@@ -7,29 +7,7 @@
         <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
         <hr>
         <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.pdf_catalogues"></orders-filter>
-        <table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"
-               te-lazy-helper data-list="$ctrl.data.pdfCataloguesList"
-               data-search-query="$ctrl.data.searchQuery" data-server-api-method="getPdfCatalogues">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Наименование</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="row in $ctrl.data.pdfCataloguesList">
-                    <td>{{ $index + 1 }}</td>
-                    <td>{{ row.title }}</td>
-                    <td class="center-item-text">
-                        <form-nav-buttons data-role="$ctrl.visual.role" data-template="table"
-                                          data-options="$ctrl.visual.navTableButts" class="btn-group"
-                                          subdata="{data:row, index:$index}" content-class="btn btn-xs">
-                        </form-nav-buttons>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <ng-include src="'app/pdf_catalogues/components/pdf-catalogues/partials/list.html'"></ng-include>
         <te-scroll-top></te-scroll-top>
     </div>
 </div>

@@ -8,37 +8,7 @@
         <hr>
         <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.incoming_transfers">
         </orders-filter>
-        <table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"
-               te-lazy-helper data-list="$ctrl.data.incomingTransfersList"
-               data-search-query="$ctrl.data.searchQuery" data-server-api-method="getIncomingTransfers">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Номер</th>
-                    <th>Дата</th>
-                    <th>Сумма</th>
-                    <th>Свободно</th>
-                    <th>Партнер</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="row in $ctrl.data.incomingTransfersList">
-                    <td>{{$index +1}}</td>
-                    <td>{{row.number}}</td>
-                    <td>{{row.date | date:'dd/MM/yy'}}</td>
-                    <td>{{row.amount | currency}}</td>
-                    <td>{{row.remaining_amount | currency}}</td>
-                    <td>{{row.partner.name}}</td>
-                    <td class="center-item-text">
-                        <form-nav-buttons data-role="$ctrl.visual.role" content-class="btn btn-xs"
-                                          subdata="{data:row, index:$index}" class="btn-group" data-template="table"
-                                          data-options="$ctrl.visual.navTableButts">
-                        </form-nav-buttons>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <ng-include src="'app/incoming_transfers/components/incoming-transfers/partials/list.html'"></ng-include>
         <te-scroll-top></te-scroll-top>
     </div>
 <!--    В зависимости от прав показывать форму создания нового-->
