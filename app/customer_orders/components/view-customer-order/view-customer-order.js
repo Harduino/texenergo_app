@@ -153,7 +153,7 @@ class ViewCustomerOrderCtrl {
 
         this.amontPercent = 0;
         this.dispatchedPercent = 0;
-        this.productForAppend = {};//данные продукта, который необходимо добавить к заказу
+        this.productForAppend = null;//данные продукта, который необходимо добавить к заказу
         this.pSelectConfig = {startPage: 0, dataMethod: serverApi.getSearch};
 
         this.sliderOptions = {
@@ -250,7 +250,7 @@ class ViewCustomerOrderCtrl {
                 selectCtrl = angular.element('#vco_prod_select').data().$uiSelectController,
                 post = {product_id: t.id, quantity: t.quantity, query_original: selectCtrl.search};
 
-            this.productForAppend = {};
+            this.productForAppend = null;
             this.selectedProduct = null;
 
             this.serverApi.addCustomerOrderProduct(self.order.id, post, result => {
