@@ -29,8 +29,10 @@ class PdfCataloguesCtrl {
                         }, ButtonPressed => {
                             if (ButtonPressed === 'Да') {
                                 button.disableOnLoad(true, $event);
+
                                 serverApi.deletePdfCatalogue(item.data.id, r => {
                                     button.disableOnLoad(false, $event);
+
                                     if(!r.data.errors){
                                         funcFactory.showNotification('Успешно', 'Каталог ' + title + ' удален!', true);
                                         self.data.pdfCataloguesList.splice(item.index, 1);
@@ -55,6 +57,6 @@ PdfCataloguesCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory
 
 angular.module('app.pdf_catalogues').component('pdfCatalogues', {
     controller: PdfCataloguesCtrl,
-    controllerAs: 'pdfCataloguesCtrl',
+    controllerAs: '$ctrl',
     templateUrl: '/app/pdf_catalogues/components/pdf-catalogues/pdf-catalogues.html'
 });
