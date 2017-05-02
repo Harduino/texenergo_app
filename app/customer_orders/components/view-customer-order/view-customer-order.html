@@ -192,17 +192,16 @@
                                                     view="app/customer_orders/components/view-customer-order/partials/ui-select-infinity-products.html">
                                 </ui-select-infinity>
                             </div>
-
-                            <te-jq-ui options="$ctrl.visual.sortOpts">
-                              <te-table-tools summ-fn="$ctrl.summarizeRows" track-by="id">
-                                <te-table-tools-controls>
-                                  <div class="col-sm-6">
-                                      <a ng-href="" ng-click="$ctrl.deleteSelectedItems(false)">Оставить выделенные</a>
-                                  </div>
-                                  <div class="col-sm-6">
-                                      <a ng-href="" ng-click="$ctrl.deleteSelectedItems(true)">Удалить выделенные</a>
-                                  </div>
-                                </te-table-tools-controls>
+                            <te-table-tools summ-fn="$ctrl.summarizeRows" track-by="id">
+                              <te-table-tools-controls>
+                                <div class="col-sm-6">
+                                    <a ng-href="" ng-click="$ctrl.deleteSelectedItems(false)">Оставить выделенные</a>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a ng-href="" ng-click="$ctrl.deleteSelectedItems(true)">Удалить выделенные</a>
+                                </div>
+                              </te-table-tools-controls>
+                              <te-jq-ui options="$ctrl.visual.sortOpts">
                                 <table class="table table-hover table-bordered margin-top-10">
                                     <thead>
                                         <tr>
@@ -304,8 +303,8 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                              </te-table-tools>
-                            </te-jq-ui>
+                              </te-jq-ui>
+                            </te-table-tools>
                         </div>
                     </div>
                 </div>
