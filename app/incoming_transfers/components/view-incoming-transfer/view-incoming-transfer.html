@@ -71,7 +71,8 @@
                 </tr>
             </tbody>
         </table>
-        <table class="table">
+        <te-table-tools summ-by="amount" track-by="id">
+          <table class="table">
             <thead>
                 <tr>
                     <th></th>
@@ -94,7 +95,10 @@
                             {{ item.outgoing_transfer.number }}
                         </span>
                     </td>
-                    <td>{{ item.amount | currency }}</td>
+                    <td>
+                      {{ item.amount | currency }}
+                      <te-summarize row="item"></te-summarize>
+                    </td>
                     <td>
                         <form-nav-buttons data-role="$ctrl.visual.roles" content-class="btn btn-xs" class="btn-group"
                                           data-options="$ctrl.visual.navTableButts" data-template="table"
@@ -109,5 +113,6 @@
                 </tr>
             </tbody>
         </table>
+      </te-table-tools>
     </div>
 </div>
