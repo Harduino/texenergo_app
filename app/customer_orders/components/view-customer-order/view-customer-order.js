@@ -10,6 +10,7 @@ class ViewCustomerOrderCtrl {
         this.$state = $state;
         this.$stateParams = $stateParams;
         this.$filter = $filter;
+        this.selectedProduct = null;
 
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
         this.order = {};
@@ -37,9 +38,7 @@ class ViewCustomerOrderCtrl {
                                     funcFactory.showNotification('Не удалось переместить сторку', res.data.errors);
                                 }
                                 button.disableOnLoad(false, $event);
-                            }, () => {
-                              button.disableOnLoad(false, $event);
-                            });
+                            }, () => button.disableOnLoad(false, $event));
                         });
                     }
                 },
@@ -140,46 +139,15 @@ class ViewCustomerOrderCtrl {
                     callback: (item, button, $event) => {
                       button.disableOnLoad(true, $event);
                       serverApi.removeCustomerOrderProduct(self.order.id, item.data.id,
-                        () => {
+                        (res) => {
                           button.disableOnLoad(false, $event);
-                          self.getRemovePositionHandler(item.data);
+                          self.getRemovePositionHandler(item.data)(res);
                         }, () => {
                           button.disableOnLoad(false, $event);
                         });
                     }
                 }
             ]
-        };
-
-        this.data = {
-            networkData: null,
-            networkConfig: {
-                actions:[
-                    {
-                        select: '.node',
-                        action: 'click',
-                        handler: item => {
-                            if (!d3.event.defaultPrevented) {
-                                $state.go(self.getPropertyByDocumentType(item).state, {id: item.id});
-                            }
-                        }
-                    }
-                ],
-                colorSetter: item => {
-                    return self.getPropertyByDocumentType(item).color;
-                },
-                tooltip: item => {
-                    return '<div class="vco-graph-tooltip">' +
-                        '<ul>' +
-                        '<li><b>Тип:</b> ' + self.getPropertyByDocumentType(item).title + '</li>' +
-                        '<li><b>Номер:</b> ' + item.number + '</li>' +
-                        '<li><b>Дата:</b> ' + $filter('date')(item.date, 'dd MMMM yy, HH:mm') + '</li>' +
-                        '<li><b>Итого:</b> ' + $filter('currency')(item.total) + '</li>' +
-                        '</ul>' +
-                        '</div>'
-                },
-                zoomChange: zoom => $('#graph_zoom_slider').slider('value', zoom)
-            }
         };
 
         this.amontPercent = 0;
@@ -196,7 +164,6 @@ class ViewCustomerOrderCtrl {
         };
 
         this.getOrderDetails();
-        serverApi.getRelatedOrdersOfCustomer($stateParams.id, res => self.data.networkData = res.data);
         this.$onDestroy = () => self._subscription && self._subscription.unsubscribe();
     }
 
@@ -283,7 +250,7 @@ class ViewCustomerOrderCtrl {
                 post = {product_id: t.id, quantity: t.quantity, query_original: selectCtrl.search};
 
             this.productForAppend = {};
-            this.data.selectedProduct = null;
+            this.selectedProduct = null;
 
             this.serverApi.addCustomerOrderProduct(self.order.id, post, result => {
                 if(result.data.errors) {
@@ -304,21 +271,6 @@ class ViewCustomerOrderCtrl {
                 }
             });
         }
-    }
-
-    // Send HTTP request to remove the product from Customer Order. PROBABLY NOT USED
-    removeProduct (item) {
-        let self = this;
-
-        $.SmartMessageBox({
-            title: 'Удалить товар?',
-            content: 'Вы действительно хотите номенклатуру ' + item.product.name,
-            buttons: '[Нет][Да]'
-        }, ButtonPressed => {
-            if (ButtonPressed === 'Да') {
-                self.serverApi.removeCustomerOrderProduct(self.order.id, item.id, self.getRemovePositionHandler(item));
-            }
-        });
     }
 
     deleteSelectedItems (useSelected) {
@@ -393,23 +345,6 @@ class ViewCustomerOrderCtrl {
       return this.$filter('price_net')(row, row.quantity);
     }
 
-    getPropertyByDocumentType (item) {
-        if((this.data.networkData.format !== undefined) && (this.data.networkData.format[item.type] !== undefined)) {
-            return this.data.networkData.format[item.type];
-        }
-
-        let linkAttributes = (title, color, state) => {
-            return {title: title, color: color, state: state};
-        };
-
-        switch (item.type) {
-            case 'CustomerOrder': return linkAttributes('Заказ клиента', '#1f77b4', 'app.customer_orders.view');
-            case 'DispatchOrder': return linkAttributes('Списание', '#d62728', 'app.dispatch_orders.view');
-            case 'IncomingTransfer': return linkAttributes('Входящий платеж', '#2ca02c', 'app.incoming_transfers.view');
-            default: return linkAttributes('Не определен', '#c7c7c7');
-        }
-    }
-
     getOrderDetails () {
         let self = this;
 
@@ -444,14 +379,6 @@ class ViewCustomerOrderCtrl {
         this[fieldY] = y;
     }
 
-    removeLinkedDispatchedOrder (customerOrder) {
-        for(let dispatchIndex = this.order.dispatched.length - 1; dispatchIndex >= 0; dispatchIndex--) {
-            if(customerOrder.product.id === this.order.dispatched[dispatchIndex].product.id) {
-                this.order.dispatched.splice(dispatchIndex, 1);
-            }
-        }
-    }
-
     getPositionIndex (position) {
         let positionIndex = -1;
 
@@ -464,21 +391,20 @@ class ViewCustomerOrderCtrl {
         return positionIndex;
     }
 
-    getRemovePositionHandler (position) {
+    getRemovePositionHandler (item) {
         let self = this;
-
         return res => {
             if(res.data.errors) {
                 self.funcFactory.showNotification('Не удалось удалить продукт', res.data.errors);
             } else {
-                let positionIndex = self.getPositionIndex(position);
+                self.order.customer_order_contents.forEach( (row, index) => {
+                    if(row.id === item.id) {
+                        self.order.customer_order_contents.splice(index, 1);
+                        self.funcFactory.showNotification('Продукт удален:', item.product.name, true);
+                        return;
+                    }
+                });
 
-                if(positionIndex > -1) {
-                    self.order.customer_order_contents.splice(positionIndex, 1);
-                    self.funcFactory.showNotification('Продукт удален:', position.product.name, true);
-                }
-
-                self.removeLinkedDispatchedOrder(position);
                 self.updateTotal();
             }
         };
