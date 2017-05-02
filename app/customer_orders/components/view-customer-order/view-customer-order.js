@@ -119,7 +119,8 @@ class ViewCustomerOrderCtrl {
                     if(self.visual.roles.can_edit){
                         serverApi.updateCommandCustomerOrder(self.order.id, data, result => {
                             if(result.status == 200) {
-                            	self.order.customer_order_contents.swapItemByindex(last_ind, new_ind);
+                            	Array.swapItemByindex(self.order.customer_order_contents,
+                                last_ind, new_ind);
                         	} else {
 	                            funcFactory.showNotification('Не удалось переместить сторку', result.data.errors);
 	                            $this.sortable('cancel');

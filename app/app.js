@@ -65,7 +65,7 @@ appConfig.sound_on = true;
 
         //Pubnub
         'pubnub.angular.service',
-        
+
         // App
         'app.api',
         'app.layout',
@@ -126,8 +126,8 @@ appConfig.sound_on = true;
         );
     }
 
-    Array.prototype.swapItemByindex = (currentIndex, newIndex) => {
-        let item = this.splice(currentIndex,1)[0];
-        this.splice(newIndex,0,item);
+    Array.swapItemByindex = (array, currentIndex, newIndex) => {
+      let item = array.splice(currentIndex,1)[0];
+      array.splice(newIndex,0,item);
     };
 }(window.angular));
