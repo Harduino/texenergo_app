@@ -4,13 +4,13 @@
         </big-breadcrumbs>
     </div>
     <div class="well">
-        <form-nav-buttons options="manufacturersCtrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
+        <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
         <hr>
-        <orders-filter data-search-query="manufacturersCtrl.data.searchQuery" data-to-state="app.manufacturers">
+        <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.manufacturers">
         </orders-filter>
         <table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"
-               te-lazy-helper data-list="manufacturersCtrl.data.manufacturersList"
-               data-search-query="manufacturersCtrl.data.searchQuery" data-server-api-method="getManufacturers">
+               te-lazy-helper data-list="$ctrl.data.manufacturersList"
+               data-search-query="$ctrl.data.searchQuery" data-server-api-method="getManufacturers">
             <thead>
                 <tr>
                     <th>#</th>
@@ -19,12 +19,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="row in manufacturersCtrl.data.manufacturersList">
+                <tr ng-repeat="row in $ctrl.data.manufacturersList">
                     <td>{{ $index + 1 }}</td>
                     <td>{{row.name}}</td>
                     <td class="center-item-text">
                         <form-nav-buttons class="btn-group" content-class="btn btn-xs" data-template="table"
-                                          data-role="row" data-options="manufacturersCtrl.visual.navTableButts"
+                                          data-role="row" data-options="$ctrl.visual.navTableButts"
                                           subdata="{data:row, index:$index}">
                         </form-nav-buttons>
                     </td>
