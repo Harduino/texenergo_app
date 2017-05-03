@@ -2,6 +2,7 @@
 // Usage:
 // <te-table-tools summ-by="<value>" track-by="<value>"
 //    result-filter="<value>" summ-fn="<value>" template="<value>">
+//   <te-table-tools-controls></te-table-tools-controls> // - if needs
 //   <table>
 //     <thead></thead>
 //     <tbody>
@@ -83,8 +84,6 @@ class TableToolsCtrl {
   }
 
   $postLink(){
-    this.$element.find('table').addClass('not-selectable');
-
     let controls = this.$element.find('te-table-tools-controls');
 
     if(controls.length){
