@@ -67,11 +67,20 @@ class ViewDispatchOrderCtrl {
         this.getDispatchOrderDetails();
     }
 
+    hasProfit() {
+        let self = this;
+        for (var i = 0; i < self.dispatchOrder.product_order_contents.length; i++) {
+            console.log(self.dispatchOrder.product_order_contents[i].profit);
+            if (self.dispatchOrder.product_order_contents[i].profit !== undefined) return true;
+        }
+        return false;
+    }
+
     saveChosenPerson() {
         let data = {dispatch_order: {person_id: this.dispatchOrder.chosenPersonId}};
         let self = this;
 
-        this.serverApi.updateDispatchOrder(this.dispatchOrder.id, data, result => {
+        self.serverApi.updateDispatchOrder(self.dispatchOrder.id, data, result => {
             if(result.data.errors) {
                 self.funcFactory.showNotification('Ошибка при выборе человека', result.data.errors);
             } else {
@@ -96,16 +105,21 @@ class ViewDispatchOrderCtrl {
             };
 
             this.serverApi.getDispatchOrderDetails(self.$stateParams.id, result => {
+
                 button && button.disableOnLoad(false, $event);
                 if(!window.dispatch_orders) window.dispatch_orders = {};
                 let dispatchOrder = self.dispatchOrder = result.data;
                 window.dispatch_orders[self.$stateParams.id] = self.dispatchOrder;
+
+                if (self.hasProfit()){
+                    self.totalProfit = 0;
+                    self.dispatchOrder.product_order_contents.forEach(c => self.totalProfit += c.profit);
+                }
+
                 self.amontPercent = self.funcFactory.getPercent(dispatchOrder.paid_amount, dispatchOrder.total);
                 self.dispatchedPercent = self.funcFactory.getPercent(dispatchOrder.dispatched_amount, dispatchOrder.total);
                 self.setFileUploadOptions(dispatchOrder);
-            }, () => {
-              button && button.disableOnLoad(false, $event);
-            });
+            }, () => (button && button.disableOnLoad(false, $event)));
         }
     }
 

@@ -114,6 +114,7 @@
                     <th>Артикул</th>
                     <th>Количество</th>
                     <th>Заказ</th>
+                    <th ng-if="viewDispatchOrderCtrl.hasProfit()">Наценка</th>
                     <th>Итого</th>
                     <th ng-if="viewDispatchOrderCtrl.dispatchOrder.can_edit"></th>
                 </tr>
@@ -127,6 +128,7 @@
                     <td>{{ item.product.article }}</td>
                     <td>{{ item.quantity }}</td>
                     <td><a ng-href="#/customer_orders/{{ item.customer_order.id }}">{{ item.customer_order.number }}</a></td>
+                    <td ng-if="viewDispatchOrderCtrl.hasProfit()" class="text-right">{{ item.profit | currency }}</td>
                     <td class="text-right">{{ item.total | currency }}</td>
                     <td ng-if="viewDispatchOrderCtrl.dispatchOrder.can_edit">
                         <div ng-click="viewDispatchOrderCtrl.deleteProduct(item)" class="btn btn-danger">
@@ -136,7 +138,8 @@
                 </tr>
                 <tr>
                     <td colspan="5" class="text-right">Итого:</td>
-                    <td>{{ viewDispatchOrderCtrl.dispatchOrder.total | currency }}</td>
+                    <td ng-if="viewDispatchOrderCtrl.hasProfit()" class="text-right">{{ viewDispatchOrderCtrl.totalProfit | currency }}</td>
+                    <td class="text-right">{{ viewDispatchOrderCtrl.dispatchOrder.total | currency }}</td>
                     <td ng-if="viewDispatchOrderCtrl.dispatchOrder.can_edit"></td>
                 </tr>
             </tbody>
