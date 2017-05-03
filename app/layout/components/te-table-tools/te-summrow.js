@@ -5,10 +5,20 @@ class TeSummRowCtrl{
     this.$element = $element;
   }
 
+  clearSelection() {
+    if (window.getSelection) {
+        window.getSelection().removeAllRanges();
+    } else if (document.selection) {
+        document.selection.empty();
+    }
+  }
+
   onRowClick(event){
     let $currentTarget = $(event.currentTarget);
 
     if(event.shiftKey){
+      this.clearSelection();
+
       let selectedForSumm = this.row.$selectedForSumm;
       let selectedNewValue = !selectedForSumm;
 
