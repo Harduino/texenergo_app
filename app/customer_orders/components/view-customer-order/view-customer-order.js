@@ -130,7 +130,8 @@ class ViewCustomerOrderCtrl {
                			$this.sortable('cancel');
                     }
                 },
-                items: '> .order-items'
+                items: '> .order-items',
+                cancel: '.cancel-draggable'
             },
             roles: {},
             navTableButts:[
