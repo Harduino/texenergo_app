@@ -7,7 +7,10 @@
         <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
         <hr>
         <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.pdf_catalogues"></orders-filter>
-        <ng-include src="'app/pdf_catalogues/components/pdf-catalogues/partials/list.html'"></ng-include>
+        <lazy-loaded-list view="app/pdf_catalogues/components/pdf-catalogues/partials/list.html"
+                          api-method="getPdfCatalogues" items="$ctrl.data.pdfCataloguesList" role="$ctrl.visual.role"
+                          nav-options="$ctrl.visual.navTableButts" search-query="$ctrl.data.searchQuery">
+        </lazy-loaded-list>
         <te-scroll-top></te-scroll-top>
     </div>
 </div>
