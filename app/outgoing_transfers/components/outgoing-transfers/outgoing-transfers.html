@@ -8,7 +8,11 @@
         <hr>
         <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.outgoing_transfers">
         </orders-filter>
-        <ng-include src="'app/outgoing_transfers/components/outgoing-transfers/partials/list.html'"></ng-include>
+        <lazy-loaded-list view="app/outgoing_transfers/components/outgoing-transfers/partials/list.html"
+                          api-method="getOutgoingTransfers" items="$ctrl.data.outgoingTransfersList"
+                          role="$ctrl.visual.role"
+                          nav-options="$ctrl.visual.navTableButts" search-query="$ctrl.data.searchQuery">
+        </lazy-loaded-list>
         <te-scroll-top></te-scroll-top>
     </div>
 <!--    В зависимости от прав показывать форму создания нового-->
