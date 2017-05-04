@@ -1,6 +1,4 @@
-<table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"
-       te-lazy-helper data-list="$ctrl.data.ordersList" data-search-query="$ctrl.data.searchQuery"
-       data-server-api-method="getReceiveOrders">
+<table class="table table-bordered table-margined-top" infinite-scroll="$ctrl.loadItems()">
     <thead>
     <tr>
         <th class="hidden-xs">№</th>
@@ -13,7 +11,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="row in $ctrl.data.ordersList">
+    <tr ng-repeat="row in $ctrl.items">
         <td class="hidden-xs">{{$index +1}}</td>
         <td>{{row.number}}</td>
         <td class="hidden-xs">{{row.date | date:'dd/MM/yy HH:mm'}}</td>
@@ -21,8 +19,8 @@
         <td class="hidden-xs">{{row.partner.name}}</td>
         <td class="hidden-xs">{{row.total | currency}}</td>
         <td class="center-item-text">
-            <form-nav-buttons data-options="$ctrl.visual.navTableButts" data-template="table" content-class="btn btn-xs"
-                              data-role="$ctrl.visual.role" subdata="{data:row, index:$index}" class="btn-group">
+            <form-nav-buttons data-options="$ctrl.navOptions" data-template="table" content-class="btn btn-xs"
+                              data-role="$ctrl.role" subdata="{data:row, index:$index}" class="btn-group">
             </form-nav-buttons>
         </td>
     </tr>

@@ -8,7 +8,10 @@
         <hr>
         <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.receive_orders">
         </orders-filter>
-        <ng-include src="'app/receive_orders/components/receive-orders/partials/list.html'"></ng-include>
+        <lazy-loaded-list view="app/receive_orders/components/receive-orders/partials/list.html"
+                          api-method="getReceiveOrders" items="$ctrl.data.ordersList" role="$ctrl.visual.role"
+                          nav-options="$ctrl.visual.navTableButts" search-query="$ctrl.data.searchQuery">
+        </lazy-loaded-list>
         <te-scroll-top></te-scroll-top>
     </div>
     <div class="modal fade" id="createNewReceiveOrderModal" tabindex="-1" role="dialog" aria-hidden="true">
