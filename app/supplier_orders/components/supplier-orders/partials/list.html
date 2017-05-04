@@ -1,6 +1,4 @@
-<table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"
-       data-list="$ctrl.data.ordersList" data-search-query="$ctrl.data.searchQuery" te-lazy-helper
-       data-server-api-method="getSupplierOrders">
+<table class="table table-bordered table-margined-top" infinite-scroll="$ctrl.loadItems()">
     <thead>
     <tr>
         <th>#</th>
@@ -13,7 +11,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="row in $ctrl.data.ordersList">
+    <tr ng-repeat="row in $ctrl.items">
         <td>{{$index +1}}</td>
         <td>{{row.number}}</td>
         <td>{{row.status}}</td>
@@ -21,7 +19,7 @@
         <td>{{row.partner.name}}</td>
         <td>{{row.total | currency}}</td>
         <td class="center-item-text">
-            <form-nav-buttons data-options="$ctrl.visual.navTableButts" content-class="btn btn-xs" data-role="row"
+            <form-nav-buttons data-options="$ctrl.navOptions" content-class="btn btn-xs" data-role="row"
                               subdata="{data:row, index:$index}" data-template="table" class="btn-group">
             </form-nav-buttons>
         </td>
