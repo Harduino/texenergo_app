@@ -1,6 +1,4 @@
-<table class="table table-bordered" infinite-scroll infinite-scroll-disabled="false" te-lazy-helper
-       data-list="$ctrl.data.searchResults" data-search-query="$ctrl.data.searchText"
-       data-server-api-method="$ctrl.getSearchProductHandler()" data-start-page="0">
+<table class="table table-bordered" infinite-scroll="$ctrl.loadItems()">
     <thead>
     <tr>
         <th class="hidden-xs"></th>
@@ -13,7 +11,7 @@
     </tr>
     </thead>
     <tbody id="top_search_table_body">
-    <tr ng-repeat="item in $ctrl.data.searchResults" ng-click="$ctrl.selectRow($index)"
+    <tr ng-repeat="item in $ctrl.items" ng-click="$ctrl.selectedRowIndex = $index"
         class="cursor-pointer" ng-class="{selected: $index === $ctrl.selectedRowIndex}">
         <td class="hidden-xs">
             <img ng-src="{{item.image_url}}" style="max-height: 40px; max-width: 40px;" class="img img-responsive"/>
@@ -35,8 +33,8 @@
         <td class="no-warp">{{item.price | currency}}</td>
         <td>{{item.stock}}</td>
         <td class="center-item-text">
-            <form-nav-buttons data-options="$ctrl.visual.navButtsOptions" data-template="table" class="btn-group"
-                              subdata="item._id || item.id" data-role="$ctrl.visual.role" content-class="btn btn-xs">
+            <form-nav-buttons data-options="$ctrl.navOptions" data-template="table" class="btn-group"
+                              subdata="item._id || item.id" data-role="$ctrl.role" content-class="btn btn-xs">
             </form-nav-buttons>
         </td>
     </tr>

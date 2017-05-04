@@ -5,7 +5,10 @@
     </div>
     <div class="well">
         <h1>Результаты поиска "{{$ctrl.data.searchText}}"</h1>
-        <ng-include src="'app/search/components/top-search/partials/list.html'"></ng-include>
+        <lazy-loaded-list view="app/search/components/top-search/partials/list.html" role="$ctrl.visual.role"
+                          fetch="$ctrl.getSearchProductHandler" items="$ctrl.data.searchResults" start-page="0"
+                          nav-options="$ctrl.visual.navTableButts" search-query="$ctrl.data.searchText">
+        </lazy-loaded-list>
         <te-scroll-top></te-scroll-top>
     </div>
 </div>

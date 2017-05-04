@@ -23,6 +23,8 @@ class TopSearchCtrl {
             ]
         };
 
+        this.getSearchProductHandler = this.getSearchProductHandler.bind(this);
+
         let tableNavigationHandler = self.navigateInTable.bind(self);
         angular.element(window).on('keydown', tableNavigationHandler);
         this.$onDestroy = () => angular.element(window).off('keydown', tableNavigationHandler);
@@ -30,41 +32,34 @@ class TopSearchCtrl {
 
     // We are looking for popular document numbering pattern. If one is matched, then navigate there.
     // i.e. consider it a command instead of a search request.
-    getSearchProductHandler () {
-        let serverApi = this.serverApi;
-        let n;
-        switch(true){
-            case /р-\d{2}-[а-я]{2,4}-\d+/i.test(this.data.searchText):
-                n = this.data.searchText.match(/р-\d{2}-[а-я]{2,4}-\d+/i)[0];
-                serverApi.getDispatchOrders(1, n, {}, r => {
-                    for (var i = 0; i < r.data.length; i++) {
-                        var order = r.data[i];
-                        if (order.number === n) {
-                            return this.$state.go('app.dispatch_orders.view', {id: order.id});
-                        }
+    getSearchProductHandler (pageNumber, query, options, callback) {
+        let self = this, orderTypeMatched = false;
 
-                    }
-                });
-                break;
-            case /\d{2}-[а-я]{2,4}-\d+/i.test(this.data.searchText):
-                n = this.data.searchText.match(/\d{2}-[а-я]{2,4}-\d+/i)[0];
-                serverApi.getCustomerOrders(1, n, {}, r => {
-                    for (var i = 0; i < r.data.length; i++) {
-                        var order = r.data[i];
-                        if (order.number === n) {
-                            return this.$state.go('app.customer_orders.view', {id: order.id});
-                        }
-                    }
-                });
-                break;
-            default:
-                return (pageNumber, query, options, callback) => serverApi.getSearch(pageNumber, query, options, callback);
-                break;
-        }        
+        [
+            {regExp: /р-\d{2}-[а-я]{2,4}-\d+/i, apiMethod: 'getDispatchOrders', state: 'app.dispatch_orders.view'},
+            {regExp: /\d{2}-[а-я]{2,4}-\d+/i, apiMethod: 'getCustomerOrders', state: 'app.customer_orders.view'}
+        ].forEach(orderCheckData => {
+            if(!orderTypeMatched && orderCheckData.regExp.test(query)) {
+                orderTypeMatched = true;
+                self.redirectToOrder(query.match(orderCheckData.regExp)[0], orderCheckData.apiMethod, orderCheckData.state);
+            }
+        });
+
+        if(!orderTypeMatched) {
+            this.serverApi.getSearch(pageNumber, query, options, callback);
+        }
     }
 
-    selectRow (index) {
-        this.selectedRowIndex = index;
+    redirectToOrder(orderNumber, apiMethod, state) {
+        let self = this;
+
+        this.serverApi[apiMethod](1, orderNumber, {}, res => {
+            for (let orderIndex = 0; orderIndex < res.data.length; orderIndex++) {
+                if (res.data[orderIndex].number === orderNumber) {
+                    return self.$state.go(state, {id: res.data[orderIndex].id});
+                }
+            }
+        });
     }
 
     viewProduct (id) {
