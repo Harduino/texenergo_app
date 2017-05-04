@@ -7,7 +7,10 @@
         <form-nav-buttons options="$ctrl.navButtsOptions" class="btn-group"></form-nav-buttons>
         <hr>
         <orders-filter data-search-query="$ctrl.searchQuery" data-to-state="app.catalogues"></orders-filter>
-        <ng-include src="'app/catalogues/components/catalogues/partials/list.html'"></ng-include>
+        <lazy-loaded-list view="app/catalogues/components/catalogues/partials/list.html"
+                          items="$ctrl.cataloguesList" api-method="getCatalogues"
+                          search-query="$ctrl.searchQuery" nav-options="$ctrl.navTableButts">
+        </lazy-loaded-list>
         <te-scroll-top></te-scroll-top>
     </div>
 </div>

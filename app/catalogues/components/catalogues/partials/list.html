@@ -1,5 +1,4 @@
-<table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false" te-lazy-helper
-       data-list="$ctrl.cataloguesList" data-search-query="$ctrl.searchQuery" data-server-api-method="getCatalogues">
+<table infinite-scroll="$ctrl.loadItems()" class="table table-bordered table-margined-top">
     <thead>
     <tr>
         <th>#</th>
@@ -8,11 +7,11 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="row in $ctrl.cataloguesList">
+    <tr ng-repeat="row in $ctrl.items">
         <td>{{ $index + 1 }}</td>
         <td>{{row.name}}</td>
         <td class="center-item-text">
-            <form-nav-buttons data-role="row" class="btn-group" data-options="$ctrl.navTableButts"
+            <form-nav-buttons data-role="row" class="btn-group" data-options="$ctrl.navOptions"
                               subdata="row" data-template="table" content-class="btn btn-xs">
             </form-nav-buttons>
         </td>
