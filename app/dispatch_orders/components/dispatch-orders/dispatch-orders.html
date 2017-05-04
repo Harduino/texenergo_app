@@ -44,7 +44,10 @@
                 </tr>
             </tbody>
         </table>
-        <ng-include src="'app/dispatch_orders/components/dispatch-orders/partials/list.html'"></ng-include>
+        <lazy-loaded-list view="app/dispatch_orders/components/dispatch-orders/partials/list.html"
+                          api-method="getDispatchOrders" items="$ctrl.data.ordersList"
+                          nav-options="$ctrl.visual.navTableButts" search-query="$ctrl.data.searchQuery">
+        </lazy-loaded-list>
         <te-scroll-top></te-scroll-top>
     </div>
 </div>

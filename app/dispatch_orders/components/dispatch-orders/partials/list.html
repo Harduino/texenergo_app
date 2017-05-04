@@ -1,6 +1,4 @@
-<table data-search-query="$ctrl.data.searchQuery" class="table table-bordered table-margined-top"
-       data-list="$ctrl.data.ordersList" infinite-scroll infinite-scroll-disabled="false"
-       data-server-api-method="getDispatchOrders" te-lazy-helper>
+<table class="table table-bordered table-margined-top" infinite-scroll="$ctrl.loadItems()">
     <thead>
     <tr>
         <th class="hidden-xs">#</th>
@@ -14,7 +12,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="row in $ctrl.data.ordersList">
+    <tr ng-repeat="row in $ctrl.items">
         <td class="hidden-xs">{{$index +1}}</td>
         <td>
             {{ row.transportation.value.substring(0,3) }}
@@ -30,7 +28,7 @@
         <td>{{row.total | currency}}</td>
         <td class="center-item-text">
             <form-nav-buttons data-role="row" class="btn-group" content-class="btn btn-xs" data-template="table"
-                              data-options="$ctrl.visual.navTableButts" subdata="{data:row, index:$index}">
+                              data-options="$ctrl.navOptions" subdata="{data:row, index:$index}">
             </form-nav-buttons>
         </td>
     </tr>
