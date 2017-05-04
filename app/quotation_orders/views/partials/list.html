@@ -1,5 +1,4 @@
-<table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false" te-lazy-helper
-       data-list="data.ordersList" data-search-query="data.searchQuery" data-server-api-method="getQuotationOrders">
+<table class="table table-bordered table-margined-top" infinite-scroll="$ctrl.loadItems()">
     <thead>
     <tr>
         <th class="hidden-xs">#</th>
@@ -8,11 +7,11 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="row in data.ordersList">
+    <tr ng-repeat="row in $ctrl.items">
         <td class="hidden-xs">{{$index +1}}</td>
         <td>{{row.title}}</td>
         <td class="center-item-text">
-            <form-nav-buttons data-role="row" class="btn-group" data-options="visual.navTableButts"
+            <form-nav-buttons data-role="row" class="btn-group" data-options="$ctrl.navOptions"
                               subdata="{data:row, index:$index}" data-template="table" content-class="btn btn-xs">
             </form-nav-buttons>
         </td>

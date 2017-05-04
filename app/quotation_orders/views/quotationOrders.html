@@ -6,7 +6,9 @@
         <form-nav-buttons options="visual.navButtsOptions" class="btn-group"></form-nav-buttons>
         <hr>
         <orders-filter data-search-query="data.searchQuery" data-to-state="app.quotation_orders"></orders-filter>
-        <ng-include src="'app/quotation_orders/views/partials/list.html'"></ng-include>
+        <lazy-loaded-list view="app/quotation_orders/views/partials/list.html" search-query="data.searchQuery"
+                          api-method="getQuotationOrders" items="data.ordersList" nav-options="visual.navTableButts">
+        </lazy-loaded-list>
         <te-scroll-top></te-scroll-top>
     </div>
     <div class="modal fade" id="createNewQuotationModal" tabindex="-1" role="dialog" aria-hidden="true">
