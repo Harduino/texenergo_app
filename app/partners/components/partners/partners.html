@@ -7,7 +7,10 @@
         <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
         <hr>
         <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.partners"></orders-filter>
-        <ng-include src="'app/partners/components/partners/partials/list.html'"></ng-include>
+        <lazy-loaded-list view="app/partners/components/partners/partials/list.html"
+                          api-method="getPartners" items="$ctrl.data.partnersList"
+                          nav-options="$ctrl.visual.navTableButts" search-query="$ctrl.data.searchQuery">
+        </lazy-loaded-list>
         <te-scroll-top></te-scroll-top>
     </div>
     <div class="modal fade" id="createPartnerModal" tabindex="-1" role="dialog" aria-hidden="true">
