@@ -1,6 +1,4 @@
-<table class="table table-bordered table-margined-top" infinite-scroll infinite-scroll-disabled="false"
-       te-lazy-helper data-list="$ctrl.data.manufacturersList"
-       data-search-query="$ctrl.data.searchQuery" data-server-api-method="getManufacturers">
+<table class="table table-bordered table-margined-top" infinite-scroll="$ctrl.loadItems()">
     <thead>
     <tr>
         <th>#</th>
@@ -9,12 +7,12 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="row in $ctrl.data.manufacturersList">
+    <tr ng-repeat="row in $ctrl.items">
         <td>{{ $index + 1 }}</td>
         <td>{{row.name}}</td>
         <td class="center-item-text">
             <form-nav-buttons class="btn-group" content-class="btn btn-xs" data-template="table" data-role="row"
-                              data-options="$ctrl.visual.navTableButts" subdata="{data:row, index:$index}">
+                              data-options="$ctrl.navOptions" subdata="{data:row, index:$index}">
             </form-nav-buttons>
         </td>
     </tr>

@@ -6,9 +6,11 @@
     <div class="well">
         <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
         <hr>
-        <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.manufacturers">
-        </orders-filter>
-        <ng-include src="'app/manufacturers/components/manufacturers/partials/list.html'"></ng-include>
+        <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.manufacturers"></orders-filter>
+        <lazy-loaded-list view="app/manufacturers/components/manufacturers/partials/list.html"
+                          api-method="getManufacturers" items="$ctrl.data.manufacturersList"
+                          nav-options="$ctrl.visual.navTableButts" search-query="$ctrl.data.searchQuery">
+        </lazy-loaded-list>
         <te-scroll-top></te-scroll-top>
     </div>
 </div>
