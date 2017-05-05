@@ -7,7 +7,7 @@
         <h1>Результаты поиска "{{$ctrl.data.searchText}}"</h1>
         <raw-lazy-loaded-list view="app/search/components/top-search/partials/list.html" role="$ctrl.visual.role"
                           fetch="$ctrl.getSearchProductHandler" items="$ctrl.data.searchResults" start-page="0"
-                          nav-options="$ctrl.visual.navTableButts" search-query="$ctrl.data.searchText">
+                          nav-options="$ctrl.visual.navButtsOptions" search-query="$ctrl.data.searchText">
         </raw-lazy-loaded-list>
         <te-scroll-top></te-scroll-top>
     </div>
