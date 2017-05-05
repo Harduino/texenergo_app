@@ -1,0 +1,9 @@
+<div ng-if="$ctrl.notFound" class="font-lg text-align-center">
+    Нет результатов.
+</div>
+<div ng-if="$ctrl.items.length > 0">
+    <ng-include src="$ctrl.view"></ng-include>
+</div>
+<div ng-if="$ctrl.showLoader" class="font-lg text-align-center">
+    <i class="fa fa-gear fa-spin"></i> Загрузка...
+</div>
