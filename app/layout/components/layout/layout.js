@@ -1,10 +1,8 @@
 class LayoutCtrl {
-    constructor($state, authService, $localStorage, globalVariables) {
-        this.$state = $state;
+    constructor(authService, $localStorage, globalVariables) {
         this.authService = authService;
         this.globals = globalVariables.globals;
 
-        this.searchText = '';
         this.logo = 'assets/img/logo.png';
         this.company_name = 'Texenergo';
 
@@ -25,16 +23,12 @@ class LayoutCtrl {
         }
     }
 
-    executeSearch() {
-        this.$state.go('app.search', {searchString: this.searchText, page: 0});
-    }
-
     signOut() {
         this.authService.logout();
     }
 }
 
-LayoutCtrl.$inject = ['$state', 'authService', '$localStorage', 'globalVariables'];
+LayoutCtrl.$inject = ['authService', '$localStorage', 'globalVariables'];
 
 angular.module('app.layout').component('layout', {
     templateUrl: '/app/layout/components/layout/layout.html',

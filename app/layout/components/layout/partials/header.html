@@ -62,20 +62,7 @@
         </li>
     </ul>
 
-    <!-- search mobile button (this is hidden till mobile view port) -->
-    <div id="search-mobile" class="btn-header transparent pull-right" data-search-mobile>
-        <span> <a href="#" title="Поиск"><i class="fa fa-search"></i></a> </span>
-    </div>
-    <!-- end search mobile button -->
-
-    <!-- input: search field -->
-    <form class="header-search pull-right">
-        <input id="search-fld" type="text" ng-model="layoutCtrl.searchText" name="param" placeholder="Поиск товаров">
-        <button type="submit" ng-click="layoutCtrl.executeSearch()"><i class="fa fa-search"></i></button>
-        <a href="$" id="cancel-search-js" title="Cancel Search"><i class="fa fa-times"></i></a>
-    </form>
-    <!-- end input: search field -->
-
+    <search-mobile></search-mobile>
     <!-- fullscreen button -->
     <full-screen></full-screen>
     <!-- end fullscreen button -->

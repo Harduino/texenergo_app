@@ -1,0 +1,13 @@
+<div id="search-mobile" class="btn-header transparent pull-right" ng-click="$ctrl.showSearchForm()">
+    <span><a title="Поиск"><i class="fa fa-search"></i></a></span>
+</div>
+
+<form class="header-search pull-right">
+    <input id="search-fld" type="text" ng-model="$ctrl.searchText" name="param" placeholder="Поиск товаров">
+    <button type="submit" ng-click="$ctrl.executeSearch()">
+        <i class="fa fa-search"></i>
+    </button>
+    <a id="cancel-search-js" title="Отменить поиск" ng-click="$ctrl.hideSearchForm()">
+        <i class="fa fa-times"></i>
+    </a>
+</form>
