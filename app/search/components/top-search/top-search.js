@@ -1,8 +1,9 @@
 class TopSearchCtrl {
-    constructor($stateParams, $state, serverApi, $uibModal) {
+    constructor($stateParams, $state, serverApi, $uibModal, funcFactory) {
         let self = this;
         this.serverApi = serverApi;
         this.$state = $state;
+        this.funcFactory = funcFactory;
 
         this.selectedRowIndex = -1;
         this.data = {searchText: decodeURIComponent($stateParams.searchString), searchResults: [], subSearch: {}};
@@ -24,6 +25,8 @@ class TopSearchCtrl {
         };
 
         this.getSearchProductHandler = this.getSearchProductHandler.bind(this);
+
+        this.funcFactory.setPageTitle("Поиск: " + $stateParams.searchString);
 
         let tableNavigationHandler = self.navigateInTable.bind(self);
         angular.element(window).on('keydown', tableNavigationHandler);
@@ -109,6 +112,7 @@ class TopSearchCtrl {
                     }
                 }
             }
+
             //on hit Enter
         } else if ((key === ENTER) && (list.length > 0) && (this.selectedRowIndex > -1)) {
 
@@ -122,7 +126,7 @@ class TopSearchCtrl {
     }
 }
 
-TopSearchCtrl.$inject = ['$stateParams', '$state', 'serverApi', '$uibModal'];
+TopSearchCtrl.$inject = ['$stateParams', '$state', 'serverApi', '$uibModal', 'funcFactory'];
 
 angular.module('app.search').component('topSearch', {
     controller: TopSearchCtrl,

@@ -16,6 +16,7 @@
     "angular-ui-select": "^0.19.6",
     "angular-ui-tinymce": "0.0.11",
     "angular-xeditable": "0.6.0",
+    "auth0.js" : "latest",
     "auth0-lock": "10.4.0",
     "auth0-lock-passwordless": "latest",
     "bootstrap": "3.3.1",

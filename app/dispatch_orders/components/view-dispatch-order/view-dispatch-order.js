@@ -69,8 +69,8 @@ class ViewDispatchOrderCtrl {
 
     hasProfit() {
         let self = this;
+        if(self.dispatchOrder.product_order_contents === undefined) return false;
         for (var i = 0; i < self.dispatchOrder.product_order_contents.length; i++) {
-            console.log(self.dispatchOrder.product_order_contents[i].profit);
             if (self.dispatchOrder.product_order_contents[i].profit !== undefined) return true;
         }
         return false;
@@ -105,11 +105,12 @@ class ViewDispatchOrderCtrl {
             };
 
             this.serverApi.getDispatchOrderDetails(self.$stateParams.id, result => {
-
                 button && button.disableOnLoad(false, $event);
                 if(!window.dispatch_orders) window.dispatch_orders = {};
                 let dispatchOrder = self.dispatchOrder = result.data;
                 window.dispatch_orders[self.$stateParams.id] = self.dispatchOrder;
+
+                self.funcFactory.setPageTitle('Реализация ' + dispatchOrder.number);
 
                 if (self.hasProfit()){
                     self.totalProfit = 0;

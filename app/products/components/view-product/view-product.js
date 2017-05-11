@@ -50,6 +50,7 @@ class ViewProductCtrl {
         } else {
             serverApi.getProduct($stateParams.id, r => {
                 self.product = r.data;
+                self.funcFactory.setPageTitle(self.product.article + " " + self.product.name);
                 self.uploader.url = 'https://v2.texenergo.com/api/products/' + self.product.id + '/image?token=' + $localStorage.id_token;
                 if(!window.products) window.products = {};
                 window.products[$stateParams.id] = r.data;
@@ -75,10 +76,22 @@ class ViewProductCtrl {
                     yaCounter7987369.reachGoal("SeLeadTime", yaParams);
                 }
 
-                self.funcFactory.showNotification(info.obsolete ? "Снят с производства" : "Успешно", 'Тариф: ' +
-                    info.price_tarif + " руб., Скидка: " + info.discount + "%, Закупка: " + info.cost +
-                    " руб., Срок поставки: " + info.delivery_date + ", Мин. кол-во: " + info.quantity_min +
-                    ", Остаток у Шнейдера: " + info.schneider_stock, !info.obsolete);
+                let header, msg, flag;
+                if (info.obsolete) {
+                    header = "Снят с производства";
+                    msg = "";
+                    flag = false;
+                } else if (info.message) {
+                    header = "Сообщение";
+                    msg = info.message;
+                    flag = false;
+                } else {
+                    header = "Успешно";
+                    msg = 'Тариф: ' + info.price_tarif + " руб., Скидка: " + info.discount + "%, Закупка: " + info.cost + " руб., Срок поставки: " + info.delivery_date + ", Мин. кол-во: " + info.quantity_min + ", Остаток у Шнейдера: " + info.schneider_stock
+                    flag = true;
+                }
+
+                self.funcFactory.showNotification(header, msg, flag);
             });
         }
     }

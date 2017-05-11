@@ -1,377 +1,318 @@
 <div id="content" ng-switch="$ctrl.product.can_edit">
-    <div class="row">
-        <big-breadcrumbs items="['Просмотр товара']" data-icon="edit" class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
-        </big-breadcrumbs>
+    <div class="well well-white">
+        <h2 ng-if="$ctrl.product.can_edit" editable-text="$ctrl.product.name"
+            class="txt-color-blueDark semi-bold prod-review-title display-inline"
+            onaftersave="$ctrl.saveProduct()">
+            {{ $ctrl.product.name }}
+        </h2>
+        <h2 ng-if="!$ctrl.product.can_edit"
+            class="txt-color-blueDark semi-bold prod-review-title display-inline">
+            {{$ctrl.product.name}}
+        </h2>
+        <span ng-if="$ctrl.product.obsolete.flag" class="text-danger">
+            (Снят с производства
+            <span ng-if="$ctrl.product.obsolete.id">
+                с заменой на
+                <a ng-href="#/products/{{$ctrl.product.obsolete.id}}">{{ $ctrl.product.obsolete.article }}</a>
+            </span>
+            )
+        </span>
+        <hr>
+        <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group margin-top-10">
+        <hr>
     </div>
-    <div class="well product-info">
-        <div class="row">
-            <div class="col-xs-12 col-md-12">
-                <div>
-                    <h2 ng-if="$ctrl.product.can_edit" editable-text="$ctrl.product.name"
-                        class="txt-color-blueDark semi-bold prod-review-title display-inline"
-                        onaftersave="$ctrl.saveProduct()">
-                        {{ $ctrl.product.name }}
-                    </h2>
-                    <h2 ng-if="!$ctrl.product.can_edit"
-                        class="txt-color-blueDark semi-bold prod-review-title display-inline">
-                        {{$ctrl.product.name}}
-                    </h2>
-                    <span ng-if="$ctrl.product.obsolete.flag" class="text-danger">
-                        (Снят с производства
-                        <span ng-if="$ctrl.product.obsolete.id">
-                            с заменой на
-                            <a ng-href="#/products/{{$ctrl.product.obsolete.id}}">{{ $ctrl.product.obsolete.article }}</a>
-                        </span>
-                        )
+    <div class="well well-white product-info" style="overflow-y: auto;">
+        <div class="col-md-6">
+            <div class="row">
+                <p class="col-xs-12 col-md-3 font-bold">
+                    Артикул:
+                </p>
+                <p class="col-md-9">
+                    <te-copy-to-buffer>
+                        <span ng-if="$ctrl.product.can_edit" editable-text="$ctrl.product.article"
+                              onaftersave="$ctrl.saveProduct()" te-buffer-value>{{ $ctrl.product.article || "Нет артикула" }}</span>
+                        <span ng-if="!$ctrl.product.can_edit" te-buffer-value>{{ $ctrl.product.article }}</span>
+                    </te-copy-to-buffer>
+                </p>
+            </div>
+            <div class="row">
+                <p class="col-xs-12 col-md-3 font-bold">
+                    Производитель:
+                </p>
+                <p class="col-md-9">
+                    <span ng-if="$ctrl.product.can_edit">
+                        <a ng-hide="$ctrl.product.manufacturer.x_editable_show" class="editable-click"
+                           ng-click="$ctrl.product.manufacturer.x_editable_show=true;">
+                            {{$ctrl.product.manufacturer.name || 'Нет'}}
+                        </a>
+                        <div ng-if="$ctrl.product.manufacturer.x_editable_show">
+                            <span>
+                                <ui-select-infinity config="$ctrl.manufacturerSelectConfig"
+                                                    ng-model="$ctrl.product.manufacturer"
+                                                    view="app/products/components/view-product/partials/ui-select-infinity.html"
+                                                    on-select="$ctrl.saveProduct()">
+                                </ui-select-infinity>
+                            </span>
+                            <button type="button" class="btn btn-default"
+                                    ng-click="$ctrl.product.manufacturer.x_editable_show=false;">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                            <button ng-click="$ctrl.goToManufacturer()" type="button" class="btn btn-default">
+                                <span class="fa fa-eye"></span>
+                            </button>
+                        </div>
                     </span>
+                    <span ng-if="!$ctrl.product.can_edit">
+                        <a ng-href="/#/partners/{{$ctrl.product.manufacturer.id }}">
+                            {{$ctrl.product.manufacturer.name}}
+                        </a>
+                    </span>
+                </p>
+            </div>
+            <div class="row">
+                <p class="col-xs-12 col-md-3 font-bold">
+                    Цена<span uib-tooltip="РЦП - Рекомендуемая Цена Продажи">*</span>:
+                </p>
+                <p class="col-md-9">{{ $ctrl.product.price | currency }}</p>
+            </div>
+            <div class="row">
+                <p class="col-xs-12 col-md-3 font-bold">
+                    Остаток:
+                </p>
+                <p class="col-md-9">
+                    {{ $ctrl.product.can_edit ? $ctrl.product.stock : $ctrl.product.stock_with_mfk }}
+                    <span ng-if="$ctrl.product.can_edit" uib-tooltip="Остаток МФК">
+                        ({{ ($ctrl.product.stock_with_mfk - $ctrl.product.stock) < 0 ? 0 : ($ctrl.product.stock_with_mfk - $ctrl.product.stock) }})
+                    </span>
+                </p>
+            </div>
+            <div class="row">
+                <p class="col-xs-12 col-md-3 font-bold">
+                    Категории:
+                </p>
+                <p class="col-md-9">
+                    <span ng-repeat="catalogue in $ctrl.product.catalogues">
+                        <a href="/#/catalogues/{{ catalogue.id }}">/{{ catalogue.name }}</a>
+                    </span>
+                </p>
+            </div>
+            <div class="row">
+                <p class="col-xs-12 col-md-3 font-bold">
+                    Снятие с производства:
+                </p>
+                <p class="col-md-9">
+                    <a href="" ng-click="$ctrl.makeObsolete(false)" ng-if="$ctrl.product.obsolete.flag">
+                        Отменить снятие с производства
+                    </a>
+                    <a href="" ng-click="$ctrl.selectReplacementProduct()" ng-if="!$ctrl.product.obsolete.flag">
+                        Отметить как снятый с производства
+                    </a>
+                    <div ng-if="$ctrl.product.obsolete.flag">
+                        <b>С заменой на:</b>
+                        <a ng-click="$ctrl.selectReplacementProduct()">{{ $ctrl.product.obsolete.name }}</a>
+                    </div>
+                </p>
+            </div>
+            <div class="row"  ng-show="$ctrl.product.manufacturer.name === 'Schneider Electric'">
+                <p class="col-xs-12 col-md-3 font-bold">
+                    Срок поставки (единиц товара):
+                </p>
+                <p class="col-md-9">
+                    <input class="form-control" ng-model="$ctrl.data.quantity" type="text"
+                                                   model-filter="{min:0}" filter-name="te_number"
+                                                   placeholder="Количество товара"
+                                                   ng-keypress="$ctrl.getLeadTime($ctrl.product.id, $ctrl.data.quantity, $event)">
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <img ng-if="!$ctrl.product.can_edit" style="max-height: 200px; max-width: 200px;"
+                 ng-src="{{ $ctrl.product.image_url }}" class="img-thumbnail">
+            <div ng-if="$ctrl.product.can_edit" class="full-width product-thumb" nv-file-drop=""
+                 uploader="$ctrl.uploader" filters="queueLimit">
+                <div ng-show="$ctrl.uploader.isHTML5" class="well my-drop-zone" nv-file-over=""
+                     uploader="$ctrl.uploader">
+                    <img class="thumbnail no-padding" ng-src="{{$ctrl.product.image_url}}"
+                         style="max-height: 200px; max-width: 200px;">
                 </div>
-                <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group margin-top-10">
-                </form-nav-buttons>
-                <div class="col-xs-12 col-md-12">
-                    <hr>
+                <div class="row" ng-if="$ctrl.uploader.queue.length>0">
+                    <div class="col-md-12" ng-repeat="item in $ctrl.uploader.queue">
+                        Новая: <span ng-bind="item.file.name"></span>
+                        <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </div>
+                    <div class="col-md-12">
+                        <button class="btn btn-info" ng-click="$ctrl.uploader.queue[0].upload()">
+                            Заменить
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-        <section id="widget-grid-view-product">
-            <jarvis-widget-grid for="widget-grid-view-product"></jarvis-widget-grid>
-            <div class="row">
-                <article class="col-md-6">
-                    <div id="show-product-1" data-widget-color="blueDark" data-widget-deletebutton="false"
-                         data-widget-collapsed="true">
-                        <header><h2>Цена и остатки</h2></header>
-                        <div>
-                            <div class="jarviswidget-editbox">
-                                <input class="form-control" type="text">
-                            </div>
-                            <div class="widget-body">
-                                <te-copy-to-buffer>
-                                    <b>Артикул:</b>
-                                    <span ng-if="$ctrl.product.can_edit" editable-text="$ctrl.product.article"
-                                          onaftersave="$ctrl.saveProduct()" te-buffer-value>
-                                        {{ $ctrl.product.article || "Нет артикула" }}
-                                    </span>
-                                    <span ng-if="!$ctrl.product.can_edit" te-buffer-value>
-                                        {{ $ctrl.product.article }}
-                                    </span>
-                                </te-copy-to-buffer>
-                                <div>
-                                    <b>Производитель:</b>
-                                    <span ng-if="$ctrl.product.can_edit">
-                                        <a ng-hide="$ctrl.product.manufacturer.x_editable_show" class="editable-click"
-                                           ng-click="$ctrl.product.manufacturer.x_editable_show=true;">
-                                            {{$ctrl.product.manufacturer.name || 'Нет'}}
-                                        </a>
-                                        <div ng-if="$ctrl.product.manufacturer.x_editable_show">
-                                            <span>
-                                                <ui-select-infinity config="$ctrl.manufacturerSelectConfig"
-                                                                    ng-model="$ctrl.product.manufacturer"
-                                                                    view="app/products/components/view-product/partials/ui-select-infinity.html"
-                                                                    on-select="$ctrl.saveProduct()">
-                                                </ui-select-infinity>
-                                            </span>
-                                            <button type="button" class="btn btn-default"
-                                                    ng-click="$ctrl.product.manufacturer.x_editable_show=false;">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </button>
-                                            <button ng-click="$ctrl.goToManufacturer()" type="button" class="btn btn-default">
-                                                <span class="fa fa-eye"></span>
-                                            </button>
-                                        </div>
-                                    </span>
-                                    <span ng-if="!$ctrl.product.can_edit">
-                                        <a ng-href="/#/partners/{{$ctrl.product.manufacturer.id }}">
-                                            {{$ctrl.product.manufacturer.name}}
-                                        </a>
-                                    </span>
-                                </div>
-                                <div>
-                                    <b>
-                                        Цена<span uib-tooltip="РЦП - Рекомендуемая Цена Продажи">*</span>:
-                                    </b>
-                                    {{ $ctrl.product.price | currency }}
-                                </div>
-                                <div >
-                                    <b>Остаток:</b>
-                                    {{ $ctrl.product.can_edit ? $ctrl.product.stock : $ctrl.product.stock_with_mfk }}
-                                </div>
-                                <div ng-if="$ctrl.product.can_edit">
-                                    <b>Остаток у МФК:</b>
-                                    {{ ($ctrl.product.stock_with_mfk - $ctrl.product.stock) < 0 ? 0 : ($ctrl.product.stock_with_mfk - $ctrl.product.stock) }}
-                                </div>
-                                <div ng-if="$ctrl.product.can_edit">
-                                    <b>Снятие с производства:</b>
-                                    <a href="" ng-click="$ctrl.makeObsolete(false)" ng-if="$ctrl.product.obsolete.flag">
-                                        Отменить снятие с производства
-                                    </a>
-                                    <a href="" ng-click="$ctrl.selectReplacementProduct()" ng-if="!$ctrl.product.obsolete.flag">
-                                        Отметить как снятый с производства
-                                    </a>
-                                </div>
-                                <div ng-if="$ctrl.product.obsolete.flag">
-                                    <b>С заменой на:</b>
-                                    <a ng-click="$ctrl.selectReplacementProduct()">{{ $ctrl.product.obsolete.name }}</a>
-                                </div>
-                                <div ng-show="$ctrl.product.manufacturer.name === 'Schneider Electric'" class="margin-top-10">
-                                    <div class="form-group string optional product_lead_time">
-                                        <label class="control-label input-group-addon">Срок поставки (единиц товара)</label>
-                                        <input class="form-control" ng-model="$ctrl.data.quantity" type="text"
-                                               model-filter="{min:0}" filter-name="te_number"
-                                               placeholder="Количество товара"
-                                               ng-keypress="$ctrl.getLeadTime($ctrl.product.id, $ctrl.data.quantity, $event)">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    </div>
+    <div class="well well-white" ng-if="$ctrl.product.description">
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Описание
+            </p>
+            <p class="col-md-9">
+                <span ng-if="!$ctrl.product.can_edit" class="widget-body">
+                    <span ng-bind-html="$ctrl.product.description"></span>
+                </span>
+                <div ng-if="$ctrl.product.can_edit" style="padding-bottom: 10px;">
+                    <div style="display: flex; flex-direction: row; justify-content: flex-end;">
+                        <button class="btn btn-success" ng-click="$ctrl.saveProduct()">Сохранить</button>
                     </div>
-                    <jarvis-widget for="show-product-1"></jarvis-widget>
-                </article>
-                <article class="col-md-6">
-                    <div id="show-product-2" data-widget-color="blueDark" data-widget-deletebutton="false"
-                         data-widget-collapsed="true">
-                        <header><h2>Фото</h2></header>
-                        <div>
-                            <div class="widget-body">
-                                <img ng-if="!$ctrl.product.can_edit" style="max-height: 200px; max-width: 200px;"
-                                     ng-src="{{ $ctrl.product.image_url }}" class="img-thumbnail">
-                                <div ng-if="$ctrl.product.can_edit" class="full-width product-thumb" nv-file-drop=""
-                                     uploader="$ctrl.uploader" filters="queueLimit">
-                                    <div ng-show="$ctrl.uploader.isHTML5" class="well my-drop-zone" nv-file-over=""
-                                         uploader="$ctrl.uploader">
-                                        <img class="thumbnail no-padding" ng-src="{{$ctrl.product.image_url}}"
-                                             style="max-height: 200px; max-width: 200px;">
-                                    </div>
-                                    <div class="row" ng-if="$ctrl.uploader.queue.length>0">
-                                        <div class="col-md-12" ng-repeat="item in $ctrl.uploader.queue">
-                                            Новая: <span ng-bind="item.file.name"></span>
-                                            <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
-                                                <span class="glyphicon glyphicon-trash"></span>
-                                            </button>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <button class="btn btn-info" ng-click="$ctrl.uploader.queue[0].upload()">
-                                                Заменить
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <jarvis-widget for="show-product-2"></jarvis-widget>
-                </article>
-                <article class="col-md-6">
-                    <div id="show-product-3" data-widget-color="blueDark" data-widget-deletebutton="false"
-                         data-widget-collapsed="true">
-                        <header><h2>Описание</h2></header>
-                        <div>
-                            <div ng-if="!$ctrl.product.can_edit" class="widget-body">
-                                <div ng-bind-html="$ctrl.product.description"></div>
-                            </div>
-                            <div  ng-if="$ctrl.product.can_edit" style="padding-bottom: 10px;">
-                                <div style="display: flex; flex-direction: row; justify-content: flex-end;">
-                                    <button class="btn btn-success" ng-click="$ctrl.saveProduct()">Сохранить</button>
-                                </div>
-                                <textarea ui-tinymce="tinymceOptions" ng-model="$ctrl.product.description"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <jarvis-widget for="show-product-3"></jarvis-widget>
-                </article>
-                <article class="col-md-6">
-                    <div id="show-product-4" data-widget-color="blueDark" data-widget-deletebutton="false"
-                         data-widget-collapsed="true">
-                        <header><h2>Категории</h2></header>
-                        <div>
-                            <div class="jarviswidget-editbox">
-                                <input class="form-control" type="text">
-                            </div>
-                            <div class="widget-body">
-                                <div class="dd">
-                                    <ol class="dd-list">
-                                        <li class="dd-item" ng-repeat="catalogue in $ctrl.product.catalogues">
-                                            <div class="dd-handle">
-                                                <a href="/#/catalogues/{{ catalogue.id }}">{{ catalogue.name }}</a>
-                                            </div>
-                                        </li>
-                                    </ol>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <jarvis-widget for="show-product-4"></jarvis-widget>
-                </article>
-                <article class="col-md-6">
-                    <div id="show-product-5" data-widget-color="blueDark" data-widget-deletebutton="false"
-                         data-widget-collapsed="true">
-                        <header><h2>У партнёров</h2></header>
-                        <div>
-                            <div class="jarviswidget-editbox">
-                                <input class="form-control" type="text">
-                            </div>
-                            <div class="widget-body">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Поставщик</th>
-                                            <th class="hidden-xs">Код поставщика</th>
-                                            <th class="hidden-xs hidden-md">Закупка</th>
-                                            <th>Продажа</th>
-                                            <th>Остаток</th>
-                                            <th class="hidden-xs hidden-md">Срок поставки</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="row in $ctrl.product.supplier_infos">
-                                            <td>{{row.supplier_code}}</td>
-                                            <td class="hidden-xs">{{row.foreign_code}}</td>
-                                            <td class="hidden-xs hidden-sm hidden-md">{{row.prime_cost | currency}}</td>
-                                            <td>{{row.price | currency}}</td>
-                                            <td>{{row.quantity}}</td>
-                                            <td class="hidden-xs hidden-sm hidden-md">{{row.lead_time}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <jarvis-widget for="show-product-5"></jarvis-widget>
-                </article>
-                <article class="col-md-6">
-                    <div id="show-product-6" data-widget-color="blueDark" data-widget-deletebutton="false"
-                         data-widget-collapsed="true">
-                        <header><h2>Похожие товары</h2></header>
-                        <div>
-                            <div class="jarviswidget-editbox">
-                                <input class="form-control" type="text">
-                            </div>
-                            <div class="widget-body">
-                                <div class="dd">
-                                    <ol class="dd-list">
-                                        <li class="dd-item" ng-repeat="similar in $ctrl.product.similar_products">
-                                            <div class="dd-handle">
-                                                <div class="row">
-                                                    <div class="col-md-8">
-                                                        <a href="/#/products/{{ similar.id }}">{{ similar.name }}</a>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        {{ similar.article }}
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        {{ similar.price }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ol>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <jarvis-widget for="show-product-6"></jarvis-widget>
-                </article>
-                <article class="col-md-6">
-                    <div id="show-product-7" data-widget-color="blueDark" data-widget-deletebutton="false"
-                         data-widget-collapsed="true">
-                        <header><h2>Свойства</h2></header>
-                        <div>
-                            <div class="jarviswidget-editbox">
-                                <input class="form-control" type="text">
-                            </div>
-                            <div class="widget-body">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Свойство</th>
-                                            <th>Значение</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="item in $ctrl.product.properties">
-                                            <td>{{ item.name }}</td>
-                                            <td>{{ item.value }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <jarvis-widget for="show-product-7"></jarvis-widget>
-                </article>
-                <article class="col-md-6">
-                    <div id="show-product-8" data-widget-color="blueDark" data-widget-deletebutton="false"
-                         data-widget-collapsed="true">
-                        <header><h2>Заказы с этим товаром</h2></header>
-                        <div>
-                            <div class="jarviswidget-editbox">
-                                <input class="form-control" type="text">
-                            </div>
-                            <div class="widget-body">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Номер</th>
-                                            <th>Статус</th>
-                                            <th>Количество</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="item in $ctrl.product.customer_orders">
-                                            <td><a href="/#/customer_orders/{{ item.id }}">{{ item.number }}</a></td>
-                                            <td>{{ item.status }}</td>
-                                            <td>{{ item.quantity }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <jarvis-widget for="show-product-8"></jarvis-widget>
-                </article>
-                <article class="col-md-6">
-                    <div id="show-product-9" data-widget-color="blueDark" data-widget-deletebutton="false"
-                         data-widget-collapsed="true">
-                        <header><h2>Движения с этим товаром</h2></header>
-                        <div>
-                            <div class="jarviswidget-editbox">
-                                <input class="form-control" type="text">
-                            </div>
-                            <div class="widget-body">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Дата</th>
-                                            <th>Номер</th>
-                                            <th>Статус</th>
-                                            <th>Количество</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-switch="item.type" ng-repeat="item in $ctrl.product.product_orders">
-                                            <td>{{ item.date | date:'dd/MM/yy HH:mm' }}</td>
-                                            <td>
-                                                <a ng-switch-when="DispatchOrder" href="/#/dispatch_orders/{{ item.id }}">
-                                                    {{ item.number || "Б/Н" }}
-                                                </a>
-                                                <a ng-switch-when="ReceiveOrder" href="/#/receive_orders/{{ item.id }}">
-                                                    {{ item.number || "Б/Н" }}
-                                                </a>
-                                                <a ng-switch-when="AssemblyOrder" href="/#/assembly_orders/{{ item.id }}">
-                                                    {{ item.number || "Б/Н" }}
-                                                </a>
-                                            </td>
-                                            <td>{{ item.status }}</td>
-                                            <td ng-switch-when="DispatchOrder" class="danger">{{ item.quantity }}</td>
-                                            <td ng-switch-when="ReceiveOrder" class="success">{{ item.quantity }}</td>
-                                            <td ng-switch-when="AssemblyOrder" class="warning">{{ item.quantity }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <jarvis-widget for="show-product-9"></jarvis-widget>
-                </article>
-            </div>
-        </section>
+                    <textarea ui-tinymce="tinymceOptions" ng-model="$ctrl.product.description"></textarea>
+                </div>
+            </p>
+        </div>
+    </div>
+    <div class="well well-white" ng-if="$ctrl.product.supplier_infos.length > 0">
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                У партнёров
+            </p>
+            <p class="col-md-9">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Поставщик</th>
+                            <th class="hidden-xs">Код поставщика</th>
+                            <th class="hidden-xs hidden-md">Закупка</th>
+                            <th>Продажа</th>
+                            <th>Остаток</th>
+                            <th class="hidden-xs hidden-md">Срок поставки</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in $ctrl.product.supplier_infos">
+                            <td>{{row.supplier_code}}</td>
+                            <td class="hidden-xs">{{row.foreign_code}}</td>
+                            <td class="hidden-xs hidden-sm hidden-md">{{row.prime_cost | currency}}</td>
+                            <td>{{row.price | currency}}</td>
+                            <td>{{row.quantity}}</td>
+                            <td class="hidden-xs hidden-sm hidden-md">{{row.lead_time}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </p>
+        </div>
+    </div>
+    <div class="well well-white" ng-if="$ctrl.product.properties.length > 0">
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Свойства:
+            </p>
+            <p class="col-md-9">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Свойство</th>
+                            <th>Значение</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in $ctrl.product.properties">
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.value }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </p>
+        </div>
+    </div>
+    <div class="well well-white" ng-if="$ctrl.product.components.length > 0">
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Состав:
+            </p>
+            <p class="col-md-9">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Товар</th>
+                            <th>Количество</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in $ctrl.product.components">
+                            <td>
+                                <a ng-href="/#/products/{{ item.product.id }}">
+                                    {{ item.producth }}                               
+                                    {{ item.product.name }} ({{ item.product.article || "Без артикула"}})
+                                </a>
+                            </td>
+                            <td>{{ item.quantity }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </p>
+        </div>
+    </div>
+    <div class="well well-white" ng-if="$ctrl.product.customer_orders.length > 0">
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Заказы с этим товаром:
+            </p>
+            <p class="col-md-9">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Номер</th>
+                            <th>Статус</th>
+                            <th>Количество</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in $ctrl.product.customer_orders">
+                            <td><a href="/#/customer_orders/{{ item.id }}">{{ item.number }}</a></td>
+                            <td>{{ item.status }}</td>
+                            <td>{{ item.quantity }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </p>
+        </div>
+    </div>
+    <div class="well well-white" ng-if="$ctrl.product.product_orders.length > 0">
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Движения с этим товаром:
+            </p>
+            <p class="col-md-9">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Дата</th>
+                            <th>Номер</th>
+                            <th>Статус</th>
+                            <th>Количество</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-switch="item.type" ng-repeat="item in $ctrl.product.product_orders">
+                            <td>{{ item.date | date:'dd/MM/yy HH:mm' }}</td>
+                            <td>
+                                <a ng-switch-when="DispatchOrder" href="/#/dispatch_orders/{{ item.id }}">
+                                    {{ item.number || "Б/Н" }}
+                                </a>
+                                <a ng-switch-when="ReceiveOrder" href="/#/receive_orders/{{ item.id }}">
+                                    {{ item.number || "Б/Н" }}
+                                </a>
+                                <a ng-switch-when="AssemblyOrder" href="/#/assembly_orders/{{ item.id }}">
+                                    {{ item.number || "Б/Н" }}
+                                </a>
+                            </td>
+                            <td>{{ item.status }}</td>
+                            <td ng-switch-when="DispatchOrder" class="danger">{{ item.quantity }}</td>
+                            <td ng-switch-when="ReceiveOrder" class="success">{{ item.quantity }}</td>
+                            <td ng-switch-when="AssemblyOrder" class="warning">{{ item.quantity }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </p>
+        </div>
     </div>
 </div>

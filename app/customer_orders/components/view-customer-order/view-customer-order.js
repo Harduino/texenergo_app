@@ -347,6 +347,18 @@ class ViewCustomerOrderCtrl {
       return this.$filter('price_net')(row, row.quantity);
     }
 
+    quantityToColor (row) {
+        if (row.quantity <= row.stock) return "success";
+        if (row.stock === 0) return "danger";
+        if (row.stock > 0) return "warning";
+    }
+
+    quantityToDescription (row) {
+        if (row.quantity <= row.stock) return "Всё в наличии";
+        if (row.stock === 0) return (row.delivery_terms !== "" ? row.delivery_terms : ("Не хватает " + row.stock));
+        if (row.stock > 0) return (row.delivery_terms !== "" ? row.delivery_terms : ("Не хватает " + (row.quantity - row.stock)));
+    }
+
     getOrderDetails () {
         let self = this;
 

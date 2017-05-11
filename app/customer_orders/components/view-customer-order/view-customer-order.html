@@ -247,9 +247,9 @@
                                 </te-copy-to-buffer>
                             </td>
                             <td  ng-if="$ctrl.order.can_edit" class="hidden-xs text-right cancel-draggable">{{ item | price_net | currency}}</td>
-                            <td class="text-right">
+                            <td class="text-right" ng-class="$ctrl.quantityToColor(item)">
                                 <a ng-if="$ctrl.order.can_edit" editable-number="item.quantity" buttons="no"
-                                   onaftersave="$ctrl.saveProductChange({item: item, index: $index})" e-min="0">
+                                   onaftersave="$ctrl.saveProductChange({item: item, index: $index})" e-min="0" uib-tooltip="{{$ctrl.quantityToDescription(item)}}">
                                     {{ item.quantity }}
                                 </a>
                                 <span ng-if="!$ctrl.order.can_edit" class="cancel-draggable">{{ item.quantity }}</span>
