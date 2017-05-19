@@ -8,7 +8,8 @@ var gulp = require('gulp'),
     expect = require('gulp-expect-file'),
     gulpif = require('gulp-if'),
     minify = require('gulp-minify'),
-    ngAnnotate = require('gulp-ng-annotate');
+    ngAnnotate = require('gulp-ng-annotate'),
+    ts = require('gulp-typescript');
 
 gulp.task('styles', function() {
     var files = [
@@ -138,8 +139,20 @@ gulp.task('watch', function() {
     ], function(){
         gulp.start('app');
     });
+
+    gulp.watch(['ng2/**/*.ts'], function() {
+        gulp.start('compile');
+    });
+});
+
+gulp.task('compile', function() {
+    var tsProject = ts.createProject('tsconfig.json');
+
+    return tsProject.src()
+        .pipe(tsProject()).js
+        .pipe(gulp.dest('ng2'));
 });
 
 gulp.task('server', ['launch', 'watch']);
-gulp.task('serve', ['app', 'libs', 'styles', 'server']);
-gulp.task('default', ['app', 'libs', 'styles']);
+gulp.task('serve', ['compile', 'app', 'libs', 'styles', 'server']);
+gulp.task('default', ['compile', 'app', 'libs', 'styles']);
