@@ -5,6 +5,7 @@ import { upgradeAdapter } from './upgrade-adapter.module';
 
 import { AppComponent }         from '../components/app/app.component';
 import { CatalogListComponent } from '../components/catalog-list/catalog-list.component';
+import { BigBreadcrumbsComponent } from '../components/big-breadcrumbs/big-breadcrumbs';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { CatalogListComponent } from '../components/catalog-list/catalog-list.co
   declarations: [
     AppComponent,
     CatalogListComponent,
+    BigBreadcrumbsComponent,
     upgradeAdapter.upgradeNg1Component('catalogues')
   ],
   bootstrap: [ AppComponent ]
