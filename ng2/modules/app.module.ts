@@ -1,8 +1,6 @@
 import { NgModule }       from '@angular/core';
 import { BrowserModule }  from '@angular/platform-browser';
 
-import { upgradeAdapter } from './upgrade-adapter.module';
-
 import { AppComponent }         from '../components/app/app.component';
 import { BigBreadcrumbsComponent } from '../components/big-breadcrumbs/big-breadcrumbs';
 
@@ -12,8 +10,7 @@ import { BigBreadcrumbsComponent } from '../components/big-breadcrumbs/big-bread
   ],
   declarations: [
     AppComponent,
-    BigBreadcrumbsComponent,
-    upgradeAdapter.upgradeNg1Component('catalogues')
+    BigBreadcrumbsComponent
   ],
   bootstrap: [ AppComponent ]
 })
