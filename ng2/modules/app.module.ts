@@ -3,6 +3,7 @@ import { BrowserModule }  from '@angular/platform-browser';
 
 import { AppComponent }         from '../components/app/app.component';
 import { BigBreadcrumbsComponent } from '../components/layout/big-breadcrumbs/big-breadcrumbs';
+import { FullScreenComponent } from '../components/layout/full-screen/full-screen';
 
 @NgModule({
   imports: [
@@ -10,7 +11,8 @@ import { BigBreadcrumbsComponent } from '../components/layout/big-breadcrumbs/bi
   ],
   declarations: [
     AppComponent,
-    BigBreadcrumbsComponent
+    BigBreadcrumbsComponent,
+    FullScreenComponent
   ],
   bootstrap: [ AppComponent ]
 })
