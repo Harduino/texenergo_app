@@ -2,7 +2,7 @@ import { NgModule }       from '@angular/core';
 import { BrowserModule }  from '@angular/platform-browser';
 
 import { AppComponent }         from '../components/app/app.component';
-import { BigBreadcrumbsComponent } from '../components/big-breadcrumbs/big-breadcrumbs';
+import { BigBreadcrumbsComponent } from '../components/layout/big-breadcrumbs/big-breadcrumbs';
 
 @NgModule({
   imports: [
