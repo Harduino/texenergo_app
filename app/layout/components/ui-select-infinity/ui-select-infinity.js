@@ -13,6 +13,7 @@ class UiSelectInfinityCtrl {
         let self = this;
         this.$q = $q;
         this.$timeout = $timeout;
+        this.$element = $element;
 
         this.defer = $q.defer();
         this.config = angular.extend(DEFAULT_CONFIG, this.config);
@@ -83,6 +84,17 @@ class UiSelectInfinityCtrl {
         this.config.dataMethod(this.page, this.query, {timeout: self.canceler.promise}, res => {
             self.inLoad = res.data.length == 0;
             self.items = self.items.concat(res.data);
+
+            let $select2 = self.$element.find('.select2.select2-container'),
+                $uiSelectController = $select2.data().$uiSelectController;
+
+            // if for some reasons $uiSelectController don't know about changes
+            if($uiSelectController && !$uiSelectController.items.length && self.items.length>0){
+              for(var i=0, items= self.items, il= items.length; i<il; i++){
+                // update items manually
+                $uiSelectController.items.push(items[i]);
+              }
+            }
             UiSelectInfinityCtrl.setSearchStatus((self.page == self.config.startPage) && (res.data.length == 0) ? 'noresult' : 'result');
         });
     }
