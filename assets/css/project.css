@@ -927,3 +927,12 @@ te-copy-to-buffer .fa-copy.animate {
 .no-events{
   pointer-events: none;
 }
+.def-tabset .tab-pane{
+  padding-top: 20px!important;
+}
+.def-tabset .tab-pane section{
+  padding-left: 10px;
+}
+.btn-margin{
+  margin-bottom: 10px
+}

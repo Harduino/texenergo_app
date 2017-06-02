@@ -1,0 +1,81 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="$ctrl.cancel()" aria-hidden="true">
+        &times;
+    </button>
+    <h4 class="modal-title">Создать адрес</h4>
+</div>
+<div class="modal-body">
+  <uib-tabset active="$ctrl.activeTab" class="def-tabset">
+    <uib-tab index="0" heading="Адрес">
+      <div class="smart-form">
+        <section>
+            <label class="label">Индекс:</label>
+            <label class="input">
+                <input type="text" ng-model="$ctrl.address.postal_index"
+                       uib-typeahead="name.label for name in $ctrl.getDaDataSuggestions('address', $viewValue, 'data.postal_code')"
+                       typeahead-on-select="$ctrl.fillAddressBySuggestion($item)" class="input-sm"
+                       typeahead-template-url="typeAhead.tmpl.html" name="data.postal_code">
+            </label>
+        </section>
+        <section>
+            <label class="label">Регион:</label>
+            <label class="input">
+                <input type="text" ng-model="$ctrl.address.region"
+                       uib-typeahead="name.label for name in $ctrl.getDaDataSuggestions('address', $viewValue, 'data.region_with_type')"
+                       typeahead-on-select="$ctrl.fillAddressBySuggestion($item)" class="input-sm"
+                       typeahead-template-url="typeAhead.tmpl.html" name="data.region_with_type">
+            </label>
+        </section>
+        <section>
+            <label class="label">Город:</label>
+            <label class="input">
+                <input type="text" ng-model="$ctrl.address.city"
+                       uib-typeahead="name.label for name in $ctrl.getDaDataSuggestions('address', $viewValue, 'data.city')"
+                       typeahead-on-select="$ctrl.fillAddressBySuggestion($item)" class="input-sm"
+                       typeahead-template-url="typeAhead.tmpl.html" name="data.city">
+            </label>
+        </section>
+        <section>
+            <label class="label">Улица:</label>
+            <label class="input">
+                <input type="text" ng-model="$ctrl.address.street"
+                       uib-typeahead="name.label for name in $ctrl.getDaDataSuggestions('address', $viewValue, 'data.street')"
+                       typeahead-on-select="$ctrl.fillAddressBySuggestion($item)" class="input-sm"
+                       typeahead-template-url="typeAhead.tmpl.html" name="data.street">
+            </label>
+        </section>
+        <section>
+            <label class="label">Дом:</label>
+            <label class="input">
+                <input type="text" ng-model="$ctrl.address.house" name="data.house"
+                       class="input-sm">
+            </label>
+        </section>
+      </div>
+    </uib-tab>
+    <uib-tab index="1" heading="Деловые Линии">
+      <section>
+        <ui-select on-select="" ng-model="$ctrl.selectedDellin"
+          uis-open-close="$ctrl.loadDellinTerminals(isOpen)"
+          reset-search-input="false" theme="select2" style="width: 100%;">
+          <ui-select-match placeholder="Введите адрес для добавления...">{{$select.selected.address}}</ui-select-match>
+          <ui-select-choices repeat="del in $ctrl.dellinTerminalsList | filter:$select.search" class="search-item">
+            <div class="search-tr">
+              <div class="search-td" ng-bind-html="del.address | highlight: $select.search"></div>
+            </div>
+          </ui-select-choices>
+        </ui-select>
+      </section>
+    </uib-tab>
+  </uib-tabset>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal"
+            ng-click="$ctrl.cancel()">
+        Отмена
+    </button>
+    <button type="button" class="btn btn-primary" data-dismiss="modal"
+            ng-click="$ctrl.saveAddress()">
+        Сохранить
+    </button>
+</div>
