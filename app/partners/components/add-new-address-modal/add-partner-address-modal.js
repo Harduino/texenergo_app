@@ -7,9 +7,31 @@ class AddPartnerAddressModalCtrl{
 
     this.cancel = $uibModalInstance.dismiss;
     this.address = {};
+    this.isEdit = config.address ? true : false;
     this.selectedDellin = null;
     this.activeTab = 0; // def tab is Address
     this.dellinTerminalsList = [];
+    this.editId = null;
+
+    if(this.isEdit){
+      let address = config.address,
+          isDellin = address.dellin_terminal;
+
+      // get edit id
+      this.editId = address.id;
+      // switch active tab
+      this.activeTab = (isDellin ? 1 : 0);
+
+      if(isDellin){
+        let dellinAddress = [address.postal_index, address.region,
+          address.city, address.street, address.house].join(', ');
+
+        this.selectedDellin = address;
+        this.selectedDellin.address = dellinAddress;
+      }else{
+        this.address = address;
+      }
+    }
   }
 
   getDaDataSuggestions(type, value, fieldName) {
@@ -52,8 +74,17 @@ class AddPartnerAddressModalCtrl{
   }
 
   saveAddress(){
-    this.$uibModalInstance
-    .close((this.activeTab ? this.selectedDellin : this.address));
+    let address = (this.activeTab ? this.selectedDellin : this.address);
+
+    // set edit id
+    if(this.isEdit){
+      address.id = this.editId;
+    }
+
+    this.$uibModalInstance.close({
+      address: address,
+      isEdit: this.isEdit
+    });
   }
 }
 

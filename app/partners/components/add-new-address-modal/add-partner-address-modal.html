@@ -2,7 +2,7 @@
     <button type="button" class="close" ng-click="$ctrl.cancel()" aria-hidden="true">
         &times;
     </button>
-    <h4 class="modal-title">Создать адрес</h4>
+    <h4 class="modal-title" ng-bind="($ctrl.isEdit ? 'Изменить' : 'Создать') + ' адрес'"></h4>
 </div>
 <div class="modal-body">
   <uib-tabset active="$ctrl.activeTab" class="def-tabset">

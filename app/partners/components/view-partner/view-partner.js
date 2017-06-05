@@ -1,14 +1,15 @@
 class ViewPartnerCtrl {
-    constructor($state, serverApi, $stateParams, funcFactory, $parse) {
+    constructor($state, serverApi, $stateParams, funcFactory, $parse, $q,
+      $uibModal) {
         let self = this;
         this.funcFactory = funcFactory;
         this.serverApi = serverApi;
         this.$parse = $parse;
+        this.$uibModal = $uibModal;
 
         this.partner = {};
         this.newPerson = {};
         this.newBankAccount = {};
-        this.newAddress = {};
         this.updatableAddress = {};
 
         this.visual = {
@@ -44,17 +45,6 @@ class ViewPartnerCtrl {
                 window.partners[$stateParams.id].receiveOrders = r.data;
                 self.partner.receiveOrders = r.data;
             }, {}, self.partner.id);
-
-            self.dellinTerminalsList = [];
-            serverApi.getDellinTerminals(self.partner.id, r => {
-                console.log("Dellin is on fire!");
-                r.data.forEach( city => {
-                    city.terminals.forEach(terminal => {
-                        terminal.dellin_terminal = terminal.id;
-                        self.dellinTerminalsList.push(terminal);
-                    })
-                });
-            });
         }
 
         var loadPartner = (force_reload, button, $event) => {
@@ -197,58 +187,41 @@ class ViewPartnerCtrl {
     //BANK ACCOUNT END
 
     // ADDRESS BEGIN
-    getDaDataSuggestions(type, value, fieldName) {
+
+    showAddressForm (addr) {
+      let self = this;
+
+      this.$uibModal.open({
+        templateUrl: 'app/partners/components/add-new-address-modal/add-partner-address-modal.html',
+        controller: 'AddPartnerAddressModalCtrl',
+        controllerAs: '$ctrl',
+        resolve: {
+          config: {
+            partnerId: self.partner.id,
+            address: addr
+          }
+        }
+      }).result.then((result) => {
+        if(result.isEdit){
+          self.saveAddress(result.address);
+        }else{
+          self.addAddress(result.address);
+        }
+      });
+    }
+
+    addAddress (address) {
         let self = this;
-
-        return this.serverApi.validateViaDaData(type, {query: value}).then(result => {
-            return result.data.suggestions.map(item => {
-                return {label: self.$parse(fieldName)(item) || value, item: item, field: fieldName};
-            });
-        });
-    }
-
-    fillAddressBySuggestion(daDataResponse, addr_item) {
-        let data = daDataResponse.item.data;
-        let addr = (addr_item === undefined) ? this.newAddress : addr_item; // Default to newAddress
-
-        addr.postal_index =  data.postal_code;
-        addr.region = data.region_with_type;
-        addr.city = (data.city || data.settlement_with_type);
-        addr.street_kladr_id = data.street_kladr_id;
-        addr.street = data.street_with_type;
-        addr.house = data.house;
-    }
-
-    showNewAddressForm () {
-        $('#createAddressModal').modal('show');
-    }
-
-    clearNewAddress () {
-        this.newAddress = {};
-    }
-
-    addAddress () {
-        let self = this;
-        let data = { address: self.newAddress };
+        let data = { address: address };
 
         self.serverApi.createAddress(self.partner.id, data, result => {
             if(!result.data.errors){
                 self.funcFactory.showNotification('Создал адрес', '', true);
                 self.partner.addresses.push(result.data);
-                self.clearNewAddress();
             } else {
                 self.funcFactory.showNotification('Не удалось создать адрес', result.data.errors);
             }
         });
-    }
-
-    showUpdateAddressForm (addr) {
-        this.updatableAddress = addr;
-        $('#updateAddressModal').modal('show');
-    }
-
-    clearUpdatableAddress () {
-        this.updatableAddress = {};
     }
 
     saveAddress (addrEntry) {
@@ -273,13 +246,6 @@ class ViewPartnerCtrl {
             }
         });
     }
-
-    dellinTerminals () {
-        console.log("Fired dellinTerminals");
-        let self = this;
-
-        
-    }
     // ADDRESS END
 
     // getDaDataBankSuggestions (type, val, fieldName) {
@@ -298,7 +264,8 @@ class ViewPartnerCtrl {
     }
 }
 
-ViewPartnerCtrl.$inject = ['$state', 'serverApi', '$stateParams', 'funcFactory', '$parse'];
+ViewPartnerCtrl.$inject = ['$state', 'serverApi', '$stateParams', 'funcFactory',
+'$parse', '$q', '$uibModal'];
 
 angular.module('app.partners').component('viewPartner', {
     controller: ViewPartnerCtrl,

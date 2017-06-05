@@ -307,17 +307,14 @@
                 </table>
             </div>
             <div class="tab-pane fade" id="s7">
-                <div ng-click="viewPartnerCtrl.showNewAddressForm()" ng-if="viewPartnerCtrl.partner.can_edit"
-                     class="ng-scope btn btn-success">
+              <div layout="row">
+                <div ng-click="viewPartnerCtrl.showAddressForm()" ng-if="viewPartnerCtrl.partner.can_edit"
+                    class="ng-scope btn btn-success btn-margin">
                     <i class="fa fa-plus"></i>
                     <span class="hidden-xs ng-binding">Новый</span>
                 </div>
-                <div>
-                    <a href="#" editable-select="viewPartnerCtrl.newAddress" e-ng-options="del as del.address for del in viewPartnerCtrl.dellinTerminalsList" onaftersave="viewPartnerCtrl.addAddress()">
-                        {{ "Ничего" }}
-                    </a>
-                </div>
-                <table class="table table-bordered">
+              </div>
+              <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>Индекс</th>
@@ -359,10 +356,10 @@
                                 <span>{{ addr.dellin_terminal }}</span>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-xs" ng-click="viewPartnerCtrl.showUpdateAddressForm(addr)">
+                                <button type="button" class="btn btn-xs" ng-click="viewPartnerCtrl.showAddressForm(addr)">
                                     <span class="glyphicon glyphicon-pencil"/>
                                 </button>
-                                <button type="button" class="btn btn-danger btn-xs" ng-click="viewPartnerCtrl.showUpdateAddressForm(addr)">
+                                <button type="button" class="btn btn-danger btn-xs" ng-click="viewPartnerCtrl.showAddressForm(addr)">
                                     <span class="glyphicon glyphicon-trash"/>
                                 </button>
                             </td>
@@ -518,151 +515,6 @@
                             </button>
                             <button type="button" class="btn btn-primary" data-dismiss="modal"
                                     ng-click="viewPartnerCtrl.addBankAccount()">
-                                Сохранить
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal fade" id="createAddressModal" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                                &times;
-                            </button>
-                            <h4 class="modal-title">Создать адрес</h4>
-                        </div>
-                        <div class="modal-body smart-form">
-                            <section class="p-l-15">
-                                <label class="label">Индекс:</label>
-                                <label class="input">
-                                    <input type="text" ng-model="viewPartnerCtrl.newAddress.postal_index"
-                                           uib-typeahead="name.label for name in viewPartnerCtrl.getDaDataSuggestions('address', $viewValue, 'data.postal_code')"
-                                           typeahead-on-select="viewPartnerCtrl.fillAddressBySuggestion($item)" class="input-sm"
-                                           typeahead-template-url="typeAhead.tmpl.html" name="data.postal_code">
-                                </label>
-                            </section>
-                            <section class="p-l-15">
-                                <label class="label">Регион:</label>
-                                <label class="input">
-                                    <input type="text" ng-model="viewPartnerCtrl.newAddress.region"
-                                           uib-typeahead="name.label for name in viewPartnerCtrl.getDaDataSuggestions('address', $viewValue, 'data.region_with_type')"
-                                           typeahead-on-select="viewPartnerCtrl.fillAddressBySuggestion($item)" class="input-sm"
-                                           typeahead-template-url="typeAhead.tmpl.html" name="data.region_with_type">
-                                </label>
-                            </section>
-                            <section class="p-l-15">
-                                <label class="label">Город:</label>
-                                <label class="input">
-                                    <input type="text" ng-model="viewPartnerCtrl.newAddress.city"
-                                           uib-typeahead="name.label for name in viewPartnerCtrl.getDaDataSuggestions('address', $viewValue, 'data.city')"
-                                           typeahead-on-select="viewPartnerCtrl.fillAddressBySuggestion($item)" class="input-sm"
-                                           typeahead-template-url="typeAhead.tmpl.html" name="data.city">
-                                </label>
-                            </section>
-                            <section class="p-l-15">
-                                <label class="label">Улица:</label>
-                                <label class="input">
-                                    <input type="text" ng-model="viewPartnerCtrl.newAddress.street"
-                                           uib-typeahead="name.label for name in viewPartnerCtrl.getDaDataSuggestions('address', $viewValue, 'data.street')"
-                                           typeahead-on-select="viewPartnerCtrl.fillAddressBySuggestion($item)" class="input-sm"
-                                           typeahead-template-url="typeAhead.tmpl.html" name="data.street">
-                                </label>
-                            </section>
-                            <section class="p-l-15">
-                                <label class="label">Дом:</label>
-                                <label class="input">
-                                    <input type="text" ng-model="viewPartnerCtrl.newAddress.house" name="data.house"
-                                           class="input-sm">
-                                </label>
-                            </section>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal"
-                                    ng-click="viewPartnerCtrl.clearNewAddress()">
-                                Отмена
-                            </button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal"
-                                    ng-click="viewPartnerCtrl.addAddress()">
-                                Сохранить
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal fade" id="updateAddressModal" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                                &times;
-                            </button>
-                            <h4 class="modal-title">Изменить адрес</h4>
-                        </div>
-                        <div class="modal-body smart-form">
-                            <section class="p-l-15">
-                                <label class="label">Индекс:</label>
-                                <label class="input">
-                                    <input type="text" ng-model="viewPartnerCtrl.updatableAddress.postal_index"
-                                           uib-typeahead="name.label for name in viewPartnerCtrl.getDaDataSuggestions('address', $viewValue, 'data.postal_code')"
-                                           typeahead-on-select="viewPartnerCtrl.fillAddressBySuggestion($item, viewPartnerCtrl.updatableAddress)" class="input-sm"
-                                           typeahead-template-url="typeAhead.tmpl.html" name="data.postal_code">
-                                </label>
-                            </section>
-                            <section class="p-l-15">
-                                <label class="label">Регион:</label>
-                                <label class="input">
-                                    <input type="text" ng-model="viewPartnerCtrl.updatableAddress.region"
-                                           uib-typeahead="name.label for name in viewPartnerCtrl.getDaDataSuggestions('address', $viewValue, 'data.region_with_type')"
-                                           typeahead-on-select="viewPartnerCtrl.fillAddressBySuggestion($item, viewPartnerCtrl.updatableAddress)" class="input-sm"
-                                           typeahead-template-url="typeAhead.tmpl.html" name="data.region_with_type">
-                                </label>
-                            </section>
-                            <section class="p-l-15">
-                                <label class="label">Город:</label>
-                                <label class="input">
-                                    <input type="text" ng-model="viewPartnerCtrl.updatableAddress.city"
-                                           uib-typeahead="name.label for name in viewPartnerCtrl.getDaDataSuggestions('address', $viewValue, 'data.city')"
-                                           typeahead-on-select="viewPartnerCtrl.fillAddressBySuggestion($item, viewPartnerCtrl.updatableAddress)" class="input-sm"
-                                           typeahead-template-url="typeAhead.tmpl.html" name="data.city">
-                                </label>
-                            </section>
-                            <section class="p-l-15">
-                                <label class="label">Улица:</label>
-                                <label class="input">
-                                    <input type="text" ng-model="viewPartnerCtrl.updatableAddress.street"
-                                           uib-typeahead="name.label for name in viewPartnerCtrl.getDaDataSuggestions('address', $viewValue, 'data.street')"
-                                           typeahead-on-select="viewPartnerCtrl.fillAddressBySuggestion($item, viewPartnerCtrl.updatableAddress)" class="input-sm"
-                                           typeahead-template-url="typeAhead.tmpl.html" name="data.street">
-                                </label>
-                            </section>
-                            <section class="p-l-15">
-                                <label class="label">Дом:</label>
-                                <label class="input">
-                                    <input type="text" ng-model="viewPartnerCtrl.updatableAddress.house" name="data.house" class="input-sm">
-                                </label>
-                            </section>
-                            <section class="p-l-15">
-                                <label class="label">Юридический адрес:</label>
-                                <label>
-                                    <te-switcher ng-model="viewPartnerCtrl.updatableAddress.legal"></te-switcher>
-                                </label>
-                            </section>
-                            <section class="p-l-15">
-                                <label class="label">Адрес доставки:</label>
-                                <label>
-                                    <te-switcher ng-model="viewPartnerCtrl.updatableAddress.delivery"></te-switcher>
-                                </label>
-                            </section>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal"
-                                    ng-click="viewPartnerCtrl.clearUpdatableAddress()">
-                                Отмена
-                            </button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal"
-                                    ng-click="viewPartnerCtrl.saveAddress(viewPartnerCtrl.updatableAddress)">
                                 Сохранить
                             </button>
                         </div>
