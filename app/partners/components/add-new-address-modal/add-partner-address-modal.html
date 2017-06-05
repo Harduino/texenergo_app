@@ -6,7 +6,7 @@
 </div>
 <div class="modal-body">
   <uib-tabset active="$ctrl.activeTab" class="def-tabset">
-    <uib-tab index="0" heading="Адрес">
+    <uib-tab index="0" heading="Адрес" ng-hide="$ctrl.isEdit && $ctrl.activeTab !== 0">
       <div class="smart-form">
         <section>
             <label class="label">Индекс:</label>
@@ -67,7 +67,7 @@
         </div>
       </div>
     </uib-tab>
-    <uib-tab index="1" heading="Деловые Линии">
+    <uib-tab index="1" heading="Деловые Линии" ng-hide="$ctrl.isEdit && $ctrl.activeTab !== 1">
       <section>
         <ui-select on-select="" ng-model="$ctrl.selectedDellin"
           uis-open-close="$ctrl.loadDellinTerminals(isOpen)"
