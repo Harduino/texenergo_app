@@ -282,8 +282,11 @@ form-nav-buttons[data-template='table'] .btn>.fa{
 .a-row-add.ng-leave-active{
     opacity: 0;
 }
+.table-bordered tr.row-archived{
+  background-color: #ffcdd2;
+}
 .right{
-    float: right!important;
+  float: right!important;
 }
 .form-control{
     min-height: 32px;

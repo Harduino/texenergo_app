@@ -330,7 +330,8 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="addr in viewPartnerCtrl.partner.addresses"
-                            ng-switch="viewPartnerCtrl.partner.can_edit">
+                            ng-switch="viewPartnerCtrl.partner.can_edit"
+                            ng-class="{'row-archived': addr.archived}">
                             <td>
                                 <span>{{ addr.postal_index }}</span>
                             </td>
@@ -356,11 +357,13 @@
                                 <span>{{ addr.dellin_terminal }}</span>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-xs" ng-click="viewPartnerCtrl.showAddressForm(addr)">
+                                <button type="button" class="btn btn-xs"
+                                ng-click="viewPartnerCtrl.showAddressForm(addr)">
                                     <span class="glyphicon glyphicon-pencil"/>
                                 </button>
-                                <button type="button" class="btn btn-danger btn-xs" ng-click="viewPartnerCtrl.showAddressForm(addr)">
-                                    <span class="glyphicon glyphicon-trash"/>
+                                <button type="button" class="btn btn-danger btn-xs"
+                                ng-click="viewPartnerCtrl.saveAddress(addr, true)">
+                                    <span ng-class="{'fa fa-archive': addr.archived, 'glyphicon glyphicon-trash': !addr.archived}"/>
                                 </button>
                             </td>
                         </tr>

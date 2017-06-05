@@ -224,27 +224,32 @@ class ViewPartnerCtrl {
         });
     }
 
-    saveAddress (addrEntry) {
-        let self = this;
+    saveAddress (addrEntry, archive) {
+      let self = this;
 
-        self.serverApi.updateAddress(self.partner.id, addrEntry.id, {
-            address: addrEntry
-        }, result => {
-            if(!result.data.errors) {
-                for (let j = 0; j < self.partner.addresses.length; j++) {
-                    let address = self.partner.addresses[j];
+      if(archive){
+        addrEntry.archived = !addrEntry.archived;
+      }
 
-                    if (address.id === result.data.id) {
-                        self.partner.addresses[j] = angular.extend(address, result.data);
-                        self.funcFactory.showNotification('Успешно обновлен адрес', (address.rs || ''),
-                            true);
-                        break;
-                    }
-                }
-            } else {
-                self.funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors);
+      self.serverApi.updateAddress(self.partner.id, addrEntry.id, {
+        address: addrEntry
+      }, result => {
+        if(!result.data.errors) {
+          for (let j = 0; j < self.partner.addresses.length; j++) {
+            let address = self.partner.addresses[j];
+
+            if (address.id === result.data.id) {
+                self.partner.addresses[j] = angular.extend(address, result.data);
+                self.funcFactory.showNotification('Успешно обновлен адрес', (address.rs || ''),
+                    true);
+                break;
             }
-        });
+          }
+        } else {
+          addrEntry.archived = !addrEntry.archived;
+          self.funcFactory.showNotification('Не удалось обновить данные продукта', result.data.errors);
+        }
+      });
     }
     // ADDRESS END
 
