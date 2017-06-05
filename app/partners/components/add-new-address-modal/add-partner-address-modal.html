@@ -51,6 +51,20 @@
                        class="input-sm">
             </label>
         </section>
+        <div ng-if="$ctrl.isEdit">
+          <section class="p-l-15">
+              <label class="label">Юридический адрес:</label>
+              <label>
+                  <te-switcher ng-model="$ctrl.address.legal"></te-switcher>
+              </label>
+          </section>
+          <section class="p-l-15">
+              <label class="label">Адрес доставки:</label>
+              <label>
+                  <te-switcher ng-model="$ctrl.address.delivery"></te-switcher>
+              </label>
+          </section>
+        </div>
       </div>
     </uib-tab>
     <uib-tab index="1" heading="Деловые Линии">
