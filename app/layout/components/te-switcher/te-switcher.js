@@ -2,7 +2,6 @@
 // Usage: <te-switcher ng-model="selected"></te-switcher>
 class TeSwitcher{
   constructor(){
-    console.log(this.model);
   }
 
   onClick($event){
