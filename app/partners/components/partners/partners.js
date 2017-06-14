@@ -27,7 +27,9 @@ class PartnersCtrl {
             if(!result.data.errors){
                 self.data.partnersList.unshift(result.data);
                 self.funcFactory.showNotification('Партнёр успешно добавлен', '', true);
-                self.serverApi.createAddress(result.data.id, {address: self.newAddress}, result => {
+                self.newAddress.legal = true;
+                self.newAddress.delivery = true;
+                self.serverApi.createAddress(result.data.id, { address: self.newAddress }, result => {
                     if(!result.data.errors){
                         self.clearNewPartner();
                     } else {

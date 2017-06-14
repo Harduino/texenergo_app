@@ -9,8 +9,11 @@
                 <input class="form-control" ng-model="$ctrl.data.quantity" placeholder="Количество" type="text">
             </div>
         </div>
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" ng-repeat='item in $ctrl.data.customerOrdersList' style="padding: 5px;">
+        <div ng-if="$ctrl.data.customerOrdersList.length > 0" class="col-xs-6 col-sm-6 col-md-6 col-lg-6" ng-repeat='item in $ctrl.data.customerOrdersList' style="padding: 5px;">
             <a href="" ng-click="$ctrl.addProductToCustomerOrder(item)" class="editable editable-click">{{item.number}}</a>
+        </div>
+        <div ng-if="$ctrl.data.customerOrdersList.length == 0" class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="padding: 5px;">
+            <span>У вас нет ни одного заказа в статусе "Не подтвержден". Создайте один.</span>
         </div>
     </div>
 </div>

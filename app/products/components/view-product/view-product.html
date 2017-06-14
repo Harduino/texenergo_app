@@ -157,15 +157,7 @@
                 Описание
             </p>
             <p class="col-md-9">
-                <span ng-if="!$ctrl.product.can_edit" class="widget-body">
-                    <span ng-bind-html="$ctrl.product.description"></span>
-                </span>
-                <div ng-if="$ctrl.product.can_edit" style="padding-bottom: 10px;">
-                    <div style="display: flex; flex-direction: row; justify-content: flex-end;">
-                        <button class="btn btn-success" ng-click="$ctrl.saveProduct()">Сохранить</button>
-                    </div>
-                    <textarea ui-tinymce="tinymceOptions" ng-model="$ctrl.product.description"></textarea>
-                </div>
+                <span ng-bind-html="$ctrl.product.description"></span>
             </p>
         </div>
     </div>
@@ -234,17 +226,18 @@
                         <tr>
                             <th>Товар</th>
                             <th>Количество</th>
+                            <th>Остаток</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="item in $ctrl.product.components">
                             <td>
-                                <a ng-href="/#/products/{{ item.product.id }}">
-                                    {{ item.producth }}                               
+                                <a ng-href="/#/products/{{ item.product.id }}">                            
                                     {{ item.product.name }} ({{ item.product.article || "Без артикула"}})
                                 </a>
                             </td>
                             <td>{{ item.quantity }}</td>
+                            <td>{{ item.product.stock }}</td>
                         </tr>
                     </tbody>
                 </table>
