@@ -59,6 +59,8 @@ class CustomerOrdersCtrl {
 
         this.data = {ordersList: [], searchQuery: $stateParams.q};
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
+        this.funcFactory.setPageTitle('Заказы клиентов');
+        
         this.clearCreateOrder();
     }
 

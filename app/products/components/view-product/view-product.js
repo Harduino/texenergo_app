@@ -104,7 +104,8 @@ class ViewProductCtrl {
                     description: product.description,
                     article: product.article,
                     manufacturer_id: product.manufacturer.id,
-                    catalogue_ids: (product.catalogues || []).map(i => {return i.id;})
+                    catalogue_ids: (product.catalogues || []).map(i => { return i.id }),
+                    unit: product.unit.selected
                 }
             };
 

@@ -113,6 +113,21 @@
                     </div>
                 </p>
             </div>
+            <div class="row">
+                <p class="col-xs-12 col-md-3 font-bold">
+                    Единица измерения:
+                </p>
+                <p class="col-md-9">
+                    <span ng-if="$ctrl.product.can_edit">
+                        <a href="#" editable-select="$ctrl.product.unit.selected"
+                        e-ng-options="option for option in $ctrl.product.unit.options"
+                        onaftersave="$ctrl.saveProduct()">
+                        {{ $ctrl.product.unit.selected || 'Не выбрано'}}
+                        </a>
+                    </span>
+                    <span ng-if="!$ctrl.product.can_edit">{{ $ctrl.product.unit }}</span>
+                </p>
+            </div>
             <div class="row"  ng-show="$ctrl.product.manufacturer.name === 'Schneider Electric'">
                 <p class="col-xs-12 col-md-3 font-bold">
                     Срок поставки (единиц товара):

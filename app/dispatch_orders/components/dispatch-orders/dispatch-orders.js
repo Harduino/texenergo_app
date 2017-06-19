@@ -44,6 +44,9 @@ class DispatchOrdersCtrl {
             ],
             titles: ['Списания']
         };
+
+        this.funcFactory.setPageTitle('Реализации');
+
         serverApi.getDispatchableProducts(r => self.data.dispatchableProducts = r.data);
     }
 
