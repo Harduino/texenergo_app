@@ -82,6 +82,7 @@ appConfig.sound_on = true;
         'app.catalogues',
         'app.manufacturers',
         'app.pdf_catalogues',
+        'app.incoming_emails',
         'app.incoming_transfers',
         'app.outgoing_transfers',
         'app.receive_orders',

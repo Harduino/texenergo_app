@@ -1,0 +1,43 @@
+<div id="content">
+    <div class="well well-white">
+        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">
+            {{$ctrl.visual.titles + $ctrl.incomingEmail.number}}
+        </h2>
+        <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group margin-top-10"></form-nav-buttons>
+        <hr>
+        <div class="row margin-top-10">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Отправитель:
+            </p>
+            <p class="col-md-9">{{ $ctrl.incomingEmail.from }}</p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Получатель:
+            </p>
+            <p class="col-md-9">{{ $ctrl.incomingEmail.to }}</p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Тема:
+            </p>
+            <p class="col-md-9">{{ $ctrl.incomingEmail.subject }}</p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Приложения:
+            </p>
+            <p class="col-md-9">
+                <div class="row" ng-repeat="attachment in $ctrl.incomingEmail.attachments">
+                    <a href="{{attachment.url}}" target="_blank">{{ attachment.name }}</a>
+                </div>
+            </p>
+        </div>
+    </div>
+
+    <div class="well well-white">
+        <pre>
+            {{ $ctrl.incomingEmail.text || $ctrl.incomingEmail.html }}
+        </pre>
+    </div>
+</div>

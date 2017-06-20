@@ -224,6 +224,18 @@
             $http.get('/incoming_transfers/' + id + '/logs').then(success, fail);
         };
 
+        // Входящие письма
+        o.getIncomingEmails = function(page, query, config, success, fail){
+            var path = '/incoming_emails?page='+page + (query ? ('&q=' + query) : '');
+            $http.get(path, config).then(success, fail);
+        };
+        o.getIncomingEmailDetails = function(id, success, fail){
+            $http.get('/incoming_emails/' + id).then(success, fail);
+        };
+        o.deleteIncomingEmail = function(id, success, fail){
+            $http.delete('/incoming_emails/' + id).then(success, fail);
+        };
+
         // Исходящие платежи
         o.getOutgoingTransfers = function(page, query, config, success, fail, partner_id){
             var path = '/outgoing_transfers?page='+page + (query ? ('&q=' + query) : '') + (partner_id ? ('&partner_id=' + partner_id) : '');
