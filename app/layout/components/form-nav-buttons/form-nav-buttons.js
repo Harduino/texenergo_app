@@ -28,7 +28,6 @@ class FormNavButtonsCtrl {
         };
 
         let self = this;
-        let roles = this.role || {};
 
         this.whaitForChanges = false;
         this.buttons;
@@ -41,14 +40,23 @@ class FormNavButtonsCtrl {
               this.buttons = [];
 
               this.options.map(item => {
-                  let button = AVAILABLE_BUTTONS[item.type], role = button.role;
+                  let button = AVAILABLE_BUTTONS[item.type],
+                      role = button.role,
+                      subdata = self.subdata;
 
                   if (button) {
                       button.callback = item.callback;
                       button.class = (self.contentClass || 'btn btn-success') + ' ' + (button.class || '');
 
-                      if(button.hasOwnProperty('disabled') && role && roles[role]) {
-                          button.disabled = !roles[role];
+                      if(button.hasOwnProperty('disabled') && role && subdata && subdata.data){
+                        let value;
+                        // if item has disabled property
+                        if(item.hasOwnProperty('disabled')){
+                          value = item.disabled;
+                        }else {
+                          value = !subdata.data[role];
+                        }
+                        button.disabled =  value;
                       }
 
                       button.disableOnLoad = function(disabled, $event){
