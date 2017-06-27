@@ -25,20 +25,32 @@
                 </div>
                 <div class="modal-body">
                     <section class="form-group">
-                        <label class="control-label" for="newContact.first_name">Имя</label>
-                        <input uib-typeahead="name for name in $ctrl.getSuggestions('fio', $viewValue, 'value')"
-                               type="text" ng-model="$ctrl.newContact.first_name" class="input-sm form-control"
-                               id="newContact.first_name" />
+                      <label class="control-label" for="newContact.first_name">Имя</label>
+                      <div class="input-group">
+                        <input uib-typeahead="name as name.value for name in $ctrl.getSuggestions('fio', $viewValue, 'name')"
+                          typeahead-on-select="$ctrl.parseFioLine($item)"
+                          type="text" ng-model="$ctrl.newContact.first_name" class="input-sm form-control"
+                          id="newContact.first_name" />
+                        <div class="input-group-btn">
+                          <button type="button" class="btn btn-default"
+                            tabindex="-1"
+                            uib-tooltip="Поменять имя и фамилию"
+                            ng-click="$ctrl.switchFioFields()">
+                            <i class="fa fa-refresh"></i>
+                          </button>
+                        </div>
+                      </div>
                     </section>
                     <section class="form-group">
                         <label class="control-label" for="newContact.last_name">Фамилия</label>
-                        <input uib-typeahead="item for item in $ctrl.getSuggestions('fio', $viewValue, 'value')"
-                               type="text" ng-model="$ctrl.newContact.last_name" class="input-sm form-control"
-                               id="newContact.last_name" />
+                        <input uib-typeahead="surname as surname.value for surname in $ctrl.getSuggestions('fio', $viewValue, 'surname')"
+                          typeahead-on-select="$ctrl.parseFioLine($item)"
+                          type="text" ng-model="$ctrl.newContact.last_name" class="input-sm form-control"
+                          id="newContact.last_name" />
                     </section>
                     <section class="form-group">
                         <label class="control-label" for="newContact.email">Email</label>
-                        <input uib-typeahead="item for item in $ctrl.getSuggestions('email', $viewValue, 'value')"
+                        <input uib-typeahead="email as email.value for email in $ctrl.getSuggestions('email', $viewValue)"
                                type="text" ng-model="$ctrl.newContact.email" class="input-sm form-control"
                                id="newContact.email" />
                     </section>
