@@ -1,6 +1,7 @@
 class IncomingEmailsCtrl {
     constructor($state, $stateParams, serverApi, funcFactory) {
         let self = this;
+        this.funcFactory = funcFactory;
 
         this.visual = {
             navButtsOptions:[
@@ -14,6 +15,7 @@ class IncomingEmailsCtrl {
                 {
                     type: 'remove',
                     callback: (item, button, $event) => {
+                        console.log("callback");
                         $.SmartMessageBox({
                             title: 'Удалить входящее письмо?',
                             content: 'Вы действительно хотите удалить входящее письма ' + item.data.number,
@@ -45,7 +47,10 @@ class IncomingEmailsCtrl {
         };
 
         this.data = { incomingEmailsList:[], searchQuery: $stateParams.q };
+        this.funcFactory.setPageTitle("Входящие письма");
     }
+
+
 }
 
 IncomingEmailsCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];

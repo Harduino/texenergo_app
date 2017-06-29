@@ -4,6 +4,8 @@ class ViewIncomingEmailCtrl {
         this.funcFactory = funcFactory;
         this.serverApi = serverApi;
         this.incomingEmail = {};
+        this.response = "";
+        this.responseSender = null;
 
         this.visual = {
             navButtsOptions:[
@@ -34,6 +36,20 @@ class ViewIncomingEmailCtrl {
 
         serverApi.getIncomingEmailDetails($stateParams.id, result => {
             let email = self.incomingEmail = result.data;
+            self.funcFactory.setPageTitle("Письмо от " + result.data.from);
+        });
+        self.funcFactory.setPageTitle("Входящее письмо");
+    }
+
+    sendResponse () {
+        let self = this;
+        let postData = { html: self.response, sender: (self.responseSender === null ? null : self.responseSender.name) };
+        self.serverApi.createIncomingEmailResponse(self.incomingEmail.id, postData, result => {
+            if(result.status == 200 && !result.data.errors) {
+                self.funcFactory.showNotification('Успешно', 'Ответил.', true);
+            } else {
+                self.funcFactory.showNotification('Неудача', 'Не удалось ответить', true);
+            }
         });
     }
 }

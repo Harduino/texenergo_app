@@ -235,6 +235,9 @@
         o.deleteIncomingEmail = function(id, success, fail){
             $http.delete('/incoming_emails/' + id).then(success, fail);
         };
+        o.createIncomingEmailResponse = (emailId, data, success, fail) => {
+            $http.post('/incoming_emails/' + emailId + '/reply', data).then(success, fail);
+        }
 
         // Исходящие платежи
         o.getOutgoingTransfers = function(page, query, config, success, fail, partner_id){

@@ -13,8 +13,9 @@ class ViewContactCtrl {
           serverApi.getContactDetails($stateParams.id, (res) => {
             button && button.disableOnLoad(false, $event);
             self.contact = res.data;
-          },() => {
-            button && button.disableOnLoad(false, $event);
+            this.funcFactory.setPageTitle("Контакт " + res.data.email);
+            }, () => {
+                button && button.disableOnLoad(false, $event);
           });
         };
 
@@ -28,6 +29,8 @@ class ViewContactCtrl {
         };
 
         getContactDetails();
+
+        this.funcFactory.setPageTitle("Контакт");
     }
 
     saveContact() {

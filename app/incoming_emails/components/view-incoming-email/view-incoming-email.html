@@ -23,7 +23,7 @@
             </p>
             <p class="col-md-9">{{ $ctrl.incomingEmail.subject }}</p>
         </div>
-        <div class="row">
+        <div class="row" ng-if="$ctrl.incomingEmail.attachments.length > 0">
             <p class="col-xs-12 col-md-3 font-bold">
                 Приложения:
             </p>
@@ -39,5 +39,21 @@
         <pre>
             {{ $ctrl.incomingEmail.text || $ctrl.incomingEmail.html }}
         </pre>
+    </div>
+
+    <div class="well well-white">
+        <div style="padding-bottom: 10px;">
+            <div style="display: flex; flex-direction: row; justify-content: flex-end;">
+                <button class="btn btn-success" ng-click="$ctrl.sendResponse()">Ответить</button>
+            </div>
+            <div class="row">
+                <a href="#"
+                    editable-select="$ctrl.responseSender"
+                    e-ng-options="option as option.name for option in $ctrl.incomingEmail.senders">
+                    {{ $ctrl.responseSender.name || 'Нет'}}
+                </a>
+            </div>
+            <textarea ui-tinymce="tinymceOptions" ng-model="$ctrl.response"></textarea>
+        </div>
     </div>
 </div>

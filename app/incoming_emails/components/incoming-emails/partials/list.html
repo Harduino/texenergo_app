@@ -1,7 +1,8 @@
 <table class="table table-bordered table-margined-top" infinite-scroll="$ctrl.loadItems()">
     <thead>
         <tr>
-            <th>#</th>
+            <th class="hidden-xs">#</th>
+            <th>Время</th>
             <th>От</th>
             <th>Кому</th>
             <th>Тема</th>
@@ -10,12 +11,15 @@
     </thead>
     <tbody>
     <tr ng-repeat="row in $ctrl.items">
-        <td>{{$index +1}}</td>
+        <td class="hidden-xs">
+            <a href="#/incoming_emails/{{row.id}}">{{$index +1}}</a>
+        </td>
+        <td>
+            <a href="#/incoming_emails/{{row.id}}">{{ row.created_at | date:'dd/MM/yy HH:mm' }}</a>
+        </td>
         <td>{{row.from}}</td>
         <td>{{row.to}}</td>
         <td>{{row.subject}}</td>
-        <!-- <td><pre>{{row.text}}</pre></td>
-        <td><pre>{{row.html}}</pre></td> -->
         <td class="center-item-text">
             <form-nav-buttons data-role="$ctrl.role" data-template="table" subdata="{data:row, index:$index}"
                               class="btn-group" content-class="btn btn-xs" data-options="$ctrl.navOptions">
