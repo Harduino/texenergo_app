@@ -60,8 +60,10 @@
         sc.saveQuotationOrderInfo = function(){
             var order = sc.data.quotationOrder,
                 data = {
-                    quotation_order:{
-                        title: order.title
+                    quotation_order: {
+                        title: order.title,
+                        quantity: order.quantity,
+                        mark_up: order.mark_up
                     }
                 };
             serverApi.updateQuotationOrder(order.id, data, function(result){
@@ -517,19 +519,19 @@
          * Обновляем информацию по заказу
          * Простой отправляем update с новым названием
          */
-        sc.saveQuotationOrderInfo = function(){
-            var order = sc.data.quotationOrder,
-                data = {
-                    quotation_order:{
-                        title: order.title
-                    }
-                };
-            serverApi.updateQuotationOrder(order.id, data, function(result){
-                if(result.status == 200 && !result.data.errors){
-                    funcFactory.showNotification("Успешно", 'Рассчёт успешно отредактирован', true);
-                }else funcFactory.showNotification("Неудача", 'Не удалось отредактировать рассчёт', true);
-            });
-        };
+        // sc.saveQuotationOrderInfo = function(){
+        //     var order = sc.data.quotationOrder,
+        //         data = {
+        //             quotation_order:{
+        //                 title: order.title
+        //             }
+        //         };
+        //     serverApi.updateQuotationOrder(order.id, data, function(result){
+        //         if(result.status == 200 && !result.data.errors){
+        //             funcFactory.showNotification("Успешно", 'Рассчёт успешно отредактирован', true);
+        //         }else funcFactory.showNotification("Неудача", 'Не удалось отредактировать рассчёт', true);
+        //     });
+        // };
 
         /**
          * Обновляем существующий элемент. Вроде всё просто.

@@ -34,6 +34,7 @@ class ViewIncomingEmailCtrl {
             titles: 'Входящее письмо'
         };
 
+
         serverApi.getIncomingEmailDetails($stateParams.id, result => {
             let email = self.incomingEmail = result.data;
             self.funcFactory.setPageTitle("Письмо от " + result.data.from);
@@ -49,6 +50,18 @@ class ViewIncomingEmailCtrl {
                 self.funcFactory.showNotification('Успешно', 'Ответил.', true);
             } else {
                 self.funcFactory.showNotification('Неудача', 'Не удалось ответить', true);
+            }
+        });
+    }
+
+    saveIncomingEmail () {
+        let self = this;
+        let postData = { incoming_email: { accomplished: self.incomingEmail.accomplished, comment: self.incomingEmail.comment } };
+        self.serverApi.updateIncomingEmail(self.incomingEmail.id, postData, result => {
+            if(result.status == 200 && !result.data.errors) {
+                self.funcFactory.showNotification('Успешно', 'Обновил.', true);
+            } else {
+                self.funcFactory.showNotification('Неудача', 'Не удалось обновить', true);
             }
         });
     }

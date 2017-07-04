@@ -15,7 +15,6 @@ class IncomingEmailsCtrl {
                 {
                     type: 'remove',
                     callback: (item, button, $event) => {
-                        console.log("callback");
                         $.SmartMessageBox({
                             title: 'Удалить входящее письмо?',
                             content: 'Вы действительно хотите удалить входящее письма ' + item.data.number,
