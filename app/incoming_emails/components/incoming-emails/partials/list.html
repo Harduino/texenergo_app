@@ -10,9 +10,9 @@
         </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="row in $ctrl.items">
+    <tr ng-repeat="row in $ctrl.items" class="{{row.accomplished ? 'success' : ''}}">
         <td class="hidden-xs">
-            <a href="#/incoming_emails/{{row.id}}">{{$index +1}}</a>
+            <a href="#/incoming_emails/{{row.id}}">{{$index + 1}}</a>
         </td>
         <td>
             <a href="#/incoming_emails/{{row.id}}">{{ row.created_at | date:'dd/MM/yy HH:mm' }}</a>

@@ -57,7 +57,18 @@
         </div>
     </div>
 
+    <div class="well well-white" ng-if="$ctrl.incomingEmail.replies.length > 0">
+        <h2>Исходящие письма:</h2>
+        <span class="row" ng-repeat="reply in $ctrl.incomingEmail.replies">
+            <div class="row">{{ reply.from }} от {{ reply.date | date:'dd MMMM yy, HH:mm'}}</div>
+            <pre>
+                {{ reply.text }}
+            </pre>
+        </span>
+    </div>
+
     <div class="well well-white">
+        <h2>Входящее письмо:</h2>
         <pre>
             {{ $ctrl.incomingEmail.text || $ctrl.incomingEmail.html }}
         </pre>

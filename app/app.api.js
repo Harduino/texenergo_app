@@ -37,17 +37,20 @@
         };
 
         // get product info
-        o.getProduct = function(id, success, fail){
-            $http.get('/products/' + id).then(success, fail);
+        o.getProduct = function(productId, success, fail){
+            $http.get('/products/' + productId).then(success, fail);
         };
-        o.updateProduct = function(id, data, success, fail){
-            $http.put('/products/' + id, data).then(success, fail);
+        o.updateProduct = function(productId, data, success, fail){
+            $http.put('/products/' + productId, data).then(success, fail);
         };
-        o.getProductPartnerLogs = function(id, success, fail){
-            $http.get('/products/'+id +'/partner_logs').then(success, fail);
+        o.deleteProduct = function(productId, success, fail) {
+            $http.delete('/products/' + productId).then(success, fail);
+        }
+        o.getProductPartnerLogs = function(productId, success, fail){
+            $http.get('/products/' + productId + '/partner_logs').then(success, fail);
         };
-        o.deleteProductPartnerLog = function(product_id, log_id, success, fail){
-            $http.delete('/products/'+product_id+'/partner_logs/' + log_id).then(success, fail);
+        o.deleteProductPartnerLog = function(productId, log_id, success, fail){
+            $http.delete('/products/' + productId + '/partner_logs/' + log_id).then(success, fail);
         };
 
         //Customer Orders

@@ -20,7 +20,37 @@ class TopSearchCtrl {
                         });
                     }
                 },
-                {type: 'view', callback: self.viewProduct.bind(self)}
+                {
+                    type: 'view',
+                    callback: self.viewProduct.bind(self)
+                },
+                {
+                    type:'remove',
+                    callback: (item, button, $event) => {
+                        $.SmartMessageBox({
+                            title: 'Удалить товар?',
+                            content: 'Вы действительно хотите удалить товар ' + item.data.name,
+                            buttons: '[Нет][Да]'
+                        }, ButtonPressed => {
+                            if (ButtonPressed === 'Да') {
+                                button.disableOnLoad(true, $event);
+                                serverApi.deleteProduct(item.data.id, result => {
+                                    button.disableOnLoad(false, $event);
+                                    if(!result.data.errors){
+                                        self.data.ordersList.splice(item.index,1);
+                                        funcFactory.showNotification('Заказ ' + item.data.number + ' успешно удален.',
+                                            '', true);
+                                    } else {
+                                        funcFactory.showNotification('Не удалось удалить заказ ' + item.data.number,
+                                            result.data.errors);
+                                    }
+                                },() => {
+                                  button.disableOnLoad(false, $event);
+                                });
+                            }
+                        });
+                    }
+                }
             ]
         };
 
