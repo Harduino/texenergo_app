@@ -1,11 +1,13 @@
 class CreateCustomerOrderCtrl{
-  constructor($uibModalInstance, serverApi, authService, $q){
+  constructor($uibModalInstance, serverApi, authService, $q, partner){
     this.$uibModalInstance = $uibModalInstance;
     this.serverApi = serverApi;
     this.authService = authService;
     this.$q = $q;
+    this.partner = partner,
     this.cancel = $uibModalInstance.dismiss;
     this.newOrderData = this.clearOrder();
+    this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
   }
 
   addNewOrder() {
@@ -33,7 +35,7 @@ class CreateCustomerOrderCtrl{
       title:'',
       description:'',
       partner_id: '',
-      partner: ((this.authService.profile.user_metadata && this.authService.profile.user_metadata.partner) || null),
+      partner: this.partner.data,
       request_original:''
     };
   }
@@ -43,7 +45,8 @@ CreateCustomerOrderCtrl.$inject = [
   '$uibModalInstance',
   'serverApi',
   'authService',
-  '$q'
+  '$q',
+  'partner'
 ];
 
 angular.module('app.customer_orders')

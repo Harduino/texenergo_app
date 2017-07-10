@@ -19,7 +19,7 @@
       Будет также отображаться в содержимом письма при отправке счёта.
     </div>
   </section>
-  <section class="form-group">
+  <section class="form-group" ng-if="!$ctrl.partner.disabled">
     <label class="control-label">Партнер</label>
     <span>
       <ui-select-infinity view="app/customer_orders/components/customer-orders/partials/ui-select-infinity.html"
