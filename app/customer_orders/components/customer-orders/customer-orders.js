@@ -7,6 +7,7 @@ class CustomerOrdersCtrl {
         this.serverApi= serverApi;
         this.funcFactory = funcFactory;
         this.$uibModal = $uibModal;
+        this.authService = authService;
         this.newOrderData = null;
 
         this.visual = {
@@ -59,7 +60,6 @@ class CustomerOrdersCtrl {
         };
 
         this.data = {ordersList: [], searchQuery: $stateParams.q};
-        this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
         this.funcFactory.setPageTitle('Заказы клиентов');
     }
 
@@ -69,7 +69,12 @@ class CustomerOrdersCtrl {
       this.$uibModal.open({
         templateUrl: 'app/customer_orders/components/create-customer-order/create-order.html',
         controller: 'CreateCustomerOrderCtrl',
-        controllerAs: '$ctrl'
+        controllerAs: '$ctrl',
+        resolve: {
+          partner: {
+            data: (self.authService.profile.user_metadata && self.authService.profile.user_metadata.partner || null)
+          }
+        }
       }).result.then((result)=>{
 
         result.promise.then((r)=>{

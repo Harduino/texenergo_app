@@ -134,6 +134,34 @@ class ViewPartnerCtrl {
     }
     //PERSON END
 
+    //CUSTOMER ORDERS BEGIN
+    addCustomerOrder (){
+      let self = this;
+
+      this.$uibModal.open({
+        templateUrl: 'app/customer_orders/components/create-customer-order/create-order.html',
+        controller: 'CreateCustomerOrderCtrl',
+        controllerAs: '$ctrl',
+        resolve: {
+          partner: {
+            data: self.partner,
+            disabled: true
+          }
+        }
+      }).result.then((result)=>{
+
+        result.promise.then((r)=>{
+          if(!r.data.errors) {
+            self.partner.customerOrders.unshift(r.data);
+            self.funcFactory.showNotification('Заказ '+r.data.number+' успешно добавлен', '', true);
+          } else {
+            self.funcFactory.showNotification('Не удалось создать заказ', r.data.errors);
+          }
+        });
+      });
+    }
+    //CUSTOMER ORDERS END
+
     //BANK ACCOUNT BEGIN
     showBankAccountForm () {
         $('#createBankAccountModal').modal('show');
