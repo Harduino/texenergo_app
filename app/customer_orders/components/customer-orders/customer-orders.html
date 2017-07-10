@@ -1,75 +1,17 @@
 <div id="content">
-    <div class="row">
-        <big-breadcrumbs items="$ctrl.visual.titles" class="col-xs-12 col-sm-7 col-md-7 col-lg-4" data-icon="book">
-        </big-breadcrumbs>
-    </div>
-    <div class="well">
-        <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
-        <hr>
-        <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.customer_orders">
-        </orders-filter>
-        <lazy-loaded-list view="app/customer_orders/components/customer-orders/partials/list.html"
-                          api-method="getCustomerOrders" items="$ctrl.data.ordersList"
-                          nav-options="$ctrl.visual.navTableButts" search-query="$ctrl.data.searchQuery">
-        </lazy-loaded-list>
-        <te-scroll-top></te-scroll-top>
-    </div>
-    <div class="modal fade" id="createNewOrderModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        &times;
-                    </button>
-                    <h4 class="modal-title">Создать новый заказ</h4>
-                </div>
-                <div class="modal-body">
-                    <section class="form-group">
-                        <label class="control-label" for="newOrderData.title">Свой номер</label>
-                        <input ng-model="$ctrl.newOrderData.title" class="input-sm form-control" type="text"
-                               id="newOrderData.title" />
-                    </section>
-                    <section class="form-group">
-                        <label class="control-label" for="newOrderData.description">Описание</label>
-                        <textarea ng-model="$ctrl.newOrderData.description" id="newOrderData.description"
-                                  class="custom-scroll form-control">
-                        </textarea>
-                        <div class="note">
-                            Будет также отображаться в содержимом письма при отправке счёта.
-                        </div>
-                    </section>
-                    <section class="form-group">
-                        <label class="control-label">Партнер</label>
-                        <span>
-                            <ui-select-infinity view="app/customer_orders/components/customer-orders/partials/ui-select-infinity.html"
-                                                config="$ctrl.partnerSelectConfig" ng-model="$ctrl.newOrderData.partner">
-                            </ui-select-infinity>
-                        </span>
-                    </section>
-                    <section class="form-group">
-                        <label class="control-label">Дата</label>
-                        <div class="form-control">{{$ctrl.newOrderData.date|date:'dd.MM.yyyy HH:mm'}}</div>
-                    </section>
-                    <section class="form-group">
-                        <label class="control-label" for="newOrderData.request_original">Текст заявки</label>
-                        <textarea ng-model="$ctrl.newOrderData.request_original" style="height: 100px;"
-                                  class="custom-scroll form-control" id="newOrderData.request_original">
-                        </textarea>
-                    </section>
-                    <section class="margin-top-10">
-                        <i class="fa-fw fa fa-warning"></i>
-                        Для добавления позиций заказа сохраните его!
-                    </section>
-                </div>
-                <div class="modal-footer">
-                    <button data-dismiss="modal" ng-click="$ctrl.clearCreateOrder()" type="button" class="btn btn-default">
-                        Отмена
-                    </button>
-                    <button data-dismiss="modal" ng-click="$ctrl.addNewOrder()" type="button" class="btn btn-primary">
-                        Сохранить
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+  <div class="row">
+    <big-breadcrumbs items="$ctrl.visual.titles" class="col-xs-12 col-sm-7 col-md-7 col-lg-4" data-icon="book">
+    </big-breadcrumbs>
+  </div>
+  <div class="well">
+    <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
+    <hr>
+    <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.customer_orders">
+    </orders-filter>
+    <lazy-loaded-list view="app/customer_orders/components/customer-orders/partials/list.html"
+      api-method="getCustomerOrders" items="$ctrl.data.ordersList"
+      nav-options="$ctrl.visual.navTableButts" search-query="$ctrl.data.searchQuery">
+    </lazy-loaded-list>
+    <te-scroll-top></te-scroll-top>
+  </div>
 </div>

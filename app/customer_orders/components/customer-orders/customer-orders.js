@@ -1,19 +1,20 @@
 class CustomerOrdersCtrl {
-    constructor($state, $stateParams, serverApi, funcFactory, authService) {
+    constructor($state, $stateParams, serverApi, funcFactory, authService,
+      $uibModal) {
         let self = this;
 
         this.$state = $state;
         this.serverApi= serverApi;
         this.funcFactory = funcFactory;
+        this.$uibModal = $uibModal;
+        this.newOrderData = null;
 
         this.visual = {
             navButtsOptions: [
                 {
                     type: 'new',
                     callback: () => {
-                        self.newOrderData.date = new Date();
-                        self.newOrderData.partner = (authService.profile.user_metadata && authService.profile.user_metadata.partner) || null;
-                        $('#createNewOrderModal').modal('show');
+                      self.openCreateModal();
                     }
                 },
                 {
@@ -60,37 +61,38 @@ class CustomerOrdersCtrl {
         this.data = {ordersList: [], searchQuery: $stateParams.q};
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
         this.funcFactory.setPageTitle('Заказы клиентов');
-        
-        this.clearCreateOrder();
     }
 
-    addNewOrder() {
-        if(this.newOrderData.partner && this.newOrderData.partner) {
-            this.newOrderData.partner_id = this.newOrderData.partner.id;
-        }
+    openCreateModal(){
+      let self = this;
 
-        delete this.newOrderData.date;// delete forbidden property
-        delete this.newOrderData.partner;
-        let self = this;
+      this.$uibModal.open({
+        templateUrl: 'app/customer_orders/components/create-customer-order/create-order.html',
+        controller: 'CreateCustomerOrderCtrl',
+        controllerAs: '$ctrl'
+      }).result.then((result)=>{
 
-        this.serverApi.createCustomerOrder(this.newOrderData, r => {
-            if(!r.data.errors) {
-                self.data.ordersList.unshift(r.data);
-                self.funcFactory.showNotification('Заказ успешно добавлен', '', true);
-                self.clearCreateOrder();
-                self.$state.go('app.customer_orders.view', {id: r.data.id});
-            } else {
-                self.funcFactory.showNotification('Не удалось создать заказ', r.data.errors);
-            }
+        result.promise.then((r)=>{
+          if(!r.data.errors) {
+            self.data.ordersList.unshift(r.data);
+            self.funcFactory.showNotification('Заказ успешно добавлен', '', true);
+            self.$state.go('app.customer_orders.view', {id: r.data.id});
+          } else {
+            self.funcFactory.showNotification('Не удалось создать заказ', r.data.errors);
+          }
         });
-    }
-
-    clearCreateOrder() {
-        this.newOrderData = {date: null, title:'', description:'', partner_id: '', request_original:''};
+      });
     }
 }
 
-CustomerOrdersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', 'authService'];
+CustomerOrdersCtrl.$inject = [
+  '$state',
+  '$stateParams',
+  'serverApi',
+  'funcFactory',
+  'authService',
+  '$uibModal'
+];
 
 angular.module('app.customer_orders').component('customerOrders', {
     controller: CustomerOrdersCtrl,
