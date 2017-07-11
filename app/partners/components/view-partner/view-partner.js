@@ -162,6 +162,28 @@ class ViewPartnerCtrl {
     }
     //CUSTOMER ORDERS END
 
+    //ADD CONTACT BEGIN
+    addContact (){
+      let self = this;
+
+      this.$uibModal.open({
+        templateUrl: 'app/contacts/components/create-contact/create-contact.html',
+        controller: 'CreateContactCtrl',
+        controllerAs: '$ctrl',
+        resolve: {
+          partner: self.partner
+        }
+      }).result.then(res => {
+        if(!res.data.errors) {
+          self.partner.contacts.unshift(res.data);
+          self.funcFactory.showNotification('Успешно', 'Контакт ' +  res.data.email + ' добавлен в список', true);
+        } else {
+          self.funcFactory.showNotification('Не удалось создать новый контакт', res.data.errors);
+        }
+      });
+    }
+    //ADD CONTACT END
+
     //BANK ACCOUNT BEGIN
     showBankAccountForm () {
         $('#createBankAccountModal').modal('show');
