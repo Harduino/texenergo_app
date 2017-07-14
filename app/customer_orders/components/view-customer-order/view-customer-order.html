@@ -6,6 +6,22 @@
         <form-nav-buttons subdata="$ctrl.order" data-role="$ctrl.order" options="$ctrl.visual.navButtsOptions"
                           class="btn-group margin-top-10">
         </form-nav-buttons>
+        <dropdown-button>
+          <button class="btn btn-success" >
+            <i class="fa fa-envelope"></i>
+            <span class="hidden-xs">Отправить</span>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu green">
+            <li>
+              <a href-void ng-click="$ctrl.sendOrder()">Всем</a>
+            </li>
+            <li class="divider"></li>
+            <li ng-repeat="r in $ctrl.order.recipients">
+              <a href-void ng-click="$ctrl.sendOrder(r)">{{r.email}}</a>
+            </li>
+          </ul>
+        </dropdown-button>
         <hr>
     </div>
     <div class="well well-white">

@@ -11,7 +11,7 @@ class LogsCustomerOrderCtrl {
                     type: 'send_email',
                     callback: (subData, button, $event) => {
                       button.disableOnLoad(true, $event);
-                      serverApi.sendCustomerOrderInvoice($stateParams.id, result => {
+                      serverApi.sendCustomerOrderInvoice($stateParams.id, null, result => {
                           if(result.status == 200) {
                               if(result.data.errors) {
                                   funcFactory.showNotification('Неудача', result.data.errors, true);

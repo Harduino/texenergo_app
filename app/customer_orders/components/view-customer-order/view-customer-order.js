@@ -43,24 +43,6 @@ class ViewCustomerOrderCtrl {
                     }
                 },
                 {
-                    type: 'send_email',
-                    callback: (subData, button, $event) => {
-                        button.disableOnLoad(true, $event);
-                        serverApi.sendCustomerOrderInvoice($stateParams.id, result => {
-                            if(result.status == 200 && !result.data.errors) {
-                                funcFactory.showNotification('Успешно', 'Заказ успешно отправлен.', true);
-                            } else if (result.status == 200 && result.data.errors) {
-                                funcFactory.showNotification('Неудача', result.data.errors, true);
-                            } else {
-                                funcFactory.showNotification('Неудача', 'Ошибка при попытке отправить заказ.', true);
-                            }
-                            button.disableOnLoad(false, $event);
-                        }, result => {
-                          button.disableOnLoad(false, $event);
-                        });
-                    }
-                },
-                {
                     type: 'recalculate',
                     callback: (subData, button, $event) => {
                         button.disableOnLoad(true, $event);
@@ -167,6 +149,32 @@ class ViewCustomerOrderCtrl {
 
         this.getOrderDetails();
         this.$onDestroy = () => self._subscription && self._subscription.unsubscribe();
+    }
+
+    sendOrder (recipient){
+      let self = this;
+      let data = null;
+
+      if(recipient){
+        data = {
+          customer_order:{
+            recipient: recipient.id
+          }
+        };
+      }
+
+      self.serverApi.sendCustomerOrderInvoice(self.$stateParams.id, data, result => {
+          if(result.status == 200 && !result.data.errors) {
+              self.funcFactory.showNotification('Успешно', 'Заказ успешно отправлен.', true);
+          } else if (result.status == 200 && result.data.errors) {
+              self.funcFactory.showNotification('Неудача', result.data.errors, true);
+          } else {
+              self.funcFactory.showNotification('Неудача', 'Ошибка при попытке отправить заказ.', true);
+          }
+          // button.disableOnLoad(false, $event);
+      }, result => {
+        // button.disableOnLoad(false, $event);
+      });
     }
 
     addressToString (addr) {

@@ -82,8 +82,9 @@
         o.getCustomerOrderLogs = (id, success, fail) => {
             $http.get('/customer_orders/' + id + '/logs').then(success, fail);
         };
-        o.sendCustomerOrderInvoice = (id, success, fail) => {
-            $http.put('/customer_orders/' + id + '/send_invoice').then(success, fail);
+        o.sendCustomerOrderInvoice = (id, data, success, fail) => {
+            $http.put('/customer_orders/' + id + '/send_invoice', data)
+            .then(success, fail);
         };
         o.recalculateCustomerOrder = (id, success, fail) => {
             $http.get('/customer_orders/' + id + '/recalculate').then(success, fail);
@@ -308,11 +309,11 @@
 
         o.createAddress = function(partner_id, data, success, fail){
             $http.post('/partners/' + partner_id + '/addresses/', data).then(success, fail);
-        };        
+        };
 
         o.updateAddress = function(partner_id, address_id, data, success, fail){
             $http.put('/partners/' + partner_id + '/addresses/' + address_id, data).then(success, fail);
-        };        
+        };
 
         // Контакты
         o.getContacts = function(page, query, config, success, fail){
