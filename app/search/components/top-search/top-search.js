@@ -12,11 +12,11 @@ class TopSearchCtrl {
             navButtsOptions:[
                 {
                     type: 'add',
-                    callback: productId => {
+                    callback: product => {
                         $uibModal.open({
                             component: 'productToCustomerOrderModal',
                             windowClass: 'eqo-centred-modal',
-                            resolve: {product : {id: productId}}
+                            resolve: {product : {id: (product._id || product.id)}}
                         });
                     }
                 },
@@ -29,19 +29,19 @@ class TopSearchCtrl {
                     callback: (item, button, $event) => {
                         $.SmartMessageBox({
                             title: 'Удалить товар?',
-                            content: 'Вы действительно хотите удалить товар ' + item.data.name,
+                            content: 'Вы действительно хотите удалить товар ' + item.name,
                             buttons: '[Нет][Да]'
                         }, ButtonPressed => {
                             if (ButtonPressed === 'Да') {
                                 button.disableOnLoad(true, $event);
-                                serverApi.deleteProduct(item.data.id, result => {
+                                serverApi.deleteProduct(item.id, result => {
                                     button.disableOnLoad(false, $event);
                                     if(!result.data.errors){
-                                        self.data.ordersList.splice(item.index,1);
-                                        funcFactory.showNotification('Заказ ' + item.data.number + ' успешно удален.',
+                                        self.data.searchResults.splice(item.index,1);
+                                        funcFactory.showNotification('Товар ' + item.name + ' успешно удален.',
                                             '', true);
                                     } else {
-                                        funcFactory.showNotification('Не удалось удалить заказ ' + item.data.number,
+                                        funcFactory.showNotification('Не удалось удалить товар ' + item.name,
                                             result.data.errors);
                                     }
                                 },() => {

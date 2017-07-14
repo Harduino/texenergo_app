@@ -12,7 +12,7 @@
     </thead>
     <tbody id="top_search_table_body">
     <tr ng-repeat="item in $ctrl.items" ng-click="$ctrl.selectedRowIndex = $index"
-        class="cursor-pointer" ng-class="{selected: $index === $ctrl.selectedRowIndex}">
+        class="cursor-pointer" ng-class="{selected: $index === $ctrl.selectedRowIndex}" ng-init="item.index = $index;">
         <td class="hidden-xs">
             <img ng-src="{{item.image_url}}" style="max-height: 40px; max-width: 40px;" class="img img-responsive"/>
         </td>
@@ -34,7 +34,7 @@
         <td>{{item.stock}}</td>
         <td class="center-item-text">
             <form-nav-buttons data-options="$ctrl.navOptions" data-template="table" class="btn-group"
-                              subdata="item._id || item.id" data-role="$ctrl.role" content-class="btn btn-xs">
+              subdata="item" data-role="$ctrl.role" content-class="btn btn-xs">
             </form-nav-buttons>
         </td>
     </tr>
