@@ -48,13 +48,14 @@ class FormNavButtonsCtrl {
                       button.callback = item.callback;
                       button.class = (self.contentClass || 'btn btn-success') + ' ' + (button.class || '');
 
-                      if(button.hasOwnProperty('disabled') && role && subdata && subdata.data){
+                      if(button.hasOwnProperty('disabled') && role && subdata){
                         let value;
                         // if item has disabled property
                         if(item.hasOwnProperty('disabled')){
                           value = item.disabled;
                         }else {
-                          value = !subdata.data[role];
+                          let r = (self.role || subdata)[role] || (subdata && subdata.data && subdata.data[role]);
+                          value = !r;
                         }
                         button.disabled =  value;
                       }
