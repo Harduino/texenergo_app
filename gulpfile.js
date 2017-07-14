@@ -70,7 +70,7 @@ gulp.task('libs', function(){
 
         'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
         'bower_components/angular-file-upload/dist/angular-file-upload.js',
-        
+
         'bower_components/angular-ui-select/dist/select.min.js',
         'bower_components/fastclick/lib/fastclick.js',
         'assets/plugin/chartjs/chart.min.js',
@@ -137,6 +137,12 @@ gulp.task('watch', function() {
         'app/app.config.js'
     ], function(){
         gulp.start('app');
+    });
+
+    gulp.watch([
+      'assets/css/project.css'
+    ], function(){
+      gulp.start('styles');
     });
 });
 
