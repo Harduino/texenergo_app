@@ -319,8 +319,7 @@ class ViewPartnerCtrl {
     }
 }
 
-ViewPartnerCtrl.$inject = ['$state', 'serverApi', '$stateParams', 'funcFactory',
-'$parse', '$q', '$uibModal'];
+ViewPartnerCtrl.$inject = ['$state', 'serverApi', '$stateParams', 'funcFactory', '$parse', '$q', '$uibModal'];
 
 angular.module('app.partners').component('viewPartner', {
     controller: ViewPartnerCtrl,

@@ -91,9 +91,7 @@ class DispatchOrdersCtrl {
         let currentOrder = self.fetchAddableOrder(order);
 
         let data = {
-            partner_id: order.partner.id,
-            delivery_address: order.delivery_address,
-            transportation: order.transportation
+            partner_id: order.partner.id
         };
 
         if (currentOrder === undefined) {

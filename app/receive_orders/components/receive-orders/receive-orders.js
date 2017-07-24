@@ -5,6 +5,7 @@ class ReceiveOrdersCtrl {
         this.$state = $state;
         this.serverApi = serverApi;
         this.funcFactory = funcFactory;
+        this.funcFactory.setPageTitle('Поступления');
 
         this.visual = {
             navButtsOptions:[

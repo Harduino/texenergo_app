@@ -95,5 +95,4 @@ AddPartnerAddressModalCtrl.$inject = [
   'config'
 ];
 
-angular.module('app.partners')
-.controller('AddPartnerAddressModalCtrl', AddPartnerAddressModalCtrl);
+angular.module('app.partners').controller('AddPartnerAddressModalCtrl', AddPartnerAddressModalCtrl);

@@ -153,6 +153,6 @@ ViewDispatchOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFac
 
 angular.module('app.dispatch_orders').component('viewDispatchOrder', {
     controller: ViewDispatchOrderCtrl,
-    controllerAs: 'viewDispatchOrderCtrl',
+    controllerAs: '$ctrl',
     templateUrl: '/app/dispatch_orders/components/view-dispatch-order/view-dispatch-order.html'
 });
