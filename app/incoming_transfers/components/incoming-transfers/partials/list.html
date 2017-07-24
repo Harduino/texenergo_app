@@ -14,7 +14,7 @@
         <tbody>
         <tr ng-repeat="row in $ctrl.items">
             <td>{{$index +1}}</td>
-            <td>{{row.number}}</td>
+            <td><a href="#/incoming_transfers/{{row.id}}">{{row.number}}</a></td>
             <td>{{row.date | date:'dd/MM/yy'}}</td>
             <td>
                 {{row.amount | currency}}

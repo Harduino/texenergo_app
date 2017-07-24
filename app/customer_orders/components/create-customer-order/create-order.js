@@ -49,5 +49,4 @@ CreateCustomerOrderCtrl.$inject = [
   'partner'
 ];
 
-angular.module('app.customer_orders')
-.controller('CreateCustomerOrderCtrl', CreateCustomerOrderCtrl);
+angular.module('app.customer_orders').controller('CreateCustomerOrderCtrl', CreateCustomerOrderCtrl);
