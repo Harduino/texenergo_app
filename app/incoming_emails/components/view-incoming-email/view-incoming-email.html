@@ -11,7 +11,7 @@
             </p>
             <div class="col-md-9 m-b-9">
               <div ng-if="!$ctrl.incomingEmail.internalEmail">{{::$ctrl.incomingEmail.from}}</div>
-              <a href="javascript:void(0)" class="editable-click"
+              <a ng-href="#/contacts/{{$ctrl.incomingEmail.from.id}}" class="editable-click"
               ng-if="$ctrl.incomingEmail.internalEmail">
                 {{::$ctrl.incomingEmail.from.full_name}}
               </a>
