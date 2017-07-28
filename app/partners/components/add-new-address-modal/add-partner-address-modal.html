@@ -51,7 +51,7 @@
                        class="input-sm">
             </label>
         </section>
-        <div ng-if="$ctrl.isEdit">
+        <div>
           <section class="p-l-15">
               <label class="label">Юридический адрес:</label>
               <label>
@@ -68,8 +68,8 @@
       </div>
     </uib-tab>
     <uib-tab index="1" heading="Деловые Линии" ng-hide="$ctrl.isEdit && $ctrl.activeTab !== 1">
-      <section>
-        <ui-select on-select="" ng-model="$ctrl.selectedDellin"
+      <section class="p-b-20">
+        <ui-select ng-model="$ctrl.selectedDellin"
           uis-open-close="$ctrl.loadDellinTerminals(isOpen)"
           reset-search-input="false" theme="select2" style="width: 100%;">
           <ui-select-match placeholder="Введите адрес для добавления...">{{$select.selected.address}}</ui-select-match>
@@ -80,6 +80,20 @@
           </ui-select-choices>
         </ui-select>
       </section>
+      <div class="smart-form">
+        <section class="p-l-15">
+          <label class="label">Юридический адрес:</label>
+          <label>
+            <te-switcher ng-model="$ctrl.selectedDellin.legal"></te-switcher>
+          </label>
+        </section>
+        <section class="p-l-15">
+          <label class="label">Адрес доставки:</label>
+          <label>
+            <te-switcher ng-model="$ctrl.selectedDellin.delivery"></te-switcher>
+          </label>
+        </section>
+      </div>
     </uib-tab>
   </uib-tabset>
 </div>
