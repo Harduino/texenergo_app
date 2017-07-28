@@ -9,7 +9,13 @@
             <p class="col-xs-12 col-md-3 font-bold">
                 Отправитель:
             </p>
-            <p class="col-md-9">{{ $ctrl.incomingEmail.from }}</p>
+            <div class="col-md-9 m-b-9">
+              <div ng-if="!$ctrl.incomingEmail.internalEmail">{{::$ctrl.incomingEmail.from}}</div>
+              <a href="javascript:void(0)" class="editable-click"
+              ng-if="$ctrl.incomingEmail.internalEmail">
+                {{::$ctrl.incomingEmail.from.full_name}}
+              </a>
+            </div>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">

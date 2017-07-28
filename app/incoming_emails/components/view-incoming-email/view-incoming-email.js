@@ -36,8 +36,13 @@ class ViewIncomingEmailCtrl {
 
 
         serverApi.getIncomingEmailDetails($stateParams.id, result => {
-            let email = self.incomingEmail = result.data;
-            self.funcFactory.setPageTitle("Письмо от " + result.data.from);
+            let d = result.data;
+
+            d.internalEmail = anguar.isObject(d.from);
+            self.incomingEmail = d;
+
+            self.funcFactory.setPageTitle("Письмо от " +
+            (d.internalEmail ? d.from.email : d.from));
         });
         self.funcFactory.setPageTitle("Входящее письмо");
     }
