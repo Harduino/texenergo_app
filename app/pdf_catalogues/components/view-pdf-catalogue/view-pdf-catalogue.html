@@ -26,12 +26,12 @@
             </div>
             <p ng-switch-default class="col-md-9">{{ $ctrl.pdfCatalogue.description || 'Нет описания' }}</p>
         </div>
-        <div class="row">
+        <div class="row p-b-20">
             <p class="col-xs-12 col-md-3 font-bold">Производитель:</p>
             <div class="col-md-9" ng-switch-when="true">
                 <a ng-hide="$ctrl.pdfCatalogue.manufacturer.x_editable_show" class="editable-click"
                    ng-click="$ctrl.pdfCatalogue.manufacturer.x_editable_show=true;">
-                    {{ iewPdfCatalogueCtrl.pdfCatalogue.manufacturer.name || 'Нет' }}
+                    {{ $ctrl.pdfCatalogue.manufacturer.name || 'Нет' }}
                 </a>
                 <div ng-if="$ctrl.pdfCatalogue.manufacturer.x_editable_show">
                     <span>
