@@ -38,7 +38,7 @@ class ViewIncomingEmailCtrl {
         serverApi.getIncomingEmailDetails($stateParams.id, result => {
             let d = result.data;
 
-            d.internalEmail = anguar.isObject(d.from);
+            d.internalEmail = angular.isObject(d.from);
             self.incomingEmail = d;
 
             self.funcFactory.setPageTitle("Письмо от " +
