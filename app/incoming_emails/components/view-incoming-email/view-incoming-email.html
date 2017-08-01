@@ -13,7 +13,7 @@
               <div ng-if="!$ctrl.incomingEmail.internalEmail">{{::$ctrl.incomingEmail.from}}</div>
               <a ng-href="#/contacts/{{$ctrl.incomingEmail.from.id}}" class="editable-click"
               ng-if="$ctrl.incomingEmail.internalEmail">
-                {{::$ctrl.incomingEmail.from.full_name}}
+                {{$ctrl.incomingEmail.from.full_name || $ctrl.incomingEmail.from.email}}
               </a>
             </div>
         </div>
