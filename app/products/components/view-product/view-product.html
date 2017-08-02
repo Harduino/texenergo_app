@@ -266,6 +266,20 @@
             </p>
         </div>
     </div>
+    <div class="well well-white" ng-if="$ctrl.product.pdf_catalogues.length > 0">
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                PDF материалы:
+            </p>
+            <p class="col-md-9">
+                <div ng-repeat="item in $ctrl.product.pdf_catalogues">
+                    <a href="{{ item.catalogue_url }}" target="_blank">
+                        {{ item.name }}
+                    </a>
+                </div>
+            </p>
+        </div>
+    </div>
     <div class="well well-white" ng-if="$ctrl.product.customer_orders.length > 0">
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">
