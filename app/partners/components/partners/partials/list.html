@@ -1,7 +1,7 @@
 <table class="table table-bordered table-margined-top" infinite-scroll="$ctrl.loadItems()">
     <thead>
     <tr>
-        <th>№</th>
+        <th class="hidden-xs">№</th>
         <th>Префикс</th>
         <th>Официальное наименование</th>
         <th>ИНН</th>
@@ -10,8 +10,12 @@
     </thead>
     <tbody>
     <tr ng-repeat="row in $ctrl.items">
-        <td>{{$index +1}}</td>
-        <td>{{ row.prefix }}</td>
+        <td class="hidden-xs">{{$index +1}}</td>
+        <td>
+            <a href="/#/partners/{{row.id}}">
+                {{ row.prefix }}
+            </a>
+        </td>
         <td>{{ row.legal_name }}</td>
         <td>{{ row.inn }}</td>
         <td class="center-item-text">

@@ -97,7 +97,7 @@
                     <a href="#s4" data-toggle="tab">Платежи</a>
                 </li>
                 <li class="dropdown">
-                    <a href="#s5" data-toggle="tab">Пользователи</a>
+                    <a href="#s5" data-toggle="tab">Контакты</a>
                 </li>
                 <li class="dropdown">
                     <a href="#s6" data-toggle="tab">Банковские счета</a>
@@ -325,60 +325,79 @@
                 </div>
               </div>
               <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Индекс</th>
-                            <th>Регион</th>
-                            <th>Город</th>
-                            <th>Улица</th>
-                            <th>Дом</th>
-                            <th>Юридический</th>
-                            <th>Доставки</th>
-                            <th>Терминал ТК Деловые Линии</th>
-                            <th/>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="addr in viewPartnerCtrl.partner.addresses"
-                            ng-switch="viewPartnerCtrl.partner.can_edit"
-                            ng-class="{'row-archived': addr.archived}">
-                            <td>
-                                <span>{{ addr.postal_index }}</span>
-                            </td>
-                            <td>
-                                <span>{{ addr.region }}</span>
-                            </td>
-                            <td>
-                                <span>{{ addr.city }}</span>
-                            </td>
-                            <td>
-                                <span>{{ addr.street }}</span>
-                            </td>
-                            <td>
-                                <span>{{ addr.house }}</span>
-                            </td>
-                            <td>
-                                <span>{{ addr.legal }}</span>
-                            </td>
-                            <td>
-                                <span>{{ addr.delivery }}</span>
-                            </td>
-                            <td>
-                                <span>{{ addr.dellin_terminal }}</span>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-xs"
-                                ng-click="viewPartnerCtrl.showAddressForm(addr)">
-                                    <span class="glyphicon glyphicon-pencil"/>
-                                </button>
-                                <button type="button" class="btn btn-danger btn-xs"
-                                ng-click="viewPartnerCtrl.saveAddress(addr, true)">
-                                    <span ng-class="{'fa fa-archive': addr.archived, 'glyphicon glyphicon-trash': !addr.archived}"/>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <thead class="hidden-xs">
+                    <tr>
+                        <th>Индекс</th>
+                        <th>Регион</th>
+                        <th>Город</th>
+                        <th>Улица</th>
+                        <th>Дом</th>
+                        <th>Юридический</th>
+                        <th>Доставки</th>
+                        <th>Терминал ТК Деловые Линии</th>
+                        <th/>
+                    </tr>
+                </thead>
+                <tbody class="hidden-xs">
+                    <tr ng-repeat="addr in viewPartnerCtrl.partner.addresses" ng-switch="viewPartnerCtrl.partner.can_edit" ng-class="{'row-archived': addr.archived}">
+                        <td>
+                            <span>{{ addr.postal_index }}</span>
+                        </td>
+                        <td>
+                            <span>{{ addr.region }}</span>
+                        </td>
+                        <td>
+                            <span>{{ addr.city }}</span>
+                        </td>
+                        <td>
+                            <span>{{ addr.street }}</span>
+                        </td>
+                        <td>
+                            <span>{{ addr.house }}</span>
+                        </td>
+                        <td>
+                            <span>{{ addr.legal }}</span>
+                        </td>
+                        <td>
+                            <span>{{ addr.delivery }}</span>
+                        </td>
+                        <td>
+                            <span>{{ addr.dellin_terminal }}</span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-xs"
+                            ng-click="viewPartnerCtrl.showAddressForm(addr)">
+                                <span class="glyphicon glyphicon-pencil"/>
+                            </button>
+                            <button type="button" class="btn btn-danger btn-xs"
+                            ng-click="viewPartnerCtrl.saveAddress(addr, true)">
+                                <span ng-class="{'fa fa-archive': addr.archived, 'glyphicon glyphicon-trash': !addr.archived}"/>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+              </table>
+              <div class="hidden-sm hidden-md hidden-lg" style="overflow-y: auto;">
+                <div ng-repeat='addr in viewPartnerCtrl.partner.addresses' class="col-xs-12" style="margin-bottom: 10px;">
+                  <span>
+                    {{ addr.postal_index }}
+                    {{ addr.region }}
+                    {{ addr.city }}
+                    {{ addr.street }}
+                    {{ addr.house }}
+                    {{ addr.legal ? "Юридический" : "Не юридический" }}
+                    {{ addr.delivery ? "Доставки" : "Не доставки" }}
+                    {{ addr.dellin_terminal ? "Деловые Линии" : "Не Деловые Линии" }}
+                  </span>
+                  <br>
+                  <button type="button" class="btn btn-xs" ng-click="viewPartnerCtrl.showAddressForm(addr)">
+                    <span class="glyphicon glyphicon-pencil"/>
+                  </button>
+                  <button type="button" class="btn btn-danger btn-xs" ng-click="viewPartnerCtrl.saveAddress(addr, true)">
+                    <span ng-class="{'fa fa-archive': addr.archived, 'glyphicon glyphicon-trash': !addr.archived}"/>
+                  </button>
+                </div>
+              </div>
             </div>
             <div class="tab-pane fade" id="s8">
                 <div class="ng-scope btn btn-success" ng-click="viewPartnerCtrl.showNewPersonForm()">

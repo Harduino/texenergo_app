@@ -18,6 +18,7 @@ class ViewReceiveOrderCtrl {
                       button.disableOnLoad(true, $event);
                       serverApi.getReceiveOrderDetails($stateParams.id, r => {
                         button.disableOnLoad(false, $event);
+                        self.funcFactory.setPageTitle('Поступление ' + r.data.number);
                         self.receiveOrder = r.data;
                       }, () => {
                         button.disableOnLoad(false, $event);
@@ -46,10 +47,10 @@ class ViewReceiveOrderCtrl {
         // Load ReceiverOrder details and any other required details.
         serverApi.getReceiveOrderDetails($stateParams.id, result => {
             self.receiveOrder = result.data;
-
+            self.funcFactory.setPageTitle('Поступление ' + self.receiveOrder.number);
             // Это что за две строчки?
-            self.amountPercent = funcFactory.getPercent(self.receiveOrder.paid_amount, self.receiveOrder.total);
-            self.receivedPercent = funcFactory.getPercent(self.receiveOrder.receivedPercent, self.receiveOrder.total);
+            // self.amountPercent = funcFactory.getPercent(self.receiveOrder.paid_amount, self.receiveOrder.total);
+            // self.receivedPercent = funcFactory.getPercent(self.receiveOrder.receivedPercent, self.receiveOrder.total);
         });
         // Queries and returns all yet unreceived products.
         serverApi.getUnreceivedProducts($stateParams.id, '', {}, r => self.unreceivedProducts = r.data);

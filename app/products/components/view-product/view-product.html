@@ -195,8 +195,8 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in $ctrl.product.supplier_infos">
-                            <td>{{row.supplier_code}}</td>
-                            <td class="hidden-xs">{{row.foreign_code}}</td>
+                            <td ng-attr-title="{{row.foreign_name}}">{{row.supplier_code}}</td>
+                            <td class="hidden-xs" ng-attr-title="{{row.foreign_name}}">{{row.foreign_code}}</td>
                             <td class="hidden-xs hidden-sm hidden-md">{{row.prime_cost | currency}}</td>
                             <td>{{row.price | currency}}</td>
                             <td>{{row.quantity}}</td>

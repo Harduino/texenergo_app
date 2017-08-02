@@ -12,7 +12,11 @@
     <tbody>
     <tr ng-repeat="row in $ctrl.items">
         <td class="hidden-xs">{{$index +1}}</td>
-        <td>{{row.email}}</td>
+        <td>
+            <a href="/#/contacts/{{row.id}}">
+                {{ row.email }}
+            </a>
+        </td>
         <td>{{row.first_name}}</td>
         <td class="hidden-xs">{{row.last_name}}</td>
         <td>{{row.partner.name}}</td>

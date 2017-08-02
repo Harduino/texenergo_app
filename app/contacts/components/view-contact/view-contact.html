@@ -111,7 +111,11 @@
                 <tbody>
                     <tr ng-repeat='item in $ctrl.contact.last_viewed_products'>
                         <td>{{ item.created_at | date:'dd MMMM yy' }}</td>
-                        <td>{{ item.product.name }}, {{ item.product.article }}</td>
+                        <td>
+                            <a href="/#/products/{{ item.product.id }}">
+                                {{ item.product.name }}, {{ item.product.article }}
+                            </a>
+                        </td>
                     </tr>
                 </tbody>
             </table>

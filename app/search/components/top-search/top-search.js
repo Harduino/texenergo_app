@@ -95,8 +95,8 @@ class TopSearchCtrl {
         });
     }
 
-    viewProduct (id) {
-        this.$state.go('app.product', {id: id});
+    viewProduct (prd) {
+        this.$state.go('app.product', { id: prd.id });
     }
 
     /**
@@ -147,7 +147,7 @@ class TopSearchCtrl {
         } else if ((key === ENTER) && (list.length > 0) && (this.selectedRowIndex > -1)) {
 
             let selectedRow = list[this.selectedRowIndex];
-            this.viewProduct(selectedRow._id || selectedRow.id);
+            this.viewProduct(selectedRow);
 
             // on Escape blur input
         } else if ((key === ESCAPE) && (event.target.localName === 'input')) {

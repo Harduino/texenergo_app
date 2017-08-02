@@ -1,42 +1,65 @@
 <table class="table table-bordered" infinite-scroll="$ctrl.loadItems()">
-    <thead>
-    <tr>
-        <th class="hidden-xs"></th>
-        <th>Артикул</th>
-        <th>Наименование</th>
-        <th>Производитель</th>
-        <th>Цена<span uib-tooltip="РЦП - Рекомендуемая Цена Продажи">*</span></th>
-        <th>Остаток</th>
-        <th></th>
-    </tr>
+    <thead class="hidden-xs">
+        <tr>
+            <th class="hidden-xs"></th>
+            <th>Артикул</th>
+            <th>Наименование</th>
+            <th>Производитель</th>
+            <th>Цена<span uib-tooltip="РЦП - Рекомендуемая Цена Продажи">*</span></th>
+            <th>Остаток</th>
+            <th></th>
+        </tr>
     </thead>
-    <tbody id="top_search_table_body">
-    <tr ng-repeat="item in $ctrl.items" ng-click="$ctrl.selectedRowIndex = $index"
-        class="cursor-pointer" ng-class="{selected: $index === $ctrl.selectedRowIndex}" ng-init="item.index = $index;">
-        <td class="hidden-xs">
-            <img ng-src="{{item.image_url}}" style="max-height: 40px; max-width: 40px;" class="img img-responsive"/>
-        </td>
-        <td>
-            <te-copy-to-buffer>
-                <a ng-href="/#/products/{{item.id || item._id}}" class="black">
-                    <span te-buffer-value>{{item.article}}</span>
-                </a>
-            </te-copy-to-buffer>
-        </td>
-        <td>
-            <te-copy-to-buffer>
-                <span class="badge alert-danger" ng-if="item.obsolete" uib-tooltip="Оборудование снято с производства">!</span>
-                <span te-buffer-value>{{item.name}}</span>
-            </te-copy-to-buffer>
-        </td>
-        <td>{{item.manufacturer}}</td>
-        <td class="no-warp">{{item.price | currency}}</td>
-        <td>{{item.stock}}</td>
-        <td class="center-item-text">
-            <form-nav-buttons data-options="$ctrl.navOptions" data-template="table" class="btn-group"
-              subdata="item" data-role="$ctrl.role" content-class="btn btn-xs">
-            </form-nav-buttons>
-        </td>
-    </tr>
+    <tbody id="top_search_table_body" class="hidden-xs">
+        <tr ng-repeat="item in $ctrl.items" ng-click="$ctrl.selectedRowIndex = $index"
+            class="cursor-pointer" ng-class="{selected: $index === $ctrl.selectedRowIndex}" ng-init="item.index = $index;">
+            <td class="hidden-xs">
+                <img ng-src="{{item.image_url}}" style="max-height: 40px; max-width: 40px;" class="img img-responsive"/>
+            </td>
+            <td>
+                <te-copy-to-buffer>
+                    <a ng-href="/#/products/{{item.id || item._id}}" class="black">
+                        <span te-buffer-value>{{item.article}}</span>
+                    </a>
+                </te-copy-to-buffer>
+            </td>
+            <td>
+                <te-copy-to-buffer>
+                    <span class="badge alert-danger" ng-if="item.obsolete" uib-tooltip="Оборудование снято с производства">!</span>
+                    <span te-buffer-value>{{item.name}}</span>
+                </te-copy-to-buffer>
+            </td>
+            <td>{{item.manufacturer}}</td>
+            <td class="no-warp">{{item.price | currency}}</td>
+            <td>{{item.stock}}</td>
+            <td class="center-item-text">
+                <form-nav-buttons data-options="$ctrl.navOptions" data-template="table" class="btn-group"
+                  subdata="item" data-role="$ctrl.role" content-class="btn btn-xs">
+                </form-nav-buttons>
+            </td>
+        </tr>
     </tbody>
 </table>
+<div class="hidden-sm hidden-md hidden-lg" style="overflow-y: auto;">
+    <div ng-repeat='item in $ctrl.items' class="col-xs-12" style="margin-bottom: 10px; border-bottom: 1px solid; padding-bottom: 10px; }">
+        <div>
+            {{ item.article }}
+        </div>
+        <div>
+            {{ item.name }}
+        </div>
+        <div>
+            {{ item.manufacturer }}
+        </div>
+        <div>
+            Цена: {{ item.price | currency }}
+        </div>
+        <div>
+            Остаток: {{ item.stock }}
+        </div>
+        <div>
+            <form-nav-buttons data-options="$ctrl.navOptions" data-template="table" class="btn-group" subdata="item" data-role="$ctrl.role" content-class="btn btn-xs">
+            </form-nav-buttons>
+        </div>
+    </div>
+</div>
