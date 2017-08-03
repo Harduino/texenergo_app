@@ -280,6 +280,37 @@
             </p>
         </div>
     </div>
+    <div class="well well-white" ng-if="$ctrl.product.similar_products.length > 0">
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Похожие по свойствам товары:
+            </p>
+            <p class="col-md-9">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Артикул</th>
+                            <th>Наименование</th>
+                            <th>Цена</th>
+                            <th>Остаток</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in $ctrl.product.similar_products">
+                            <td>
+                                <a href="/#/products/{{ item.id }}">
+                                    {{ (item.article == "") ? "Нет" : item.article }}
+                                </a>
+                            </td>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.price | currency }}</td>
+                            <td>{{ item.stock }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </p>
+        </div>
+    </div>
     <div class="well well-white" ng-if="$ctrl.product.customer_orders.length > 0">
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">
