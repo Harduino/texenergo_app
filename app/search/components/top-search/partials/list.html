@@ -43,19 +43,19 @@
 <div class="hidden-sm hidden-md hidden-lg" style="overflow-y: auto;">
     <div ng-repeat='item in $ctrl.items' class="col-xs-12" style="margin-bottom: 10px; border-bottom: 1px solid; padding-bottom: 10px; }">
         <div>
-            {{ item.article }}
+            <i>Артикул:</i> {{ item.article }}
         </div>
         <div>
-            {{ item.name }}
+            <i>Наименование:</i> {{ item.name }}
         </div>
         <div>
-            {{ item.manufacturer }}
+            <i>Производитель:</i> {{ item.manufacturer }}
         </div>
         <div>
-            Цена: {{ item.price | currency }}
+            <i>Цена:</i> {{ item.price | currency }}
         </div>
         <div>
-            Остаток: {{ item.stock }}
+            <i>Остаток:</i> {{ item.stock }}
         </div>
         <div>
             <form-nav-buttons data-options="$ctrl.navOptions" data-template="table" class="btn-group" subdata="item" data-role="$ctrl.role" content-class="btn btn-xs">

@@ -56,6 +56,7 @@ class ViewPartnerCtrl {
                 serverApi.getPartnerDetails($stateParams.id, r => {
                     button && button.disableOnLoad(false, $event);
                     self.partner = r.data;
+                    self.funcFactory.setPageTitle('Партнёр ' + self.partner.prefix);
                     if(!window.partners) window.partners = {};
                     window.partners[$stateParams.id] = r.data;
                     loadResources();

@@ -81,7 +81,8 @@ class ViewCustomerOrderCtrl {
                         });
                     }
                 },
-                {type: 'refresh', callback: self.getOrderDetails.bind(self)}
+                {type: 'refresh', callback: self.getOrderDetails.bind(self)},
+                {type: 'print_form_pdf', callback: () => self.openPdf('')}
             ],
             chartOptions: {
                 barColor: 'rgb(103,135,155)',
@@ -430,6 +431,11 @@ class ViewCustomerOrderCtrl {
                 self.updateTotal();
             }
         };
+    }
+
+    openPdf(path) {
+        window.open(window.APP_ENV.TEXENERGO_COM_API_HTTP_BASE_URL + '/customer_orders/' + this.order.id +
+            path + '.pdf?token=' + this.$localStorage.id_token, '_blank');
     }
 }
 

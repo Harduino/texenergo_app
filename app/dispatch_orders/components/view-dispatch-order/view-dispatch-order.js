@@ -12,7 +12,7 @@ class ViewDispatchOrderCtrl {
         this.visual = {
             navButtsOptions:[
                 {type: 'back', callback: () => $state.go('app.dispatch_orders',{})},
-                {type: 'upd_form_pdf', callback: () => self.openPdf('')},
+                {type: 'print_form_pdf', callback: () => self.openPdf('')},
                 {type: 'label_pdf', callback: () => self.openPdf('/label')},
                 {type: 'packing_list_pdf', callback: () => self.openPdf('/packing_list')},
                 {
