@@ -19,6 +19,7 @@ class ViewSupplierOrderCtrl {
                             this.data.supplierOrder.status = r.data.status;
                             this.data.supplierOrder.can_edit = r.data.can_edit;
                             this.data.supplierOrder.events = r.data.events;
+                            item.updateConfirmButton();
                         }, () => {
                           item.disableOnLoad(false, $event);
                         });

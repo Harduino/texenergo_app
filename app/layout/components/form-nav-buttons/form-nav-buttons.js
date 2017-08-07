@@ -60,7 +60,7 @@ class FormNavButtonsCtrl {
                         button.disabled =  value;
                       }
 
-                      button.disableOnLoad = function(disabled, $event){
+                      button.disableOnLoad = (disabled, $event) => {
                         var $elem = $($event.currentTarget || $event.srcElement);
                         if(disabled){
                           $elem.attr('disabled', 'disabled')
@@ -75,6 +75,11 @@ class FormNavButtonsCtrl {
 
                       if(item.type === 'confirm_order') {
                           this.whaitForChanges = true;
+
+                          button.updateConfirmButton = () => {
+                            self.buildButtons();
+                          };
+
                           return self.createConfirmOrderControls(button);
                       }
 
