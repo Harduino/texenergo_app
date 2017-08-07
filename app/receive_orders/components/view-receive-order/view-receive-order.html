@@ -41,7 +41,7 @@
             <p class="col-md-9">{{ $ctrl.receiveOrder.status }}</p>
         </div>
     </div>
-    
+
     <div class="well well-white">
         <table class="table table-bordered margin-top-10">
             <thead>
@@ -175,6 +175,11 @@
                             {{ item.supplier_order.number }}
                         </a>
                     </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-right">Итого:</td>
+                    <td>{{ $ctrl.unreceivedProducts.total | currency }}</td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>

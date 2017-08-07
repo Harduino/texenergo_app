@@ -49,11 +49,15 @@ class ViewReceiveOrderCtrl {
             self.receiveOrder = result.data;
             self.funcFactory.setPageTitle('Поступление ' + self.receiveOrder.number);
             // Это что за две строчки?
+            // считали какой-то процент, похоже не нужно уже
             // self.amountPercent = funcFactory.getPercent(self.receiveOrder.paid_amount, self.receiveOrder.total);
             // self.receivedPercent = funcFactory.getPercent(self.receiveOrder.receivedPercent, self.receiveOrder.total);
         });
         // Queries and returns all yet unreceived products.
-        serverApi.getUnreceivedProducts($stateParams.id, '', {}, r => self.unreceivedProducts = r.data);
+        serverApi.getUnreceivedProducts($stateParams.id, '', {}, r => {
+          self.unreceivedProducts = r.data
+          self.unreceivedProducts();
+        });
     }
 
     // Reset the product we are about to add;
@@ -83,6 +87,7 @@ class ViewReceiveOrderCtrl {
                     if(!result.data.errors) {
                         self.funcFactory.showNotification('Успешно', 'Продукт ' + data.product.name + ' успешно добвален', true);
                         self.receiveOrder.product_order_contents.push(angular.extend(data, result.data));
+                        self.calculateProductOrderContents();
                         self.clearProductForAppend();
 
                         for (let i = self.unreceivedProducts.length - 1; i >= 0; i--) {
@@ -92,6 +97,7 @@ class ViewReceiveOrderCtrl {
                                 if (unreceived_row.unreceived === data.quantity) {
                                     // Standard case. We are receiving all the pending quantity.
                                     self.unreceivedProducts.splice(i, 1);
+                                    self.calculateUnreceivedProducts();
                                 } else if (data.quantity < unreceived_row.unreceived) {
                                     // Partially receiving the quantities
                                     unreceived_row.unreceived = unreceived_row.unreceived - data.quantity;
@@ -122,7 +128,10 @@ class ViewReceiveOrderCtrl {
                 self.funcFactory.showNotification('Успешно', 'Продукт ' + item.product.name + ' успешно удален', true);
                 for (let i = 0; i < self.receiveOrder.product_order_contents.length; i++) {
                     let c = self.receiveOrder.product_order_contents[i];
-                    if(c.id === item.id) self.receiveOrder.product_order_contents.splice(i, 1);
+                    if(c.id === item.id) {
+                      self.receiveOrder.product_order_contents.splice(i, 1);
+                      self.calculateProductOrderContents();
+                    }
                 }
             } else {
                 self.funcFactory.showNotification('Не удалось удалить продукт ' + item.product.name, result.data.errors);
@@ -145,6 +154,7 @@ class ViewReceiveOrderCtrl {
             if(!result.data.errors){
                 let r = self.receiveOrder.product_order_contents;
                 r[row.index] = angular.extend(r[row.index], result.data);
+                self.calculateProductOrderContents();
                 self.funcFactory.showNotification('Успешно', 'Продукт ' + data.product.name + ' успешно обновлен', true);
             } else {
                 self.funcFactory.showNotification('Не удалось обновить продукт ' + data.product.name, result.data.errors);
@@ -175,6 +185,27 @@ class ViewReceiveOrderCtrl {
                     (item.product.article.match(new RegExp(query, 'i')) !== null);
             })
         }
+    }
+
+    calculateTotal(array, summFn) {
+      let self = this,
+          total = 0;
+
+      for(let item of array){
+        total += summFn ? summFn(item) : item.total;
+      }
+
+      return total;
+    }
+
+    calculateProductOrderContents() {
+      self.receiveOrder.total = this.calculateTotal(self.receiveOrder.product_order_contents);
+    }
+
+    calculateUnreceivedProducts() {
+      self.unreceivedProducts.total = this.calculateTotal(this.unreceivedProducts, (item) => {
+        return item.total / item.quantity * item.unreceived;
+      });
     }
 }
 
