@@ -199,11 +199,11 @@ class ViewReceiveOrderCtrl {
     }
 
     calculateProductOrderContents() {
-      self.receiveOrder.total = this.calculateTotal(self.receiveOrder.product_order_contents);
+      this.receiveOrder.total = this.calculateTotal(this.receiveOrder.product_order_contents);
     }
 
     calculateUnreceivedProducts() {
-      self.unreceivedProducts.total = this.calculateTotal(this.unreceivedProducts, (item) => {
+      this.unreceivedProducts.total = this.calculateTotal(this.unreceivedProducts, (item) => {
         return item.total / item.quantity * item.unreceived;
       });
     }
