@@ -21,12 +21,12 @@ class UiSelectInfinityCtrl {
 
         $timeout(() => {
             $element.find('.ui-select-choices').append('<div class="ui-select-status">' +
-                '<span id="UiSelectInfinitySearchStatus-before">Введите еще хотя бы ' + self.config.startFrom + ' символа</span>'+
-                '<span id="UiSelectInfinitySearchStatus-noresult">Поиск не дал результатов</span>'+
-                '<span id="UiSelectInfinitySearchStatus-inload">Поиск...</span>'+
+                '<span class="UiSelectInfinitySearchStatus-before">Введите еще хотя бы ' + self.config.startFrom + ' символа</span>'+
+                '<span class="UiSelectInfinitySearchStatus-noresult">Поиск не дал результатов</span>'+
+                '<span class="UiSelectInfinitySearchStatus-inload">Поиск...</span>'+
             '</div>');
 
-            UiSelectInfinityCtrl.setSearchStatus('before');
+            self.setSearchStatus('before');
             self.searchBox = $element.find('.ui-select-search')[0];
             self.searchBox.addEventListener('input', triggerSearch);
         }, 500);
@@ -53,7 +53,7 @@ class UiSelectInfinityCtrl {
         if (query !== '' && query.length >= this.config.startFrom) {
             this.timerId = this.$timeout(this.load.bind(this), this.config.delay);
         } else {
-            UiSelectInfinityCtrl.setSearchStatus('before');
+            this.setSearchStatus('before');
         }
     }
 
@@ -76,7 +76,7 @@ class UiSelectInfinityCtrl {
 
     load (hideStatus) {
         this.inLoad = true;
-        UiSelectInfinityCtrl.setSearchStatus(hideStatus ? 'result' : 'inload');
+        this.setSearchStatus(hideStatus ? 'result' : 'inload');
         this.canceler = this.$q.defer();
 
         let self = this;
@@ -95,15 +95,18 @@ class UiSelectInfinityCtrl {
                 $uiSelectController.items.push(items[i]);
               }
             }
-            UiSelectInfinityCtrl.setSearchStatus((self.page == self.config.startPage) && (res.data.length == 0) ? 'noresult' : 'result');
+            self.setSearchStatus((self.page == self.config.startPage) && (res.data.length == 0) ? 'noresult' : 'result');
         });
     }
 
-    static setSearchStatus (searchStatus) {
-        ['before', 'noresult', 'inload'].forEach(status => {
-            document.getElementById('UiSelectInfinitySearchStatus-' + status).style.display =
-                status === searchStatus ? 'block' : 'none';
-        });
+    setSearchStatus (searchStatus) {
+      var self  = this;
+
+      for(let status of ['before', 'noresult', 'inload']){
+
+        self.$element.find('.UiSelectInfinitySearchStatus-' + status)
+        .css({'display': (status === searchStatus ? 'block' : 'none')});
+      }
     };
 }
 
