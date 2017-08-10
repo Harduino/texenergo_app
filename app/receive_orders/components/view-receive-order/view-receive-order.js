@@ -56,7 +56,7 @@ class ViewReceiveOrderCtrl {
         // Queries and returns all yet unreceived products.
         serverApi.getUnreceivedProducts($stateParams.id, '', {}, r => {
           self.unreceivedProducts = r.data
-          self.unreceivedProducts();
+          self.calculateUnreceivedProducts();
         });
     }
 
