@@ -1,5 +1,5 @@
 class ViewCustomerOrderCtrl {
-    constructor($state, $stateParams, serverApi, funcFactory, $filter, $parse, $timeout, $uibModal) {
+    constructor($state, $stateParams, serverApi, funcFactory, $filter, $parse, $timeout, $uibModal, $localStorage) {
         let self = this;
 
         this.serverApi = serverApi;
@@ -10,6 +10,7 @@ class ViewCustomerOrderCtrl {
         this.$state = $state;
         this.$stateParams = $stateParams;
         this.$filter = $filter;
+        this.$localStorage = $localStorage;
         this.selectedProduct = null;
 
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
@@ -439,7 +440,7 @@ class ViewCustomerOrderCtrl {
     }
 }
 
-ViewCustomerOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', '$filter', '$parse', '$timeout', '$uibModal'];
+ViewCustomerOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', '$filter', '$parse', '$timeout', '$uibModal', '$localStorage'];
 
 angular.module('app.customer_orders').component('viewCustomerOrder', {
     controller: ViewCustomerOrderCtrl,
