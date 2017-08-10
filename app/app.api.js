@@ -429,6 +429,39 @@
             $http.get(path, config).then(success, fail);
         };
 
+        // Чего тут у нас производство производит
+        o.getManufacturerOrders = (page, query, config, success, fail) => {
+            console.log("getManufacturerOrders");
+            var path = '/assembly_orders?page='+page + (query ? ('&q=' + query) : '');
+            $http.get(path, config).then(success, fail);
+        }
+        o.createManufacturerOrder = (data, success, fail) => {
+            $http.post('/assembly_orders/', data).then(success, fail);
+        };
+        o.deleteManufacturerOrder = (assembly_order_id, success, fail) => {
+            $http.delete('/assembly_orders/' + assembly_order_id).then(success, fail);
+        };
+        o.getManufacturerOrderDetails = (assembly_order_id, success, fail) => {
+            $http.get('/assembly_orders/' + assembly_order_id).then(success, fail);
+        };
+        o.updateManufacturerOrder = function(assembly_order_id, data, success, fail){
+            $http.put('/assembly_orders/' + assembly_order_id, data).then(success, fail);
+        };
+        o.getInStockProducts = (success, fail) => {
+            $http.get('/assembly_orders/in_stock').then(success, fail);
+        };
+        o.createManufacturerOrderContent = (assembly_order_id, data, success, fail) => {
+            $http.post('/assembly_orders/' + assembly_order_id + '/assembly_order_contents', data).then(success, fail);
+        };
+        o.updateManufacturerOrderContent = function(assembly_order_id, content_id, data, success, fail){
+            $http.put('/assembly_orders/' + assembly_order_id + '/assembly_order_contents/' + content_id, data).then(success, fail)
+        };
+        o.deleteManufacturerOrderContent = function(assembly_order_id, content_id, success, fail){
+            $http.delete('/assembly_orders/' + assembly_order_id + '/assembly_order_contents/' + content_id).then(success, fail)
+        };
+
+        
+
         o.validateViaDaData = function(type, data){
             var url = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/' + type;
             return $http.post(url, data, {

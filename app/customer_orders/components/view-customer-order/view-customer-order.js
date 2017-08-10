@@ -435,8 +435,7 @@ class ViewCustomerOrderCtrl {
     }
 
     openPdf(path) {
-        window.open(window.APP_ENV.TEXENERGO_COM_API_HTTP_BASE_URL + '/customer_orders/' + this.order.id +
-            path + '.pdf?token=' + this.$localStorage.id_token, '_blank');
+        window.open(window.APP_ENV.TEXENERGO_COM_API_HTTP_BASE_URL + '/customer_orders/' + this.order.id + path + '.pdf?token=' + this.$localStorage.id_token, '_blank');
     }
 }
 
