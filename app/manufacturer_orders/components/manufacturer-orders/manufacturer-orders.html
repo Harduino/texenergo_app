@@ -1,0 +1,16 @@
+<div id="content">
+    <div class="row">
+        <big-breadcrumbs items="$ctrl.visual.titles" data-icon="group" class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        </big-breadcrumbs>
+    </div>
+    <div class="well">
+        <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
+        <hr>
+        <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.manufacturer_orders"></orders-filter>
+        <lazy-loaded-list view="app/manufacturer_orders/components/manufacturer-orders/partials/list.html"
+                          api-method="getManufacturerOrders" items="$ctrl.data.ordersList"
+                          nav-options="$ctrl.visual.navTableButts" search-query="$ctrl.data.searchQuery">
+        </lazy-loaded-list>
+        <te-scroll-top></te-scroll-top>
+    </div>
+</div>

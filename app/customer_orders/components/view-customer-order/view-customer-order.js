@@ -1,5 +1,5 @@
 class ViewCustomerOrderCtrl {
-    constructor($state, $stateParams, serverApi, funcFactory, $filter, $parse, $timeout, $uibModal) {
+    constructor($state, $stateParams, serverApi, funcFactory, $filter, $parse, $timeout, $uibModal, $localStorage) {
         let self = this;
 
         this.serverApi = serverApi;
@@ -10,6 +10,7 @@ class ViewCustomerOrderCtrl {
         this.$state = $state;
         this.$stateParams = $stateParams;
         this.$filter = $filter;
+        this.$localStorage = $localStorage;
         this.selectedProduct = null;
 
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
@@ -434,12 +435,11 @@ class ViewCustomerOrderCtrl {
     }
 
     openPdf(path) {
-        window.open(window.APP_ENV.TEXENERGO_COM_API_HTTP_BASE_URL + '/customer_orders/' + this.order.id +
-            path + '.pdf?token=' + this.$localStorage.id_token, '_blank');
+        window.open(window.APP_ENV.TEXENERGO_COM_API_HTTP_BASE_URL + '/customer_orders/' + this.order.id + path + '.pdf?token=' + this.$localStorage.id_token, '_blank');
     }
 }
 
-ViewCustomerOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', '$filter', '$parse', '$timeout', '$uibModal'];
+ViewCustomerOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', '$filter', '$parse', '$timeout', '$uibModal', '$localStorage'];
 
 angular.module('app.customer_orders').component('viewCustomerOrder', {
     controller: ViewCustomerOrderCtrl,

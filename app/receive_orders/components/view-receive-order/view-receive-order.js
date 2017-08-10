@@ -15,14 +15,8 @@ class ViewReceiveOrderCtrl {
                 {
                     type: 'refresh',
                     callback: (subData, button, $event) => {
-                      button.disableOnLoad(true, $event);
-                      serverApi.getReceiveOrderDetails($stateParams.id, r => {
-                        button.disableOnLoad(false, $event);
-                        self.funcFactory.setPageTitle('Поступление ' + r.data.number);
-                        self.receiveOrder = r.data;
-                      }, () => {
-                        button.disableOnLoad(false, $event);
-                      });
+                        button.disableOnLoad(true, $event);
+                        this.loadStuff(() => button.disableOnLoad(false, $event));
                     }
                 }
             ],
@@ -44,20 +38,19 @@ class ViewReceiveOrderCtrl {
 
         this.goToPartner = () => $state.go('app.partners.view', {id: (this.receiveOrder.partner.id || this.receiveOrder.partner._id)});
 
-        // Load ReceiverOrder details and any other required details.
-        serverApi.getReceiveOrderDetails($stateParams.id, result => {
-            self.receiveOrder = result.data;
-            self.funcFactory.setPageTitle('Поступление ' + self.receiveOrder.number);
-            // Это что за две строчки?
-            // считали какой-то процент, похоже не нужно уже
-            // self.amountPercent = funcFactory.getPercent(self.receiveOrder.paid_amount, self.receiveOrder.total);
-            // self.receivedPercent = funcFactory.getPercent(self.receiveOrder.receivedPercent, self.receiveOrder.total);
-        });
-        // Queries and returns all yet unreceived products.
-        serverApi.getUnreceivedProducts($stateParams.id, '', {}, r => {
-          self.unreceivedProducts = r.data
-          self.calculateUnreceivedProducts();
-        });
+        this.loadStuff = (callback) => {
+            // Load ReceiverOrder details and any other required details.
+            serverApi.getReceiveOrderDetails($stateParams.id, result => {
+                self.receiveOrder = result.data;
+                self.funcFactory.setPageTitle('Поступление ' + self.receiveOrder.number);
+                // Queries and returns all yet unreceived products.
+                serverApi.getUnreceivedProducts($stateParams.id, '', {}, r => {
+                  self.unreceivedProducts = r.data;
+                  callback();
+                });
+            });
+        }
+        this.loadStuff();
     }
 
     // Reset the product we are about to add;
@@ -97,7 +90,6 @@ class ViewReceiveOrderCtrl {
                                 if (unreceived_row.unreceived === data.quantity) {
                                     // Standard case. We are receiving all the pending quantity.
                                     self.unreceivedProducts.splice(i, 1);
-                                    self.calculateUnreceivedProducts();
                                 } else if (data.quantity < unreceived_row.unreceived) {
                                     // Partially receiving the quantities
                                     unreceived_row.unreceived = unreceived_row.unreceived - data.quantity;
@@ -200,12 +192,6 @@ class ViewReceiveOrderCtrl {
 
     calculateProductOrderContents() {
       this.receiveOrder.total = this.calculateTotal(this.receiveOrder.product_order_contents);
-    }
-
-    calculateUnreceivedProducts() {
-      this.unreceivedProducts.total = this.calculateTotal(this.unreceivedProducts, (item) => {
-        return item.total / item.quantity * item.unreceived;
-      });
     }
 }
 
