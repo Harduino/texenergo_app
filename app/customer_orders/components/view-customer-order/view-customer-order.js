@@ -12,6 +12,8 @@ class ViewCustomerOrderCtrl {
         this.$filter = $filter;
         this.$localStorage = $localStorage;
         this.selectedProduct = null;
+        this.upsaleSuggestions = [];
+        this.showUpsale = true; // show upsale items for default
 
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
         this.order = {};
@@ -246,17 +248,20 @@ class ViewCustomerOrderCtrl {
         });
     }
 
-    selectProductForAppend (item) {
-        this.productForAppend = item;
-        this.productForAppend.id = item.id || item._id;
-        this.productForAppend.quantity = 0;
-        this.$timeout(() => angular.element('#append_product_quantity').focus(), 10);
+    selectProductForAppend () {
+      // clear upsale suggestions
+      this.upsaleSuggestions = [];
     }
 
-    appendProduct (event) {
+    /**
+    * @description Appending product to order
+    * @param {EventObject} event - keypress event
+    * @param {Object} product - product from upsale suggestions
+    */
+    appendProduct (event, product) {
         if(!event || (event.keyCode == 13)) {
             let self = this,
-                t = this.productForAppend,
+                t = product || this.productForAppend,
                 data = angular.extend(t, {product: {name: t.name, id: t.id}}),
                 selectCtrl = angular.element('#vco_prod_select').data().$uiSelectController,
                 post = {product_id: t.id, quantity: t.quantity, query_original: selectCtrl.search};
@@ -264,12 +269,22 @@ class ViewCustomerOrderCtrl {
             this.productForAppend = null;
             this.selectedProduct = null;
 
+            // remove added upsale item
+            if(product) self.removeUpsaleItemById(product.id);
+
             this.serverApi.addCustomerOrderProduct(self.order.id, post, result => {
                 if(result.data.errors) {
                     self.funcFactory.showNotification('Не удалось добавить продукт', result.data.errors);
                 } else {
+                    let hasUpsale = false;
+
                     for (let i = 0; i < result.data.length; i++) {
                         let position = angular.extend(data, result.data[i]);
+
+                        if(!product && position.upsale && position.upsale.length){
+                          hasUpsale = true;
+                          self.showUpsaleSuggestions(position);
+                        }
 
                         if(self.getPositionIndex(position) === -1) {
                             self.order.customer_order_contents.push(position);
@@ -278,7 +293,7 @@ class ViewCustomerOrderCtrl {
                     }
 
                     self.updateTotal();
-                    selectCtrl.open = true;
+                    if((!hasUpsale && !product) || !self.showUpsale) selectCtrl.open = true;
                     selectCtrl.search = '';
                 }
             });
@@ -432,6 +447,26 @@ class ViewCustomerOrderCtrl {
                 self.updateTotal();
             }
         };
+    }
+
+    showUpsaleSuggestions(position){
+      for(let p of position.upsale){
+        this.upsaleSuggestions.push(p.product);
+      }
+    }
+
+    removeUpsaleItemById(id){
+      let self = this,
+          index = -1;
+
+      for(let i=0, il=this.upsaleSuggestions.length; i<il; i++){
+        if(this.upsaleSuggestions[i].id === id){
+          index = i;
+          break;
+        }
+      }
+
+      if(index > -1) self.upsaleSuggestions.splice(index, 1);
     }
 
     openPdf(path) {

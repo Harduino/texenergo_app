@@ -959,3 +959,26 @@ te-copy-to-buffer .fa-copy.animate {
 .m-b-9{
   margin-bottom: 9px;
 }
+.table-hover tr.no-hover:hover{
+  background-color: white;
+}
+.flex{
+  display: flex;
+  flex: 1;
+}
+.flex-100{
+  flex: 1;
+}
+.layout-row{
+  flex-direction: row;
+}
+.layout-align-start-center{
+  align-items: center;
+  justify-content: flex-start;
+}
+.upsale-toggle{
+  padding-top: 6px;
+}
+.upsale-toggle>span{
+  margin-left: 5px;
+}

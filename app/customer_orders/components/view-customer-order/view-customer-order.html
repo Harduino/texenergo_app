@@ -184,10 +184,15 @@
     </div>
     <div class="well well-white" style="overflow-y: auto;">
         <div class="well well-clean well-white no-padding">
-            <div ng-if="$ctrl.visual.roles.can_edit">
-                <ui-select-infinity config="$ctrl.pSelectConfig" ng-model="$ctrl.productForAppend"
-                                    view="app/customer_orders/components/view-customer-order/partials/ui-select-infinity-products.html">
-                </ui-select-infinity>
+            <div ng-if="$ctrl.visual.roles.can_edit" class="flex layout-row layout-align-start-center">
+              <ui-select-infinity class="flex-100" config="$ctrl.pSelectConfig" ng-model="$ctrl.productForAppend"
+                  view="app/customer_orders/components/view-customer-order/partials/ui-select-infinity-products.html"
+                  on-select="$ctrl.selectProductForAppend()">
+              </ui-select-infinity>
+              <div class="upsale-toggle">
+                <te-switcher ng-model="$ctrl.showUpsale"></te-switcher>
+                <span>Предложения</span>
+              </div>
             </div>
             <te-table-tools summ-fn="$ctrl.summarizeRows" track-by="id">
               <te-table-tools-controls>
@@ -241,6 +246,39 @@
                                 </div>
                             </td>
                         </tr>
+                        <!-- BEGIN UPSALE  -->
+                        <tr ng-show="$ctrl.showUpsale" ng-if="$ctrl.upsaleSuggestions.length" class="no-hover">
+                          <td colspan="8" class="center-item-text">Вас также могут заинтересовать</td>
+                        </tr>
+                        <tr ng-show="$ctrl.showUpsale" ng-repeat="upsaleItem in $ctrl.upsaleSuggestions">
+                          <td></td>
+                          <td>{{upsaleItem.name}}</td>
+                          <td>{{upsaleItem.article}}</td>
+                          <td>{{upsaleItem | price_net | currency}}</td>
+                          <td>
+                              <input class="form-control table-input"
+                                     ng-model="upsaleItem.quantity" model-filter="{min:0}"
+                                     ng-attr-placeholder="{{'доступно ' + upsaleItem.stock +' шт.'}}"
+                                     filter-name="te_number" type="text">
+                              <div class="note">
+                                  <i class="fa fa-exclamation-triangle"></i>
+                                  <span class="font-sm">
+                                      {{' доступно ' + upsaleItem.stock +' шт.'}}
+                                  </span>
+                              </div>
+                          </td>
+                          <td></td>
+                          <td>{{upsaleItem | price_net: upsaleItem.quantity | currency}}</td>
+                          <td class="center-item-text">
+                              <div ng-click="$ctrl.appendProduct(null, upsaleItem)" class="btn btn-success">
+                                  <i class="fa fa-plus"></i>
+                              </div>
+                          </td>
+                        </tr>
+                        <tr ng-show="$ctrl.showUpsale" ng-if="$ctrl.upsaleSuggestions.length" class="no-hover">
+                          <td colspan="8"></td>
+                        </tr>
+                        <!-- END UPSALE -->
                         <tr ng-repeat='item in $ctrl.order.customer_order_contents' class="order-items"
                             ng-click="$ctrl.selectPosition($event, item)" ng-class="{selected: item.selected}">
                             <td class="hidden-xs">{{ $index + 1 }}</td>
