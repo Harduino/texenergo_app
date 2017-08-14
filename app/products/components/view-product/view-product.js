@@ -15,7 +15,7 @@ class ViewProductCtrl {
                     type: 'logs',
                     callback: () => $state.go('app.product.logs', {})
                 },
-                { 
+                {
                     type: 'add',
                     callback: () => {
                         $uibModal.open({
@@ -89,6 +89,12 @@ class ViewProductCtrl {
                     header = "Успешно";
                     msg = 'Тариф: ' + info.price_tarif + " руб., Скидка: " + info.discount + "%, Закупка: " + info.cost + " руб., Срок поставки: " + info.delivery_date + ", Мин. кол-во: " + info.quantity_min + ", Остаток у Шнейдера: " + info.schneider_stock
                     flag = true;
+                }
+
+                if(info.schneider_stock !== undefined){
+                  let p = _.findWhere(self.product.supplier_infos, {supplier_code: 'schneider'});
+
+                  p && (p.quantity = info.schneider_stock);
                 }
 
                 self.funcFactory.showNotification(header, msg, flag);
