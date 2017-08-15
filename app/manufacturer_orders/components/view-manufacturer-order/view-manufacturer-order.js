@@ -86,51 +86,51 @@ class ViewManufacturerOrderCtrl {
 
     // Implements adding a product
     addProduct(event) {
+      if(!event || (event.keyCode == 13)) {
         let p = this.addableProduct.product;
 
-        if(p && p.id) {
-            if(!event || (event.keyCode == 13)) {
-                let self = this;
-                let data = this.addableProduct;
+        if(p && p.id) {  
+          let self = this;
+          let data = this.addableProduct;
 
-                let post = {
-                    product_id: data.product.id,
-                    quantity: data.quantity
-                };
+          let post = {
+              product_id: data.product.id,
+              quantity: data.quantity
+          };
 
-                this.serverApi.createManufacturerOrderContent(this.manufacturerOrder.id, post, result => {
-                    if(!result.data.errors) {
-                        self.funcFactory.showNotification('Успешно', 'Продукт ' + data.product.name + ' успешно добвален', true);
-                        self.manufacturerOrder.contents.push(angular.extend(data, result.data));
-                        // self.calculateProductOrderContents();
-                        self.clearProductForAppend();
+          this.serverApi.createManufacturerOrderContent(this.manufacturerOrder.id, post, result => {
+              if(!result.data.errors) {
+                  self.funcFactory.showNotification('Успешно', 'Продукт ' + data.product.name + ' успешно добвален', true);
+                  self.manufacturerOrder.contents.push(angular.extend(data, result.data));
+                  // self.calculateProductOrderContents();
+                  self.clearProductForAppend();
 
-                        for (let i = self.inStockProducts.length - 1; i >= 0; i--) {
-                            let inStockProduct = self.inStockProducts[i];
+                  for (let i = self.inStockProducts.length - 1; i >= 0; i--) {
+                      let inStockProduct = self.inStockProducts[i];
 
-                            if(inStockProduct.product.id === data.product.id) {
-                                if (inStockProduct.quantity === data.quantity) {
-                                    // Standard case. We are receiving all the pending quantity.
-                                    self.inStockProducts.splice(i, 1);
-                                    self.calculateUnreceivedProducts();
-                                } else if (data.quantity < inStockProduct.unreceived) {
-                                    // Partially receiving the quantities
-                                    inStockProduct.quantity = inStockProduct.quantity - data.quantity;
-                                }
-                                // Pending a case when a customer order has got two rows of the product received as a single row.
-                            }
-                        }
+                      if(inStockProduct.product.id === data.product.id) {
+                          if (inStockProduct.quantity === data.quantity) {
+                              // Standard case. We are receiving all the pending quantity.
+                              self.inStockProducts.splice(i, 1);
+                              self.calculateUnreceivedProducts();
+                          } else if (data.quantity < inStockProduct.unreceived) {
+                              // Partially receiving the quantities
+                              inStockProduct.quantity = inStockProduct.quantity - data.quantity;
+                          }
+                          // Pending a case when a customer order has got two rows of the product received as a single row.
+                      }
+                  }
 
-                        angular.element('#vro_prod_select').focus();
-                    } else {
-                        self.funcFactory.showNotification('Не удалось добавить продукт ' + data.product.name,
-                            result.data.errors, false);
-                    }
-                });
-            }
+                  angular.element('#vro_prod_select').focus();
+              } else {
+                  self.funcFactory.showNotification('Не удалось добавить продукт ' + data.product.name,
+                      result.data.errors, false);
+              }
+          });
         } else {
             this.funcFactory.showNotification('У товара нет ID', 'У введённого товара нет ID. Обычно такое происходит тогда, когда Вы самостоятельно ввели товар вместо выбора из списка.', false);
         }
+      }
     };
 
 

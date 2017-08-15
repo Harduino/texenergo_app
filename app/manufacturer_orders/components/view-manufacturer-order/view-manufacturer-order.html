@@ -74,7 +74,7 @@
                             {{ item.product.name }} {{ item.product.article !== "" ? ( "(" + item.product.article  + ")" ) : "" }}
                         </a>
                     </td>
-                    <td ng-class="item.quantity >= 0 ? 'success' : 'danger'">
+                    <td ng-switch="$ctrl.manufacturerOrder.can_edit" ng-class="item.quantity >= 0 ? 'success' : 'danger'">
                         <p class="col-md-9" ng-switch-when="true">
                             <a editable-number="item.quantity" buttons="no" onaftersave="$ctrl.updateManufacturerOrderComponent(item)">
                                 {{ item.quantity || 'Нет' }}
