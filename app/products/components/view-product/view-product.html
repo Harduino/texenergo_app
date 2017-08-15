@@ -230,11 +230,15 @@
             </p>
         </div>
     </div>
-    <div class="well well-white" ng-if="$ctrl.product.components.length > 0">
+    <div class="well well-white" ng-if="$ctrl.product.components.length">
         <div class="row">
-            <p class="col-xs-12 col-md-3 font-bold">
-                Состав:
-            </p>
+            <div class="col-xs-12 col-md-12 font-bold m-b-9 flex layout-row layout-align-space-between-center">
+                <span>Состав:</span>
+                <div class="btn btn-success" ng-click="$ctrl.addSet()">
+                  <i class="fa fa-plus"></i>
+                  <span class="hidden-xs">Добавить комплект</span>
+                </div>
+            </div>
             <p class="col-md-9">
                 <table class="table">
                     <thead>
@@ -248,7 +252,7 @@
                     <tbody>
                         <tr ng-repeat="item in $ctrl.product.components">
                             <td>
-                                <a ng-href="/#/products/{{ item.product.id }}">                            
+                                <a ng-href="/#/products/{{ item.product.id }}">
                                     {{ item.product.name }} ({{ item.product.article || "Без артикула"}})
                                 </a>
                             </td>

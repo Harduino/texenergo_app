@@ -161,6 +161,45 @@ class ViewProductCtrl {
             resolve: {product : self.product.obsolete}
         }).result.then(selectedProduct => self.makeObsolete(true, selectedProduct._id || selectedProduct.id));
     }
+
+    /**
+    * @description Add set of products to customer order
+    */
+    addSet() {
+      let self = this;
+
+      let appendToOrder = (order_id, product, quantity) => {
+        self.serverApi.addCustomerOrderProduct(order_id,
+        {
+          product_id: product.id,
+          quantity
+        },
+        result => {
+          if(result.data.errors) {
+            self.funcFactory.showNotification('Не удалось добавить продукт', result.data.errors);
+          } else {
+            self.funcFactory.showNotification('Успешно', `${product.name} добавлен в заказ`, true);
+          }
+        });
+      }
+
+      this.uibModal.open({
+        component: 'productToCustomerOrderModal',
+        windowClass: 'eqo-centred-modal',
+        resolve: {product : this.product, withoutUpdate: true}
+      }).result.then((data) => {
+
+        let {order_id, quantity} = data;
+
+        for(let component of self.product.components){
+          appendToOrder(
+            order_id,
+            component.product,
+            Math.ceil(component.quantity) * quantity
+          );
+        }
+      });
+    }
 }
 
 ViewProductCtrl.$inject = ['$stateParams', 'serverApi', '$state', 'funcFactory', '$uibModal', 'FileUploader', '$localStorage'];

@@ -959,6 +959,9 @@ te-copy-to-buffer .fa-copy.animate {
 .m-b-9{
   margin-bottom: 9px;
 }
+.c-orders-list{
+  padding: 10px 10px 0 10px;
+}
 .table-hover tr.no-hover:hover{
   background-color: white;
 }
@@ -969,6 +972,9 @@ te-copy-to-buffer .fa-copy.animate {
 .flex-100{
   flex: 1;
 }
+.wrap{
+  flex-wrap: wrap;
+}
 .layout-row{
   flex-direction: row;
 }
@@ -976,9 +982,16 @@ te-copy-to-buffer .fa-copy.animate {
   align-items: center;
   justify-content: flex-start;
 }
+.layout-align-space-between-center{
+  align-items: center;
+  justify-content: space-between;
+}
 .upsale-toggle{
   padding-top: 6px;
 }
 .upsale-toggle>span{
   margin-left: 5px;
+}
+.float-right{
+  float: right;
 }
