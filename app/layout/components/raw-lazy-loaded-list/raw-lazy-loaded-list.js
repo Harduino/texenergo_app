@@ -35,7 +35,7 @@ class RawLazyLoadedListCtrl {
 }
 
 angular.module('app.layout').component('rawLazyLoadedList', {
-    bindings: {fetch: '=', items: '=', navOptions: '=', role: '=', searchQuery: '=', startPage: '@', view: '@'},
+    bindings: {fetch: '=', items: '=', navOptions: '=', role: '=', searchQuery: '=', startPage: '<', view: '@'},
     templateUrl: 'app/layout/components/raw-lazy-loaded-list/raw-lazy-loaded-list.html',
     controller: RawLazyLoadedListCtrl,
     controllerAs: '$ctrl'
