@@ -1,15 +1,29 @@
 class ProductToCustomerOrderModalCtrl {
   constructor(serverApi, funcFactory) {
+    const STATUSES = {
+      IN_LOAD: 'Загружаем заказы...',
+      NO_DATA: 'У вас нет ни одного заказа в статусе "Не подтвержден". Создайте один.',
+      DATA: ''
+    };
+
     let self = this;
     this.data = {product: self.resolve.product, quantity: null, customerOrdersList: []};
 
     this.serverApi = serverApi;
     this.funcFactory = funcFactory;
+    this.visual = {
+      status: STATUSES.IN_LOAD
+    }
 
     serverApi.getCustomerOrders(0, null, {}, result => {
-      self.data.customerOrdersList = result.data.filter(obj => {
+      self.visual.status = STATUSES.DATA;
+      let list =  self.data.customerOrdersList = result.data.filter(obj => {
         return obj.can_edit;
       });
+
+      if(!list.length){
+        self.visual.status = STATUSES.NO_DATA;
+      }
     });
   }
 
