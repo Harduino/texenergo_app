@@ -54,6 +54,12 @@ class ViewProductCtrl {
                 self.uploader.url = 'https://v2.texenergo.com/api/products/' + self.product.id + '/image?token=' + $localStorage.id_token;
                 if(!window.products) window.products = {};
                 window.products[$stateParams.id] = r.data;
+
+                var componentsCost = self.product.components.reduce((s,v) => {
+                    return s + v.product.price * v.quantity
+                }, 0);
+
+                self.componentMarkupCorr = self.product.price / componentsCost;
             });
         }
     }
@@ -201,6 +207,11 @@ class ViewProductCtrl {
           );
         }
       });
+    }
+
+    componentShareCost(component) {
+        let self = this;
+        return (component.product.price * component.quantity / self.product.price * 100) * self.componentMarkupCorr;
     }
 }
 
