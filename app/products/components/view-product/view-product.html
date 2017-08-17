@@ -1,6 +1,6 @@
 <div id="content" ng-switch="$ctrl.product.can_edit">
     <div class="well well-white">
-        <h2 ng-if="$ctrl.product.can_edit" editable-text="$ctrl.product.name"
+        <h2 ng-if="$ctrl.product.can_edit" editable-text="$ctrl.product.name_raw"
             class="txt-color-blueDark semi-bold prod-review-title display-inline"
             onaftersave="$ctrl.saveProduct()">
             {{ $ctrl.product.name }}

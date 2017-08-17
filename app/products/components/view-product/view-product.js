@@ -106,7 +106,7 @@ class ViewProductCtrl {
         let self = this, product = this.product,
             data = {
                 product:{
-                    name: product.name,
+                    name: product.name_raw,
                     description: product.description,
                     article: product.article,
                     manufacturer_id: product.manufacturer.id,
@@ -117,6 +117,8 @@ class ViewProductCtrl {
 
         this.serverApi.updateProduct(product.id, data, r => {
             if(!r.data.errors) {
+                product.name = r.data.name;
+                product.name_raw = r.data.name_raw;
                 self.funcFactory.showNotification("Успешно", 'Товар ' + product.name + ' успешно отредактирована.', true);
             } else {
                 self.funcFactory.showNotification('Не удалось отредактировать категорию ' + product.name, r.data.errors);
