@@ -1,6 +1,53 @@
 #logo{
     margin-top: 8px;
 }
+#header{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+#header>.pull-right{
+  float: none!important;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: reverse;
+  -ms-flex-direction: row-reverse;
+  flex-direction: row-reverse;
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 0px;
+  flex: 1 1 0;
+}
+
+search-mobile{
+  -webkit-transition: width 1s;
+  -o-transition: width 1s;
+  transition: width 1s;
+  width: 206px;
+}
+
+search-mobile.full-width>.header-search>input{
+  border-color: rgb(247, 143, 30);
+}
+
+.header-search.pull-right{
+  width: 100%;
+  padding-left: 6px;
+}
+
+#fullscreen, .header-search.pull-right{
+  margin: 0
+}
+
 .table.table-bordered>tbody td{
     vertical-align: middle;
 }
@@ -966,7 +1013,11 @@ te-copy-to-buffer .fa-copy.animate {
   background-color: white;
 }
 .flex{
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
   flex: 1;
 }
 .flex-100{

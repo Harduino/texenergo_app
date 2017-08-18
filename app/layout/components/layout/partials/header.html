@@ -22,7 +22,7 @@
         <span> <a title="Выйти" ng-click="layoutCtrl.signOut()" class="fa fa-sign-out"></i></a> </span>
     </div>
     <!-- end logout button -->
-    
+
     <!-- collapse menu button -->
     <toggle-menu></toggle-menu>
     <!-- end collapse menu -->
@@ -62,7 +62,7 @@
         </li>
     </ul>
 
-    <search-mobile></search-mobile>
+    <search-mobile ng-class="{'full-width': layoutCtrl.$state.current.name === 'app.search'}"></search-mobile>
     <!-- fullscreen button -->
     <full-screen></full-screen>
     <!-- end fullscreen button -->
