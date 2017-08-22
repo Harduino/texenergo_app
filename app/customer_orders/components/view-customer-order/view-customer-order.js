@@ -268,6 +268,7 @@ class ViewCustomerOrderCtrl {
 
             this.productForAppend = null;
             this.selectedProduct = null;
+            this.upsaleSuggestions = [];
 
             // remove added upsale item
             if(product) self.removeUpsaleItemById(product.id);
@@ -282,8 +283,8 @@ class ViewCustomerOrderCtrl {
                         // TODO: А зачем мы тут extend делаем, есть какой-то скрытый смысл ?
                         let position = angular.extend(data, result.data[i]);
 
-                        // Если продукт не из upsale отображаем позиции upsale
-                        if(!product && position.upsale && position.upsale.length){
+                        // Отображаем позиции upsale
+                        if(position.upsale && position.upsale.length){
                           self.showUpsaleSuggestions(position);
                         }
 
