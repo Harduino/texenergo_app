@@ -17,7 +17,13 @@
         <td>
             <a href="#/incoming_emails/{{row.id}}">{{ row.created_at | date:'dd/MM/yy HH:mm' }}</a>
         </td>
-        <td>{{row.from}}</td>
+        <td>
+          <div ng-if="!row.internalEmail">{{::row.from}}</div>
+          <a ng-href="#/contacts/{{row.from.id}}" class="editable-click"
+          ng-if="row.internalEmail">
+            {{row.from.full_name || row.from.email}}
+          </a>
+        </td>
         <td>{{row.to}}</td>
         <td>{{row.subject}}</td>
         <td class="center-item-text">

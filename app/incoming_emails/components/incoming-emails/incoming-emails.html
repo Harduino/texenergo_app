@@ -8,11 +8,11 @@
         <hr>
         <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.incoming_emails">
         </orders-filter>
-        <lazy-loaded-list view="app/incoming_emails/components/incoming-emails/partials/list.html"
-                          api-method="getIncomingEmails" items="$ctrl.data.incomingEmailsList"
-                          role="$ctrl.visual.role"
-                          nav-options="$ctrl.visual.navTableButts" search-query="$ctrl.data.searchQuery">
-        </lazy-loaded-list>
+        <raw-lazy-loaded-list view="{{'app/incoming_emails/components/incoming-emails/partials/list.html'}}"
+          items="$ctrl.data.incomingEmailsList" search-query="$ctrl.data.searchQuery"
+          nav-options="$ctrl.visual.navTableButts" role="$ctrl.visual.role"
+          fetch="$ctrl.fetch">
+        </raw-lazy-loaded-list>
         <te-scroll-top></te-scroll-top>
     </div>
 </div>

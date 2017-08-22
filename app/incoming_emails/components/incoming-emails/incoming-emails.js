@@ -2,6 +2,7 @@ class IncomingEmailsCtrl {
     constructor($state, $stateParams, serverApi, funcFactory) {
         let self = this;
         this.funcFactory = funcFactory;
+        this.serverApi = serverApi;
 
         this.visual = {
             navButtsOptions:[
@@ -47,8 +48,30 @@ class IncomingEmailsCtrl {
 
         this.data = { incomingEmailsList:[], searchQuery: $stateParams.q };
         this.funcFactory.setPageTitle("Входящие письма");
-    }
 
+        /**
+        * @description Возвращает данные для листа.
+        * @param {Int} pageNumber номер страницы
+        * @param {String} searchQuery поисковый запрос
+        * @param {Object} options опции запроса к серверу
+        * @param {Function} callback вернуть в нем данные для последующего отображения
+        */
+        this.fetch = (pageNumber, searchQuery, options, callback) => {
+          self.serverApi.getIncomingEmails(pageNumber, searchQuery, options, (result) => {
+            let emails = result.data;
+
+            // Проверяем есть ли отправитель письма в контактах
+            if(emails && emails.length){
+              for(let item of emails){
+                // Помечаем как внутренний если from объект
+                item.internalEmail = angular.isObject(item.from);
+              }
+            }
+
+            callback(result);
+          });
+        }
+    }
 
 }
 
