@@ -261,7 +261,7 @@ class ViewCustomerOrderCtrl {
     appendProduct (event, product) {
         if(!event || (event.keyCode == 13)) {
             let self = this,
-                t = product || this.productForAppend,
+                t = product || angular.copy(this.productForAppend),
                 data = angular.extend(t, {product: {name: t.name, id: t.id}}),
                 selectCtrl = angular.element('#vco_prod_select').data().$uiSelectController,
                 post = {product_id: t.id, quantity: t.quantity, query_original: selectCtrl.search};
@@ -276,16 +276,20 @@ class ViewCustomerOrderCtrl {
                 if(result.data.errors) {
                     self.funcFactory.showNotification('Не удалось добавить продукт', result.data.errors);
                 } else {
-                    let hasUpsale = false;
-
+                    // сервер может вернуть больше одного продукта,
+                    // поэтому пробегаемся по ответу сервера
                     for (let i = 0; i < result.data.length; i++) {
+                        // TODO: А зачем мы тут extend делаем, есть какой-то скрытый смысл ?
                         let position = angular.extend(data, result.data[i]);
 
+                        // Если продукт не из upsale отображаем позиции upsale
                         if(!product && position.upsale && position.upsale.length){
-                          hasUpsale = true;
                           self.showUpsaleSuggestions(position);
                         }
 
+                        // Если позиции нет, добавляем
+                        // TODO: Не уверен что getPositionIndex,
+                        // если в этом есть смысл, нужно фиксануть
                         if(self.getPositionIndex(position) === -1) {
                             self.order.customer_order_contents.push(position);
                             self.funcFactory.showNotification('Успешно добавлен продукт', t.name, true);
@@ -293,8 +297,7 @@ class ViewCustomerOrderCtrl {
                     }
 
                     self.updateTotal();
-                    if((!hasUpsale && !product) || !self.showUpsale) selectCtrl.open = true;
-                    selectCtrl.search = '';
+                    selectCtrl.open = true; // open dropdown
                 }
             });
         }
@@ -449,12 +452,20 @@ class ViewCustomerOrderCtrl {
         };
     }
 
+    /**
+    * @description Формируем список предложений upsale
+    * @param {Object} position позиция заказа
+    */
     showUpsaleSuggestions(position){
       for(let p of position.upsale){
         this.upsaleSuggestions.push(p.product);
       }
     }
 
+    /**
+    * @description Удаляем позицию upsale
+    * @param {String} id - id позиции upsale
+    */
     removeUpsaleItemById(id){
       let self = this,
           index = -1;
