@@ -288,7 +288,7 @@ class ViewCustomerOrderCtrl {
                         }
 
                         // Если позиции нет, добавляем
-                        // TODO: Не уверен что getPositionIndex,
+                        // TODO: Не уверен что getPositionIndex работает,
                         // если в этом есть смысл, нужно фиксануть
                         if(self.getPositionIndex(position) === -1) {
                             self.order.customer_order_contents.push(position);
