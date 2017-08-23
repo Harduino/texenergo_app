@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.html",
-  "scripts": {},
+  "scripts": {
+    "postinstall": "bower install",
+    "build": "gulp",
+    "server": "gulp server"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/marzhaev/texenergo_app"
@@ -17,6 +21,7 @@
   "dependencies": {},
   "devDependencies": {
     "babel-preset-es2015": "^6.18.0",
+    "bower": "^1.8.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-concat": "^2.6.0",

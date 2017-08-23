@@ -1,19 +1,20 @@
-# texenergo #
+# texenergo
 
 ## Dependencies
-* Node.js (https://nodejs.org/)
+* [Node.js](https://nodejs.org/) (better install and manage with [nvm](https://github.com/creationix/nvm#installation))
 * NPM (usually installed with Node.js)
-* Bower (`sudo npm install -g bower`)
-* gulp (`sudo npm install -g gulp`)
 
 ## Install
-```
+```bash
 $ npm install
-$ bower install
 ```
 
 ## Build
-`$ gulp`
+```bash
+$ npm run build
+```
 
 ## Launch
-`$ gulp server`
+```bash
+$ npm run server
+```
