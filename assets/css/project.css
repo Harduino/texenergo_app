@@ -1037,12 +1037,20 @@ te-copy-to-buffer .fa-copy.animate {
   align-items: center;
   justify-content: space-between;
 }
-.upsale-toggle{
-  padding-top: 6px;
-}
-.upsale-toggle>span{
+.search-toggle>span{
   margin-left: 5px;
 }
 .float-right{
   float: right;
+}
+.list-filter-switcher{
+  float: right;
+  padding-top: 5px;
+}
+.onoffswitch{
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.onoffswitch-label{
+  margin: 0;
 }

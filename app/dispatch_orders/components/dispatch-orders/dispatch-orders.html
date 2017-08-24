@@ -5,6 +5,10 @@
     </div>
     <div class="well">
         <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
+        <div class="list-filter-switcher">
+          <span>Только невыполненные</span>
+          <te-switcher ng-model="$ctrl.isIncomplete" ng-change="$ctrl.reloadState()"></te-switcher>
+        </div>
         <hr>
         <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.dispatch_orders"></orders-filter>
         <table class="table table-bordered table-margined-top">
@@ -44,10 +48,10 @@
                 </tr>
             </tbody>
         </table>
-        <lazy-loaded-list view="app/dispatch_orders/components/dispatch-orders/partials/list.html"
-                          api-method="getDispatchOrders" items="$ctrl.data.ordersList"
-                          nav-options="$ctrl.visual.navTableButts" search-query="$ctrl.data.searchQuery">
-        </lazy-loaded-list>
+        <raw-lazy-loaded-list view="{{'app/dispatch_orders/components/dispatch-orders/partials/list.html'}}"
+          items="$ctrl.data.ordersList" nav-options="$ctrl.visual.navTableButts"
+          search-query="$ctrl.data.searchQuery" fetch="$ctrl.fetchOrders">
+        </raw-lazy-loaded-list>
         <te-scroll-top></te-scroll-top>
     </div>
 </div>

@@ -230,8 +230,11 @@
 
         // Входящие письма
         o.getIncomingEmails = function(page, query, config, success, fail){
-            var path = '/incoming_emails?page='+page + (query ? ('&q=' + query) : '');
-            $http.get(path, config).then(success, fail);
+          let path = '/incoming_emails';
+
+          config.params = getLazyListQueryParams(config);
+
+          $http.get(path, config).then(success, fail);
         };
         o.getIncomingEmailDetails = function(id, success, fail){
             $http.get('/incoming_emails/' + id).then(success, fail);
@@ -335,8 +338,11 @@
 
         // DispatchOrder
         o.getDispatchOrders = function(page, query, config, success, fail){
-            var path = '/dispatch_orders?page='+page + (query ? ('&q=' + query) : '');
-            $http.get(path, config).then(success, fail);
+
+          let path = '/dispatch_orders';
+
+          config.params = getLazyListQueryParams(config);
+          $http.get(path, config).then(success, fail);
         };
         o.createDispatchOrder = function(data, success, fail){
             $http.post('/dispatch_orders', data).then(success, fail);
@@ -460,7 +466,7 @@
             $http.delete('/assembly_orders/' + assembly_order_id + '/assembly_order_contents/' + content_id).then(success, fail)
         };
 
-        
+
 
         o.validateViaDaData = function(type, data){
             var url = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/' + type;
@@ -472,6 +478,27 @@
                 },
                 withCredentials: false
             });
+        }
+
+        /**
+        * @description Getting parameters for lazy-list query
+        * @param {Object} config http config
+        * @return {Object} params for config
+        */
+        let getLazyListQueryParams = (config) => {
+          let params = {},
+              additionalParams = config.additionalParams;
+
+          params.page = page;
+          if(query) params.q = query;
+
+          if(additionalParams){
+            for(let param in additionalParams){
+              params[param] = additionalParams[param];
+            }
+          }
+
+          return params;
         }
     }]);
 }());

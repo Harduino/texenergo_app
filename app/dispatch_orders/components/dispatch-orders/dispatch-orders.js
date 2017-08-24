@@ -1,9 +1,11 @@
 class DispatchOrdersCtrl {
     constructor($state, $stateParams, serverApi, funcFactory) {
         let self = this;
+        this.state = $state;
         this.serverApi = serverApi;
         this.funcFactory = funcFactory;
         this.data = {ordersList:[], searchQuery: $stateParams.q, dispatchableProducts: []};
+        this.isIncomplete = $state.params.status === 'incomplete';
 
         this.visual = {
             navButtsOptions:[
@@ -48,6 +50,26 @@ class DispatchOrdersCtrl {
         this.funcFactory.setPageTitle('Реализации');
 
         serverApi.getDispatchableProducts(r => self.data.dispatchableProducts = r.data);
+
+        this.fetchOrders = (pageNumber, searchQuery, config, callback) => {
+
+          // Добавляем статус к запросу
+          if(self.isIncomplete){
+            config.additionalParams = {
+              status: 'incomplete'
+            };
+          }
+
+          self.serverApi.getDispatchOrders(pageNumber, searchQuery, config, callback);
+        };
+    }
+
+    reloadState(){
+      if(this.isIncomplete){
+        this.state.params.status = 'incomplete';
+      }else this.state.params.status = undefined;
+
+      this.state.go('app.dispatch_orders', this.state.params, {reload:true});
     }
 
     fetchAddableOrder(order) {
@@ -69,7 +91,7 @@ class DispatchOrdersCtrl {
             quantity: item.remains_to_dispatch,
             customer_order_id: item.customer_order_id
         };
-        
+
         self.serverApi.createDispatchOrderContent(dispatchOrder.id, data, r => {
             if (!!r.data && !r.data.errors) {
                 self.funcFactory.showNotification('Позиция списана', 'Позиция добавлена в реализацию ' +
@@ -98,7 +120,7 @@ class DispatchOrdersCtrl {
             self.serverApi.createDispatchOrder(data, r => {
                 self.data.ordersList.unshift(r.data);
                 currentOrder = self.fetchAddableOrder(order);
-                
+
                 if(currentOrder !== undefined){
                     self.funcFactory.showNotification('Создание реализации', 'Создан новый документ реализации ' +
                         currentOrder.number, true);
@@ -122,7 +144,7 @@ class DispatchOrdersCtrl {
         this.setAutomatic(order, true, 'Позиция будет списана роботом автоматически.',
             'Не получилось снять отметку о запрете списания роботом.');
     }
-    
+
     setAutomatic (order, state, successMessage, failureMessage) {
         let self = this;
         let data = { automatically_dispatchable: state };

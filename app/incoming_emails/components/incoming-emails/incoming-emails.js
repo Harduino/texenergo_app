@@ -1,8 +1,10 @@
 class IncomingEmailsCtrl {
     constructor($state, $stateParams, serverApi, funcFactory) {
         let self = this;
+        this.state = $state;
         this.funcFactory = funcFactory;
         this.serverApi = serverApi;
+        this.isIncomplete = $state.params.status === 'incomplete';
 
         this.visual = {
             navButtsOptions:[
@@ -57,6 +59,14 @@ class IncomingEmailsCtrl {
         * @param {Function} callback вернуть в нем данные для последующего отображения
         */
         this.fetch = (pageNumber, searchQuery, options, callback) => {
+
+          // Добавляем статус к запросу
+          if(self.isIncomplete){
+            options.additionalParams = {
+              status: 'incomplete'
+            };
+          }
+
           self.serverApi.getIncomingEmails(pageNumber, searchQuery, options, (result) => {
             let emails = result.data;
 
@@ -71,6 +81,14 @@ class IncomingEmailsCtrl {
             callback(result);
           });
         }
+    }
+
+    reloadState(){
+      if(this.isIncomplete){
+        this.state.params.status = 'incomplete';
+      }else this.state.params.status = undefined;
+
+      this.state.go('app.incoming_emails', this.state.params, {reload:true});
     }
 
 }

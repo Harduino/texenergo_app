@@ -2,7 +2,7 @@ angular.module('app.dispatch_orders', ['ui.router'])
     .config($stateProvider => {
         $stateProvider
             .state('app.dispatch_orders', {
-                url: '/dispatch_orders?q',
+                url: '/dispatch_orders?q&status',
                 data:{
                     title: 'Списания',
                     access:{
@@ -11,7 +11,8 @@ angular.module('app.dispatch_orders', ['ui.router'])
                     }
                 },
                 params:{
-                    q:''
+                    q:'',
+                    status:''
                 },
                 views:{
                     'content@app': {

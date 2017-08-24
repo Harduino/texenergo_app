@@ -1,7 +1,7 @@
 angular.module('app.incoming_emails', ['ui.router'])
     .config($stateProvider => {
         $stateProvider.state('app.incoming_emails', {
-            url: '/incoming_emails?q',
+            url: '/incoming_emails?q&status',
             data:{
                 title: 'Входящие Письма',
                 access:{
@@ -11,7 +11,8 @@ angular.module('app.incoming_emails', ['ui.router'])
             },
             params:{
                 q:'',
-                id:''
+                id:'',
+                status:''
             },
             views:{
                 "content@app": {
@@ -34,4 +35,3 @@ angular.module('app.incoming_emails', ['ui.router'])
             }
         });
     });
-    
