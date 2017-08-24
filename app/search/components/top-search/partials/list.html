@@ -19,7 +19,7 @@
             <td>
                 <te-copy-to-buffer>
                     <a ng-href="/#/products/{{item.id || item._id}}" class="black">
-                        <span te-buffer-value>{{ item.article == "" ? "Нет" : item.article }}</span>
+                        <span te-buffer-value>{{ item.article === "" || item.article === null ? "Нет" : item.article }}</span>
                     </a>
                 </te-copy-to-buffer>
             </td>

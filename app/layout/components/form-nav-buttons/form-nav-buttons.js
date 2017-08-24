@@ -83,7 +83,12 @@ class FormNavButtonsCtrl {
                           return self.createConfirmOrderControls(button);
                       }
 
-                      self.buttons.push(button);
+                      if (item.conditional === undefined) {
+                        self.buttons.push(button);
+                      } else if(item.conditional()) {
+                        self.buttons.push(button);
+                      }
+                      
                   }
               });
           }

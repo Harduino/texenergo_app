@@ -12,7 +12,22 @@ class ViewDispatchOrderCtrl {
         this.visual = {
             navButtsOptions:[
                 {type: 'back', callback: () => $state.go('app.dispatch_orders',{})},
-                {type: 'print_form_pdf', callback: () => self.openPdf('')},
+                {
+                    type: 'print_form_pdf',
+                    callback: () => self.openPdf(''),
+                    conditional: () => {
+                        var dor = this.dispatchOrder;
+                        if (dor === undefined || Object.keys(dor).length === 0) {
+                            return false;
+                        }
+                        
+                        if (dor.status !== "Выполнен" && dor.transportation.value.match(/^EXF/) !== null) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                },
                 {type: 'label_pdf', callback: () => self.openPdf('/label')},
                 {type: 'packing_list_pdf', callback: () => self.openPdf('/packing_list')},
                 {
