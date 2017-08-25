@@ -74,11 +74,17 @@ class UiSelectInfinityCtrl {
       this.page = this.config.startPage;
       this.inLoad = false;
       this.query = query;
-      this.items = [];
 
       if (query !== '' && query.length >= this.config.startFrom) {
         this.timerId = this.$timeout(this.load.bind(this), this.config.delay);
       } else {
+        let controller = this.getUiSelectController();
+
+        // timeout to trigger digest cycle
+        controller && this.$timeout(() => {
+          controller.items = [];
+        }, 0);
+
         this.setSearchStatus('before');
       }
     }
@@ -109,16 +115,19 @@ class UiSelectInfinityCtrl {
 
       this.config.dataMethod(this.page, this.query, {timeout: self.canceler.promise}, res => {
         self.inLoad = res.data.length == 0;
-        self.items = self.items.concat(res.data);
 
-        let $select2 = self.$element.find('.select2.select2-container'),
-            $uiSelectController = $select2.data().$uiSelectController;
+        let $uiSelectController = self.getUiSelectController();
 
-        // if for some reasons $uiSelectController don't know about changes
-        if($uiSelectController && !$uiSelectController.items.length && self.items.length>0){
-          for(var i=0, items= self.items, il= items.length; i<il; i++){
-            // update items manually
-            $uiSelectController.items.push(items[i]);
+        // NOTE: We not using self.items because it not update
+        // items of ui-select; self.items used only in template like placeholder
+        // that will get items from controller of ui-select.
+        if($uiSelectController){
+          if(self.page === self.config.startPage){
+            $uiSelectController.items = [];
+          }
+
+          for(let item of res.data){
+            $uiSelectController.items.push(item);
           }
         }
         self.setSearchStatus((self.page == self.config.startPage) && (res.data.length == 0) ? 'noresult' : 'result');
@@ -134,6 +143,16 @@ class UiSelectInfinityCtrl {
         .css({'display': (status === searchStatus ? 'block' : 'none')});
       }
     };
+
+    /**
+    * @description Returns Controller of ui-select
+    * @return {Controller} ui-select controller
+    */
+    getUiSelectController() {
+      let $select2 = this.$element.find('.select2.select2-container');
+
+      return $select2.data().$uiSelectController;
+    }
 }
 
 UiSelectInfinityCtrl.$inject =['$element', '$q', '$timeout'];
