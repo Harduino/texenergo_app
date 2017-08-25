@@ -232,7 +232,7 @@
         o.getIncomingEmails = function(page, query, config, success, fail){
           let path = '/incoming_emails';
 
-          config.params = getLazyListQueryParams(config);
+          config.params = getLazyListQueryParams(config, page, query);
 
           $http.get(path, config).then(success, fail);
         };
@@ -341,7 +341,7 @@
 
           let path = '/dispatch_orders';
 
-          config.params = getLazyListQueryParams(config);
+          config.params = getLazyListQueryParams(config, page, query);
           $http.get(path, config).then(success, fail);
         };
         o.createDispatchOrder = function(data, success, fail){
@@ -485,7 +485,7 @@
         * @param {Object} config http config
         * @return {Object} params for config
         */
-        let getLazyListQueryParams = (config) => {
+        let getLazyListQueryParams = (config, page, query) => {
           let params = {},
               additionalParams = config.additionalParams;
 
