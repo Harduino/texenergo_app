@@ -12,15 +12,8 @@ var gulp = require('gulp'),
 
 gulp.task('styles', function() {
     var files = [
-        'assets/css/bootstrap.css',
-        'assets/css/font-awesome.css',
-        'assets/css/smartadmin-production-plugins.css',
-        'assets/css/smartadmin-production.css',
-        'assets/css/smartadmin-skins.css',
-        'assets/css/fixes.css',
-        // 'assets/css/smartadmin-rtl.css',
-        'assets/css/project.css',
-        'assets/css/login.css',
+        'assets/css/*.css',
+
         'bower_components/angular-ui-select/dist/select.min.css',
         'bower_components/angular-xeditable/dist/css/xeditable.css',
         'bower_components/ion.rangeSlider/css/normalize.css',
