@@ -1,19 +1,23 @@
 class ViewContactCtrl {
-    constructor($state, $stateParams, serverApi, funcFactory) {
+    constructor($state, $stateParams, serverApi, funcFactory, $uibModal) {
         this.contact = {};
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
 
         this.$state = $state;
         this.serverApi = serverApi;
         this.funcFactory = funcFactory;
+        this.$uibModal = $uibModal;
 
         let self = this;
         let getContactDetails = (subData, button, $event) => {
           if(button) button.disableOnLoad(true, $event);
           serverApi.getContactDetails($stateParams.id, (res) => {
-            button && button.disableOnLoad(false, $event);
-            self.contact = res.data;
-            this.funcFactory.setPageTitle("Контакт " + res.data.email);
+                button && button.disableOnLoad(false, $event);
+                self.contact = res.data;
+                this.funcFactory.setPageTitle("Контакт " + res.data.email);
+                serverApi.getIncomingEmails(1, res.data.email, {}, (ems) => {
+                    self.contact.incoming_emails = ems.data;
+                })
             }, () => {
                 button && button.disableOnLoad(false, $event);
           });
@@ -79,9 +83,35 @@ class ViewContactCtrl {
         });
     }
 
+        //CUSTOMER ORDERS BEGIN
+    addCustomerOrder (){
+        let self = this;
+
+        this.$uibModal.open({
+            templateUrl: 'app/customer_orders/components/create-customer-order/create-order.html',
+            controller: 'CreateCustomerOrderCtrl',
+            controllerAs: '$ctrl',
+            resolve: {
+                partner: {
+                    data: self.contact.partner,
+                    disabled: true
+                }
+            }
+        }).result.then((result)=>{
+            result.promise.then((r)=>{
+                if(!r.data.errors) {
+                    self.$state.go('app.customer_orders.view', {id: r.data.id});
+                } else {
+                    self.funcFactory.showNotification('Не удалось создать заказ', r.data.errors);
+                }
+            });
+        });
+    }
+    //CUSTOMER ORDERS END
+
 }
 
-ViewContactCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
+ViewContactCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', '$uibModal'];
 
 angular.module('app.contacts').component('viewContact', {
     controller: ViewContactCtrl,

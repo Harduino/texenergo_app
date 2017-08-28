@@ -95,12 +95,75 @@
     </div>
     <nav-tabs>
         <ul class="nav nav-tabs bordered" id="myTab1">
-            <li class="active"><a data-toggle="tab" href="#s1">Просмотренные товары</a></li>
-            <li><a data-toggle="tab" href="#s2">Поисковые запросы</a></li>
+            <li class="active">
+                <a data-toggle="tab" href="#s1">Заказы клиента</a>
+            </li>
+            <li class="dropdown">
+                <a data-toggle="tab" href="#s2">Входящие письма</a>
+            </li>
+            <li class="dropdown">
+                <a data-toggle="tab" href="#s3">Просмотренные товары</a>
+            </li>
+            <li class="dropdown">
+                <a data-toggle="tab" href="#s4">Поисковые запросы</a>
+            </li>
+            <li class="dropdown">
+                <a data-toggle="tab" href="#s5">Просмотренные документы</a>
+            </li>
         </ul>
     </nav-tabs>
     <div class="tab-content padding-10" id="myTabContent1" style="background: white;">
         <div class="tab-pane fade in active" id="s1">
+            <div ng-click="$ctrl.addCustomerOrder()" class="ng-scope btn btn-success btn-margin">
+                <i class="fa fa-plus"></i>
+                <span class="hidden-xs ng-binding">Новый</span>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Номер</th>
+                        <th class="hidden-xs">Дата</th>
+                        <th>Сумма</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in $ctrl.contact.customer_orders">
+                        <td>
+                            <a href="/#/customer_orders/{{ item.id }}">
+                                {{ item.number }}
+                            </a>
+                        </td>
+                        <td class="hidden-xs">{{ item.date | date:'dd MMMM yy'}}</td>
+                        <td class="text-right">
+                            {{ item.total | currency }}
+                        </td>
+                        <td>{{ item.status }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="s2">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Тема</th>
+                        <th>Кому</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in $ctrl.contact.incoming_emails">
+                        <td>
+                            <a href="/#/incoming_emails/{{item.id}}">{{ item.created_at | date:'dd/MM/yy HH:mm' }}</a>
+                        </td>
+                        <td>{{item.subject}}</td>
+                        <td>{{item.to}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="s3">
             <table class="table table-hover table-bordered">
                 <thead>
                     <tr>
@@ -120,7 +183,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="tab-pane fade" id="s2">
+        <div class="tab-pane fade" id="s4">
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -134,6 +197,60 @@
                         <td>{{ item.created_at | date:'dd MMMM yy' }}</td>
                         <td>{{ item.query }}</td>
                         <td>{{ item.products_found }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="s5">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Тип документа</th>
+                        <th>Номер</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in $ctrl.contact.last_viewed_documents">
+                        <td>{{ item.created_at | date:'dd MMMM yy HH:mm' }}</td>
+                        <td>{{ item.document.klass }}</td>
+                        <td>
+                            <span ng-switch="item.document.klass">
+                                <span ng-switch-when="DispatchOrder">
+                                    <a href="/#/dispatch_orders/{{item.document.id}}">
+                                        {{ item.document.number }}    
+                                    </a>
+                                </span>
+                                <span ng-switch-when="CustomerOrder">
+                                    <a href="/#/customer_orders/{{item.document.id}}">
+                                        {{ item.document.number }}    
+                                    </a>
+                                </span>
+                                <span ng-switch-when="Contact">
+                                    <a href="/#/contacts/{{item.document.id}}">
+                                        {{ item.document.email }}    
+                                    </a>
+                                </span>
+                                <span ng-switch-when="IncomingTransfer">
+                                    <a href="/#/incoming_transfers/{{item.document.id}}">
+                                        {{ item.document.number }}    
+                                    </a>
+                                </span>
+                                <span ng-switch-when="AssemblyOrder">
+                                    <a href="/#/manufacturer_orders/{{item.document.id}}">
+                                        {{ item.document.number }}    
+                                    </a>
+                                </span>
+                                <span ng-switch-when="ReceiveOrder">
+                                    <a href="/#/receive_orders/{{item.document.id}}">
+                                        {{ item.document.number }}    
+                                    </a>
+                                </span>
+                                <span ng-switch-default>
+                                    {{ item.document.number }}    
+                                </span>
+                            </span>
+                        </td>
                     </tr>
                 </tbody>
             </table>

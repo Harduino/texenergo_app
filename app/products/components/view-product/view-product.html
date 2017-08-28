@@ -84,6 +84,9 @@
                     <span ng-if="$ctrl.product.can_edit" uib-tooltip="Остаток МФК">
                         ({{ ($ctrl.product.stock_with_mfk - $ctrl.product.stock) < 0 ? 0 : ($ctrl.product.stock_with_mfk - $ctrl.product.stock) }})
                     </span>
+                    <span ng-if="$ctrl.product.stock_assemblable !== null && $ctrl.product.stock_assemblable > 0" uib-tooltip="Уточняйте у Вашего менеджера">
+                    (и ещё {{ $ctrl.product.stock_assemblable }})
+                </span>
                 </p>
             </div>
             <div class="row">

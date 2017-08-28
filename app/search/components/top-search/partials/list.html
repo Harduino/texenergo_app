@@ -31,7 +31,12 @@
             </td>
             <td>{{item.manufacturer}}</td>
             <td class="no-warp">{{item.price | currency}}</td>
-            <td>{{item.stock}}</td>
+            <td>
+                {{item.stock}}
+                <span ng-if="item.stock_assemblable !== null && item.stock_assemblable > 0" uib-tooltip="Уточняйте у Вашего менеджера">
+                    (и ещё {{ item.stock_assemblable }})
+                </span>
+            </td>
             <td class="center-item-text">
                 <form-nav-buttons data-options="$ctrl.navOptions" data-template="table" class="btn-group"
                   subdata="item" data-role="$ctrl.role" content-class="btn btn-xs">
@@ -56,6 +61,10 @@
         </div>
         <div>
             <i>Остаток:</i> {{ item.stock }}
+            <span ng-if="item.stock_assemblable !== null && item.stock_assemblable > 0">
+                <br>
+                <i>Уточняйте у менеджера:</i> {{ item.stock_assemblable }}
+            </span>
         </div>
         <div>
             <form-nav-buttons data-options="$ctrl.navOptions" data-template="table" class="btn-group" subdata="item" data-role="$ctrl.role" content-class="btn btn-xs">
