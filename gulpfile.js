@@ -20,6 +20,7 @@ gulp.task('styles', function() {
         'assets/css/fixes.css',
         // 'assets/css/smartadmin-rtl.css',
         'assets/css/project.css',
+        'assets/css/login.css',
         'bower_components/angular-ui-select/dist/select.min.css',
         'bower_components/angular-xeditable/dist/css/xeditable.css',
         'bower_components/ion.rangeSlider/css/normalize.css',
@@ -140,7 +141,7 @@ gulp.task('watch', function() {
     });
 
     gulp.watch([
-      'assets/css/project.css'
+      'assets/css/*.css'
     ], function(){
       gulp.start('styles');
     });

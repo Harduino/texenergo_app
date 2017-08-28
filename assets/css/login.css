@@ -1,0 +1,17 @@
+@media (max-width: 667px) {
+  .go-to-passwordless{
+    top: 0;
+    right: 0;
+  }
+
+  #lock{
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 370px) {
+  #lock form.auth0-lock-widget{
+    width: 100%;
+  }
+}
