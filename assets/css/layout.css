@@ -3,3 +3,7 @@
     width: auto;
   }
 }
+
+.link-to-order{
+  cursor: pointer;
+}

@@ -55,8 +55,12 @@
 
         //Customer Orders
         o.getCustomerOrders = (page, query, config, success, fail, partner_id) => {
-            var path = '/customer_orders?page='+page + (query ? ('&q=' + query) : '') + (partner_id ? ('&partner_id=' + partner_id) : '');
-            $http.get(path, config).then(success, fail);
+            let path = '/customer_orders?page='+page + (query ? ('&q=' + query) : '') + (partner_id ? ('&partner_id=' + partner_id) : '');
+            let promise = $http.get(path, config);
+
+            promise.then(success, fail);
+
+            return promise;
         };
         o.createCustomerOrder = (data, success, fail) => {
             $http.post('/customer_orders', data).then(success, fail);
@@ -338,11 +342,14 @@
 
         // DispatchOrder
         o.getDispatchOrders = function(page, query, config, success, fail){
-
-          let path = '/dispatch_orders';
-
+          let path = '/dispatch_orders',
+              promise;
           config.params = getLazyListQueryParams(config, page, query);
-          $http.get(path, config).then(success, fail);
+
+          promise = $http.get(path, config);
+          promise.then(success, fail);
+
+          return promise;
         };
         o.createDispatchOrder = function(data, success, fail){
             $http.post('/dispatch_orders', data).then(success, fail);

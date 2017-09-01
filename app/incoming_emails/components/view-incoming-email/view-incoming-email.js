@@ -1,5 +1,5 @@
 class ViewIncomingEmailCtrl {
-    constructor($state, $stateParams, serverApi, $q, funcFactory) {
+    constructor($state, $stateParams, serverApi, $q, funcFactory, $filter) {
         let self = this;
         this.funcFactory = funcFactory;
         this.serverApi = serverApi;
@@ -45,6 +45,25 @@ class ViewIncomingEmailCtrl {
             (d.internalEmail ? d.from.email : d.from));
         });
         self.funcFactory.setPageTitle("Входящее письмо");
+
+        /**
+        * @description fromatter for popover of orders links
+        * @param {object} order
+        * @return {String} content for popover
+        */
+        this.linkFormatter = (order) => {
+          return `
+          <p>
+            <b>Статус: </b><span>${order.status}</span>
+          </p>
+          <p>
+            <b>Дата заказа: </b><span>${$filter('date')(order.date, 'dd MMMM yy, HH:mm')}</span>
+          </p>
+          <p>
+            <b>Итого: </b><span>${order.total}</span>
+          </p>
+          `;
+        };
     }
 
     sendResponse () {
@@ -73,7 +92,14 @@ class ViewIncomingEmailCtrl {
     }
 }
 
-ViewIncomingEmailCtrl.$inject = ['$state', '$stateParams', 'serverApi', '$q', 'funcFactory'];
+ViewIncomingEmailCtrl.$inject = [
+  '$state',
+  '$stateParams',
+  'serverApi',
+  '$q',
+  'funcFactory',
+  '$filter'
+];
 
 angular.module('app.incoming_emails').component('viewIncomingEmail', {
     controller: ViewIncomingEmailCtrl,

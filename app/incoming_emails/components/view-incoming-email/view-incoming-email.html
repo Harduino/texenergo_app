@@ -27,7 +27,10 @@
             <p class="col-xs-12 col-md-3 font-bold">
                 Тема:
             </p>
-            <p class="col-md-9">{{ $ctrl.incomingEmail.subject }}</p>
+            <p class="col-md-9">
+              <orders-to-links link-formatter="$ctrl.linkFormatter"
+              text="$ctrl.incomingEmail.subject"></orders-to-links>
+            </p>
         </div>
         <div class="row" ng-if="$ctrl.incomingEmail.attachments.length > 0">
             <p class="col-xs-12 col-md-3 font-bold">
@@ -76,7 +79,8 @@
     <div class="well well-white">
         <h2>Входящее письмо:</h2>
         <pre>
-            {{ $ctrl.incomingEmail.text || $ctrl.incomingEmail.html }}
+          <orders-to-links link-formatter="$ctrl.linkFormatter"
+          text="($ctrl.incomingEmail.text || $ctrl.incomingEmail.html)"></orders-to-links>
         </pre>
     </div>
 
