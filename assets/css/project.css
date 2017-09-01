@@ -265,7 +265,6 @@ form-nav-buttons[data-template='table'] .btn>.fa{
     position: absolute;
 }
 .easy-pie-chart .percent {
-    line-height: 50px;
     width: 50px;
     top: 0;
     margin: 0;
