@@ -4,7 +4,8 @@ class IncomingEmailsCtrl {
         this.state = $state;
         this.funcFactory = funcFactory;
         this.serverApi = serverApi;
-        this.isIncomplete = $state.params.status === 'incomplete';
+        this.incomplete = $state.params.status === 'incomplete';
+        this.accomplished = $state.params.status === 'accomplished';
 
         this.visual = {
             navButtsOptions:[
@@ -61,9 +62,9 @@ class IncomingEmailsCtrl {
         this.fetch = (pageNumber, searchQuery, options, callback) => {
 
           // Добавляем статус к запросу
-          if(self.isIncomplete){
+          if(this.state.params.status){
             options.additionalParams = {
-              status: 'incomplete'
+              status: this.state.params.status
             };
           }
 
@@ -83,9 +84,17 @@ class IncomingEmailsCtrl {
         }
     }
 
-    reloadState(){
-      if(this.isIncomplete){
-        this.state.params.status = 'incomplete';
+    /**
+    * @description reload state passing filtering parameters
+    * @param {String} on - filter that should be on
+    * @param {String} off - filter that should be off
+    */
+    reloadState(on, off){
+      if(this.incomplete || this.accomplished){
+
+        this.state.params.status = on;
+        this[off] = false;
+
       }else this.state.params.status = undefined;
 
       this.state.go('app.incoming_emails', this.state.params, {reload:true});

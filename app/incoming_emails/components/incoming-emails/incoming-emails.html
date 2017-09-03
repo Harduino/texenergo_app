@@ -5,9 +5,15 @@
     </div>
     <div class="well">
         <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
-        <div class="list-filter-switcher">
-          <span>Только невыполненные</span>
-          <te-switcher ng-model="$ctrl.isIncomplete" ng-change="$ctrl.reloadState()"></te-switcher>
+        <div class="list-filter-switcher multi">
+          <div class="filter-switcher">
+            <span>Только невыполненные</span>
+            <te-switcher ng-model="$ctrl.incomplete" ng-change="$ctrl.reloadState('incomplete', 'isAccomplished')"></te-switcher>
+          </div>
+          <div class="filter-switcher">
+            <span>Выполненныe</span>
+            <te-switcher ng-model="$ctrl.accomplished" ng-change="$ctrl.reloadState('accomplished', 'incomplete')"></te-switcher>
+          </div>
         </div>
         <hr>
         <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.incoming_emails">

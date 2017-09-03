@@ -7,3 +7,17 @@
 .link-to-order{
   cursor: pointer;
 }
+
+.list-filter-switcher.multi{
+  padding-top: 0;
+}
+.list-filter-switcher.multi > .filter-switcher{
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.list-filter-switcher.multi .onoffswitch{
+  margin-top: 0;
+  margin-bottom: 0;
+}
