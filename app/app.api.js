@@ -68,8 +68,8 @@
         o.deleteCustomerOrder = (order_id, success, fail) => {
             $http.delete('/customer_orders/' + order_id).then(success, fail)
         };
-        o.getCustomerOrderDetails = (id, success, fail) => {
-            $http.get('/customer_orders/' + id).then(success, fail);
+        o.getCustomerOrderDetails = (id) => {
+          return $http.get('/customer_orders/' + id);
         };
         o.updateCustomerOrder = (id, data, success, fail) => {
             $http.put('/customer_orders/' + id, data).then(success, fail);

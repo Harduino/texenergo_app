@@ -135,7 +135,9 @@ class ViewCustomerOrderCtrl {
                         });
                     }
                 }
-            ]
+            ],
+            inLoad: true,
+            error: false
         };
 
         this.amontPercent = 0;
@@ -391,8 +393,14 @@ class ViewCustomerOrderCtrl {
     getOrderDetails () {
         let self = this;
 
-        this.serverApi.getCustomerOrderDetails(this.$stateParams.id, result => {
+        self.visual.inLoad = true;
+        self.visual.error = false;
+
+        this.serverApi.getCustomerOrderDetails(this.$stateParams.id)
+        .then(result => {
             let order = self.order = result.data;
+
+            self.visual.inLoad = false;
 
             self.funcFactory.setPageTitle('Заказ ' + self.order.number);
             self.amontPercent = self.funcFactory.getPercent(order.paid_amount, order.total);
@@ -407,6 +415,8 @@ class ViewCustomerOrderCtrl {
             self.calculateTotals(order, 'incoming_transfers', 'total_paid_linked', 'total_paid');
             self.calculateTotals(order, 'dispatch_orders', 'total_dispatched_linked', 'total_dispatched');
             self.updateTotal();
+        }, error => {
+          self.visual.error = true;
         });
     }
 
