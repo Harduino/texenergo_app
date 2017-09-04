@@ -101,20 +101,15 @@ class IncomingEmailsCtrl {
       }
 
       this.incomplete = params.status === 'incomplete';
-      this.accomplished = params.status === 'accomplished';
     }
 
     /**
     * @description reload state passing filtering parameters
-    * @param {String} on - filter that should be on
-    * @param {String} off - filter that should be off
     */
-    reloadState(on, off){
-      if(this.incomplete || this.accomplished){
+    reloadState(){
+      if(this.incomplete){
 
-        this.state.params.status = on;
-        this[off] = false;
-
+        this.state.params.status = 'incomplete';
       }else this.state.params.status = undefined;
 
       this.authService.updateUserMetadata({
