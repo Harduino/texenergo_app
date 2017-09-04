@@ -1,11 +1,13 @@
 class IncomingEmailsCtrl {
-    constructor($state, $stateParams, serverApi, funcFactory) {
+    constructor($state, $stateParams, serverApi, funcFactory, authService) {
         let self = this;
+
         this.state = $state;
         this.funcFactory = funcFactory;
         this.serverApi = serverApi;
-        this.incomplete = $state.params.status === 'incomplete';
-        this.accomplished = $state.params.status === 'accomplished';
+        this.authService = authService;
+
+        this.restoreStatusFromSate();
 
         this.visual = {
             navButtsOptions:[
@@ -60,7 +62,6 @@ class IncomingEmailsCtrl {
         * @param {Function} callback вернуть в нем данные для последующего отображения
         */
         this.fetch = (pageNumber, searchQuery, options, callback) => {
-
           // Добавляем статус к запросу
           if(this.state.params.status){
             options.additionalParams = {
@@ -84,6 +85,25 @@ class IncomingEmailsCtrl {
         }
     }
 
+    restoreStatusFromSate() {
+      let params = this.state.params,
+          userMeta = this.authService.userMetadata,
+          status;
+
+      if(userMeta.hasOwnProperty('incomingEmais')){
+        status = userMeta.incomingEmais.status;
+      }
+
+      // restore status from metadata
+      if(status && params.status !== status){
+        params.status = status;
+        this.state.go(this.state.current.name, this.state.params, {reload: true, notify: false});
+      }
+
+      this.incomplete = params.status === 'incomplete';
+      this.accomplished = params.status === 'accomplished';
+    }
+
     /**
     * @description reload state passing filtering parameters
     * @param {String} on - filter that should be on
@@ -97,12 +117,24 @@ class IncomingEmailsCtrl {
 
       }else this.state.params.status = undefined;
 
+      this.authService.updateUserMetadata({
+        incomingEmais: {
+          status: this.state.params.status
+        }
+      });
+
       this.state.go('app.incoming_emails', this.state.params, {reload:true});
     }
 
 }
 
-IncomingEmailsCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
+IncomingEmailsCtrl.$inject = [
+  '$state',
+  '$stateParams',
+  'serverApi',
+  'funcFactory',
+  'authService'
+];
 
 angular.module('app.incoming_emails').component('incomingEmails', {
     controller: IncomingEmailsCtrl,

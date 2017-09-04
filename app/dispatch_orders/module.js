@@ -14,6 +14,11 @@ angular.module('app.dispatch_orders', ['ui.router'])
                     q:'',
                     status:''
                 },
+                resolve: {
+                  profile: function(authService){
+                    return authService.profilePromise;
+                  }
+                },
                 views:{
                     'content@app': {
                         template: '<dispatch-orders></dispatch-orders>'

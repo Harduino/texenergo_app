@@ -1,9 +1,11 @@
 class AuthService {
-    constructor($rootScope, lock, $localStorage, jwtHelper, lockPasswordless, $location, $q) {
+    constructor($rootScope, lock, $localStorage, jwtHelper, lockPasswordless,
+      $location, $q) {
         this._token = $localStorage.id_token || null;
         this._profile = undefined;
         this.authDomain = 'texenergo.eu.auth0.com';
         this.tokenDefer = $q.defer();
+        this._profilePromise;
 
         this.$rootScope = $rootScope;
         this.lock = lock;
@@ -12,15 +14,15 @@ class AuthService {
         this.lockPasswordless = lockPasswordless;
         this.$location = $location;
 
-        if(this._token !== null){
-            this.tokenDefer.resolve(this._token);
-        }
+        let self = this;
+
         if(this._token && !jwtHelper.isTokenExpired(this._token)) {
-            this.getProfile(this._token);
+          self.tokenDefer.resolve(self._token);
+          this._profilePromise = this.getProfile(this._token);
         }
     }
 
-    //TODO: DEPRECATED Remove all usages 
+    //TODO: DEPRECATED Remove all usages
     get	token() {
         return this._token;
     }
@@ -31,6 +33,14 @@ class AuthService {
 
     get	profile() {
         return this._profile;
+    }
+
+    get profilePromise() {
+      return this._profilePromise;
+    }
+
+    get userMetadata() {
+      return this._profile.user_metadata;
     }
 
     login() {
@@ -50,8 +60,8 @@ class AuthService {
         this.lock.on('authenticated', authResult => {
             console.log('auth result', authResult);
             self._token = self.$localStorage.id_token = authResult.idToken;
-            self.tokenDefer.resolve(self._token); // resolve promises 
-            self.getProfile(authResult.idToken);
+            self.tokenDefer.resolve(self._token); // resolve promises
+            self._profilePromise = self.getProfile(authResult.idToken);
             self.$rootScope.$emit('authenticated');
         });
     }
@@ -95,7 +105,7 @@ class AuthService {
             }
 
             self._token = self.$localStorage.id_token = id_token;
-            self.tokenDefer.resolve(self._token); // resolve promises 
+            self.tokenDefer.resolve(self._token); // resolve promises
             self._profile = profile;
 
             let url = self.$location.$$absUrl,
@@ -110,14 +120,51 @@ class AuthService {
         });
     }
 
-    getProfile(idToken) {
-        let self = this;
-        this.lock.getProfile(idToken, (error, profile) => {
-            if (error) console.log(error);
+    updateProfile(profile) {
+      this.$localStorage.profile = profile;
+      this._profile = profile;
+    }
 
-            self.$localStorage.profile = profile;
-            self._profile = profile;
+    getProfile(idToken) {
+      let self = this;
+
+      return new Promise((resolve) => {
+        this.lock.getProfile(idToken, (error, profile) => {
+          if (error) console.log(error);
+
+          self.updateProfile(profile);
+          resolve();
         });
+      });
+    }
+
+    /**
+    * @description Update user metadata
+    * @param {Object} metaData object with user metadata
+    */
+    updateUserMetadata(metaData) {
+      const path = `https://${this.authDomain}/api/v2/users/${this._profile.user_id}`;
+      let self = this,
+          newMetaData = {"user_metadata": metaData};
+
+      let settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": path,
+        "method": "PATCH",
+        "headers": {
+          "authorization": `Bearer ${this._token}`,
+          "content-type": "application/json"
+        },
+        "processData": false,
+        "data": JSON.stringify(newMetaData)
+      };
+
+      angular.merge(this._profile, newMetaData);
+
+      $.ajax(settings).done(function (response) {
+        self.updateProfile(response);
+      });
     }
 }
 

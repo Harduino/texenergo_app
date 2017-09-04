@@ -1,11 +1,13 @@
 class DispatchOrdersCtrl {
-    constructor($state, $stateParams, serverApi, funcFactory) {
+    constructor($state, $stateParams, serverApi, funcFactory, authService) {
         let self = this;
         this.state = $state;
         this.serverApi = serverApi;
+        this.authService = authService;
         this.funcFactory = funcFactory;
         this.data = {ordersList:[], searchQuery: $stateParams.q, dispatchableProducts: []};
-        this.isIncomplete = $state.params.status === 'incomplete';
+
+        this.restoreStatusFromSate();
 
         this.visual = {
             navButtsOptions:[
@@ -64,10 +66,34 @@ class DispatchOrdersCtrl {
         };
     }
 
+    restoreStatusFromSate() {
+      let params = this.state.params,
+          userMeta = this.authService.userMetadata,
+          status;
+
+      if(userMeta.hasOwnProperty('dispatchOrders')){
+        status = userMeta.dispatchOrders.status;
+      }
+
+      // restore status from metadata
+      if(status && params.status !== status){
+        params.status = status;
+        this.state.go(this.state.current.name, this.state.params, {reload: true, notify: false});
+      }
+
+      this.isIncomplete = this.state.params.status === 'incomplete';
+    }
+
     reloadState(){
       if(this.isIncomplete){
         this.state.params.status = 'incomplete';
       }else this.state.params.status = undefined;
+
+      this.authService.updateUserMetadata({
+        dispatchOrders: {
+          status: this.state.params.status
+        }
+      });
 
       this.state.go('app.dispatch_orders', this.state.params, {reload:true});
     }
@@ -160,7 +186,13 @@ class DispatchOrdersCtrl {
     }
 }
 
-DispatchOrdersCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
+DispatchOrdersCtrl.$inject = [
+  '$state',
+  '$stateParams',
+  'serverApi',
+  'funcFactory',
+  'authService'
+];
 
 angular.module('app.dispatch_orders').component('dispatchOrders', {
     controller: DispatchOrdersCtrl,

@@ -14,6 +14,11 @@ angular.module('app.incoming_emails', ['ui.router'])
                 id:'',
                 status:''
             },
+            resolve: {
+              profile: function(authService){
+                return authService.profilePromise;
+              }
+            },
             views:{
                 "content@app": {
                     template: '<incoming-emails></incoming-emails>'
