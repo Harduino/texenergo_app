@@ -48,10 +48,7 @@
                 Обработано:
             </p>
             <p class="col-md-9">
-                <a editable-checkbox="$ctrl.incomingEmail.accomplished" onaftersave="$ctrl.saveIncomingEmail()">
-                    {{ $ctrl.incomingEmail.accomplished }}
-                </a>
-                <!-- <te-switcher ng-model="$ctrl.incomingEmail.accomplished"></te-switcher> -->
+                <te-switcher ng-model="$ctrl.incomingEmail.accomplished" ng-change="$ctrl.saveIncomingEmail()"></te-switcher>
             </p>
         </div>
         <div class="row">
