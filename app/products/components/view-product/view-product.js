@@ -46,6 +46,7 @@ class ViewProductCtrl {
 
         if (window.products !== undefined && window.products[$stateParams.id] !== undefined) {
             this.product = window.products[$stateParams.id];
+            this.funcFactory.setPageTitle(this.product.article + " " + this.product.name);
             this.uploader.url = 'https://v2.texenergo.com/api/products/' + this.product.id + '/image?token=' + $localStorage.id_token;
         } else {
             serverApi.getProduct($stateParams.id, r => {
