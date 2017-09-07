@@ -79,14 +79,16 @@ class OrdersToLinks {
     for (let exprName in this.defExpressions){
       html = html.replace(this.defExpressions[exprName].expr, (match) => {
 
+        let number = match.replace(/[\s,]/g, '');
+
         // create object for unique order
-        if (!self.orders[match]) {
-          self.orders[match] = {
+        if (!self.orders[number]) {
+          self.orders[number] = {
             exprName
           };
         }
 
-        return `<a class="link-to-order" number="${match}">${match}</a>`;
+        return `<a class="link-to-order" number="${number}">${match}</a>`;
       });
     }
 
@@ -126,7 +128,7 @@ class OrdersToLinks {
       let order = this.orders[number];
 
       order.promise = this.defExpressions[order.exprName]
-      .apiMethod(1, number.replace(/[\s,]/g, ''), {});
+      .apiMethod(1, number, {});
     }
   }
 
