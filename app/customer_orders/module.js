@@ -36,6 +36,11 @@
                     params:'CustomerOrder'
                 }
             },
+            resolve: {
+              profile: function(authService){
+                return authService.profilePromise;
+              }
+            },
             views:{
                 "content@app":{
                     template: '<view-customer-order></view-customer-order>'

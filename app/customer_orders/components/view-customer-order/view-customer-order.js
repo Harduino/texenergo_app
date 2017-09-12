@@ -1,5 +1,6 @@
 class ViewCustomerOrderCtrl {
-    constructor($state, $stateParams, serverApi, funcFactory, $filter, $parse, $timeout, $uibModal, $localStorage) {
+    constructor($state, $stateParams, serverApi, funcFactory, $filter, $parse,
+      $timeout, $uibModal, $localStorage, authService) {
         let self = this;
 
         this.serverApi = serverApi;
@@ -11,6 +12,7 @@ class ViewCustomerOrderCtrl {
         this.$stateParams = $stateParams;
         this.$filter = $filter;
         this.$localStorage = $localStorage;
+        this.authService = authService;
         this.selectedProduct = null;
         this.upsaleSuggestions = [];
         this.showUpsale = true; // show upsale items for default
@@ -153,6 +155,7 @@ class ViewCustomerOrderCtrl {
             slide: (event, ui) => self.data.networkConfig.zoom = ui.value
         };
 
+        this.restoreVisualParams();
         this.getOrderDetails();
         this.$onDestroy = () => self._subscription && self._subscription.unsubscribe();
     }
@@ -464,6 +467,29 @@ class ViewCustomerOrderCtrl {
     }
 
     /**
+    * @description Восстанавливаем визуальные настройки из Auth0
+    */
+    restoreVisualParams() {
+      let userMetadata = this.authService.userMetadata;
+
+      if(userMetadata.hasOwnProperty('viewCustomerOrder')){
+        this.showUpsale = userMetadata.viewCustomerOrder.showUpsale;
+      }
+    }
+
+    /**
+    * @description Сохраняем состояние переключателя upsale в Auth0
+    */
+    changeUpsaleVisibility() {
+
+      this.authService.updateUserMetadata({
+        viewCustomerOrder: {
+          showUpsale: this.showUpsale
+        }
+      });
+    }
+
+    /**
     * @description Формируем список предложений upsale
     * @param {Object} position позиция заказа
     */
@@ -496,7 +522,18 @@ class ViewCustomerOrderCtrl {
     }
 }
 
-ViewCustomerOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', '$filter', '$parse', '$timeout', '$uibModal', '$localStorage'];
+ViewCustomerOrderCtrl.$inject = [
+  '$state',
+  '$stateParams',
+  'serverApi',
+  'funcFactory',
+  '$filter',
+  '$parse',
+  '$timeout',
+  '$uibModal',
+  '$localStorage',
+  'authService'
+];
 
 angular.module('app.customer_orders').component('viewCustomerOrder', {
     controller: ViewCustomerOrderCtrl,

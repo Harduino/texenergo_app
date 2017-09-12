@@ -190,7 +190,7 @@
                   on-select="$ctrl.selectProductForAppend()">
               </ui-select-infinity>
               <div class="search-toggle">
-                <te-switcher ng-model="$ctrl.showUpsale"></te-switcher>
+                <te-switcher ng-model="$ctrl.showUpsale" ng-change="$ctrl.changeUpsaleVisibility()"></te-switcher>
                 <span>Предложения</span>
               </div>
             </div>
