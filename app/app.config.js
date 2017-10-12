@@ -76,10 +76,14 @@
                 },
                 responseError: function (rejection) {
                     console.log(rejection);
+                    setInload(false);
+
                     var s = rejection.status;
+
                     if(s == 401) $location.path('sign_in');
                     else if (s == 403) notifyError({status: "Ошибка", statusText: 'Не достаточно прав!'});
                     else s !==-1 && notifyError(rejection);
+
                     return $q.reject(rejection);
                 }
             };
