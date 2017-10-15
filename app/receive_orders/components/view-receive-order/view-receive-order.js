@@ -45,8 +45,8 @@ class ViewReceiveOrderCtrl {
                 self.funcFactory.setPageTitle('Поступление ' + self.receiveOrder.number);
                 // Queries and returns all yet unreceived products.
                 serverApi.getUnreceivedProducts($stateParams.id, '', {}, r => {
-                  self.unreceivedProducts = r.data;
-                  callback();
+                    self.unreceivedProducts = r.data;
+                    if (callback !== undefined) callback();
                 });
             });
         }
@@ -180,14 +180,13 @@ class ViewReceiveOrderCtrl {
     }
 
     calculateTotal(array, summFn) {
-      let self = this,
-          total = 0;
+        let total = 0;
 
-      for(let item of array){
-        total += summFn ? summFn(item) : item.total;
-      }
+        for(let item of array){
+            total += summFn ? summFn(item) : item.total;
+        }
 
-      return total;
+        return total;
     }
 
     calculateProductOrderContents() {

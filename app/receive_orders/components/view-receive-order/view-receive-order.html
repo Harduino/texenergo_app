@@ -108,7 +108,7 @@
                         <span ng-if="!$ctrl.receiveOrder.can_edit">{{ item.quantity || 0}}</span>
                     </td>
                     <td class="text-right">
-                        <a ng-if="$ctrl.receiveOrder.can_edit" editable-text="item.total" buttons="no"
+                        <a ng-if="$ctrl.receiveOrder.can_edit" editable-number="item.total" e-step="any" buttons="no"
                            onaftersave="$ctrl.updateContentsProduct({data:item, index:$index})">
                             {{ (item.total || 0) | currency}}
                         </a>
