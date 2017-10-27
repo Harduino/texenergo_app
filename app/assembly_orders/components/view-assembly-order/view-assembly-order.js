@@ -1,6 +1,6 @@
-class ViewManufacturerOrderCtrl {
+class ViewAssemblyOrderCtrl {
     constructor($state, $stateParams, serverApi, funcFactory) {
-        this.manufacturerOrder = {};
+        this.assemblyOrder = {};
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
 
         this.$state = $state;
@@ -12,11 +12,11 @@ class ViewManufacturerOrderCtrl {
         this.inStockProducts = []; // Stores as of yet unreceived products
 
         let self = this;
-        let getManufacturerOrderDetails = (subData, button, $event) => {
+        let getAssemblyOrderDetails = (subData, button, $event) => {
           if(button) button.disableOnLoad(true, $event);
-          serverApi.getManufacturerOrderDetails($stateParams.id, (res) => {
+          serverApi.getAssemblyOrderDetails($stateParams.id, (res) => {
             button && button.disableOnLoad(false, $event);
-            self.manufacturerOrder = res.data;
+            self.assemblyOrder = res.data;
             this.funcFactory.setPageTitle("Выписка из производства " + res.data.email);
             serverApi.getInStockProducts(r => {
               self.inStockProducts = r.data
@@ -28,8 +28,8 @@ class ViewManufacturerOrderCtrl {
 
         this.visual = {
             navButtsOptions:[
-                {type:'back', callback: () => $state.go('app.manufacturer_orders', {})},
-                {type:'refresh', callback: getManufacturerOrderDetails}
+                {type:'back', callback: () => $state.go('app.assembly_orders', {})},
+                {type:'refresh', callback: getAssemblyOrderDetails}
             ],
             chartOptions: {barColor:'rgb(103,135,155)', scaleColor:false, lineWidth:5, lineCap:'circle', size:50},
             titles: 'Выписка из производства: ',
@@ -39,7 +39,7 @@ class ViewManufacturerOrderCtrl {
                     disabled: false,
                     callback: (item, button, $event) => {
                       button.disableOnLoad(true, $event);
-                      serverApi.deleteManufacturerOrderContent(self.manufacturerOrder.id, item.data.id,
+                      serverApi.deleteAssemblyOrderContent(self.assemblyOrder.id, item.data.id,
                         (res) => {
                           button.disableOnLoad(false, $event);
                           self.getRemovePositionHandler(item.data)(res);
@@ -51,23 +51,23 @@ class ViewManufacturerOrderCtrl {
             ]
         };
 
-        getManufacturerOrderDetails();
+        getAssemblyOrderDetails();
 
         this.funcFactory.setPageTitle("Контакт");
     }
 
-    saveManufacturerOrder() {
+    saveAssemblyOrder() {
         let self = this;
-        let manufacturerOrder = self.manufacturerOrder;
+        let assemblyOrder = self.assemblyOrder;
         let data = {
             assembly_order: {
-                number: manufacturerOrder.number
+                number: assemblyOrder.number
             }
         };
 
-        this.serverApi.updateManufacturerOrder(manufacturerOrder.id, data, res => {
+        this.serverApi.updateAssemblyOrder(assemblyOrder.id, data, res => {
             if(!res.data.errors) {
-                self.manufacturerOrder = res.data;
+                self.assemblyOrder = res.data;
                 self.funcFactory.showNotification("Успешно", 'Успешно отредактирован.', true);
             } else {
                 self.funcFactory.showNotification('Не удалось отредактировать', res.data.errors);
@@ -76,7 +76,7 @@ class ViewManufacturerOrderCtrl {
     }
 
     goToPartner() {
-        this.$state.go('app.partners.view', {id: (this.manufacturerOrder.partner.id || this.manufacturerOrder.partner._id)})
+        this.$state.go('app.partners.view', {id: (this.assemblyOrder.partner.id || this.assemblyOrder.partner._id)})
     }
 
     // Reset the product we are about to add;
@@ -98,10 +98,10 @@ class ViewManufacturerOrderCtrl {
               quantity: data.quantity
           };
 
-          this.serverApi.createManufacturerOrderContent(this.manufacturerOrder.id, post, result => {
+          this.serverApi.createAssemblyOrderContent(this.assemblyOrder.id, post, result => {
               if(!result.data.errors) {
                   self.funcFactory.showNotification('Успешно', 'Продукт ' + data.product.name + ' успешно добвален', true);
-                  self.manufacturerOrder.contents.push(angular.extend(data, result.data));
+                  self.assemblyOrder.contents.push(angular.extend(data, result.data));
                   // self.calculateProductOrderContents();
                   self.clearProductForAppend();
 
@@ -166,9 +166,9 @@ class ViewManufacturerOrderCtrl {
             if(res.data.errors) {
                 self.funcFactory.showNotification('Не удалось удалить продукт', res.data.errors);
             } else {
-                self.manufacturerOrder.contents.forEach( (row, index) => {
+                self.assemblyOrder.contents.forEach( (row, index) => {
                     if(row.id === item.id) {
-                        self.manufacturerOrder.contents.splice(index, 1);
+                        self.assemblyOrder.contents.splice(index, 1);
                         self.funcFactory.showNotification('Продукт удален:', item.product.name, true);
                         return;
                     }
@@ -179,7 +179,7 @@ class ViewManufacturerOrderCtrl {
 
     // Обовляем у уже добавленного красного товара количество.
     // Сервер ответит либо новым количеством и новым итого, либо [если почему-то нельзя менять] старыми.
-    updateManufacturerOrderComponent (item) {
+    updateAssemblyOrderComponent (item) {
         let self = this;
         let data = {
             assembly_order_content: {
@@ -187,7 +187,7 @@ class ViewManufacturerOrderCtrl {
             }
         }
 
-        self.serverApi.updateManufacturerOrderContent(self.manufacturerOrder.id, item.id, data, result => {
+        self.serverApi.updateAssemblyOrderContent(self.assemblyOrder.id, item.id, data, result => {
             if(!result.data.errors) {
                 self.funcFactory.showNotification('Успешно', 'Продукт ' + item.product.name + ' успешно обновлен', true);
                 item.quantity = result.data.quantity;
@@ -200,10 +200,10 @@ class ViewManufacturerOrderCtrl {
     }
 }
 
-ViewManufacturerOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
+ViewAssemblyOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
 
-angular.module('app.manufacturer_orders').component('viewManufacturerOrder', {
-    controller: ViewManufacturerOrderCtrl,
+angular.module('app.assembly_orders').component('viewAssemblyOrder', {
+    controller: ViewAssemblyOrderCtrl,
     controllerAs: '$ctrl',
-    templateUrl: '/app/manufacturer_orders/components/view-manufacturer-order/view-manufacturer-order.html'
+    templateUrl: '/app/assembly_orders/components/view-assembly-order/view-assembly-order.html'
 });

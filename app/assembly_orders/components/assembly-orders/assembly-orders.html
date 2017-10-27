@@ -6,9 +6,9 @@
     <div class="well">
         <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
         <hr>
-        <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.manufacturer_orders"></orders-filter>
-        <lazy-loaded-list view="app/manufacturer_orders/components/manufacturer-orders/partials/list.html"
-                          api-method="getManufacturerOrders" items="$ctrl.data.ordersList"
+        <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.assembly_orders"></orders-filter>
+        <lazy-loaded-list view="app/assembly_orders/components/assembly-orders/partials/list.html"
+                          api-method="getAssemblyOrders" items="$ctrl.data.ordersList"
                           nav-options="$ctrl.visual.navTableButts" search-query="$ctrl.data.searchQuery">
         </lazy-loaded-list>
         <te-scroll-top></te-scroll-top>

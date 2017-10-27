@@ -443,33 +443,32 @@
         };
 
         // Чего тут у нас производство производит
-        o.getManufacturerOrders = (page, query, config, success, fail) => {
-            console.log("getManufacturerOrders");
+        o.getAssemblyOrders = (page, query, config, success, fail) => {
             var path = '/assembly_orders?page='+page + (query ? ('&q=' + query) : '');
             $http.get(path, config).then(success, fail);
         }
-        o.createManufacturerOrder = (data, success, fail) => {
+        o.createAssemblyOrder = (data, success, fail) => {
             $http.post('/assembly_orders/', data).then(success, fail);
         };
-        o.deleteManufacturerOrder = (assembly_order_id, success, fail) => {
+        o.deleteAssemblyOrder = (assembly_order_id, success, fail) => {
             $http.delete('/assembly_orders/' + assembly_order_id).then(success, fail);
         };
-        o.getManufacturerOrderDetails = (assembly_order_id, success, fail) => {
+        o.getAssemblyOrderDetails = (assembly_order_id, success, fail) => {
             $http.get('/assembly_orders/' + assembly_order_id).then(success, fail);
         };
-        o.updateManufacturerOrder = function(assembly_order_id, data, success, fail){
+        o.updateAssemblyOrder = function(assembly_order_id, data, success, fail){
             $http.put('/assembly_orders/' + assembly_order_id, data).then(success, fail);
         };
         o.getInStockProducts = (success, fail) => {
             $http.get('/assembly_orders/in_stock').then(success, fail);
         };
-        o.createManufacturerOrderContent = (assembly_order_id, data, success, fail) => {
+        o.createAssemblyOrderContent = (assembly_order_id, data, success, fail) => {
             $http.post('/assembly_orders/' + assembly_order_id + '/assembly_order_contents', data).then(success, fail);
         };
-        o.updateManufacturerOrderContent = function(assembly_order_id, content_id, data, success, fail){
+        o.updateAssemblyOrderContent = function(assembly_order_id, content_id, data, success, fail){
             $http.put('/assembly_orders/' + assembly_order_id + '/assembly_order_contents/' + content_id, data).then(success, fail)
         };
-        o.deleteManufacturerOrderContent = function(assembly_order_id, content_id, success, fail){
+        o.deleteAssemblyOrderContent = function(assembly_order_id, content_id, success, fail){
             $http.delete('/assembly_orders/' + assembly_order_id + '/assembly_order_contents/' + content_id).then(success, fail)
         };
 

@@ -237,13 +237,18 @@
                                     </a>
                                 </span>
                                 <span ng-switch-when="AssemblyOrder">
-                                    <a href="/#/manufacturer_orders/{{item.document.id}}">
+                                    <a href="/#/assembly_orders/{{item.document.id}}">
                                         {{ item.document.number }}    
                                     </a>
                                 </span>
                                 <span ng-switch-when="ReceiveOrder">
                                     <a href="/#/receive_orders/{{item.document.id}}">
                                         {{ item.document.number }}    
+                                    </a>
+                                </span>
+                                <span ng-switch-when="Partner">
+                                    <a href="/#/partners/{{item.document.id}}">
+                                        {{ item.document.prefix }}
                                     </a>
                                 </span>
                                 <span ng-switch-default>

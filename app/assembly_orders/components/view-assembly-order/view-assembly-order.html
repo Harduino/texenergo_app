@@ -1,7 +1,7 @@
-<div id="content" ng-switch="$ctrl.manufacturerOrder.can_edit">
+<div id="content" ng-switch="$ctrl.assemblyOrder.can_edit">
     <div class="well well-white">
         <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">
-            {{$ctrl.visual.titles + $ctrl.manufacturerOrder.number}}
+            {{$ctrl.visual.titles + $ctrl.assemblyOrder.number}}
         </h2>
         <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group margin-top-10">
         </form-nav-buttons>
@@ -9,25 +9,25 @@
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Номер:</p>
             <p class="col-md-9" ng-switch-when="true">
-                <a editable-text="$ctrl.manufacturerOrder.number" buttons="no" onaftersave="$ctrl.saveManufacturerOrder()">
-                    {{$ctrl.manufacturerOrder.number || 'Нет'}}
+                <a editable-text="$ctrl.assemblyOrder.number" buttons="no" onaftersave="$ctrl.saveAssemblyOrder()">
+                    {{$ctrl.assemblyOrder.number || 'Нет'}}
                 </a>
             </p>
-            <p ng-switch-default class="col-md-9">{{$ctrl.manufacturerOrder.number}}</p>
+            <p ng-switch-default class="col-md-9">{{$ctrl.assemblyOrder.number}}</p>
         </div>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Статус:</p>
-            <p class="col-md-9">{{ $ctrl.manufacturerOrder.status }}</p>
+            <p class="col-md-9">{{ $ctrl.assemblyOrder.status }}</p>
         </div>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Дата:</p>
-            <p class="col-md-9">{{ $ctrl.manufacturerOrder.date | date:'dd MMMM yy' }}</p>
+            <p class="col-md-9">{{ $ctrl.assemblyOrder.date | date:'dd MMMM yy' }}</p>
         </div>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Партнёр:</p>
             <p class="col-md-9">
-                <a href="/#/partners/{{ $ctrl.manufacturerOrder.partner.id }}">
-                    {{ $ctrl.manufacturerOrder.partner.name}}
+                <a href="/#/partners/{{ $ctrl.assemblyOrder.partner.id }}">
+                    {{ $ctrl.assemblyOrder.partner.name}}
                 </a>
             </p>
         </div>
@@ -43,7 +43,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-if="$ctrl.manufacturerOrder.can_edit">
+                <tr ng-if="$ctrl.assemblyOrder.can_edit">
                     <td>
                         <input class="form-control" ng-model="$ctrl.addableProduct.product.name" id="vro_prod_select"
                                placeholder="Поисковый запрос" type="text" ng-change="$ctrl.productSearch()" ng-keypress="$ctrl.addProduct($event)">
@@ -67,15 +67,15 @@
                         </div>
                     </td>
                 </tr>
-                <tr ng-repeat='item in $ctrl.manufacturerOrder.contents'>
+                <tr ng-repeat='item in $ctrl.assemblyOrder.contents'>
                     <td>
                         <a href="/#/products/{{ item.product.id }}">
                             {{ item.product.name }} {{ item.product.article !== "" ? ( "(" + item.product.article  + ")" ) : "" }}
                         </a>
                     </td>
-                    <td ng-switch="$ctrl.manufacturerOrder.can_edit" ng-class="item.quantity >= 0 ? 'success' : 'danger'">
+                    <td ng-switch="$ctrl.assemblyOrder.can_edit" ng-class="item.quantity >= 0 ? 'success' : 'danger'">
                         <p class="col-md-9" ng-switch-when="true">
-                            <a editable-number="item.quantity" buttons="no" onaftersave="$ctrl.updateManufacturerOrderComponent(item)">
+                            <a editable-number="item.quantity" buttons="no" onaftersave="$ctrl.updateAssemblyOrderComponent(item)">
                                 {{ item.quantity || 'Нет' }}
                             </a>
                         </p>

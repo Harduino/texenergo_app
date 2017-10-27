@@ -1,4 +1,4 @@
-class ManufacturerOrdersCtrl {
+class AssemblyOrdersCtrl {
   constructor($state, $stateParams, serverApi, funcFactory, $uibModal) {
     let self = this;
     this.serverApi = serverApi;
@@ -15,13 +15,12 @@ class ManufacturerOrdersCtrl {
         },
         {
           type: 'refresh',
-          callback: () => $state.go('app.manufacturer_orders', {}, {reload: true})
+          callback: () => $state.go('app.assembly_orders', {}, {reload: true})
         }
       ],
       navTableButts: [
-        {type: 'view', callback: (data) => $state.go('app.manufacturer_orders.view', {id: data.id || data._id})},
+        {type: 'view', callback: (data) => $state.go('app.assembly_orders.view', {id: data.id || data._id})},
         {type: 'remove', callback: (item, button, $event) => {
-          console.log("item", item);
           $.SmartMessageBox({
             title: 'Удалить?',
             content: 'Вы действительно хотите удалить ' + item.number,
@@ -29,7 +28,7 @@ class ManufacturerOrdersCtrl {
           }, ButtonPressed => {
             if (ButtonPressed === 'Да') {
               button.disableOnLoad(true, $event);
-              serverApi.deleteManufacturerOrder(item.id, result => {
+              serverApi.deleteAssemblyOrder(item.id, result => {
                 button.disableOnLoad(false, $event);
                 if(!result.data.errors){
                   self.data.ordersList.splice(item.index,1);
@@ -54,8 +53,8 @@ class ManufacturerOrdersCtrl {
     let self = this;
 
     this.$uibModal.open({
-      templateUrl: 'app/manufacturer_orders/components/create-manufacturer-order/create-manufacturer-order.html',
-      controller: 'CreateManufacturerOrderCtrl',
+      templateUrl: 'app/assembly_orders/components/create-assembly-order/create-assembly-order.html',
+      controller: 'CreateAssemblyOrderCtrl',
       controllerAs: '$ctrl',
       resolve: {
         partner: undefined
@@ -79,8 +78,8 @@ ContactsCtrl.$inject = [
   '$uibModal'
 ];
 
-angular.module('app.manufacturer_orders').component('manufacturerOrders', {
-    controller: ManufacturerOrdersCtrl,
+angular.module('app.assembly_orders').component('assemblyOrders', {
+    controller: AssemblyOrdersCtrl,
     controllerAs: '$ctrl',
-    templateUrl: '/app/manufacturer_orders/components/manufacturer-orders/manufacturer-orders.html'
+    templateUrl: '/app/assembly_orders/components/assembly-orders/assembly-orders.html'
 });

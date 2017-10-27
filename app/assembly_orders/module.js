@@ -6,16 +6,16 @@
 
     "use strict";
 
-    var module = angular.module('app.manufacturer_orders', ['ui.router', 'easypiechart']);
+    var module = angular.module('app.assembly_orders', ['ui.router', 'easypiechart']);
 
     module.config(function ($stateProvider) {
-        $stateProvider.state('app.manufacturer_orders', {
-            url: '/manufacturer_orders?q',
+        $stateProvider.state('app.assembly_orders', {
+            url: '/assembly_orders?q',
             data:{
                 title: 'Выпуски с производства',
                 access:{
                     action:'index',
-                    params:'ManufacturerOrder'
+                    params:'AssemblyOrder'
                 }
             },
             params:{
@@ -24,21 +24,21 @@
             },
             views:{
                 "content@app": {
-                    template: '<manufacturer-orders></manufacturer-orders>'
+                    template: '<assembly-orders></assembly-orders>'
                 }
             }
-        }).state('app.manufacturer_orders.view', {
+        }).state('app.assembly_orders.view', {
             url: '/:id',
             data:{
                 title: 'Выпуск с производства',
                 access:{
                     action:'read',
-                    params:'ManufacturerOrder'
+                    params:'AssemblyOrder'
                 }
             },
             views:{
                 "content@app":{
-                    template: '<view-manufacturer-order></view-manufacturer-order>'
+                    template: '<view-assembly-order></view-assembly-order>'
                 }
             }
         });
