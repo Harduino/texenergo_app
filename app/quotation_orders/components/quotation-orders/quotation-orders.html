@@ -1,0 +1,61 @@
+<div id="content">
+    <div class="row">
+        <big-breadcrumbs items="$ctrl.visual.titles" class="col-xs-12 col-sm-7 col-md-7 col-lg-4" data-icon="edit">
+        </big-breadcrumbs>
+    </div>
+    <div class="well">
+        <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
+        <hr>
+        <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.quotation_orders">
+        </orders-filter>
+        <lazy-loaded-list view="app/quotation_orders/components/quotation-orders/partials/list.html"
+                          api-method="getQuotationOrders" items="$ctrl.data.ordersList" role="$ctrl.visual.role"
+                          nav-options="$ctrl.visual.navTableButts" search-query="$ctrl.data.searchQuery">
+        </lazy-loaded-list>
+        <te-scroll-top></te-scroll-top>
+    </div>
+    <div class="modal fade" id="createNewQuotationOrderModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">Создать новый рассчёт</h4>
+                </div>
+                <div class="modal-body">
+                    <section class="form-group">
+                        <label class="control-label">Партнер</label>
+                        <span>
+                            <ui-select-infinity config="$ctrl.partnerSelectConfig" ng-model="$ctrl.newOrderData.partner"
+                                                view="app/quotation_orders/components/quotation-orders/partials/ui-select-infinity.html">
+                            </ui-select-infinity>
+                        </span>
+                    </section>
+                    <section class="form-group">
+                        <te-jq-datepicker ng-model="$ctrl.newOrderData.date" label="Дата"></te-jq-datepicker>
+                    </section>
+                    <section class="form-group">
+                        <label class="control-label" for="new-order-number">Номер накладной</label>
+                        <input type="text" ng-model="$ctrl.newOrderData.number" class="input-sm form-control"
+                               id="new-order-number">
+                    </section>
+                    <section class="form-group">
+                        <label class="control-label" for="new-order-vat-code">Номер счёт-фактуры</label>
+                        <input type="text" ng-model="$ctrl.newOrderData.vat_code" class="input-sm form-control"
+                               id="new-order-vat-code">
+                    </section>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" ng-click="$ctrl.clearCreateOrder()"
+                            type="button">
+                        Отмена
+                    </button>
+                    <button class="btn btn-primary" data-dismiss="modal" ng-click="$ctrl.addNewOrder()" type="button">
+                        Сохранить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

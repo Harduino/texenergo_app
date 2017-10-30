@@ -70,7 +70,7 @@ class AssemblyOrdersCtrl {
   }
 }
 
-ContactsCtrl.$inject = [
+AssemblyOrdersCtrl.$inject = [
   '$state',
   '$stateParams',
   'serverApi',

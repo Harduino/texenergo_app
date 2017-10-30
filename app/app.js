@@ -57,6 +57,7 @@ appConfig.sound_on = true;
         'te.infinity.scroll',
         'teBuffer',
         'angularFileUpload',
+        'xeditable',
 
         //Auth0
         'auth0.lock',

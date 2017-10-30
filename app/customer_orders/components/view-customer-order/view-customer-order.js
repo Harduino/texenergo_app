@@ -127,13 +127,13 @@ class ViewCustomerOrderCtrl {
                     type: 'remove',
                     disabled: false,
                     callback: (item, button, $event) => {
-                      button.disableOnLoad(true, $event);
-                      serverApi.removeCustomerOrderProduct(self.order.id, item.data.id,
-                        (res) => {
-                          button.disableOnLoad(false, $event);
-                          self.getRemovePositionHandler(item.data)(res);
-                        }, () => {
-                          button.disableOnLoad(false, $event);
+                        button.disableOnLoad(true, $event);
+                        serverApi.removeCustomerOrderProduct(self.order.id, item.data.id,
+                            (res) => {
+                                button.disableOnLoad(false, $event);
+                                self.getRemovePositionHandler(item.data)(res);
+                            }, () => {
+                                button.disableOnLoad(false, $event);
                         });
                     }
                 }
@@ -160,6 +160,16 @@ class ViewCustomerOrderCtrl {
         this.$onDestroy = () => self._subscription && self._subscription.unsubscribe();
     }
 
+    removeCustomerOrderProduct (item) {
+        let self = this;
+
+        self.serverApi.removeCustomerOrderProduct(self.order.id, item.id,
+            (res) => {
+                self.getRemovePositionHandler(item)(res);
+            }
+        );
+    }
+
     sendOrder (recipient){
       let self = this;
       let data = null;
@@ -172,6 +182,7 @@ class ViewCustomerOrderCtrl {
         };
       }
 
+
       self.serverApi.sendCustomerOrderInvoice(self.$stateParams.id, data, result => {
           if(result.status == 200 && !result.data.errors) {
               self.funcFactory.showNotification('Успешно', 'Заказ успешно отправлен.', true);
@@ -180,9 +191,7 @@ class ViewCustomerOrderCtrl {
           } else {
               self.funcFactory.showNotification('Неудача', 'Ошибка при попытке отправить заказ.', true);
           }
-          // button.disableOnLoad(false, $event);
       }, result => {
-        // button.disableOnLoad(false, $event);
       });
     }
 
@@ -221,11 +230,19 @@ class ViewCustomerOrderCtrl {
     }
 
     saveProductChange (data) {
-        let product = data.item;
+        let row = data.item;
 
-        this.serverApi.updateCustomerOrderProduct(this.order.id, product.id, {
-            quantity: product.quantity,
-            discount: product.discount
+        this.serverApi.updateCustomerOrderProduct(this.order.id, row.id, {
+            quantity: row.quantity,
+            discount: row.discount
+        }, this.processUpdateCustomerDataResponse.bind(this));
+    }
+
+    cancelProductQuantity (row) {
+        let self = this;
+
+        self.serverApi.updateCustomerOrderProduct(this.order.id, row.id, {
+            quantity: (row.quantity - row.cancellable_quantity)
         }, this.processUpdateCustomerDataResponse.bind(this));
     }
 

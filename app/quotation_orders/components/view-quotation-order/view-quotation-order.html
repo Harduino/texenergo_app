@@ -1,0 +1,187 @@
+<div id="content">
+    <div class="well well-white">
+        <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">
+            Поступление: {{ $ctrl.quotationOrder.number }}
+        </h2>
+        <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group margin-top-10">
+        </form-nav-buttons>
+        <hr>
+        <div class="row margin-top-10">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Номер накладной:
+            </p>
+            <p class="col-md-9">{{ $ctrl.quotationOrder.number }}</p>
+        </div>
+        <div class="row margin-top-10">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Номер счёт-фактуры:
+            </p>
+            <p class="col-md-9">{{ $ctrl.quotationOrder.vat_code }}</p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Дата:
+            </p>
+            <p class="col-md-9">{{ $ctrl.quotationOrder.date | date:'dd MMMM yy' }}</p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Партнёр:
+            </p>
+            <p class="col-md-9">
+                <a ui-sref="app.partners.view({id: $ctrl.quotationOrder.partner.id })">
+                    {{ $ctrl.quotationOrder.partner.name }}
+                </a>
+            </p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Статус:
+            </p>
+            <p class="col-md-9">{{ $ctrl.quotationOrder.status }}</p>
+        </div>
+    </div>
+
+    <div class="well well-white">
+        <table class="table table-bordered margin-top-10">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Наименование</th>
+                    <th>Кол-во</th>
+                    <th>Итого</th>
+                    <th>ГТД/Страна</th>
+                    <th>Заказ</th>
+                    <th ng-if="$ctrl.quotationOrder.can_edit"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-if="$ctrl.quotationOrder.can_edit">
+                    <td></td>
+                    <td>
+                        <input class="form-control" ng-model="$ctrl.addableProduct.product.name" id="vro_prod_select"
+                               placeholder="Поисковый запрос" type="text" ng-change="$ctrl.productSearch()">
+                        <div style="position: absolute; background: white; border: 1px solid; padding: 5px;"
+                             ng-show="$ctrl.searchProductsList.length">
+                            <p ng-repeat='item in $ctrl.searchProductsList' ng-click="$ctrl.setAddableProduct(item)">
+                                {{ item.product.name }}
+                            </p>
+                        </div>
+                    </td>
+                    <td>
+                        <input class="form-control table-input" ng-model="$ctrl.addableProduct.quantity" type="text"
+                               model-filter="{min:0}" filter-name="te_number" ng-keypress="$ctrl.addProduct($event)">
+                    </td>
+                    <td>
+                        <input class="form-control table-input" ng-model="$ctrl.addableProduct.total" type="text"
+                               model-filter="{min:0, number:true}" filter-name="te_number"
+                               ng-keypress="$ctrl.addProduct($event)">
+                    </td>
+                    <td>
+                        <div class="display-flex" style="align-items: center;">
+                            <input class="form-control table-input" ng-model="$ctrl.addableProduct.gtd" type="text"
+                                   placeholder="ГТД" ng-keypress="$ctrl.addProduct($event)">
+                            &nbsp;/&nbsp;
+                            <input class="form-control table-input" ng-model="$ctrl.addableProduct.country" type="text"
+                                   placeholder="Страна" ng-keypress="$ctrl.addProduct($event)">
+                        </div>
+                    </td>
+                    <td>{{$ctrl.addableProduct.supplier_order.number || 'не указан'}}</td>
+                    <td class="center-item-text">
+                        <div ng-click="$ctrl.addProduct()" class="btn btn-success">
+                            <i class="fa fa-plus"></i>
+                        </div>
+                    </td>
+                </tr>
+                <tr ng-repeat="item in $ctrl.quotationOrder.product_order_contents" class="order-items">
+                    <td>{{ $index + 1 }}</td>
+                    <td>
+                        <a ng-href="#/products/{{ item.product.id }}">
+                            {{ item.product.name }} ({{ item.product.article }})
+                        </a>
+                    </td>
+                    <td>
+                        <a ng-if="$ctrl.quotationOrder.can_edit" editable-number="item.quantity"
+                           onaftersave="$ctrl.updateContentsProduct({data:item, index:$index})" e-min="0" buttons="no">
+                            {{ item.quantity }}
+                        </a>
+                        <span ng-if="!$ctrl.quotationOrder.can_edit">{{ item.quantity || 0}}</span>
+                    </td>
+                    <td class="text-right">
+                        <a ng-if="$ctrl.quotationOrder.can_edit" editable-number="item.total" e-step="any" buttons="no"
+                           onaftersave="$ctrl.updateContentsProduct({data:item, index:$index})">
+                            {{ (item.total || 0) | currency}}
+                        </a>
+                        <span ng-if="!$ctrl.quotationOrder.can_edit">{{ item.total | currency }}</span>
+                    </td>
+                    <td>
+                        <span ng-if="$ctrl.quotationOrder.can_edit">
+                            <a editable-text="item.gtd" buttons="no"
+                               onaftersave="$ctrl.updateContentsProduct({data:item, index:$index})">
+                                {{ item.gtd || 'Пусто'}}
+                            </a>
+                            <span>&nbsp; / &nbsp;</span>
+                            <a editable-text="item.country" buttons="no"
+                               onaftersave="$ctrl.updateContentsProduct({data:item, index:$index})">
+                                {{ item.country || 'Пусто'}}
+                            </a>
+                        </span>
+                        <span ng-if="item.gtd && !$ctrl.quotationOrder.can_edit">
+                            {{ item.gtd + ' / ' + item.country }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="/#/supplier_orders/{{item.supplier_order.id}}">
+                            {{ item.supplier_order.number }}
+                        </a>
+                    </td>
+                    <td ng-if="$ctrl.quotationOrder.can_edit">
+                        <div ng-click="$ctrl.deleteProduct(item)" class="btn btn-danger">
+                            <i class="fa fa-trash-o"></i>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-right">Итого:</td>
+                    <td>{{ $ctrl.quotationOrder.total | currency }}</td>
+                    <td colspan="2"></td>
+                    <td ng-if="$ctrl.quotationOrder.can_edit"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="well well-white">
+        <table class="table table-bordered margin-top-10">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Кол-во</th>
+                    <th>Итого</th>
+                    <th>Заказ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in $ctrl.unreceivedProducts" ng-click="$ctrl.setAddableProduct(item)">
+                    <td>
+                        <a ng-href="#/products/{{ item.product.id }}">
+                            {{ item.product.name }} ({{ item.product.article }})
+                        </a>
+                    </td>
+                    <td>{{ item.unreceived }}</td>
+                    <td>{{ item.total / item.quantity * item.unreceived | currency }}</td>
+                    <td>
+                        <a href="/#/supplier_orders/{{item.supplier_order.id}}">
+                            {{ item.supplier_order.number }}
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-right">Итого:</td>
+                    <td>{{ $ctrl.unreceivedProducts.total | currency }}</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

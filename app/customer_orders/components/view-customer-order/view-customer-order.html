@@ -318,11 +318,19 @@
                             <td class="text-right">{{ item | price_net : item.quantity | currency}}</td>
                             <!-- <td class="success" ng-class="{'warning': item.remains > 0}"> -->
                             <td ng-class="($ctrl.order.status !== 'Не подтвержден') ? (item.remains > 0 ? 'warning' : 'success') : ''">
-                                <form-nav-buttons ng-if="item.can_destroy" class="btn-group"
+                                <!-- Случай когда нельзя удалить, например, услугу отгрузки частями -->
+                                <form-nav-buttons ng-if="($ctrl.order.status === 'Не подтвержден') && item.can_destroy" class="btn-group"
                                                   subdata="{data:item, index:$index}" data-template="table"
                                                   data-options="$ctrl.visual.navTableButts" data-role="item"
                                                   content-class="btn btn-xs">
                                 </form-nav-buttons>
+                                <!-- Случай когда можно что-то отменить в подтверждённом заказе -->
+                                <span ng-if="($ctrl.order.status === 'Подтвержден') && item.can_edit && !item.can_destroy" ng-click="$ctrl.cancelProductQuantity(item)">
+                                    /Уменьшить количество на {{ item.cancellable_quantity }} ед./
+                                </span>
+                                <span ng-if="($ctrl.order.status === 'Подтвержден') && item.can_destroy" ng-click="$ctrl.removeCustomerOrderProduct(item)">
+                                    Отменить строку
+                                </span>
                                 <span ng-hide="$ctrl.order.status === 'Не подтвержден'">
                                     {{ item.remains }}
                                 </span>

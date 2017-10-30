@@ -1,0 +1,28 @@
+<table class="table table-bordered table-margined-top" infinite-scroll="$ctrl.loadItems()">
+    <thead>
+    <tr>
+        <th class="hidden-xs">№</th>
+        <th>Номер</th>
+        <th class="hidden-xs">Дата</th>
+        <th class="hidden-xs">Статус</th>
+        <th class="hidden-xs">Партнер</th>
+        <th class="hidden-xs">Итого</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="row in $ctrl.items">
+        <td class="hidden-xs">{{$index +1}}</td>
+        <td>{{row.title}}</td>
+        <td class="hidden-xs">{{row.date | date:'dd/MM/yy HH:mm'}}</td>
+        <td class="hidden-xs">{{row.status}}</td>
+        <td class="hidden-xs">{{row.partner.name}}</td>
+        <td class="hidden-xs">{{row.total | currency}}</td>
+        <td class="center-item-text">
+            <form-nav-buttons data-options="$ctrl.navOptions" data-template="table" content-class="btn btn-xs"
+                              data-role="$ctrl.role" subdata="{data:row, index:$index}" class="btn-group">
+            </form-nav-buttons>
+        </td>
+    </tr>
+    </tbody>
+</table>
