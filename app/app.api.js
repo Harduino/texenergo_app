@@ -357,6 +357,10 @@
         o.getDispatchOrderDetails = function(id, success, fail){
             $http.get('/dispatch_orders/' + id).then(success, fail);
         };
+        o.sendDispatchOrderPdf = (id, data, success, fail) => {
+            $http.put('/dispatch_orders/' + id + '/send_pdf', data)
+            .then(success, fail);
+        };
         o.updateDispatchOrder = function(id, data, success, fail){
             $http.put('/dispatch_orders/' + id, data).then(success, fail);
         };

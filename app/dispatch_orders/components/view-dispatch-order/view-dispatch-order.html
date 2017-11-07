@@ -3,9 +3,23 @@
         <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">
             {{$ctrl.visual.titles + $ctrl.dispatchOrder.number}}
         </h2>
-        <form-nav-buttons subdata="$ctrl.dispatchOrder" data-role="$ctrl.dispatchOrder"
-                          options="$ctrl.visual.navButtsOptions" class="btn-group margin-top-10">
-        </form-nav-buttons>
+        <div class="extra-nav-btns">
+            <form-nav-buttons subdata="$ctrl.dispatchOrder" data-role="$ctrl.dispatchOrder"
+                              options="$ctrl.visual.navButtsOptions" class="btn-group margin-top-10">
+            </form-nav-buttons>
+            <dropdown-button>
+                <button class="btn btn-success" >
+                    <i class="fa fa-envelope"></i>
+                    <span class="hidden-xs">Отправить</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu green">
+                    <li ng-repeat="r in $ctrl.dispatchOrder.recipients">
+                        <a href-void ng-click="$ctrl.sendOrder(r)">{{r.email}}</a>
+                    </li>
+                </ul>
+            </dropdown-button>
+        </div>
         <hr>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">

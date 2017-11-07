@@ -162,6 +162,30 @@ class ViewDispatchOrderCtrl {
             }
         })
     }
+
+    sendOrder (recipient){
+        let self = this;
+        let data = null;
+
+        if(recipient){
+            data = {
+                dispatch_order:{
+                    recipient: recipient.id
+                }
+            };
+        }
+
+        self.serverApi.sendDispatchOrderPdf(self.$stateParams.id, data, result => {
+            if(result.status == 200 && !result.data.errors) {
+                self.funcFactory.showNotification('Успешно', 'УПД успешно отправлена.', true);
+            } else if (result.status == 200 && result.data.errors) {
+                self.funcFactory.showNotification('Неудача', result.data.errors, true);
+            } else {
+                self.funcFactory.showNotification('Неудача', 'Ошибка при попытке отправить УПД.', true);
+            }
+        }, result => {
+        });
+    }
 }
 
 ViewDispatchOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', 'FileUploader', '$localStorage'];
