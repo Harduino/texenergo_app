@@ -215,6 +215,7 @@ class ViewCustomerOrderCtrl {
                     partner_id: order.partner.id,
                     issued_by_id: order.issued_by.id,
                     transportation: order.transportation_info.transportation,
+                    payer_id: order.payer.id,
                     delivery_address_id: (order.transportation_info.delivery_address !== null) ? order.transportation_info.delivery_address.id : null
                 }
             };

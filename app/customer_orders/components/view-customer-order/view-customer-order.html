@@ -131,6 +131,36 @@
             </div>
             <div class="row">
                 <p class="col-xs-12 col-md-3 font-bold">
+                    Плательщик:
+                </p>
+                <div class="col-md-9" ng-switch-when="true">
+                    <a ng-hide="$ctrl.order.payer.x_editable_show" class="editable-click"
+                       ng-click="$ctrl.order.payer.x_editable_show=true;">
+                        {{$ctrl.order.payer.name || 'Нет'}}
+                    </a>
+                    <div ng-if="$ctrl.order.payer.x_editable_show">
+                        <span>
+                            <ui-select-infinity config="$ctrl.partnerSelectConfig"
+                                                view="app/customer_orders/components/view-customer-order/partials/ui-select-infinity-buyer.html"
+                                                on-select="$ctrl.saveOrderInfo()"
+                                                ng-model="$ctrl.order.payer">
+                            </ui-select-infinity>
+                        </span>
+                        <button type="button" ng-click="$ctrl.order.payer.x_editable_show=false;"
+                                class="btn btn-default">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <button ng-click="$ctrl.goToPartner()" type="button" class="btn btn-default">
+                            <span class="fa fa-eye"></span>
+                        </button>
+                    </div>
+                </div>
+                <p ng-switch-default class="col-md-9">
+                    <a ng-href="/#/partners/{{$ctrl.order.payer.id}}">{{$ctrl.order.payer.name}}</a>
+                </p>
+            </div>
+            <div class="row">
+                <p class="col-xs-12 col-md-3 font-bold">
                     Статус:
                 </p>
                 <p class="col-md-9">{{$ctrl.order.status}}</p>
