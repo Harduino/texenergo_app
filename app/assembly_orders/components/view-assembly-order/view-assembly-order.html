@@ -3,7 +3,7 @@
         <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">
             {{$ctrl.visual.titles + $ctrl.assemblyOrder.number}}
         </h2>
-        <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group margin-top-10">
+        <form-nav-buttons subdata="$ctrl.assemblyOrder" data-role="$ctrl.assemblyOrder" options="$ctrl.visual.navButtsOptions" class="btn-group margin-top-10">
         </form-nav-buttons>
         <hr />
         <div class="row margin-top-10">
@@ -33,6 +33,63 @@
         </div>
     </div>
     <div class="well well-white">
+        <h2>Произведённые товары</h2>
+        <ui-select-infinity class="flex-100" config="$ctrl.pSelectConfig" ng-model="$ctrl.productForAppend" view="app/assembly_orders/components/view-assembly-order/partials/ui-select-infinity-products.html" on-select="$ctrl.selectProductForAppend()">
+        </ui-select-infinity>
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>Товар</th>
+                    <th>Количество</th>
+                    <th>Итого, руб</th>
+                    <th/>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-if="$ctrl.productForAppend.id">
+                    <td>
+                        {{$ctrl.productForAppend.name}} {{$ctrl.productForAppend.article}}
+                    </td>
+                    <td>
+                        <input id="append_product_quantity" class="form-control table-input"
+                               ng-model="$ctrl.productForAppend.quantity" model-filter="{min:0}"
+                               ng-attr-placeholder="{{'доступно ' + $ctrl.productForAppend.stock +' шт.'}}"
+                               filter-name="te_number" type="text">
+                    </td>
+                    <td>{{$ctrl.productForAppend | price_net: $ctrl.productForAppend.quantity | currency}}</td>
+                    <td class="center-item-text">
+                        <div ng-click="$ctrl.addProduct()" class="btn btn-success">
+                            <i class="fa fa-plus"></i>
+                        </div>
+                    </td>
+                </tr>
+                <tr ng-repeat='item in $ctrl.assemblyOrder.products'>
+                    <td>
+                        <a href="/#/products/{{ item.product.id }}">
+                            {{ item.product.name }} {{ item.product.article !== "" ? ( "(" + item.product.article  + ")" ) : "" }}
+                        </a>
+                    </td>
+                    <td ng-switch="$ctrl.assemblyOrder.can_edit" ng-class="item.quantity >= 0 ? 'success' : 'danger'">
+                        <p class="col-md-9" ng-switch-when="true">
+                            <a editable-number="item.quantity" buttons="no" onaftersave="$ctrl.updateAssemblyOrderComponent(item)">
+                                {{ item.quantity || 'Нет' }}
+                            </a>
+                        </p>
+                        <span ng-switch-default class="col-md-9">{{ item.quantity }}</span>
+                    </td>
+                    <td>
+                        {{ item.total | currency }}
+                    </td>
+                    <td>
+                        <form-nav-buttons ng-if="item.can_destroy" class="btn-group" subdata="{data:item, index:$index}" data-template="table" data-options="$ctrl.visual.navTableButts" data-role="item" content-class="btn btn-xs">
+                        </form-nav-buttons>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="well well-white">
+        <h2>Комплектующие</h2>
         <table class="table table-hover table-bordered">
             <thead>
                 <tr>
@@ -45,29 +102,29 @@
             <tbody>
                 <tr ng-if="$ctrl.assemblyOrder.can_edit">
                     <td>
-                        <input class="form-control" ng-model="$ctrl.addableProduct.product.name" id="vro_prod_select"
-                               placeholder="Поисковый запрос" type="text" ng-change="$ctrl.productSearch()" ng-keypress="$ctrl.addProduct($event)">
+                        <input class="form-control" ng-model="$ctrl.addableComponent.product.name" id="vro_prod_select"
+                               placeholder="Поисковый запрос" type="text" ng-change="$ctrl.productSearch()" ng-keypress="$ctrl.addComponent($event)">
                         <div style="position: absolute; background: white; border: 1px solid; padding: 5px;"
                              ng-show="$ctrl.searchProductsList.length">
-                            <p ng-repeat='item in $ctrl.searchProductsList' ng-click="$ctrl.setAddableProduct(item)">
+                            <p ng-repeat='item in $ctrl.searchProductsList' ng-click="$ctrl.setAddableComponent(item)">
                                 {{ item.product.name }}
                             </p>
                         </div>
                     </td>
                     <td>
-                        <input class="form-control table-input" ng-model="$ctrl.addableProduct.quantity" type="text"
-                               model-filter="{min:0, max:$ctrl.addableProduct.stock}" filter-name="te_number" ng-keypress="$ctrl.addProduct($event)">
+                        <input class="form-control table-input" ng-model="$ctrl.addableComponent.quantity" type="text"
+                               model-filter="{min:0, max:$ctrl.addableComponent.stock}" filter-name="te_number" ng-keypress="$ctrl.addComponent($event)">
                     </td>
                     <td>
                         0
                     </td>
                     <td class="center-item-text">
-                        <div ng-click="$ctrl.addProduct()" class="btn btn-success">
+                        <div ng-click="$ctrl.addComponent()" class="btn btn-success">
                             <i class="fa fa-plus"></i>
                         </div>
                     </td>
                 </tr>
-                <tr ng-repeat='item in $ctrl.assemblyOrder.contents'>
+                <tr ng-repeat='item in $ctrl.assemblyOrder.components'>
                     <td>
                         <a href="/#/products/{{ item.product.id }}">
                             {{ item.product.name }} {{ item.product.article !== "" ? ( "(" + item.product.article  + ")" ) : "" }}

@@ -7,6 +7,26 @@
         <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group"></form-nav-buttons>
         <hr>
         <orders-filter data-search-query="$ctrl.data.searchQuery" data-to-state="app.assembly_orders"></orders-filter>
+        <table class="table table-bordered table-margined-top">
+            <thead>
+                <tr>
+                    <th>Товар</th>
+                    <th>Заказ клиента</th>
+                    <th>Осталось</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in $ctrl.data.assemblableProducts" ng-class="item.dispatchable ? '' : 'danger'">
+                    <td>
+                        <a href="#/products/{{item.product.id}}">{{ item.product.name }}</a>
+                    </td>
+                    <td>
+                        <a href="#/customer_orders/{{item.customer_order.id}}">{{ item.customer_order.number }}</a>
+                    </td>
+                    <td>{{ item.product.remains_to_dispatch }}</td>
+                </tr>
+            </tbody>
+        </table>
         <lazy-loaded-list view="app/assembly_orders/components/assembly-orders/partials/list.html"
                           api-method="getAssemblyOrders" items="$ctrl.data.ordersList"
                           nav-options="$ctrl.visual.navTableButts" search-query="$ctrl.data.searchQuery">

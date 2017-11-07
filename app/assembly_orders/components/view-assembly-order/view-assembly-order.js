@@ -7,9 +7,11 @@ class ViewAssemblyOrderCtrl {
         this.serverApi = serverApi;
         this.funcFactory = funcFactory;
 
-        this.addableProduct = { product: {} }; // Stores a product that we are about to add.
+        this.addableComponent = { product: {} }; // Stores a product that we are about to add.
         this.searchProductsList = []; // Stores filtered unreceived products
         this.inStockProducts = []; // Stores as of yet unreceived products
+        this.productForAppend = null;
+        this.pSelectConfig = {startPage: 0, dataMethod: serverApi.getSearch};
 
         let self = this;
         let getAssemblyOrderDetails = (subData, button, $event) => {
@@ -29,7 +31,28 @@ class ViewAssemblyOrderCtrl {
         this.visual = {
             navButtsOptions:[
                 {type:'back', callback: () => $state.go('app.assembly_orders', {})},
-                {type:'refresh', callback: getAssemblyOrderDetails}
+                {type:'refresh', callback: getAssemblyOrderDetails},
+                {
+                    type: 'confirm_order',
+                    callback: (subdata, item, $event) => {
+                        let data = {assembly_order: {event: item.event}};
+
+                        item.disableOnLoad(true, $event);
+                        serverApi.updateStatusAssemblyOrder($stateParams.id, data, result => {
+                            if(result.status == 200 && !result.data.errors) {
+                                funcFactory.showNotification('Успешно', 'Удалось ' + item.name.toLowerCase() + ' заказ',
+                                    true);
+                                self.dispatchOrder = result.data;
+                            } else {
+                                funcFactory.showNotification('Не удалось ' + item.name.toLowerCase() + ' заказ',
+                                    result.data.errors);
+                            }
+                            item.disableOnLoad(false, $event);
+                        }, () => {
+                          item.disableOnLoad(false, $event);
+                        });
+                    }
+                },
             ],
             chartOptions: {barColor:'rgb(103,135,155)', scaleColor:false, lineWidth:5, lineCap:'circle', size:50},
             titles: 'Выписка из производства: ',
@@ -81,17 +104,45 @@ class ViewAssemblyOrderCtrl {
 
     // Reset the product we are about to add;
     clearProductForAppend() {
-        this.addableProduct = { product: {} };
+        this.addableComponent = { product: {} };
     }
 
-    // Implements adding a product
     addProduct(event) {
+        if(!event || (event.keyCode == 13)) {
+            let p = this.productForAppend;
+
+            if(p && p.id) {
+                let self = this;
+
+                let post = {
+                    product_id: p.id,
+                    quantity: p.quantity,
+                    is_product: true
+                };
+
+                this.serverApi.createAssemblyOrderContent(this.assemblyOrder.id, post, result => {
+                    if(!result.data.errors) {
+                        self.funcFactory.showNotification('Успешно', 'Продукт ' + p.name + ' успешно добвален', true);
+                        self.assemblyOrder.products.push(angular.extend(p, result.data));
+                        this.productForAppend = null;
+                    } else {
+                        self.funcFactory.showNotification('Не удалось добавить продукт ' + p.name, result.data.errors, false);
+                    }
+                });
+            } else {
+                this.funcFactory.showNotification('У товара нет ID', 'У введённого товара нет ID. Обычно такое происходит тогда, когда Вы самостоятельно ввели товар вместо выбора из списка.', false);
+            }
+        }
+    }    
+
+    // Implements adding a component
+    addComponent(event) {
       if(!event || (event.keyCode == 13)) {
-        let p = this.addableProduct.product;
+        let p = this.addableComponent.product;
 
         if(p && p.id) {  
           let self = this;
-          let data = this.addableProduct;
+          let data = this.addableComponent;
 
           let post = {
               product_id: data.product.id,
@@ -101,7 +152,7 @@ class ViewAssemblyOrderCtrl {
           this.serverApi.createAssemblyOrderContent(this.assemblyOrder.id, post, result => {
               if(!result.data.errors) {
                   self.funcFactory.showNotification('Успешно', 'Продукт ' + data.product.name + ' успешно добвален', true);
-                  self.assemblyOrder.contents.push(angular.extend(data, result.data));
+                  self.assemblyOrder.components.push(angular.extend(data, result.data));
                   // self.calculateProductOrderContents();
                   self.clearProductForAppend();
 
@@ -135,19 +186,19 @@ class ViewAssemblyOrderCtrl {
 
 
     // Sets a product we are about to add to one in the item variable provided
-    setAddableProduct(item) {
-        this.addableProduct = jQuery.extend(true, {}, item);
+    setAddableComponent(item) {
+        this.addableComponent = jQuery.extend(true, {}, item);
         // Handling a case when unreceived quantity less than a quantity in customer order content entry.
         // The product at the line had been previously partially received.
-        this.addableProduct.quantity = item.stock;
-        this.addableProduct.total = 0;
+        this.addableComponent.quantity = item.stock;
+        this.addableComponent.total = 0;
         this.searchProductsList = [];
     }
 
     // Моя функция которая ищет среди товаров на складе, что лежат в памяти браузера
     productSearch() {
-        let query = this.addableProduct.product.name;
-        delete this.addableProduct.product.id; // Such that a user cannot input a name for a specific product_id
+        let query = this.addableComponent.product.name;
+        delete this.addableComponent.product.id; // Such that a user cannot input a name for a specific product_id
 
         if (query === undefined || query.length <= 1) {
             this.searchProductsList = [];
@@ -166,9 +217,9 @@ class ViewAssemblyOrderCtrl {
             if(res.data.errors) {
                 self.funcFactory.showNotification('Не удалось удалить продукт', res.data.errors);
             } else {
-                self.assemblyOrder.contents.forEach( (row, index) => {
+                self.assemblyOrder.components.forEach( (row, index) => {
                     if(row.id === item.id) {
-                        self.assemblyOrder.contents.splice(index, 1);
+                        self.assemblyOrder.components.splice(index, 1);
                         self.funcFactory.showNotification('Продукт удален:', item.product.name, true);
                         return;
                     }

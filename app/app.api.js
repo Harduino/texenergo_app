@@ -447,6 +447,9 @@
             var path = '/assembly_orders?page='+page + (query ? ('&q=' + query) : '');
             $http.get(path, config).then(success, fail);
         }
+        o.getAssemblyOrderToAssemble = (success, fail) => {
+            $http.get('/assembly_orders/to_assemble').then(success, fail);
+        }
         o.createAssemblyOrder = (data, success, fail) => {
             $http.post('/assembly_orders/', data).then(success, fail);
         };

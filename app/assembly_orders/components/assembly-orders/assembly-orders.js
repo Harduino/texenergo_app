@@ -47,6 +47,8 @@ class AssemblyOrdersCtrl {
     };
 
     this.data = {ordersList:[], searchQuery: $stateParams.q};
+
+    this.serverApi.getAssemblyOrderToAssemble(r => self.data.assemblableProducts = r.data);
   }
 
   openCreateModal(){
