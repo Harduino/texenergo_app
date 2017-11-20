@@ -19,7 +19,8 @@ class ViewAssemblyOrderCtrl {
           serverApi.getAssemblyOrderDetails($stateParams.id, (res) => {
             button && button.disableOnLoad(false, $event);
             self.assemblyOrder = res.data;
-            this.funcFactory.setPageTitle("Выписка из производства " + res.data.email);
+            this.funcFactory.setPageTitle("Выписка из производства " + res.data.number);
+            self.calculateTotal();
             serverApi.getInStockProducts(r => {
               self.inStockProducts = r.data
             });
@@ -77,6 +78,17 @@ class ViewAssemblyOrderCtrl {
         getAssemblyOrderDetails();
 
         this.funcFactory.setPageTitle("Контакт");
+    }
+
+    calculateTotal() {
+      let self = this;
+      let x = 0;
+
+      self.assemblyOrder.components.forEach(item => {
+          x += item.total;
+      });
+
+      self.assemblyOrder.total = x;
     }
 
     saveAssemblyOrder() {

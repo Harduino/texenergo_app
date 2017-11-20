@@ -196,13 +196,25 @@ class ViewCustomerOrderCtrl {
     }
 
     addressToString (addr) {
-        return [
-            (addr.postal_index || "Индекс"),
-            (addr.region || "Регион"),
-            (addr.city || "Город"),
-            (addr.street || "Улица"),
-            (addr.house || "Дом")
-        ].join(", ");
+        let x;
+        if (addr.dellin_terminal) {
+            x = "Терминал ДЛ: " + [
+                (addr.postal_index || "Индекс"),
+                (addr.region || "Регион"),
+                (addr.city || "Город"),
+                (addr.street || "Улица"),
+                (addr.house || "Дом")
+            ].join(", ");
+        } else {
+            x = "Адрес клиента: " + [
+                (addr.postal_index || "Индекс"),
+                (addr.region || "Регион"),
+                (addr.city || "Город"),
+                (addr.street || "Улица"),
+                (addr.house || "Дом")
+            ].join(", ");
+        }
+        return x;
     }
 
     saveOrderInfo () {

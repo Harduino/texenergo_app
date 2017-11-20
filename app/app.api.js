@@ -120,6 +120,15 @@
         o.updateQuotationOrder = function(id, data, success, fail){
             $http.put('/quotation_orders/' + id, data).then(success, fail);
         };
+        o.addQuotationOrderProduct = (id, data, success, fail) =>{
+            $http.post('/quotation_orders/' + id + '/quotation_order_contents', data).then(success, fail);
+        };
+        o.updateQuotationOrderContent = function(quotation_order_id, content_id, data, success, fail){
+            $http.put('/quotation_orders/' + quotation_order_id + '/quotation_order_contents/' + content_id, data).then(success, fail);
+        };
+        o.removeQuotationOrderContent = function(quotation_order_id, content_id, success, fail){
+            $http.delete('/quotation_orders/' + quotation_order_id +'/quotation_order_contents/' + content_id).then(success);
+        };
 
         // Supplier Orders
         o.getSupplierOrders = function(page, query, config, success, fail){
@@ -465,6 +474,9 @@
         };
         o.updateAssemblyOrder = function(assembly_order_id, data, success, fail){
             $http.put('/assembly_orders/' + assembly_order_id, data).then(success, fail);
+        };
+        o.updateStatusAssemblyOrder = (id, data, success, fail) => {
+            $http.put('/assembly_orders/' + id + '/update_status', data).then(success, fail);
         };
         o.getInStockProducts = (success, fail) => {
             $http.get('/assembly_orders/in_stock').then(success, fail);

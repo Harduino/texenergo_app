@@ -1,0 +1,6 @@
+<ui-select on-select="$ctrl.onSelect()" ng-model="$ctrl.ngModel" uis-open-close="$ctrl.focusSearchBox()" theme="select2" style="min-width: 250px; margin-top: -6px;">
+    <ui-select-match placeholder="Партнер не выбран">{{$select.selected.name}}</ui-select-match>
+    <ui-select-choices repeat="partner in $ctrl.items | filter:$select.search">
+        <div ng-bind-html="partner.name | highlight: $select.search"></div>
+    </ui-select-choices>
+</ui-select>

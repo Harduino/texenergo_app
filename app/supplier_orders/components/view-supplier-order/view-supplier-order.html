@@ -75,8 +75,7 @@
     <nav-tabs>
         <ul class="nav nav-tabs bordered" id="myTab1">
             <li class="active"><a data-toggle="tab" href="#s1">Позиции заказа</a></li>
-            <li><a data-toggle="tab" href="#s2">Поступления</a></li>
-            <li><a data-toggle="tab" href="#s3">Документы</a></li>
+            <li><a data-toggle="tab" href="#s2">Документы</a></li>
         </ul>
     </nav-tabs>
     <div class="tab-content padding-10" id="myTabContent1" style="background: white;">
@@ -136,12 +135,14 @@
                             </a>
                             <span ng-if="!$ctrl.data.supplierOrder.can_edit">{{ item.price }}</span>
                         </td>
-                        <td class="text-right">
-                            <a ng-if="$ctrl.data.supplierOrder.can_edit" editable-number="item.quantity" buttons="no"
+                        <td class="text-right" ng-if="$ctrl.data.supplierOrder.can_edit" uib-tooltip="{{item.comment}}" tooltip-append-to-body="true">
+                            <a editable-number="item.quantity" buttons="no"
                                onaftersave="$ctrl.saveProductChange({item: item, index: $index})" e-min="0">
                                 {{ item.quantity }}
                             </a>
-                            <span ng-if="!$ctrl.data.supplierOrder.can_edit">{{ item.quantity || 0}}</span>
+                        </td>
+                        <td class="text-right" ng-if="!$ctrl.data.supplierOrder.can_edit" ng-class="(item.received_quantity < item.quantity) ? 'warning' : 'success' " uib-tooltip="{{item.comment}}" tooltip-append-to-body="true">
+                            {{ item.received_quantity }}/{{ item.quantity || 0}}
                         </td>
                         <td class="text-right hidden-xs">{{ item.price * item.quantity | currency }}</td>
                         <td class="center">
@@ -163,30 +164,7 @@
                 </tbody>
             </table>
         </div>
-         <div class="tab-pane fade" id="s2">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="hidden-xs"></th>
-                        <th>Наименование</th>
-                        <th>Получено</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="item in $ctrl.data.supplierOrder.received">
-                        <td class="hidden-xs">{{ $index + 1 }}</td>
-                        <td>
-                            <a ng-href="/#/products/{{ item.product.id}}">
-                                {{ item.product.name + ' '+ item.product.article }}
-                            </a>
-                        </td>
-                        <td class="success" ng-class="{'warning': item.received_quantity < item.quantity}">
-                            {{item.received_quantity +'/'+ item.quantity}}
-                        </td>
-                </tbody>
-            </table>
-        </div>
-        <div class="tab-pane fade" id="s3">
+        <div class="tab-pane fade" id="s2">
             <table class="table table-hover">
                 <thead>
                     <tr>

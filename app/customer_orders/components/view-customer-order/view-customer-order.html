@@ -176,10 +176,7 @@
                     Отгрузка:
                 </p>
                 <p class="col-md-9" ng-if="$ctrl.order.can_edit">
-                    <a href="#"
-                        editable-select="$ctrl.order.transportation_info.transportation"
-                        e-ng-options="option for option in $ctrl.order.transportation_info.transportation_options"
-                        onaftersave="$ctrl.saveOrderInfo()">
+                    <a href="#" editable-select="$ctrl.order.transportation_info.transportation" e-ng-options="option for option in $ctrl.order.transportation_info.transportation_options" onaftersave="$ctrl.saveOrderInfo()">
                         {{ $ctrl.order.transportation_info.transportation || 'Нет'}}
                     </a>
                 </p>
@@ -192,10 +189,7 @@
                     Адрес доставки:
                 </p>
                 <div class="col-md-9" ng-if="$ctrl.order.can_edit">
-                    <a href="#"
-                        editable-select="$ctrl.order.transportation_info.delivery_address"
-                        e-ng-options="option as $ctrl.addressToString(option) for option in $ctrl.order.transportation_info.delivery_address_options"
-                        onaftersave="$ctrl.saveOrderInfo()">
+                    <a href="#" editable-select="$ctrl.order.transportation_info.delivery_address" e-ng-options="option as $ctrl.addressToString(option) for option in $ctrl.order.transportation_info.delivery_address_options" onaftersave="$ctrl.saveOrderInfo()">
                         <span ng-if="$ctrl.order.transportation_info.delivery_address">
                             {{ $ctrl.addressToString($ctrl.order.transportation_info.delivery_address) }}
                         </span>

@@ -138,13 +138,18 @@
                         </p>
                         <span ng-switch-default class="col-md-9">{{ item.quantity }}</span>
                     </td>
-                    <td>
+                    <td class="text-right">
                         {{ item.total | currency }}
                     </td>
                     <td>
                         <form-nav-buttons ng-if="item.can_destroy" class="btn-group" subdata="{data:item, index:$index}" data-template="table" data-options="$ctrl.visual.navTableButts" data-role="item" content-class="btn btn-xs">
                         </form-nav-buttons>
                     </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-right">Итого, руб:</td>
+                    <td class="text-right">{{ $ctrl.assemblyOrder.total | currency }}</td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>
