@@ -3,7 +3,7 @@
         <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">
             Заказ производства: {{ $ctrl.quotationOrder.number }}
         </h2>
-        <form-nav-buttons options="$ctrl.visual.navButtsOptions" class="btn-group margin-top-10">
+        <form-nav-buttons subdata="$ctrl.quotationOrder"  options="$ctrl.visual.navButtsOptions" class="btn-group margin-top-10">
         </form-nav-buttons>
         <hr>
         <div class="row margin-top-10">
@@ -49,6 +49,42 @@
             </p>
             <p class="col-md-9">{{ $ctrl.quotationOrder.status }}</p>
         </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Количество изделий:
+            </p>
+            <p class="col-md-9">
+                <a ng-if="$ctrl.quotationOrder.can_edit" editable-number="$ctrl.quotationOrder.quantity" buttons="no" onaftersave="$ctrl.saveOrderInfo()" e-min="0">
+                    {{ $ctrl.quotationOrder.quantity }}
+                </a>
+            </p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Коэффициент:
+            </p>
+            <p class="col-md-9">
+                <a ng-if="$ctrl.quotationOrder.can_edit" editable-number="$ctrl.quotationOrder.coefficient" buttons="no" onaftersave="$ctrl.saveOrderInfo()" e-step="any">
+                    {{ $ctrl.quotationOrder.coefficient }}
+                </a>
+            </p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Продажная цена, руб:
+            </p>
+            <p class="col-md-9">
+                {{ $ctrl.quotationOrder.total * $ctrl.quotationOrder.coefficient * $ctrl.quotationOrder.quantity | currency }}
+            </p>
+        </div>
+        <div class="row" ng-if="$ctrl.showCost()">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Себестоимость комплектующих, руб:
+            </p>
+            <p class="col-md-9">
+                {{ $ctrl.quotationOrder.totalNet | currency }}
+            </p>
+        </div>
     </div>
     <div class="well well-white">
         <div class="flex layout-row layout-align-start-center">
@@ -61,7 +97,8 @@
                     <th>Наименование</th>
                     <th>Кол-во</th>
                     <th>Итого</th>
-                    <th>Заказ</th>
+                    <th ng-if="$ctrl.showCost()">%</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -78,6 +115,9 @@
                     </td>
                     <td>
                         {{$ctrl.productForAppend | price_net: $ctrl.productForAppend.quantity | currency}}
+                    </td>
+                    <td ng-if="$ctrl.showCost()">
+                        
                     </td>
                     <td class="center-item-text">
                         <div ng-click="$ctrl.appendProduct()" class="btn btn-success">
@@ -98,6 +138,9 @@
                         <span ng-if="!$ctrl.quotationOrder.can_edit">{{ item.quantity }}</span>
                     </td>
                     <td class="text-right">{{ item.quantity * item.price | currency }}</td>
+                    <td class="text-right" ng-if="$ctrl.showCost()">
+                        {{ ((100 * item.quantity * item.price_discounted) / ($ctrl.quotationOrder.totalNet / $ctrl.quotationOrder.quantity)).toFixed(2) }}
+                    </td>
                     <td>
                         <form-nav-buttons class="btn-group" subdata="{data:item, index:$index}" data-template="table" data-options="$ctrl.visual.navTableButts" data-role="item" content-class="btn btn-xs">
                         </form-nav-buttons>
@@ -108,6 +151,7 @@
                     <td class="text-right">
                         {{ $ctrl.quotationOrder.total | currency }}
                     </td>
+                    <td ng-if="$ctrl.showCost()"></td>
                     <td></td>
                 </tr>
             </tbody>

@@ -1,8 +1,9 @@
 class ViewQuotationOrderCtrl {
-    constructor($state, $stateParams, serverApi, funcFactory) {
+    constructor($state, $stateParams, serverApi, funcFactory, $localStorage) {
         let self = this;
         this.serverApi = serverApi;
         this.funcFactory = funcFactory;
+        this.$localStorage = $localStorage;
 
         this.quotation = {};
         this.addableProduct = { product: {} }; // Stores a product that we are about to add.
@@ -10,14 +11,65 @@ class ViewQuotationOrderCtrl {
         this.visual = {
             navButtsOptions:[
                 {type: 'back', callback: () => $state.go('app.quotation_orders', {})},
-                {type: 'logs', callback: () => $state.go('app.quotation_orders.view.logs', {})},
+                {
+                    type: 'confirm_order',
+                    callback: (subdata, item, $event) => {
+                        item.disableOnLoad(true, $event);
+                        serverApi.updateStatusQuotationOrder($stateParams.id, { quotation_order: { event: item.event } }, r => {
+                            item.disableOnLoad(false, $event);
+                            this.quotationOrder.status = r.data.status;
+                            this.quotationOrder.can_edit = r.data.can_edit;
+                            this.quotationOrder.events = r.data.events;
+                            item.updateConfirmButton();
+                        }, () => {
+                          item.disableOnLoad(false, $event);
+                        });
+                    }
+                },
+                {
+                    type: 'recalculate',
+                    callback: (subData, button, $event) => {
+                        button.disableOnLoad(true, $event);
+                        serverApi.recalculateQuotationOrder($stateParams.id, result => {
+                            button.disableOnLoad(false, $event);
+                            if(result.status == 200 && !result.data.errors) {
+                                funcFactory.showNotification('Успешно', 'Заказ успешно пересчитан.', true);
+                                self.quotationOrder = result.data;
+                                self.updateTotal();
+                            } else {
+                                funcFactory.showNotification('Неудача', 'Ошибка при пересчёте заказа.', false);
+                            }
+                        }, () => {
+                          button.disableOnLoad(false, $event);
+                        });
+                    }
+                },
+                {
+                    type: 'send_email',
+                    callback: (subData, button, $event) => {
+                        button.disableOnLoad(true, $event);
+                        serverApi.sendQuotationOrderRFQ($stateParams.id, result => {
+                            button.disableOnLoad(false, $event);
+                            if(result.status == 200 && !result.data.errors) {
+                                funcFactory.showNotification('Успешно', 'Заказ успешно отправлен.', true);
+                            } else if (result.status == 200 && result.data.errors) {
+                                funcFactory.showNotification('Неудача', result.data.errors, true);
+                            } else {
+                                funcFactory.showNotification('Неудача', 'Ошибка при попытке отправить заказ.', true);
+                            }
+                        }, () => {
+                          button.disableOnLoad(false, $event);
+                        });
+                    }
+                },
                 {
                     type: 'refresh',
                     callback: (subData, button, $event) => {
                         button.disableOnLoad(true, $event);
                         this.loadStuff(() => button.disableOnLoad(false, $event));
                     }
-                }
+                },
+                {type: 'print_form_pdf', callback: () => self.openPdf('')}
             ],
             navTableButts:[
                 {
@@ -69,13 +121,26 @@ class ViewQuotationOrderCtrl {
         this.loadStuff();
     }
 
+    showCost() {
+        let self = this;
+        if(self.quotationOrder === undefined) return false;
+        for (var i = self.quotationOrder.quotation_order_contents.length - 1; i >= 0; i--) {
+            if (self.quotationOrder.quotation_order_contents[i].quantity !== undefined && self.quotationOrder.quotation_order_contents[i].quantity !== null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     saveOrderInfo () {
         let self = this,
         order = self.quotationOrder,
         data = {
             quotation_order: {
                 title: order.title,
-                partner_id: order.partner.id
+                partner_id: order.partner.id,
+                coefficient: order.coefficient,
+                quantity: order.quantity
             }
         };
 
@@ -94,6 +159,10 @@ class ViewQuotationOrderCtrl {
         let self = this, sum = 0;
         this.quotationOrder.quotation_order_contents.map(item => sum += (item.price * item.quantity));
         this.quotationOrder.total = sum;
+
+        this.quotationOrder.totalNet = self.quotationOrder.quotation_order_contents.reduce((tot, thiz) => {
+            return tot += (thiz.price_discounted * thiz.quantity);
+        }, 0) * self.quotationOrder.quantity;
     }
 
     /**
@@ -164,9 +233,13 @@ class ViewQuotationOrderCtrl {
             }
         })
     };
+
+    openPdf(path) {
+        window.open(window.APP_ENV.TEXENERGO_COM_API_HTTP_BASE_URL + '/quotation_orders/' + this.quotationOrder.id + path + '.pdf?token=' + this.$localStorage.id_token, '_blank');
+    }
 }
 
-ViewQuotationOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
+ViewQuotationOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', '$localStorage'];
 
 angular.module('app.quotation_orders').component('viewQuotationOrder', {
     controller: ViewQuotationOrderCtrl,

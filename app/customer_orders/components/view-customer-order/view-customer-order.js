@@ -55,7 +55,7 @@ class ViewCustomerOrderCtrl {
                             button.disableOnLoad(false, $event);
                             if(result.status == 200 && !result.data.errors) {
                                 funcFactory.showNotification('Успешно', 'Заказ успешно пересчитан.', true);
-                                self.data.order = result.data;
+                                self.order = result.data;
                             } else {
                                 funcFactory.showNotification('Неудача', 'Ошибка при пересчёте заказа.', true);
                             }

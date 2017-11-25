@@ -54,7 +54,7 @@ class QuotationOrdersCtrl {
                     }
                 }
             ],
-            titles: ['Поступления']
+            titles: ['Рассчёты (Заказы производства)']
         };
 
         this.data = {ordersList: [], searchQuery: $stateParams.q};

@@ -16,7 +16,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in $ctrl.data.assemblableProducts" ng-class="item.dispatchable ? '' : 'danger'">
+                <tr ng-if="$ctrl.data.assemblableProducts.length === 0" >
+                    <td colspan="3" class="text-center">
+                        Нет товаров для сборки
+                    </td>
+                </tr>
+                <tr ng-if="$ctrl.data.assemblableProducts.length > 0" ng-repeat="item in $ctrl.data.assemblableProducts" ng-class="item.dispatchable ? '' : 'danger'">
                     <td>
                         <a href="#/products/{{item.product.id}}">{{ item.product.name }}</a>
                     </td>

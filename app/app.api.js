@@ -120,6 +120,9 @@
         o.updateQuotationOrder = function(id, data, success, fail){
             $http.put('/quotation_orders/' + id, data).then(success, fail);
         };
+        o.recalculateQuotationOrder = (id, success, fail) => {
+            $http.get('/quotation_orders/' + id + '/recalculate').then(success, fail);
+        };
         o.addQuotationOrderProduct = (id, data, success, fail) =>{
             $http.post('/quotation_orders/' + id + '/quotation_order_contents', data).then(success, fail);
         };
@@ -128,6 +131,12 @@
         };
         o.removeQuotationOrderContent = function(quotation_order_id, content_id, success, fail){
             $http.delete('/quotation_orders/' + quotation_order_id +'/quotation_order_contents/' + content_id).then(success);
+        };
+        o.sendQuotationOrderRFQ = function(id, success, fail){
+            $http.put('/quotation_orders/' + id + '/send_rfq').then(success, fail);
+        };
+        o.updateStatusQuotationOrder = function(id, data, success, fail){
+            $http.put('/quotation_orders/' + id + '/update_status', data).then(success, fail);
         };
 
         // Supplier Orders
@@ -150,6 +159,7 @@
         o.sendSupplierOrderRFQ = function(id, success, fail){
             $http.put('/supplier_orders/' + id + '/send_rfq').then(success, fail);
         };
+
         o.addSupplierOrderProduct = function(id, data, success, fail){
             $http.post('/supplier_orders/'+id+'/supplier_order_contents', data).then(success, fail);
         };

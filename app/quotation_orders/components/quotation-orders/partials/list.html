@@ -13,7 +13,11 @@
     <tbody>
     <tr ng-repeat="row in $ctrl.items">
         <td class="hidden-xs">{{$index +1}}</td>
-        <td>{{row.title}}</td>
+        <td>
+            <a href="/#/quotation_orders/{{ row.id }}">
+                {{row.title}}
+            </a>
+        </td>
         <td class="hidden-xs">{{row.date | date:'dd/MM/yy HH:mm'}}</td>
         <td class="hidden-xs">{{row.status}}</td>
         <td class="hidden-xs">{{row.partner.name}}</td>
