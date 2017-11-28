@@ -1,9 +1,9 @@
 <div id="content">
-    <div class="well well-white" ng-switch="$ctrl.data.supplierOrder.can_edit">
+    <div class="well well-white" ng-switch="$ctrl.supplierOrder.can_edit">
         <h2 class="txt-color-blueDark semi-bold prod-review-title no-padding">
-            {{$ctrl.visual.titles + $ctrl.data.supplierOrder.number}}
+            {{$ctrl.visual.titles + $ctrl.supplierOrder.number}}
         </h2>
-        <form-nav-buttons subdata="$ctrl.data.supplierOrder" options="$ctrl.visual.navButtsOptions" class="btn-group margin-top-10">
+        <form-nav-buttons subdata="$ctrl.supplierOrder" options="$ctrl.visual.navButtsOptions" class="btn-group margin-top-10">
         </form-nav-buttons>
         <hr>
         <div class="row">
@@ -25,51 +25,51 @@
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Номер:</p>
             <div class="col-md-9" ng-switch-when="true">
-                <a editable-text="$ctrl.data.supplierOrder.number" onaftersave="$ctrl.saveSupplierOrderInfo()">
-                    {{ $ctrl.data.supplierOrder.number || 'Нет' }}
+                <a editable-text="$ctrl.supplierOrder.number" onaftersave="$ctrl.saveSupplierOrderInfo()">
+                    {{ $ctrl.supplierOrder.number || 'Нет' }}
                 </a>
             </div>
-            <p ng-switch-default class="col-md-9">{{ $ctrl.data.supplierOrder.number }}</p>
+            <p ng-switch-default class="col-md-9">{{ $ctrl.supplierOrder.number }}</p>
         </div>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Название:</p>
             <div class="col-md-9" ng-switch-when="true">
-                <a editable-textarea="$ctrl.data.supplierOrder.title" onaftersave="$ctrl.saveSupplierOrderInfo()">
-                    {{ $ctrl.data.supplierOrder.title || 'Нет' }}
+                <a editable-textarea="$ctrl.supplierOrder.title" onaftersave="$ctrl.saveSupplierOrderInfo()">
+                    {{ $ctrl.supplierOrder.title || 'Нет' }}
                 </a>
             </div>
-            <p ng-switch-default class="col-md-9">{{$ctrl.data.supplierOrder.title}}</p>
+            <p ng-switch-default class="col-md-9">{{$ctrl.supplierOrder.title}}</p>
         </div>
         <div class="row margin-top-10">
             <p class="col-xs-12 col-md-3 font-bold">Описание:</p>
             <div class="col-md-9" ng-switch-when="true">
-                <a editable-textarea="$ctrl.data.supplierOrder.description" onaftersave="$ctrl.saveSupplierOrderInfo()">
-                    {{ $ctrl.data.supplierOrder.description || 'Нет' }}
+                <a editable-textarea="$ctrl.supplierOrder.description" onaftersave="$ctrl.saveSupplierOrderInfo()">
+                    {{ $ctrl.supplierOrder.description || 'Нет' }}
                 </a>
             </div>
-            <p ng-switch-default class="col-md-9">{{$ctrl.data.supplierOrder.description}}</p>
+            <p ng-switch-default class="col-md-9">{{$ctrl.supplierOrder.description}}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Дата заказа:</p>
-            <p class="col-md-9">{{$ctrl.data.supplierOrder.date | date:'dd MMMM yy, HH:mm'}}</p>
+            <p class="col-md-9">{{$ctrl.supplierOrder.date | date:'dd MMMM yy, HH:mm'}}</p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Партнер:</p>
             <p class="col-md-9">
                 <ui-select-infinity config="$ctrl.partnerSelectConfig" on-select="$ctrl.saveSupplierOrderInfo()"
                   view="app/supplier_orders/components/view-supplier-order/partials/ui-select-infinity-partners.html"
-                  ng-model="$ctrl.data.supplierOrder.partner" ng-switch-when="true">
+                  ng-model="$ctrl.supplierOrder.partner" ng-switch-when="true">
                 </ui-select-infinity>
             </p>
             <p class="col-md-9">
-                <a ng-switch-default ng-href="/#/partners/{{$ctrl.data.supplierOrder.partner.id}}">
-                    {{$ctrl.data.supplierOrder.partner.name}}
+                <a ng-switch-default ng-href="/#/partners/{{$ctrl.supplierOrder.partner.id}}">
+                    {{$ctrl.supplierOrder.partner.name}}
                 </a>
             </p>
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">Статус:</p>
-            <p class="col-md-9">{{$ctrl.data.supplierOrder.status}}</p>
+            <p class="col-md-9">{{$ctrl.supplierOrder.status}}</p>
         </div>
     </div>
     <nav-tabs>
@@ -81,7 +81,7 @@
     <div class="tab-content padding-10" id="myTabContent1" style="background: white;">
         <div class="tab-pane fade in active" id="s1">
             <div ></div>
-            <ui-select-infinity ng-if="$ctrl.data.supplierOrder.can_edit" ng-model="$ctrl.data.selectedProduct"
+            <ui-select-infinity ng-if="$ctrl.supplierOrder.can_edit" ng-model="$ctrl.selectedProduct"
               view="app/supplier_orders/components/view-supplier-order/partials/ui-select-infinity-products.html"
               config="$ctrl.pSelectConfig">
             </ui-select-infinity>
@@ -98,23 +98,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-if="$ctrl.data.selectedProduct.id" class="append-product-row a-row-add"
+                    <tr ng-if="$ctrl.selectedProduct.id" class="append-product-row a-row-add"
                         ng-keypress="$ctrl.appendProduct($event)">
                         <td></td>
-                        <td>{{ $ctrl.data.selectedProduct.name }}</td>
-                        <td>{{ $ctrl.data.selectedProduct.article }}</td>
+                        <td>{{ $ctrl.selectedProduct.name }}</td>
+                        <td>{{ $ctrl.selectedProduct.article }}</td>
                         <td>
                             <input id="append_product_price" class="form-control table-input" filter-name="te_number"
-                                   ng-model="$ctrl.data.selectedProduct.price" model-filter="{min:0, number: true}"
+                                   ng-model="$ctrl.selectedProduct.price" model-filter="{min:0, number: true}"
                                    type="text" ng-init="focusOnProduct()">
                         </td>
                         <td>
                             <input id="append_product_quantity" class="form-control table-input" filter-name="te_number"
-                                   ng-model="$ctrl.data.selectedProduct.quantity" model-filter="{min:0}" type="text"
+                                   ng-model="$ctrl.selectedProduct.quantity" model-filter="{min:0}" type="text"
                                    ng-init="focusOnProduct()">
                         </td>
                         <td>
-                            {{ $ctrl.data.selectedProduct.price * $ctrl.data.selectedProduct.quantity }}
+                            {{ $ctrl.selectedProduct.price * $ctrl.selectedProduct.quantity }}
                         </td>
                         <td class="center-item-text">
                             <div ng-click="$ctrl.appendProduct()" class="btn btn-success">
@@ -122,30 +122,33 @@
                             </div>
                         </td>
                     </tr>
-                    <tr ng-repeat='item in $ctrl.data.supplierOrder.supplier_order_contents'>
+                    <tr ng-repeat='item in $ctrl.supplierOrder.supplier_order_contents'>
                         <td class="hidden-xs">{{ $index + 1 }}</td>
                         <td>
                             <a ng-href="/#/products/{{ item.product.id }}">{{ item.product.name }}</a>
                         </td>
                         <td class="hidden-xs">{{ item.product.article}}</td>
                         <td class="text-right">
-                            <a ng-if="$ctrl.data.supplierOrder.can_edit" editable-number="item.price" e-step="0.01"
+                            <a ng-if="$ctrl.supplierOrder.can_edit" editable-number="item.price" e-step="0.01"
                                onaftersave="$ctrl.saveProductChange({item: item, index: $index})" buttons="no">
                                 {{ item.price }}
                             </a>
-                            <span ng-if="!$ctrl.data.supplierOrder.can_edit">{{ item.price }}</span>
+                            <span ng-if="!$ctrl.supplierOrder.can_edit">{{ item.price }}</span>
                         </td>
-                        <td class="text-right" ng-if="$ctrl.data.supplierOrder.can_edit" uib-tooltip="{{item.comment}}" tooltip-append-to-body="true">
+                        <td class="text-right" ng-if="$ctrl.supplierOrder.can_edit" uib-tooltip="{{item.comment}}" tooltip-append-to-body="true">
                             <a editable-number="item.quantity" buttons="no"
                                onaftersave="$ctrl.saveProductChange({item: item, index: $index})" e-min="0">
                                 {{ item.quantity }}
                             </a>
                         </td>
-                        <td class="text-right" ng-if="!$ctrl.data.supplierOrder.can_edit" ng-class="(item.received_quantity < item.quantity) ? 'warning' : 'success' " uib-tooltip="{{item.comment}}" tooltip-append-to-body="true">
+                        <td class="text-right" ng-if="!$ctrl.supplierOrder.can_edit" ng-class="(item.received_quantity < item.quantity) ? 'warning' : 'success' " uib-tooltip="{{item.comment}}" tooltip-append-to-body="true">
                             {{ item.received_quantity }}/{{ item.quantity || 0}}
                         </td>
                         <td class="text-right hidden-xs">{{ item.price * item.quantity | currency }}</td>
                         <td class="center">
+                            <span ng-if="($ctrl.supplierOrder.status === 'Подтвержден') && item.cancellable_quantity > 0" ng-click="$ctrl.cancelProductQuantity(item)">
+                                /Отменить {{ item.cancellable_quantity }} ед./
+                            </span>
                             <div ng-disabled="!item.can_destroy" ng-click="$ctrl.removeProduct(item)"
                                  class="ng-scope btn btn-xs btn-danger">
                                 <i class="fa fa-trash-o"></i>
@@ -158,7 +161,7 @@
                         <td class="hidden-xs"></td>
                         <td class="hidden-xs"></td>
                         <td><span class="pull-right">Итого:</span></td>
-                        <td>{{ $ctrl.data.supplierOrder.total | currency }}</td>
+                        <td>{{ $ctrl.supplierOrder.total | currency }}</td>
                         <td></td>
                     </tr>
                 </tbody>
@@ -177,7 +180,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="item in $ctrl.data.supplierOrder.receive_orders">
+                    <tr ng-repeat="item in $ctrl.supplierOrder.receive_orders">
                         <td class="hidden-xs">{{ $index + 1 }}</td>
                         <td>{{ item.number }}</td>
                         <td class="hidden-xs">{{ item.date | date:'dd MMMM yy, HH:mm'}}</td>
@@ -205,7 +208,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="item in $ctrl.data.supplierOrder.outgoing_transfers">
+                    <tr ng-repeat="item in $ctrl.supplierOrder.outgoing_transfers">
                         <td class="hidden-xs">{{ $index + 1 }}</td>
                         <td>{{ item.number }}</td>
                         <td class="hidden-xs">{{ item.date | date:'dd MMMM yy, HH:mm' }}</td>

@@ -2,7 +2,7 @@
     <li>Приложение</li>
     <li ng-repeat="breadcrumb in stateBreadcrumbsCtrl.breadcrumbs">{{breadcrumb}}</li>
 </ol>
-<div class="alert alert-danger fade in" ng-if="!$stateBreadcrumbsCtrl.showWarning()">
+<div class="alert alert-danger fade in" ng-if="$stateBreadcrumbsCtrl.showWarning()">
   <button class="close" data-dismiss="alert">
       ×
   </button>
