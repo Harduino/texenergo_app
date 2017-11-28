@@ -36,7 +36,7 @@ class ViewAssemblyOrderCtrl {
                       name: ("Из заказа: " + i.product.name)
                     },
                     stock: i.stock,
-                    quotation_order_id: r.data.id
+                    quotation_order_content_id: i.id
                   }
                 })
               })
@@ -173,11 +173,12 @@ class ViewAssemblyOrderCtrl {
         if(p && p.id) {  
           let self = this;
           let data = this.addableComponent;
+          console.log("data", data);
 
           let post = {
               product_id: data.product.id,
               quantity: data.quantity,
-              quotation_order_id: data.quotation_order_id
+              quotation_order_content_id: data.quotation_order_content_id
           };
 
           this.serverApi.createAssemblyOrderContent(this.assemblyOrder.id, post, result => {

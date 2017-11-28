@@ -97,6 +97,7 @@
                     <th>Наименование</th>
                     <th>Кол-во</th>
                     <th>Склад</th>
+                    <th>В сборке</th>
                     <th>Итого</th>
                     <th ng-if="$ctrl.showCost()">%</th>
                     <th></th>
@@ -114,6 +115,7 @@
                             </span>
                         </div>
                     </td>
+                    <td colspan="2"></td>
                     <td>
                         {{$ctrl.productForAppend | price_net: $ctrl.productForAppend.quantity | currency}}
                     </td>
@@ -141,6 +143,9 @@
                     <td class="text-right">
                         {{ item.stock }}
                     </td>
+                    <td class="text-right">
+                        {{ item.assembled }}
+                    </td>
                     <td class="text-right">{{ item.quantity * item.price | currency }}</td>
                     <td class="text-right" ng-if="$ctrl.showCost()">
                         {{ ((100 * item.quantity * item.price_discounted) / ($ctrl.quotationOrder.totalNet / $ctrl.quotationOrder.quantity)).toFixed(2) }}
@@ -151,7 +156,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3"/>
+                    <td colspan="4"/>
                     <td class="text-right">
                         {{ $ctrl.quotationOrder.total | currency }}
                     </td>
