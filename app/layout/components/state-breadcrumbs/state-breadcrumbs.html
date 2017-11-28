@@ -2,3 +2,11 @@
     <li>Приложение</li>
     <li ng-repeat="breadcrumb in stateBreadcrumbsCtrl.breadcrumbs">{{breadcrumb}}</li>
 </ol>
+<div class="alert alert-danger fade in" ng-if="!$stateBreadcrumbsCtrl.showWarning()">
+  <button class="close" data-dismiss="alert">
+      ×
+  </button>
+  <i class="fa-fw fa fa-danger"></i>
+  <strong>Внимание</strong> Вы не привязаны ни к одному Партнёру. Из-за этого функционал доступен частично -
+  <a href="mailto:support@texenergo.com" style="color: white;">support@texenergo.com</a>
+</div>

@@ -1,11 +1,19 @@
 class StateBreadcrumbsCtrl {
-    constructor($rootScope, $state) {
+    constructor($rootScope, $state, authService) {
         this.breadcrumbs = [];
         this.$state = $state;
         this.processState($state.current);
+        this.user = authService;
 
         let self = this;
         $rootScope.$on('$stateChangeStart', (event, state) => self.processState(state));
+    }
+
+    showWarning() {
+        if (this.user._profile.app_metadata === undefined || this.user._profile.app_metadata === null) return true;
+        if (this.user._profile.app_metadata.partner === undefined || this.user._profile.app_metadata.partner === null) return true;
+        if (this.user._profile.app_metadata.partner.id === undefined || this.user._profile.app_metadata.partner.id === null) return true;
+        return false;
     }
 
     processState(state) {
@@ -32,7 +40,7 @@ class StateBreadcrumbsCtrl {
     }
 }
 
-StateBreadcrumbsCtrl.$inject = ['$rootScope', '$state'];
+StateBreadcrumbsCtrl.$inject = ['$rootScope', '$state', 'authService'];
 
 angular.module('app.layout').component('stateBreadcrumbs', {
     templateUrl: '/app/layout/components/state-breadcrumbs/state-breadcrumbs.html',
