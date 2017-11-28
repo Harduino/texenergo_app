@@ -1,7 +1,8 @@
 class ViewAssemblyOrderCtrl {
     constructor($state, $stateParams, serverApi, funcFactory) {
         this.assemblyOrder = {};
-        this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
+        // this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
+        this.quotationOrderSelectConfig = {dataMethod: serverApi.getQuotationOrders};
 
         this.$state = $state;
         this.serverApi = serverApi;
@@ -10,6 +11,7 @@ class ViewAssemblyOrderCtrl {
         this.addableComponent = { product: {} }; // Stores a product that we are about to add.
         this.searchProductsList = []; // Stores filtered unreceived products
         this.inStockProducts = []; // Stores as of yet unreceived products
+        this.quotationOrderProducts = [];
         this.productForAppend = null;
         this.pSelectConfig = {startPage: 0, dataMethod: serverApi.getSearch};
 
@@ -24,6 +26,21 @@ class ViewAssemblyOrderCtrl {
             serverApi.getInStockProducts(r => {
               self.inStockProducts = r.data
             });
+            if(!!self.assemblyOrder.quotation_order && !!self.assemblyOrder.quotation_order.id) {
+              serverApi.getQuotationOrderDetails(self.assemblyOrder.quotation_order.id, r => {
+                self.quotationOrderProducts  = r.data.quotation_order_contents.map(i => {
+                  return {
+                    product: {
+                      article: i.product.article, 
+                      id: i.product.id,
+                      name: ("Из заказа: " + i.product.name)
+                    },
+                    stock: i.stock,
+                    quotation_order_id: r.data.id
+                  }
+                })
+              })
+            }
           }, () => {
             button && button.disableOnLoad(false, $event);
           });
@@ -96,7 +113,8 @@ class ViewAssemblyOrderCtrl {
         let assemblyOrder = self.assemblyOrder;
         let data = {
             assembly_order: {
-                number: assemblyOrder.number
+                number: assemblyOrder.number,
+                quotation_order_id: assemblyOrder.quotation_order.id
             }
         };
 
@@ -158,7 +176,8 @@ class ViewAssemblyOrderCtrl {
 
           let post = {
               product_id: data.product.id,
-              quantity: data.quantity
+              quantity: data.quantity,
+              quotation_order_id: data.quotation_order_id
           };
 
           this.serverApi.createAssemblyOrderContent(this.assemblyOrder.id, post, result => {
@@ -215,10 +234,21 @@ class ViewAssemblyOrderCtrl {
         if (query === undefined || query.length <= 1) {
             this.searchProductsList = [];
         } else {
-            this.searchProductsList = this.inStockProducts.filter( item => {
-                return (item.product.name.match(new RegExp(query, 'i')) !== null) ||
-                    (item.product.article.match(new RegExp(query, 'i')) !== null);
-            })
+            this.searchProductsList = [];
+            var quotationOrderPrdsList = this.searchProductsList.concat(this.quotationOrderProducts.filter( item => {
+              var a = (item.product.name + item.product.article).match(new RegExp(query, 'i')) !== null;
+              var b = item.stock > 0;
+              return (a && b )
+            }));
+
+            var searchResultsProductsList = this.inStockProducts.filter( item => {
+              var a = ((item.product.name + item.product.article).match(new RegExp(query, 'i')) !== null);
+              var b = quotationOrderPrdsList.findIndex(i => i.product.id === item.product.id) < 0;
+              // console.log("b", b);
+              return a && b
+            });
+
+            this.searchProductsList = [].concat(quotationOrderPrdsList).concat(searchResultsProductsList);
         }
     }
 

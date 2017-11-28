@@ -96,6 +96,7 @@
                 <tr>
                     <th>Наименование</th>
                     <th>Кол-во</th>
+                    <th>Склад</th>
                     <th>Итого</th>
                     <th ng-if="$ctrl.showCost()">%</th>
                     <th></th>
@@ -137,6 +138,9 @@
                         </a>
                         <span ng-if="!$ctrl.quotationOrder.can_edit">{{ item.quantity }}</span>
                     </td>
+                    <td class="text-right">
+                        {{ item.stock }}
+                    </td>
                     <td class="text-right">{{ item.quantity * item.price | currency }}</td>
                     <td class="text-right" ng-if="$ctrl.showCost()">
                         {{ ((100 * item.quantity * item.price_discounted) / ($ctrl.quotationOrder.totalNet / $ctrl.quotationOrder.quantity)).toFixed(2) }}
@@ -147,7 +151,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2"/>
+                    <td colspan="3"/>
                     <td class="text-right">
                         {{ $ctrl.quotationOrder.total | currency }}
                     </td>

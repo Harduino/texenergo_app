@@ -31,6 +31,21 @@
                 </a>
             </p>
         </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">Заказ производства:</p>
+            <p class="col-md-9" ng-if="$ctrl.assemblyOrder.can_edit">
+                <ui-select-infinity config="$ctrl.quotationOrderSelectConfig" on-select="$ctrl.saveAssemblyOrder()" view="app/assembly_orders/components/view-assembly-order/partials/ui-select-infinity-quotation-orders.html" ng-model="$ctrl.assemblyOrder.quotation_order">
+                </ui-select-infinity>
+                <a ng-href="/#/quotation_orders/{{$ctrl.assemblyOrder.quotation_order.id}}" type="button" class="btn btn-default">
+                    <span class="fa fa-eye"></span>
+                </a>
+            </p>
+            <p class="col-md-9" ng-if="!$ctrl.assemblyOrder.can_edit">
+                <a ng-href="/#/quotation_orders/{{$ctrl.assemblyOrder.quotation_order.id}}">
+                    {{ $ctrl.assemblyOrder.quotation_order.title }}
+                </a>
+            </p>
+        </div>
     </div>
     <div class="well well-white">
         <h2>Произведённые товары</h2>
@@ -96,17 +111,17 @@
                     <th>Товар</th>
                     <th>Количество</th>
                     <th>Итого, руб</th>
+                    <th>Заказ</th>
                     <th/>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-if="$ctrl.assemblyOrder.can_edit">
                     <td>
-                        <input class="form-control" ng-model="$ctrl.addableComponent.product.name" id="vro_prod_select"
-                               placeholder="Поисковый запрос" type="text" ng-change="$ctrl.productSearch()" ng-keypress="$ctrl.addComponent($event)">
+                        <input class="form-control" ng-model="$ctrl.addableComponent.product.name" id="vro_prod_select" placeholder="Поисковый запрос" type="text" ng-change="$ctrl.productSearch()" ng-keypress="$ctrl.addComponent($event)">
                         <div style="position: absolute; background: white; border: 1px solid; padding: 5px;"
                              ng-show="$ctrl.searchProductsList.length">
-                            <p ng-repeat='item in $ctrl.searchProductsList' ng-click="$ctrl.setAddableComponent(item)">
+                            <p ng-repeat='item in $ctrl.searchProductsList' ng-click="$ctrl.setAddableComponent(item)" >
                                 {{ item.product.name }}
                             </p>
                         </div>
@@ -118,13 +133,14 @@
                     <td>
                         0
                     </td>
+                    <td></td>
                     <td class="center-item-text">
                         <div ng-click="$ctrl.addComponent()" class="btn btn-success">
                             <i class="fa fa-plus"></i>
                         </div>
                     </td>
                 </tr>
-                <tr ng-repeat='item in $ctrl.assemblyOrder.components'>
+                <tr ng-repeat='item in $ctrl.assemblyOrder.components track by $index'>
                     <td>
                         <a href="/#/products/{{ item.product.id }}">
                             {{ item.product.name }} {{ item.product.article !== "" ? ( "(" + item.product.article  + ")" ) : "" }}
@@ -142,6 +158,16 @@
                         {{ item.total | currency }}
                     </td>
                     <td>
+                        <span ng-if="item.quotation_order.title">
+                            <a href="/#/quotation_orders/{{ item.quotation_order.id }}">
+                                {{ item.quotation_order.title }}
+                            </a>
+                        </span>
+                        <span ng-if="!item.quotation_order.title">
+                            Пусто
+                        </span>
+                    </td>
+                    <td>
                         <form-nav-buttons ng-if="item.can_destroy" class="btn-group" subdata="{data:item, index:$index}" data-template="table" data-options="$ctrl.visual.navTableButts" data-role="item" content-class="btn btn-xs">
                         </form-nav-buttons>
                     </td>
@@ -149,7 +175,7 @@
                 <tr>
                     <td colspan="2" class="text-right">Итого, руб:</td>
                     <td class="text-right">{{ $ctrl.assemblyOrder.total | currency }}</td>
-                    <td></td>
+                    <td colspan="2"></td>
                 </tr>
             </tbody>
         </table>

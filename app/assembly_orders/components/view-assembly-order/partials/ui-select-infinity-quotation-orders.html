@@ -1,0 +1,8 @@
+<ui-select on-select="$ctrl.onSelect()" ng-model="$ctrl.ngModel" uis-open-close="$ctrl.focusSearchBox()"
+           theme="select2" ng-disabled="disabled" style="width: 50%;">
+    <ui-select-match placeholder="Заказ производства не выбран">{{$select.selected.title}}</ui-select-match>
+    <ui-select-choices repeat="quotationOrder in $ctrl.items | filter:$select.search">
+        <div ng-bind-html="quotationOrder.title | highlight: $select.search"></div>
+    </ui-select-choices>
+</ui-select>
+<!-- der/partials/ui-select-infinity-quotation-orders.htm -->
