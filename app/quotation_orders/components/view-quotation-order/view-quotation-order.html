@@ -45,6 +45,18 @@
         </div>
         <div class="row">
             <p class="col-xs-12 col-md-3 font-bold">
+                Заказ клиента:
+            </p>
+            <p class="col-md-9">
+                <ui-select-infinity config="$ctrl.customerOrderSelectConfig" on-select="$ctrl.saveOrderInfo()" view="app/quotation_orders/components/view-quotation-order/partials/ui-select-infinity-customer-orders.html" ng-model="$ctrl.quotationOrder.customer_order" ng-if="$ctrl.quotationOrder.can_edit">
+                </ui-select-infinity>
+                <a ng-if="!$ctrl.quotationOrder.can_edit" ng-href="/#/partners/{{$ctrl.quotationOrder.customerOrder.id}}">
+                    {{$ctrl.quotationOrder.customerOrder.number}}
+                </a>
+            </p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
                 Статус:
             </p>
             <p class="col-md-9">{{ $ctrl.quotationOrder.status }}</p>
@@ -56,6 +68,16 @@
             <p class="col-md-9">
                 <a ng-if="$ctrl.quotationOrder.can_edit" editable-number="$ctrl.quotationOrder.quantity" buttons="no" onaftersave="$ctrl.saveOrderInfo()" e-min="0">
                     {{ $ctrl.quotationOrder.quantity }}
+                </a>
+            </p>
+        </div>
+        <div class="row">
+            <p class="col-xs-12 col-md-3 font-bold">
+                Количество произведенно:
+            </p>
+            <p class="col-md-9">
+                <a ng-if="$ctrl.quotationOrder.can_edit" editable-number="$ctrl.quotationOrder.quantity_manufactured" buttons="no" onaftersave="$ctrl.saveOrderInfo()" e-min="0">
+                    {{ $ctrl.quotationOrder.quantity_manufactured }}
                 </a>
             </p>
         </div>

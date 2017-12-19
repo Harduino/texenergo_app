@@ -403,6 +403,7 @@ class ViewCustomerOrderCtrl {
     updateTotal () {
         let self = this, total = 0;
         this.order.customer_order_contents.map(item => total += self.$filter('price_net')(item, item.quantity));
+        this.order.quotation_orders.map(ord => total += ord.total);
         self.total = total;
     }
 

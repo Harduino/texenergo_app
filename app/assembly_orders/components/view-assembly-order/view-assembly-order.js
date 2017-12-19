@@ -29,13 +29,15 @@ class ViewAssemblyOrderCtrl {
             if(!!self.assemblyOrder.quotation_order && !!self.assemblyOrder.quotation_order.id) {
               serverApi.getQuotationOrderDetails(self.assemblyOrder.quotation_order.id, r => {
                 self.quotationOrderProducts  = r.data.quotation_order_contents.map(i => {
+                  var stcToAssemble = i.quantity - i.assembled;
+                  var stc = (stcToAssemble <= i.stock) ? stcToAssemble : i.stock;
                   return {
                     product: {
                       article: i.product.article, 
                       id: i.product.id,
                       name: ("Из заказа: " + i.product.name)
                     },
-                    stock: i.stock,
+                    stock: stc,
                     quotation_order_content_id: i.id
                   }
                 })
@@ -173,7 +175,6 @@ class ViewAssemblyOrderCtrl {
         if(p && p.id) {  
           let self = this;
           let data = this.addableComponent;
-          console.log("data", data);
 
           let post = {
               product_id: data.product.id,
@@ -245,7 +246,6 @@ class ViewAssemblyOrderCtrl {
             var searchResultsProductsList = this.inStockProducts.filter( item => {
               var a = ((item.product.name + item.product.article).match(new RegExp(query, 'i')) !== null);
               var b = quotationOrderPrdsList.findIndex(i => i.product.id === item.product.id) < 0;
-              // console.log("b", b);
               return a && b
             });
 

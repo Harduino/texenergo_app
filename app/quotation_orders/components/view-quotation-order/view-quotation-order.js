@@ -106,6 +106,7 @@ class ViewQuotationOrderCtrl {
         this.pSelectConfig = {startPage: 0, dataMethod: serverApi.getSearch};
         this.productForAppend = null;
         this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
+        this.customerOrderSelectConfig = {dataMethod: serverApi.getCustomerOrders};
 
         this.goToPartner = () => $state.go('app.partners.view', {id: (this.quotationOrder.partner.id || this.quotationOrder.partner._id)});
 
@@ -140,9 +141,12 @@ class ViewQuotationOrderCtrl {
                 title: order.title,
                 partner_id: order.partner.id,
                 coefficient: order.coefficient,
-                quantity: order.quantity
+                quantity: order.quantity,
+                customer_order_id: order.customer_order.id,
+                quantity_manufactured: order.quantity_manufactured
             }
         };
+
 
         this.serverApi.updateQuotationOrder(order.id, data, result => {
             if(result.status == 200 && !result.data.errors) {

@@ -1,8 +1,8 @@
 <table class="table table-bordered table-margined-top" infinite-scroll="$ctrl.loadItems()">
     <thead>
     <tr>
-        <th class="hidden-xs">№</th>
-        <th>Номер</th>
+        <th class="hidden-xs">Номер</th>
+        <th>Название</th>
         <th class="hidden-xs">Дата</th>
         <th class="hidden-xs">Статус</th>
         <th class="hidden-xs">Партнер</th>
@@ -12,7 +12,7 @@
     </thead>
     <tbody>
     <tr ng-repeat="row in $ctrl.items">
-        <td class="hidden-xs">{{$index +1}}</td>
+        <td class="hidden-xs">{{ row.number }}</td>
         <td>
             <a href="/#/quotation_orders/{{ row.id }}">
                 {{row.title}}

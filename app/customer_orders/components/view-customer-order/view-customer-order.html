@@ -202,6 +202,33 @@
             </div>
         </div>
     </div>
+    <div class="well well-white" style="overflow-y: auto;" ng-if="$ctrl.order.quotation_orders.length">
+        <div class="well well-clean well-white no-padding">
+            <h2>Щитовое оборудование</h2>
+            <div>
+                <table class="table table-hover table-bordered margin-top-10">
+                    <thead>
+                        <tr>
+                            <th>Название </th>
+                            <th>Номер</th>
+                            <th>Итого</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="quotationOrder in $ctrl.order.quotation_orders">
+                            <td>
+                                <a ng-href="/#/quotation_orders/{{ quotationOrder.id }}">
+                                    {{ quotationOrder.title }}
+                                </a>
+                            </td>
+                            <td>{{ quotationOrder.number }}</td>
+                            <td>{{ quotationOrder.total | currency }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
     <div class="well well-white" style="overflow-y: auto;">
         <div class="well well-clean well-white no-padding">
             <div ng-if="$ctrl.visual.roles.can_edit" class="flex layout-row layout-align-start-center">

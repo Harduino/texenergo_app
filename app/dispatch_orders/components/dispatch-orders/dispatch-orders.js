@@ -112,11 +112,17 @@ class DispatchOrdersCtrl {
 
     addDispatchOrderContent(item, dispatchOrder) {
         let self = this;
+
         let data = {
-            customer_order_content_id: item.customer_order_content_id,
             quantity: item.remains_to_dispatch,
             customer_order_id: item.customer_order_id
         };
+
+        if (item.customer_order_content_id !== undefined) {
+            data["customer_order_content_id"] = item.customer_order_content_id;
+        } else if (item.quotation_order_id !== undefined) {
+            data["quotation_order_id"] = item.quotation_order_id;
+        }
 
         self.serverApi.createDispatchOrderContent(dispatchOrder.id, data, r => {
             if (!!r.data && !r.data.errors) {

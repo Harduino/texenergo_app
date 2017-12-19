@@ -1,0 +1,6 @@
+<ui-select on-select="$ctrl.onSelect()" ng-model="$ctrl.ngModel" uis-open-close="$ctrl.focusSearchBox()" theme="select2" style="min-width: 250px; margin-top: -6px;">
+    <ui-select-match placeholder="Заказ клиента не выбран">{{$select.selected.number}}</ui-select-match>
+    <ui-select-choices repeat="customerOrder in $ctrl.items | filter:$select.search">
+        <div ng-bind-html="customerOrder.number | highlight: $select.search"></div>
+    </ui-select-choices>
+</ui-select>
