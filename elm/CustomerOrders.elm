@@ -1,19 +1,18 @@
 -- https://auth0.com/blog/creating-your-first-elm-app-part-1/
--- elm-make Main.elm --output ../public/elm.js
+-- elm-make CustomerOrders.elm --output ../public/elm.js
 
 module CustomerOrders exposing (Partner)
 
 import Html exposing (div, text, tr, td, th)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, style)
 import Html.Events exposing (onInput, onClick)
 import Http
 import Json.Decode as Decode exposing (field, int, string, float, bool)
 import Json.Decode.Pipeline exposing (required)
 import Json.Encode
 import Utils.Date
+import Utils.Currency exposing (toCurrency)
 import Date exposing (Date)
-import FormatNumber exposing (format)
-import FormatNumber.Locales exposing (Locale)
 
 type alias Model =
   { customerOrders : List CustomerOrder
@@ -75,10 +74,6 @@ type Msg = FetchCustomerOrders Int String
   | FetchedPartners (Result Http.Error (List Partner))
   | ChoosePartner Partner
 
-
-rusLocale : Locale
-rusLocale =
-  Locale 2 " " "," "" ""
 
 update : Msg -> Model -> ( Model, Cmd Msg ) 
 update msg m =
@@ -216,7 +211,7 @@ destroyCustomerOrder m customerOrderId =
     , headers = [
       Http.header "Authorization" ("Bearer " ++ m.authToken)
     ]
-    , url = "http://localhost:3000/api/customer_orders/" ++ customerOrderId
+    , url = "https://api.texenergo.com/v2/customer_orders/" ++ customerOrderId
     , body = Http.emptyBody
     , expect = Http.expectStringResponse (\_ -> Ok ())
     , timeout = Nothing
@@ -234,7 +229,7 @@ createCustomerOrder m =
     , headers = [
       Http.header "Authorization" ("Bearer " ++ m.authToken)
     ]
-    , url = "http://localhost:3000/api/customer_orders"
+    , url = "https://api.texenergo.com/v2/customer_orders"
     , body = Http.jsonBody (encodeCustomerOrder nco)
     , expect = Http.expectJson customerOrderDecoder
     , timeout = Nothing
@@ -285,7 +280,7 @@ fetchCustomerOrders p f =
     queryString =
       "?q=" ++ f ++ "&page=" ++ (toString p)
     endpoint =
-      "http://localhost:3000/api/customer_orders" ++ queryString
+      "https://api.texenergo.com/v2/customer_orders" ++ queryString
   in
   Http.send FetchedCustomerOrders (Http.get endpoint customerOrdersDecoder)
 
@@ -293,7 +288,7 @@ fetchCustomerOrders p f =
 fetchPartners : String -> Cmd Msg
 fetchPartners f = 
   let
-    endpoint = ("http://localhost:3000/api/partners?q=" ++ f)
+    endpoint = ("https://api.texenergo.com/v2/partners?q=" ++ f)
   in
   Http.send FetchedPartners (Http.get endpoint (Decode.list partnerDecoder))
 
@@ -359,15 +354,15 @@ view m =
         viewQueryFilter m)
     ],
     div [ class "well well-white" ] [
-      Html.table [ class "table table-bordered" ] [
-        Html.thead [ class "hidden-xs" ] [
+      Html.table [ class "table table-bordered hidden-xs" ] [
+        Html.thead [] [
           tr [] [
             th [ class "hidden-xs" ] [
               Html.i [ class "fa fa-truck" ] []
             ], 
             th [] [ text "Номер" ],
             th [] [ text "Свой номер" ],
-            th [ class "hidden-xs" ] [ text "Статус" ],
+            th [] [ text "Статус" ],
             th [] [ text "Дата" ],
             th [] [ text "Партнер" ],
             th [] [ text "Итого" ],
@@ -376,6 +371,7 @@ view m =
         ],
         Html.tbody [] (List.map viewCustomerOrder m.customerOrders)
       ],
+      div [ class "hidden-sm hidden-md hidden-lg", style [("overflow-y", "auto")] ] (List.map viewCustomerOrderMobile m.customerOrders),
       viewLoadMore m
     ]
   ]
@@ -388,7 +384,7 @@ viewLoadMore m =
   else
     div [
       onClick LoadMoreCustomerOrders,
-      Html.Attributes.style [("width", "100%"), ("text-align", "center")]
+      style [("width", "100%"), ("text-align", "center")]
     ] [
       Html.span [class "editable-click a.editable-click"] [
         text "Загрузить ещё"
@@ -449,7 +445,7 @@ viewPartnerOption p =
 
 viewPartnerSection : Model -> Html.Html Msg
 viewPartnerSection m =
-  Html.section [ class "form-group", Html.Attributes.style [("overflow-y", "auto")] ] [
+  Html.section [ class "form-group", style [("overflow-y", "auto")] ] [
     Html.label [ class "control-label" ] [ text "Партнёр" ],
     Html.br [] [],
     if m.partnerConf.editing then
@@ -525,6 +521,31 @@ viewNewCustomerOrder m =
     text ""
 
 
+viewCustomerOrderMobile : CustomerOrder -> Html.Html Msg
+viewCustomerOrderMobile co =
+  div [
+    class "col-xs-12",
+    style [("margin-bottom", "10px"), ("border-bottom", "1px solid"), ("padding-bottom", "10px")]
+  ] [
+    div [] [
+      text "Номер: ",
+      Html.a [ Html.Attributes.href ("/#/customer_orders/" ++ co.id)] [ text co.number]
+    ],
+    div [] [
+      "Статус: " ++ co.status |> text 
+    ],
+    div [] [
+      "Дата: " ++ Utils.Date.toHuman co.date |> text
+    ],
+    div [] [
+      "Партнёр: " ++ co.partner.name |> text
+    ],
+    div [] [
+      "Итого: " ++ (toCurrency co.total) |> text
+    ]
+  ]
+
+
 viewCustomerOrder : CustomerOrder -> Html.Html Msg
 viewCustomerOrder co =
   let
@@ -549,9 +570,9 @@ viewCustomerOrder co =
     td [ class "hidden-xs" ] [ text co.status ],
     td [] [ Utils.Date.toHuman co.date |> text ],
     td [] [ text co.partner.name ],
-    td [ class "text-right" ] [ format rusLocale co.total |> (flip (++) " руб") |> text ],
+    td [ class "text-right" ] [ toCurrency co.total |> text ],
     td [ class "center-item-text" ] [
-      Html.node "form-nav-buttons" [ class "btn-group" ] [
+      Html.node "form-nav-buttons" [ class "btn-group", Html.Attributes.attribute "data-template" "table" ] [
         Html.a [ class "btn btn-xs btn-info", Html.Attributes.href ("/#/customer_orders/" ++ co.id)] [
           Html.i [ class "fa fa-eye" ] []
         ],

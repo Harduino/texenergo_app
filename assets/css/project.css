@@ -246,6 +246,11 @@ form-nav-buttons[data-template='table']>div{
     height: 28px;
     line-height: 24px;
 }
+form-nav-buttons[data-template='table']>a{
+    width:28px;
+    height: 28px;
+    line-height: 24px;
+}
 form-nav-buttons[data-template='table'] .btn>.fa{
     margin-right: 0;
 }

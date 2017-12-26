@@ -12,4 +12,10 @@ public/assets/javascripts/libs.js
 
 public/assets/stylesheets/app-styles.css
 
+public/assets/javascripts/skins/lightgray/*
+
 bower_components
+
+elm/elm-stuff
+elm/build
+public/elm.js
