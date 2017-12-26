@@ -394,7 +394,12 @@
                             <td ng-if="$ctrl.order.can_edit" class="hidden-xs"></td>
                             <td ng-if="$ctrl.order.can_edit" ></td>
                             <td class="text-right hidden-xs">Итого, руб:</td>
-                            <td class="text-right">{{$ctrl.total | currency}}</td>
+                            <td class="text-right">
+                                {{$ctrl.total | currency}}
+                                <span ng-if="$ctrl.order.quotation_orders.length" class="btn-danger">
+                                    <bold>!!!</bold>
+                                </span>
+                            </td>
                             <td></td>
                         </tr>
                     </tbody>

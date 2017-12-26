@@ -58,6 +58,7 @@ appConfig.sound_on = true;
         'teBuffer',
         'angularFileUpload',
         'xeditable',
+        'angularElmComponents',
 
         //Auth0
         'auth0.lock',

@@ -8,7 +8,8 @@ var gulp = require('gulp'),
     expect = require('gulp-expect-file'),
     gulpif = require('gulp-if'),
     minify = require('gulp-minify'),
-    ngAnnotate = require('gulp-ng-annotate');
+    ngAnnotate = require('gulp-ng-annotate'),
+    elm = require('gulp-elm');
 
 gulp.task('styles', function() {
     var files = [
@@ -128,10 +129,17 @@ gulp.task('watch', function() {
         'app/*/directives/*.js',
         'app/app.api.js',
         'app/app.js',
-        'app/app.config.js'
+        'app/app.config.js',
+        'elm.js'
     ], function(){
         gulp.start('app');
     });
+
+    // gulp.watch([
+    //     'elm.js'
+    // ], function() {
+    //     connect.reload();
+    // });
 
     gulp.watch([
       'assets/css/*.css'
