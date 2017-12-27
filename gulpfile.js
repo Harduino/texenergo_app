@@ -46,7 +46,6 @@ gulp.task('libs', function(){
         'bower_components/bootstrap/dist/js/bootstrap.min.js',
         'bower_components/jquery-ui/jquery-ui.min.js',
         'assets/js/datepicker-locale.js',
-        'bower_components/d3/d3.min.js',
         'bower_components/angular/angular.min.js',
         'assets/plugin/i18n/*.js',
         'bower_components/angular-ui-router/release/angular-ui-router.min.js',
@@ -99,14 +98,19 @@ gulp.task('app', function(){
         'app/*/services/*.js',
         'app/layout/templates.js',
         'app/layout/filters/filters.js',
-        // 'app/*/controllers/*.js',
         'app/*/components/*/*.js',
-        // 'app/*/directives/*.js',
-        'assets/plugin/angular-d3/angular-d3.js',
         'app/app.api.js',
         'app/app.js',
         'app/app.config.js'
     ])
+        .pipe(connect.reload());
+});
+
+gulp.task('elm', function(){
+    gulp.src('elm/*.elm')
+        .pipe(elm({cwd: "elm/"}))
+        .pipe(concat('elm.js'))
+        .pipe(gulp.dest('public/assets/javascripts/'))
         .pipe(connect.reload());
 });
 
@@ -129,17 +133,16 @@ gulp.task('watch', function() {
         'app/*/directives/*.js',
         'app/app.api.js',
         'app/app.js',
-        'app/app.config.js',
-        'elm.js'
+        'app/app.config.js'
     ], function(){
         gulp.start('app');
     });
 
-    // gulp.watch([
-    //     'elm.js'
-    // ], function() {
-    //     connect.reload();
-    // });
+    gulp.watch([
+        'elm/*.elm'
+    ], function() {
+        gulp.start('elm');
+    });
 
     gulp.watch([
       'assets/css/*.css'
@@ -150,4 +153,4 @@ gulp.task('watch', function() {
 
 gulp.task('server', ['launch', 'watch']);
 gulp.task('serve', ['app', 'libs', 'styles', 'server']);
-gulp.task('default', ['app', 'libs', 'styles']);
+gulp.task('default', ['app', 'libs', 'styles', 'elm']);

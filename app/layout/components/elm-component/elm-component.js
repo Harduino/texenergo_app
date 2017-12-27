@@ -2,9 +2,13 @@ class ElmComponentCtrl {
     constructor($timeout, $element, authService) {
         this.$timeout = $timeout;
         this.$element = $element;
+        
 
         if (this.modul !== undefined) {
-            Elm[this.modul].embed($element[0], {authToken: authService._token});
+            Elm[this.modul].embed($element[0], { 
+                authToken: authService._token,
+                apiEndpoint: window.APP_ENV.API_HTTP_BASE_URL
+            });
         }
     }
 }

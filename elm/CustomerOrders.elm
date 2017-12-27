@@ -19,13 +19,14 @@ type alias Model =
   , filter : String
   , newCustomerOrderOpened : Bool
   , newCustomerOrder : NewCustomerOrder
-  , authToken : String
+  , flags : Flags
   , page : Int
   , lastPage : Bool
   , partnerConf : PartnerConfig
   }
 type alias Flags = {
-  authToken : String
+  authToken : String,
+  apiEndpoint : String
 }
 type alias Partner =
   { id : String
@@ -112,7 +113,7 @@ update msg m =
       
   case msg of
     FetchCustomerOrders p f ->
-      ( { m | page = (m.page + 1) }, fetchCustomerOrders p f)
+      ( { m | page = (m.page + 1) }, fetchCustomerOrders m p f)
 
     FetchedCustomerOrders (Result.Ok xs) ->
       ( { m | customerOrders = List.append m.customerOrders xs, lastPage = isLastPage xs }, Cmd.none)
@@ -150,16 +151,16 @@ update msg m =
           ( m, Cmd.none )
 
     CreatedCustomerOrder (Result.Ok x) ->
-      ( { m | customerOrders = [], page = 1 }, fetchCustomerOrders 1 m.filter )
+      ( { m | customerOrders = [], page = 1 }, fetchCustomerOrders m 1 m.filter )
 
     LoadMoreCustomerOrders ->
       if m.lastPage then
         ( m, Cmd.none )
       else
-        ( { m | page = (m.page + 1) } , fetchCustomerOrders (m.page + 1) m.filter )
+        ( { m | page = (m.page + 1) } , fetchCustomerOrders m (m.page + 1) m.filter )
 
     RefreshCustomerOrders ->
-      ( { m | customerOrders = [], page = 1 }, fetchCustomerOrders 1 m.filter)
+      ( { m | customerOrders = [], page = 1 }, fetchCustomerOrders m 1 m.filter)
     
     DestroyCustomerOrder customerOrderId ->
       ( m , (destroyCustomerOrder m customerOrderId) )
@@ -176,7 +177,7 @@ update msg m =
     
     FilterKeyPressed keyCode ->
       if keyCode == 13 then
-        ( { m | customerOrders = [], page = 1 }, fetchCustomerOrders 1 m.filter)
+        ( { m | customerOrders = [], page = 1 }, fetchCustomerOrders m 1 m.filter)
       else
         ( m, Cmd.none )
 
@@ -184,7 +185,7 @@ update msg m =
       (
         { m | partnerConf = (setPartnerFilter str m.partnerConf) }
         , if String.length str >= 2 then
-          fetchPartners str
+          fetchPartners m str
         else
           Cmd.none
       )
@@ -209,9 +210,9 @@ destroyCustomerOrder m customerOrderId =
   Http.request {
     method = "DELETE"
     , headers = [
-      Http.header "Authorization" ("Bearer " ++ m.authToken)
+      Http.header "Authorization" ("Bearer " ++ m.flags.authToken)
     ]
-    , url = "https://api.texenergo.com/v2/customer_orders/" ++ customerOrderId
+    , url = m.flags.apiEndpoint ++ "/customer_orders/" ++ customerOrderId
     , body = Http.emptyBody
     , expect = Http.expectStringResponse (\_ -> Ok ())
     , timeout = Nothing
@@ -227,9 +228,9 @@ createCustomerOrder m =
   Http.request {
     method = "POST"
     , headers = [
-      Http.header "Authorization" ("Bearer " ++ m.authToken)
+      Http.header "Authorization" ("Bearer " ++ m.flags.authToken)
     ]
-    , url = "https://api.texenergo.com/v2/customer_orders"
+    , url = m.flags.apiEndpoint ++ "/customer_orders"
     , body = Http.jsonBody (encodeCustomerOrder nco)
     , expect = Http.expectJson customerOrderDecoder
     , timeout = Nothing
@@ -274,21 +275,21 @@ customerOrderDecoder =
     |> required "can_destroy" bool
 
 
-fetchCustomerOrders : Int -> String -> Cmd Msg
-fetchCustomerOrders p f =
+fetchCustomerOrders : Model -> Int -> String -> Cmd Msg
+fetchCustomerOrders m p f =
   let
     queryString =
       "?q=" ++ f ++ "&page=" ++ (toString p)
     endpoint =
-      "https://api.texenergo.com/v2/customer_orders" ++ queryString
+      m.flags.apiEndpoint ++ "/customer_orders" ++ queryString
   in
   Http.send FetchedCustomerOrders (Http.get endpoint customerOrdersDecoder)
 
 
-fetchPartners : String -> Cmd Msg
-fetchPartners f = 
+fetchPartners : Model -> String -> Cmd Msg
+fetchPartners m f = 
   let
-    endpoint = ("https://api.texenergo.com/v2/partners?q=" ++ f)
+    endpoint = (m.flags.apiEndpoint ++ "/partners?q=" ++ f)
   in
   Http.send FetchedPartners (Http.get endpoint (Decode.list partnerDecoder))
 
@@ -306,14 +307,17 @@ initNewCustomerOrder =
   NewCustomerOrder "" "" initPartner ""
 
 
-initModel : String -> Model
-initModel authToken =
-  Model [] "" False initNewCustomerOrder authToken 1 False initPartnerConf
+initModel : Flags -> Model
+initModel flags =
+  Model [] "" False initNewCustomerOrder flags 1 False initPartnerConf
 
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
-  ( initModel flags.authToken, fetchCustomerOrders 1 "" )
+  let
+    m = initModel flags
+  in
+  ( m, fetchCustomerOrders m 1 "" )
 
 
 subscriptions : Model -> Sub Msg
