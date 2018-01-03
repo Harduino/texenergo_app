@@ -42,7 +42,6 @@ var buildJs = function(destinationFileName, files, skipES6) {
 
 gulp.task('libs', function(){
     buildJs('libs.js', [
-        'bower_components/jquery/dist/jquery.min.js',
         'bower_components/bootstrap/dist/js/bootstrap.min.js',
         'bower_components/jquery-ui/jquery-ui.min.js',
         'assets/js/datepicker-locale.js',
@@ -151,6 +150,6 @@ gulp.task('watch', function() {
     });
 });
 
-gulp.task('server', ['launch', 'watch']);
+gulp.task('server', ['elm','launch', 'watch']);
 gulp.task('serve', ['app', 'libs', 'styles', 'server']);
 gulp.task('default', ['app', 'libs', 'styles', 'elm']);

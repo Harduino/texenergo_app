@@ -1,8 +1,9 @@
 -- https://auth0.com/blog/creating-your-first-elm-app-part-1/
 -- elm-make CustomerOrders.elm --output ../public/elm.js
 
-module CustomerOrders exposing (Partner)
+module CustomerOrders exposing (CustomerOrder)
 
+import Date exposing (Date)
 import Html exposing (div, text, tr, td, th)
 import Html.Attributes exposing (class, style)
 import Html.Events exposing (onInput, onClick)
@@ -12,7 +13,8 @@ import Json.Decode.Pipeline exposing (required)
 import Json.Encode
 import Utils.Date
 import Utils.Currency exposing (toCurrency)
-import Date exposing (Date)
+
+import Partner.Model exposing (Partner, PartnerConfig, partnerDecoder, initPartnerConf, initPartner)
 
 type alias Model =
   { customerOrders : List CustomerOrder
@@ -28,15 +30,7 @@ type alias Flags = {
   authToken : String,
   apiEndpoint : String
 }
-type alias Partner =
-  { id : String
-  , name : String
-  }
-type alias PartnerConfig =
-  { query : String 
-  , partners : List Partner
-  , editing : Bool
-  }
+
 type alias NewCustomerOrder =
   { title : String 
   , description : String
@@ -216,7 +210,7 @@ destroyCustomerOrder m customerOrderId =
     , body = Http.emptyBody
     , expect = Http.expectStringResponse (\_ -> Ok ())
     , timeout = Nothing
-    , withCredentials = True
+    , withCredentials = False
   } |> Http.send (DestroyedCustomerOrder customerOrderId)
 
 
@@ -234,7 +228,7 @@ createCustomerOrder m =
     , body = Http.jsonBody (encodeCustomerOrder nco)
     , expect = Http.expectJson customerOrderDecoder
     , timeout = Nothing
-    , withCredentials = True
+    , withCredentials = False
     } |> Http.send CreatedCustomerOrder
 
 
@@ -251,13 +245,6 @@ encodeCustomerOrder no =
 customerOrdersDecoder : Decode.Decoder (List CustomerOrder)
 customerOrdersDecoder =
   Decode.list customerOrderDecoder
-
-
-partnerDecoder : Decode.Decoder Partner
-partnerDecoder =
-  Decode.succeed Partner
-    |> required "id" string
-    |> required "name" string
 
 
 customerOrderDecoder : Decode.Decoder CustomerOrder
@@ -283,7 +270,16 @@ fetchCustomerOrders m p f =
     endpoint =
       m.flags.apiEndpoint ++ "/customer_orders" ++ queryString
   in
-  Http.send FetchedCustomerOrders (Http.get endpoint customerOrdersDecoder)
+  Http.request { method = "GET"
+    , headers = [
+      Http.header "Authorization" ("Bearer " ++ m.flags.authToken)
+    ]
+    , url = endpoint
+    , body = Http.emptyBody
+    , expect = Http.expectJson customerOrdersDecoder
+    , timeout = Nothing
+    , withCredentials = False
+  } |> Http.send FetchedCustomerOrders
 
 
 fetchPartners : Model -> String -> Cmd Msg
@@ -291,15 +287,16 @@ fetchPartners m f =
   let
     endpoint = (m.flags.apiEndpoint ++ "/partners?q=" ++ f)
   in
-  Http.send FetchedPartners (Http.get endpoint (Decode.list partnerDecoder))
-
-
-initPartnerConf : PartnerConfig
-initPartnerConf =
-  PartnerConfig "" [] False
-
-initPartner : Partner
-initPartner = Partner "" ""
+  Http.request { method = "GET"
+    , headers = [
+      Http.header "Authorization" ("Bearer " ++ m.flags.authToken)
+    ]
+    , url = endpoint
+    , body = Http.emptyBody
+    , expect = Http.expectJson (Decode.list partnerDecoder)
+    , timeout = Nothing
+    , withCredentials = False
+  } |> Http.send FetchedPartners
 
 
 initNewCustomerOrder : NewCustomerOrder
@@ -307,21 +304,12 @@ initNewCustomerOrder =
   NewCustomerOrder "" "" initPartner ""
 
 
-initModel : Flags -> Model
-initModel flags =
-  Model [] "" False initNewCustomerOrder flags 1 False initPartnerConf
-
-
 init : Flags -> ( Model, Cmd Msg )
 init flags =
   let
-    m = initModel flags
+    initModel = Model [] "" False initNewCustomerOrder flags 1 False initPartnerConf
   in
-  ( m, fetchCustomerOrders m 1 "" )
-
-
-subscriptions : Model -> Sub Msg
-subscriptions model = Sub.none
+  ( initModel, fetchCustomerOrders initModel 1 "" )
 
 
 view : Model -> Html.Html Msg
@@ -418,7 +406,7 @@ viewQueryFilter m =
           Html.input [
             Html.Attributes.type_ "text",
             Html.Attributes.placeholder "Введите часть номера",
-            class "input-sm ng-pristine ng-valid ng-empty ng-touched",
+            class "input-sm",
             Html.Events.onInput ChangeFilter,
             onKeyUp FilterKeyPressed
           ] []
@@ -475,54 +463,51 @@ viewPartnerSection m =
 
 viewNewCustomerOrder : Model -> Html.Html Msg
 viewNewCustomerOrder m =
-  if m.newCustomerOrderOpened then
-    Html.span [] [
-      Html.h4 [] [
-        text "Создать новый заказ"
-      ],
-      Html.section [ class "form-group" ] [
-        Html.label [ class "control-label" ] [ text "Свой номер" ],
-        Html.input [
-          class "input-sm form-control",
-          onInput ChangeNewCustomerOrderTitle
-        ] [
-          text m.newCustomerOrder.title
-        ]
-      ],
-      Html.section [ class "form-group" ] [
-        Html.label [ class "control-label" ] [ text "Описание" ],
-        Html.input [
-          class "input-sm form-control",
-          onInput ChangeNewCustomerOrderDescription
-        ] [
-          text m.newCustomerOrder.description
-        ]
-      ],
-      viewPartnerSection m,
-      Html.section [ class "form-group" ] [
-        Html.label [ class "control-label" ] [ text "Оригинал заявки" ],
-        Html.textarea [
-          class "input-sm form-control",
-          onInput ChangeNewCustomerOrderDescription
-        ] [
-          text m.newCustomerOrder.requestOriginal
-        ]
-      ],
-      Html.button [
-        class "btn btn-default",
-        onClick FlipNewCustomerOrder
+  Html.span [] [
+    Html.h4 [] [
+      text "Создать новый заказ"
+    ],
+    Html.section [ class "form-group" ] [
+      Html.label [ class "control-label" ] [ text "Свой номер" ],
+      Html.input [
+        class "input-sm form-control",
+        onInput ChangeNewCustomerOrderTitle
       ] [
-        text "Отмена"
-      ],
-      Html.button [
-        class "btn btn-primary",
-        onClick CreateCustomerOrder
-      ] [
-        text "Сохранить"
+        text m.newCustomerOrder.title
       ]
+    ],
+    Html.section [ class "form-group" ] [
+      Html.label [ class "control-label" ] [ text "Описание" ],
+      Html.input [
+        class "input-sm form-control",
+        onInput ChangeNewCustomerOrderDescription
+      ] [
+        text m.newCustomerOrder.description
+      ]
+    ],
+    viewPartnerSection m,
+    Html.section [ class "form-group" ] [
+      Html.label [ class "control-label" ] [ text "Оригинал заявки" ],
+      Html.textarea [
+        class "input-sm form-control",
+        onInput ChangeNewCustomerOrderDescription
+      ] [
+        text m.newCustomerOrder.requestOriginal
+      ]
+    ],
+    Html.button [
+      class "btn btn-default",
+      onClick FlipNewCustomerOrder
+    ] [
+      text "Отмена"
+    ],
+    Html.button [
+      class "btn btn-primary",
+      onClick CreateCustomerOrder
+    ] [
+      text "Сохранить"
     ]
-  else
-    text ""
+  ]
 
 
 viewCustomerOrderMobile : CustomerOrder -> Html.Html Msg
@@ -588,12 +573,11 @@ viewCustomerOrder co =
   ]
 
 
--- MAIN
 main : Program Flags Model Msg
 main =
   Html.programWithFlags
     { init = init
     , view = view
     , update = update
-    , subscriptions = subscriptions
+    , subscriptions = (\m -> Sub.none)
     }

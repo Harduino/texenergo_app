@@ -1,4 +1,4 @@
-module Utils.Date exposing (decoder, toHuman)
+module Utils.Date exposing (decoder, toHuman, toHumanShort)
 
 import Date exposing (Date)
 import Json.Decode as Decode exposing (Decoder)
@@ -61,14 +61,19 @@ monthDigit m =
             "12"
 
 
-toHuman : Date -> String
-toHuman d =
-    -- 01/06/17 13:40
+toHumanShort : Date -> String
+toHumanShort d =
     (Date.day d |> toString)
         ++ "/"
         ++ (Date.month d |> monthDigit)
         ++ "/"
         ++ (Date.year d |> toString |> String.right 2)
+
+
+toHuman : Date -> String
+toHuman d =
+    -- 01/06/17 13:40
+    toHumanShort d
         ++ " "
         ++ (Date.hour d |> toString)
         ++ ":"

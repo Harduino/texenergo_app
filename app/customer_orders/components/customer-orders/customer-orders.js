@@ -3,10 +3,7 @@ class CustomerOrdersCtrl {
     }
 }
 
-CustomerOrdersCtrl.$inject = [
-  '$state',
-  '$stateParams'
-];
+CustomerOrdersCtrl.$inject = ['$state', '$stateParams'];
 
 angular.module('app.customer_orders').component('customerOrders', {
     controller: CustomerOrdersCtrl,
