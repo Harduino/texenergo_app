@@ -65,50 +65,6 @@ class ViewProductCtrl {
         }
     }
 
-    getLeadTime(id, quantity, event) {
-        if(event.keyCode == 13) {
-            let self = this;
-
-            this.serverApi.getLeadTime(id, quantity, r => {
-                let info = r.data.lead_time_info;
-
-                if (window.yaCounter7987369 != undefined) {
-                    let yaParams = {};
-
-                    if (self.localStoraj && self.localStoraj.profile && self.localStoraj.profile.user_metadata) {
-                        yaParams.user_email = self.localStoraj.profile.user_metadata.email;
-                        yaParams.user_id = self.localStoraj.profile.user_metadata.contact_id;
-                    }
-
-                    yaCounter7987369.reachGoal("SeLeadTime", yaParams);
-                }
-
-                let header, msg, flag;
-                if (info.obsolete) {
-                    header = "Снят с производства";
-                    msg = "";
-                    flag = false;
-                } else if (info.message) {
-                    header = "Сообщение";
-                    msg = info.message;
-                    flag = false;
-                } else {
-                    header = "Успешно";
-                    msg = 'Тариф: ' + info.price_tarif + " руб., Скидка: " + info.discount + "%, Закупка: " + info.cost + " руб., Срок поставки: " + info.delivery_date + ", Мин. кол-во: " + info.quantity_min + ", Остаток у Шнейдера: " + info.schneider_stock
-                    flag = true;
-                }
-
-                if(info.schneider_stock !== undefined){
-                  let p = _.findWhere(self.product.supplier_infos, {supplier_code: 'schneider'});
-
-                  p && (p.quantity = info.schneider_stock);
-                }
-
-                self.funcFactory.showNotification(header, msg, flag);
-            });
-        }
-    }
-
     saveProduct() {
         let self = this, product = this.product,
             data = {

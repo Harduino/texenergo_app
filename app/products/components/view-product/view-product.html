@@ -131,17 +131,6 @@
                     <span ng-if="!$ctrl.product.can_edit">{{ $ctrl.product.unit }}</span>
                 </p>
             </div>
-            <div class="row"  ng-show="$ctrl.product.manufacturer.name === 'Schneider Electric'">
-                <p class="col-xs-12 col-md-3 font-bold">
-                    Срок поставки (единиц товара):
-                </p>
-                <p class="col-md-9">
-                    <input class="form-control" ng-model="$ctrl.data.quantity" type="text"
-                                                   model-filter="{min:0}" filter-name="te_number"
-                                                   placeholder="Количество товара"
-                                                   ng-keypress="$ctrl.getLeadTime($ctrl.product.id, $ctrl.data.quantity, $event)">
-                </p>
-            </div>
         </div>
         <div class="col-md-6">
             <img ng-if="!$ctrl.product.can_edit" style="max-height: 200px; max-width: 200px;"

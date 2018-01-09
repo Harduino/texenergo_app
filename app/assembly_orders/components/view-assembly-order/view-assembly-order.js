@@ -1,5 +1,5 @@
 class ViewAssemblyOrderCtrl {
-    constructor($state, $stateParams, serverApi, funcFactory) {
+    constructor($state, $stateParams, serverApi, funcFactory, $localStorage) {
         this.assemblyOrder = {};
         // this.partnerSelectConfig = {dataMethod: serverApi.getPartners};
         this.quotationOrderSelectConfig = {dataMethod: serverApi.getQuotationOrders};
@@ -7,6 +7,7 @@ class ViewAssemblyOrderCtrl {
         this.$state = $state;
         this.serverApi = serverApi;
         this.funcFactory = funcFactory;
+        this.$localStorage = $localStorage;
 
         this.addableComponent = { product: {} }; // Stores a product that we are about to add.
         this.searchProductsList = []; // Stores filtered unreceived products
@@ -73,6 +74,7 @@ class ViewAssemblyOrderCtrl {
                         });
                     }
                 },
+                {type: 'print_form_pdf', callback: () => self.openPdf('')}
             ],
             chartOptions: {barColor:'rgb(103,135,155)', scaleColor:false, lineWidth:5, lineCap:'circle', size:50},
             titles: 'Выписка из производства: ',
@@ -292,9 +294,17 @@ class ViewAssemblyOrderCtrl {
             }
         });
     }
+
+    openPdf(path) {
+        var prefix = window.APP_ENV.TEXENERGO_COM_API_HTTP_BASE_URL;
+        if (window.location.href.match("localhost") !== null) {
+          prefix = "http://localhost:3000/api";
+        }
+        window.open(prefix + '/assembly_orders/' + this.assemblyOrder.id + path + '.pdf?token=' + this.$localStorage.id_token, '_blank');
+    }
 }
 
-ViewAssemblyOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory'];
+ViewAssemblyOrderCtrl.$inject = ['$state', '$stateParams', 'serverApi', 'funcFactory', '$localStorage'];
 
 angular.module('app.assembly_orders').component('viewAssemblyOrder', {
     controller: ViewAssemblyOrderCtrl,
