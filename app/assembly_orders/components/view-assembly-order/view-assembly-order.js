@@ -27,14 +27,17 @@ class ViewAssemblyOrderCtrl {
             serverApi.getInStockProducts(r => {
               self.inStockProducts = r.data
             });
+
+            // Открываем связанный Заказ Производства. Если есть.
             if(!!self.assemblyOrder.quotation_order && !!self.assemblyOrder.quotation_order.id) {
-              serverApi.getQuotationOrderDetails(self.assemblyOrder.quotation_order.id, r => {
-                self.quotationOrderProducts  = r.data.quotation_order_contents.map(i => {
-                  var stcToAssemble = i.quantity - i.assembled;
+              serverApi.getQuotationOrderDetails(self.assemblyOrder.quotation_order.id, thizQuotationOrder => {
+
+                self.quotationOrderProducts  = thizQuotationOrder.data.quotation_order_contents.map(i => {
+                  var stcToAssemble = (i.quantity * thizQuotationOrder.data.quantity) - i.assembled;
                   var stc = (stcToAssemble <= i.stock) ? stcToAssemble : i.stock;
                   return {
                     product: {
-                      article: i.product.article, 
+                      article: i.product.article,
                       id: i.product.id,
                       name: ("Из заказа: " + i.product.name)
                     },
@@ -42,6 +45,7 @@ class ViewAssemblyOrderCtrl {
                     quotation_order_content_id: i.id
                   }
                 })
+
               })
             }
           }, () => {
@@ -167,14 +171,14 @@ class ViewAssemblyOrderCtrl {
                 this.funcFactory.showNotification('У товара нет ID', 'У введённого товара нет ID. Обычно такое происходит тогда, когда Вы самостоятельно ввели товар вместо выбора из списка.', false);
             }
         }
-    }    
+    }
 
     // Implements adding a component
     addComponent(event) {
       if(!event || (event.keyCode == 13)) {
         let p = this.addableComponent.product;
 
-        if(p && p.id) {  
+        if(p && p.id) {
           let self = this;
           let data = this.addableComponent;
 
