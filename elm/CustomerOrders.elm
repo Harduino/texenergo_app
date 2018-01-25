@@ -17,6 +17,7 @@ import Utils.Currency exposing (toCurrency)
 import Html.Texenergo exposing (pageHeader)
 import RemoteData exposing (WebData)
 import Partner.Model exposing (Partner, PartnerConfig, partnerDecoder, initPartnerConf, initPartner)
+import Texenergo.Flags exposing (..)
 
 
 type alias Model =
@@ -28,12 +29,6 @@ type alias Model =
     , page : Int
     , lastPage : Bool
     , partnerConf : PartnerConfig
-    }
-
-
-type alias Flags =
-    { authToken : String
-    , apiEndpoint : String
     }
 
 
@@ -122,7 +117,9 @@ update msg m =
     in
         case msg of
             FetchCustomerOrders p f ->
-                ( { m | page = (m.page + 1) }, fetchCustomerOrders m p f )
+                ( { m | page = (m.page + 1) }
+                , fetchCustomerOrders m.flags.apiEndpoint m.flags.authToken p f
+                )
 
             FetchedCustomerOrders xs ->
                 ( { m | customerOrders = xs, lastPage = isLastPage xs }, Cmd.none )
@@ -146,7 +143,7 @@ update msg m =
                 ( { m | newCustomerOrder = (setRequestOriginal x m.newCustomerOrder) }, Cmd.none )
 
             CreateCustomerOrder ->
-                ( m, createCustomerOrder m )
+                ( m, createCustomerOrder m.flags.apiEndpoint m.flags.authToken m )
 
             CreatedCustomerOrder (Result.Err err) ->
                 case err of
@@ -158,19 +155,25 @@ update msg m =
                         ( m, Cmd.none )
 
             CreatedCustomerOrder (Result.Ok x) ->
-                ( { m | customerOrders = RemoteData.succeed [], page = 1 }, fetchCustomerOrders m 1 m.filter )
+                ( { m | customerOrders = RemoteData.succeed [], page = 1 }
+                , fetchCustomerOrders m.flags.apiEndpoint m.flags.authToken 1 m.filter
+                )
 
             LoadMoreCustomerOrders ->
                 if m.lastPage then
                     ( m, Cmd.none )
                 else
-                    ( { m | page = (m.page + 1) }, fetchCustomerOrders m (m.page + 1) m.filter )
+                    ( { m | page = (m.page + 1) }
+                    , fetchCustomerOrders m.flags.apiEndpoint m.flags.authToken (m.page + 1) m.filter
+                    )
 
             RefreshCustomerOrders ->
-                ( { m | customerOrders = RemoteData.Loading, page = 1 }, fetchCustomerOrders m 1 m.filter )
+                ( { m | customerOrders = RemoteData.Loading, page = 1 }
+                , fetchCustomerOrders m.flags.apiEndpoint m.flags.authToken 1 m.filter
+                )
 
             DestroyCustomerOrder customerOrderId ->
-                ( m, (destroyCustomerOrder m customerOrderId) )
+                ( m, (destroyCustomerOrder m.flags.apiEndpoint m.flags.authToken customerOrderId) )
 
             DestroyedCustomerOrder customerOrderId (Result.Ok y) ->
                 let
@@ -190,14 +193,16 @@ update msg m =
 
             FilterKeyPressed keyCode ->
                 if keyCode == 13 then
-                    ( { m | customerOrders = RemoteData.succeed [], page = 1 }, fetchCustomerOrders m 1 m.filter )
+                    ( { m | customerOrders = RemoteData.succeed [], page = 1 }
+                    , fetchCustomerOrders m.flags.apiEndpoint m.flags.authToken 1 m.filter
+                    )
                 else
                     ( m, Cmd.none )
 
             ChangePartnerFilter str ->
                 ( { m | partnerConf = (setPartnerFilter str m.partnerConf) }
                 , if String.length str >= 2 then
-                    fetchPartners m str
+                    fetchPartners m.flags.apiEndpoint m.flags.authToken m str
                   else
                     Cmd.none
                 )
@@ -218,14 +223,14 @@ update msg m =
                 ( { m | newCustomerOrder = setPartner partner m.newCustomerOrder, partnerConf = (flipPartnerConf m.partnerConf) }, Cmd.none )
 
 
-destroyCustomerOrder : Model -> String -> Cmd Msg
-destroyCustomerOrder m customerOrderId =
+destroyCustomerOrder : Endpoint -> ApiAuthToken -> String -> Cmd Msg
+destroyCustomerOrder (Endpoint aep) (ApiAuthToken at) customerOrderId =
     Http.request
         { method = "DELETE"
         , headers =
-            [ Http.header "Authorization" ("Bearer " ++ m.flags.authToken)
+            [ Http.header "Authorization" ("Bearer " ++ at)
             ]
-        , url = m.flags.apiEndpoint ++ "/customer_orders/" ++ customerOrderId
+        , url = aep ++ "/customer_orders/" ++ customerOrderId
         , body = Http.emptyBody
         , expect = Http.expectStringResponse (\_ -> Ok ())
         , timeout = Nothing
@@ -234,8 +239,8 @@ destroyCustomerOrder m customerOrderId =
         |> Http.send (DestroyedCustomerOrder customerOrderId)
 
 
-createCustomerOrder : Model -> Cmd Msg
-createCustomerOrder m =
+createCustomerOrder : Endpoint -> ApiAuthToken -> Model -> Cmd Msg
+createCustomerOrder (Endpoint aep) (ApiAuthToken at) m =
     let
         nco =
             m.newCustomerOrder
@@ -243,9 +248,9 @@ createCustomerOrder m =
         Http.request
             { method = "POST"
             , headers =
-                [ Http.header "Authorization" ("Bearer " ++ m.flags.authToken)
+                [ Http.header "Authorization" ("Bearer " ++ at)
                 ]
-            , url = m.flags.apiEndpoint ++ "/customer_orders"
+            , url = aep ++ "/customer_orders"
             , body = Http.jsonBody (encodeCustomerOrder nco)
             , expect = Http.expectJson customerOrderDecoder
             , timeout = Nothing
@@ -285,19 +290,19 @@ customerOrderDecoder =
         |> required "can_destroy" bool
 
 
-fetchCustomerOrders : Model -> Int -> String -> Cmd Msg
-fetchCustomerOrders m p f =
+fetchCustomerOrders : Endpoint -> ApiAuthToken -> Int -> String -> Cmd Msg
+fetchCustomerOrders (Endpoint aep) (ApiAuthToken at) p f =
     let
         queryString =
             "?q=" ++ f ++ "&page=" ++ (toString p)
 
         endpoint =
-            m.flags.apiEndpoint ++ "/customer_orders" ++ queryString
+            aep ++ "/customer_orders" ++ queryString
     in
         Http.request
             { method = "GET"
             , headers =
-                [ Http.header "Authorization" ("Bearer " ++ m.flags.authToken)
+                [ Http.header "Authorization" ("Bearer " ++ at)
                 ]
             , url = endpoint
             , body = Http.emptyBody
@@ -309,16 +314,16 @@ fetchCustomerOrders m p f =
             |> Cmd.map FetchedCustomerOrders
 
 
-fetchPartners : Model -> String -> Cmd Msg
-fetchPartners m f =
+fetchPartners : Endpoint -> ApiAuthToken -> Model -> String -> Cmd Msg
+fetchPartners (Endpoint aep) (ApiAuthToken at) m f =
     let
         endpoint =
-            (m.flags.apiEndpoint ++ "/partners?q=" ++ f)
+            (aep ++ "/partners?q=" ++ f)
     in
         Http.request
             { method = "GET"
             , headers =
-                [ Http.header "Authorization" ("Bearer " ++ m.flags.authToken)
+                [ Http.header "Authorization" ("Bearer " ++ at)
                 ]
             , url = endpoint
             , body = Http.emptyBody
@@ -334,13 +339,15 @@ initNewCustomerOrder =
     NewCustomerOrder "" "" initPartner ""
 
 
-init : Flags -> ( Model, Cmd Msg )
+init : Flagz -> ( Model, Cmd Msg )
 init flags =
     let
         initModel =
-            Model RemoteData.Loading "" False initNewCustomerOrder flags 1 False initPartnerConf
+            Model RemoteData.Loading "" False initNewCustomerOrder (initFlags flags) 1 False initPartnerConf
     in
-        ( initModel, fetchCustomerOrders initModel 1 "" )
+        ( initModel
+        , fetchCustomerOrders (Endpoint flags.apiEndpoint) (ApiAuthToken flags.authToken) 1 ""
+        )
 
 
 view : Model -> Html.Html Msg
@@ -502,11 +509,6 @@ viewPartnerOption p =
         ]
 
 
-
---viewPartnerEditing : Model -> Html.Html Msg
---viewPartnerEditing m =
-
-
 viewPartnerSection : Model -> Html.Html Msg
 viewPartnerSection m =
     Html.section [ class "form-group", style [ ( "overflow-y", "auto" ) ] ]
@@ -645,7 +647,7 @@ viewCustomerOrder co =
             ]
 
 
-main : Program Flags Model Msg
+main : Program Flagz Model Msg
 main =
     Html.programWithFlags
         { init = init

@@ -19,3 +19,5 @@ bower_components
 elm/elm-stuff
 elm/build
 public/elm.js
+elm-stuff/
+public/assets/javascripts/elm.js
