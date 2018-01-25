@@ -10,6 +10,7 @@ import Json.Decode.Pipeline exposing (required)
 import Json.Encode
 import Utils.Date
 
+import Html.Texenergo exposing (pageHeader)
 import Partner.Model exposing (Partner, PartnerConfig, partnerDecoder, initPartnerConf, initPartner)
 import Utils.Currency exposing (toCurrency)
 
@@ -439,10 +440,7 @@ viewNewIncomingTransfer m =
 view : Model -> Html.Html Msg
 view m = 
   div [ Html.Attributes.id "content" ] [
-    Html.h1 [ class "page-title txt-color-blueDark" ] [
-      Html.i [ class "fa-fw fa fa-book" ] [],
-      text "Входящие платежи"
-    ],
+    pageHeader "Входящие платежи",
     div [ class "well well-white" ] [
       Html.span [] [ ],
       Html.node "form-nav-buttons" [] [
