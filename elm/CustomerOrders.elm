@@ -118,7 +118,7 @@ update msg m =
         case msg of
             FetchCustomerOrders p f ->
                 ( { m | page = (m.page + 1) }
-                , fetchCustomerOrders m.flags.apiEndpoint m.flags.authToken p f
+                , fetchCustomerOrders m.flags.apiEndpoint m.flags.apiAuthToken p f
                 )
 
             FetchedCustomerOrders xs ->
@@ -143,7 +143,7 @@ update msg m =
                 ( { m | newCustomerOrder = (setRequestOriginal x m.newCustomerOrder) }, Cmd.none )
 
             CreateCustomerOrder ->
-                ( m, createCustomerOrder m.flags.apiEndpoint m.flags.authToken m )
+                ( m, createCustomerOrder m.flags.apiEndpoint m.flags.apiAuthToken m )
 
             CreatedCustomerOrder (Result.Err err) ->
                 case err of
@@ -156,7 +156,7 @@ update msg m =
 
             CreatedCustomerOrder (Result.Ok x) ->
                 ( { m | customerOrders = RemoteData.succeed [], page = 1 }
-                , fetchCustomerOrders m.flags.apiEndpoint m.flags.authToken 1 m.filter
+                , fetchCustomerOrders m.flags.apiEndpoint m.flags.apiAuthToken 1 m.filter
                 )
 
             LoadMoreCustomerOrders ->
@@ -164,16 +164,16 @@ update msg m =
                     ( m, Cmd.none )
                 else
                     ( { m | page = (m.page + 1) }
-                    , fetchCustomerOrders m.flags.apiEndpoint m.flags.authToken (m.page + 1) m.filter
+                    , fetchCustomerOrders m.flags.apiEndpoint m.flags.apiAuthToken (m.page + 1) m.filter
                     )
 
             RefreshCustomerOrders ->
                 ( { m | customerOrders = RemoteData.Loading, page = 1 }
-                , fetchCustomerOrders m.flags.apiEndpoint m.flags.authToken 1 m.filter
+                , fetchCustomerOrders m.flags.apiEndpoint m.flags.apiAuthToken 1 m.filter
                 )
 
             DestroyCustomerOrder customerOrderId ->
-                ( m, (destroyCustomerOrder m.flags.apiEndpoint m.flags.authToken customerOrderId) )
+                ( m, (destroyCustomerOrder m.flags.apiEndpoint m.flags.apiAuthToken customerOrderId) )
 
             DestroyedCustomerOrder customerOrderId (Result.Ok y) ->
                 let
@@ -194,7 +194,7 @@ update msg m =
             FilterKeyPressed keyCode ->
                 if keyCode == 13 then
                     ( { m | customerOrders = RemoteData.succeed [], page = 1 }
-                    , fetchCustomerOrders m.flags.apiEndpoint m.flags.authToken 1 m.filter
+                    , fetchCustomerOrders m.flags.apiEndpoint m.flags.apiAuthToken 1 m.filter
                     )
                 else
                     ( m, Cmd.none )
@@ -202,7 +202,7 @@ update msg m =
             ChangePartnerFilter str ->
                 ( { m | partnerConf = (setPartnerFilter str m.partnerConf) }
                 , if String.length str >= 2 then
-                    fetchPartners m.flags.apiEndpoint m.flags.authToken m str
+                    fetchPartners m.flags.apiEndpoint m.flags.apiAuthToken m str
                   else
                     Cmd.none
                 )

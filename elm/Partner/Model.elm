@@ -5,29 +5,30 @@ import Json.Decode.Pipeline exposing (required)
 
 
 type alias Partner =
-  { id : String
-  , name : String
-  }
+    { id : String
+    , name : String
+    }
 
 
 type alias PartnerConfig =
-  { query : String 
-  , partners : List Partner
-  , editing : Bool
-  }
+    { query : String
+    , partners : List Partner
+    , editing : Bool
+    }
 
 
 initPartner : Partner
-initPartner = Partner "" ""
+initPartner =
+    Partner "" ""
 
 
 initPartnerConf : PartnerConfig
 initPartnerConf =
-  PartnerConfig "" [] False
+    PartnerConfig "" [] False
 
 
 partnerDecoder : Decode.Decoder Partner
 partnerDecoder =
-  Decode.succeed Partner
-    |> required "id" string
-    |> required "name" string
+    Decode.succeed Partner
+        |> required "id" string
+        |> required "name" string

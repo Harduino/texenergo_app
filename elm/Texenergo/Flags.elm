@@ -1,8 +1,4 @@
-module Texenergo.Flags exposing (OutgoingTransferId(..), ApiAuthToken(..), Endpoint(..), Flags, Flagz, initFlags)
-
-
-type OutgoingTransferId
-    = OutgoingTransferId String
+module Texenergo.Flags exposing (ApiAuthToken(..), Endpoint(..), Flags, Flagz, initFlags)
 
 
 type ApiAuthToken
@@ -14,7 +10,7 @@ type Endpoint
 
 
 type alias Flags =
-    { authToken : ApiAuthToken, apiEndpoint : Endpoint, outgoingTransferFlag : OutgoingTransferId }
+    { apiAuthToken : ApiAuthToken, apiEndpoint : Endpoint }
 
 
 type alias Flagz =
@@ -23,4 +19,4 @@ type alias Flagz =
 
 initFlags : Flagz -> Flags
 initFlags fz =
-    Flags (ApiAuthToken fz.authToken) (Endpoint fz.apiEndpoint) (OutgoingTransferId fz.objId)
+    Flags (ApiAuthToken fz.authToken) (Endpoint fz.apiEndpoint)
