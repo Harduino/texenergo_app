@@ -19,7 +19,7 @@
     "auth0.js" : "latest",
     "auth0-lock": "10.4.0",
     "auth0-lock-passwordless": "latest",
-    "bootstrap": "3.3.1",
+    "bootstrap": "3.3.7",
     "d3": "3.5.17",
     "dropzone": "4.2.0",
     "fastclick": "1.0.3",
