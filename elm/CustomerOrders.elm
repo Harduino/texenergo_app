@@ -2,21 +2,20 @@
 -- elm-make CustomerOrders.elm --output ../public/elm.js
 
 
-module CustomerOrders exposing (CustomerOrder)
+module CustomerOrders exposing (..)
 
-import Date exposing (Date)
 import Html exposing (div, text, tr, td, th)
 import Html.Attributes exposing (class, style)
 import Html.Events exposing (onInput, onClick)
 import Http
 import Json.Decode as Decode exposing (field, int, string, float, bool)
-import Json.Decode.Pipeline exposing (required)
 import Json.Encode
 import Utils.Date
 import Utils.Currency exposing (toCurrency)
-import Html.Texenergo exposing (pageHeader)
 import RemoteData exposing (WebData)
-import Partner.Model exposing (Partner, PartnerConfig, partnerDecoder, initPartnerConf, initPartner)
+import CustomerOrder.Model exposing (CustomerOrder, customerOrdersDecoder, customerOrderDecoder)
+import Html.Texenergo exposing (pageHeader)
+import Partner.Model exposing (Partner, PartnerId(..), PartnerConfig, partnerDecoder, initPartnerConf, initPartner, partnerIdToString)
 import Texenergo.Flags exposing (..)
 
 
@@ -37,20 +36,6 @@ type alias NewCustomerOrder =
     , description : String
     , partner : Partner
     , requestOriginal : String
-    }
-
-
-type alias CustomerOrder =
-    { id : String
-    , number : String
-    , total : Float
-    , status : String
-    , title : String
-    , transportation : String
-    , date : Date
-    , partner : Partner
-    , canEdit : Bool
-    , canDestroy : Bool
     }
 
 
@@ -265,29 +250,9 @@ encodeCustomerOrder no =
         [ ( "title", Json.Encode.string no.title )
         , ( "description", Json.Encode.string no.description )
         , ( "request_original", Json.Encode.string no.requestOriginal )
-        , ( "partner_id", Json.Encode.string no.partner.id )
+        , ( "partner_id", partnerIdToString no.partner.id |> Json.Encode.string )
         , ( "issued_by", Json.Encode.string "" )
         ]
-
-
-customerOrdersDecoder : Decode.Decoder (List CustomerOrder)
-customerOrdersDecoder =
-    Decode.list customerOrderDecoder
-
-
-customerOrderDecoder : Decode.Decoder CustomerOrder
-customerOrderDecoder =
-    Decode.succeed CustomerOrder
-        |> required "id" string
-        |> required "number" string
-        |> required "total" float
-        |> required "status" string
-        |> required "title" string
-        |> required "transportation" string
-        |> required "date" Utils.Date.decoder
-        |> required "partner" partnerDecoder
-        |> required "can_edit" bool
-        |> required "can_destroy" bool
 
 
 fetchCustomerOrders : Endpoint -> ApiAuthToken -> Int -> String -> Cmd Msg

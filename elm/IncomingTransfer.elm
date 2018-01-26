@@ -1,26 +1,34 @@
 port module IncomingTransfer exposing (..)
 
-import CustomerOrder.Model exposing (CustomerOrderBrief, customerOrderBriefDecoder)
 import Date exposing (Date)
 import Html exposing (div, text, tr, td, th, p)
 import Html.Attributes exposing (class, style, id)
 import Html.Events exposing (onInput, onClick)
-import Html.Texenergo exposing (pageHeader)
 import Http
 import Json.Decode as Decode exposing (field, int, string, float, bool)
 import Json.Decode.Pipeline exposing (required)
-import Partner.Model exposing (Partner, PartnerConfig, partnerDecoder, initPartnerConf, initPartner)
+import Json.Encode
 import RemoteData exposing (WebData)
-import Texenergo.Flags exposing (..)
 import Utils.Date
 import Utils.Currency exposing (toCurrency)
+import CustomerOrder.Model exposing (CustomerOrderBrief, CustomerOrder, customerOrderBriefDecoder, customerOrdersDecoder)
+import Html.Texenergo exposing (pageHeader)
+import Partner.Model exposing (Partner, PartnerId(..), PartnerConfig, partnerDecoder, initPartnerConf, initPartner)
+import Texenergo.Flags exposing (..)
 
 
 type Msg
     = FetchedIncomingTransfer (WebData IncomingTransfer)
     | FetchIncomingTransfer
     | RefreshIncomingTransfer
-    | Dummy
+    | FetchedCustomerOrders (WebData (List CustomerOrder))
+    | FilterKeyPressed CustomerOrderRow Int
+    | ChangeCustomerOrderAmount CustomerOrderRow String
+    | CreatedMoneyAssign (Result Http.Error String)
+
+
+
+-- | FetchedOutgoingTransfers (WebData OutgoingTransferBrief)
 
 
 type IncomingTransferId
@@ -31,8 +39,18 @@ type IncomingTransferNumber
     = IncomingTransferNumber String
 
 
+type MoneyAssignmentId
+    = MoneyAssignmentId String
+
+
+type alias CustomerOrderRow =
+    { amountAssigned : Float
+    , obj : CustomerOrder
+    }
+
+
 type alias MoneyAssignment =
-    { id : String, amount : Float, customerOrder : CustomerOrderBrief }
+    { id : MoneyAssignmentId, amount : Float, customerOrder : CustomerOrderBrief }
 
 
 type alias IncomingTransfer =
@@ -50,7 +68,13 @@ type alias Model =
     { incomingTransfer : WebData IncomingTransfer
     , incomingTransferId : String
     , flags : Flags
+    , customerOrders : List CustomerOrderRow
     }
+
+
+onKeyUp : (Int -> Msg) -> Html.Attribute Msg
+onKeyUp tagger =
+    Html.Events.on "keyup" (Decode.map tagger Html.Events.keyCode)
 
 
 unassignedAmount : IncomingTransfer -> Float
@@ -66,7 +90,7 @@ unassignedAmount it =
 moneyAssignmentDecoder : Decode.Decoder MoneyAssignment
 moneyAssignmentDecoder =
     Decode.succeed MoneyAssignment
-        |> required "id" string
+        |> required "id" (string |> Decode.map MoneyAssignmentId)
         |> required "amount" float
         |> required "customer_order" customerOrderBriefDecoder
 
@@ -88,6 +112,30 @@ incomingTransferDecoder =
         |> required "money_to_orders" moneyAssignmentsDecoder
 
 
+encodeMoneyAssignment : CustomerOrderRow -> Json.Encode.Value
+encodeMoneyAssignment cor =
+    Json.Encode.object
+        [ ( "amount", Json.Encode.float cor.amountAssigned )
+        , ( "customer_order_id", Json.Encode.string cor.obj.id )
+        ]
+
+
+createMoneyAssignment : IncomingTransferId -> ApiAuthToken -> Endpoint -> CustomerOrderRow -> Cmd Msg
+createMoneyAssignment (IncomingTransferId itid) (ApiAuthToken aat) (Endpoint aep) cor =
+    Http.request
+        { method = "POST"
+        , headers =
+            [ Http.header "Authorization" ("Bearer " ++ aat)
+            ]
+        , url = aep ++ "/incoming_transfers/" ++ itid ++ "/money_to_orders"
+        , body = Http.jsonBody (encodeMoneyAssignment cor)
+        , expect = Http.expectJson (Decode.succeed "")
+        , timeout = Nothing
+        , withCredentials = False
+        }
+        |> Http.send CreatedMoneyAssign
+
+
 fetchIncomingTransfer : Endpoint -> IncomingTransferId -> ApiAuthToken -> Cmd Msg
 fetchIncomingTransfer (Endpoint endpoint) (IncomingTransferId id) (ApiAuthToken apiAuthToken) =
     Http.request
@@ -105,12 +153,40 @@ fetchIncomingTransfer (Endpoint endpoint) (IncomingTransferId id) (ApiAuthToken 
         |> Cmd.map FetchedIncomingTransfer
 
 
+fetchCustomerOrders : Endpoint -> ApiAuthToken -> PartnerId -> Cmd Msg
+fetchCustomerOrders (Endpoint aep) (ApiAuthToken at) (PartnerId pid) =
+    let
+        queryString =
+            "?partner_id=" ++ pid
+
+        endpoint =
+            aep ++ "/customer_orders" ++ queryString
+    in
+        Http.request
+            { method = "GET"
+            , headers =
+                [ Http.header "Authorization" ("Bearer " ++ at)
+                ]
+            , url = endpoint
+            , body = Http.emptyBody
+            , expect = Http.expectJson customerOrdersDecoder
+            , timeout = Nothing
+            , withCredentials = False
+            }
+            |> RemoteData.sendRequest
+            |> Cmd.map FetchedCustomerOrders
+
+
 viewMetaBlock : WebData IncomingTransfer -> Html.Html Msg
 viewMetaBlock wd =
     let
         numberToText : IncomingTransferNumber -> Html.Html Msg
         numberToText (IncomingTransferNumber n) =
             text n
+
+        extractPartnerId : PartnerId -> String
+        extractPartnerId (PartnerId str) =
+            str
     in
         case wd of
             RemoteData.Success incomingTransfer ->
@@ -119,7 +195,7 @@ viewMetaBlock wd =
                     , p [ class "col-md-9 ng-binding" ] [ numberToText incomingTransfer.number ]
                     , p [ class "col-xs-12 col-md-3 font-bold" ] [ text "Партнёр:" ]
                     , p [ class "col-md-9 ng-binding" ]
-                        [ Html.a [ "/#/partners/" ++ incomingTransfer.partner.id |> Html.Attributes.href ] [ text incomingTransfer.partner.name ]
+                        [ Html.a [ "/#/partners/" ++ (incomingTransfer.partner.id |> extractPartnerId) |> Html.Attributes.href ] [ text incomingTransfer.partner.name ]
                         ]
                     , p [ class "col-xs-12 col-md-3 font-bold" ] [ text "Входящая дата:" ]
                     , p [ class "col-md-9 ng-binding" ]
@@ -147,26 +223,91 @@ viewMoneyAssignment ma =
         ]
 
 
-viewAssignedBlock : WebData IncomingTransfer -> Html.Html Msg
-viewAssignedBlock wd =
-    case wd of
-        RemoteData.Success incomingTransfer ->
-            Html.table [ class "table" ]
+viewCustomerOrder : CustomerOrderRow -> Html.Html Msg
+viewCustomerOrder customerOrderRow =
+    let
+        co : CustomerOrder
+        co =
+            customerOrderRow.obj
+
+        localTotal : String
+        localTotal =
+            toCurrency co.total
+
+        localAmountPaid : String
+        localAmountPaid =
+            toCurrency co.amountPaid
+    in
+        tr []
+            [ td [] [ text co.number ]
+            , td [] [ (localAmountPaid ++ " / " ++ localTotal) |> text ]
+            , td []
+                [ Html.label [ class "input" ]
+                    [ Html.input
+                        [ Html.Attributes.type_ "text"
+                        , Html.Attributes.placeholder "Сумму повесить"
+                        , customerOrderRow.amountAssigned |> toString |> Html.Attributes.value
+                        , onInput (ChangeCustomerOrderAmount customerOrderRow)
+                        , onKeyUp (FilterKeyPressed customerOrderRow)
+                        ]
+                        []
+                    ]
+                ]
+            ]
+
+
+viewCustomerOrders : Model -> IncomingTransfer -> Html.Html Msg
+viewCustomerOrders m incomingTransfer =
+    if unassignedAmount incomingTransfer > 0 then
+        Html.span []
+            [ Html.h1 [] [ unassignedAmount incomingTransfer |> toCurrency |> (++) "Доступно для развешивания: " |> text ]
+            , Html.table [ class "table" ]
                 [ Html.thead []
                     [ tr []
                         [ th [] [ text "Заказ клиента" ]
-                        , th [] [ text "Сумма" ]
+                        , th [] [ text "Оплачено / Сумма" ]
+                        , th [] [ text "Назначить" ]
                         ]
                     ]
                 , Html.tbody []
                     (List.append
-                        (List.map viewMoneyAssignment incomingTransfer.moneyAssignments)
+                        (List.map viewCustomerOrder m.customerOrders)
                         [ tr []
-                            [ td [ class "text-right" ] [ text "Итого:" ]
+                            [ td [ class "text-right", Html.Attributes.colspan 2 ] [ text "Итого:" ]
                             , td [] [ toCurrency incomingTransfer.total |> text ]
                             ]
                         ]
                     )
+                ]
+            ]
+    else
+        Html.span [] []
+
+
+viewAssignedBlock : Model -> WebData IncomingTransfer -> Html.Html Msg
+viewAssignedBlock m wd =
+    case wd of
+        RemoteData.Success incomingTransfer ->
+            Html.span []
+                [ viewCustomerOrders m incomingTransfer
+                , Html.h1 [] [ text "Привязка денежных средств" ]
+                , Html.table [ class "table" ]
+                    [ Html.thead []
+                        [ tr []
+                            [ th [] [ text "Заказ клиента" ]
+                            , th [] [ text "Сумма" ]
+                            ]
+                        ]
+                    , Html.tbody []
+                        (List.append
+                            (List.map viewMoneyAssignment incomingTransfer.moneyAssignments)
+                            [ tr []
+                                [ td [ class "text-right" ] [ text "Итого:" ]
+                                , td [] [ toCurrency incomingTransfer.total |> text ]
+                                ]
+                            ]
+                        )
+                    ]
                 ]
 
         _ ->
@@ -180,16 +321,18 @@ view m =
         numberToString (IncomingTransferNumber n) =
             n
 
+        extractNumber : WebData IncomingTransfer -> String
+        extractNumber wd =
+            case wd of
+                RemoteData.Success t ->
+                    numberToString t.number
+
+                _ ->
+                    "Ждём"
+
         pageHeaderTitle : String
         pageHeaderTitle =
-            "Входящий платеж: "
-                ++ (case m.incomingTransfer of
-                        RemoteData.Success t ->
-                            numberToString t.number
-
-                        _ ->
-                            "Ждём"
-                   )
+            "Входящий платеж: " ++ (extractNumber m.incomingTransfer)
     in
         div [ id "content" ]
             [ pageHeaderTitle |> pageHeader
@@ -209,10 +352,10 @@ view m =
                             ]
                         , div
                             [ class "btn btn-success"
+                            , onClick RefreshIncomingTransfer
                             ]
                             [ Html.i
                                 [ class "fa fa-refresh"
-                                , onClick RefreshIncomingTransfer
                                 ]
                                 []
                             , text "Обновить"
@@ -224,7 +367,7 @@ view m =
                 [ viewMetaBlock m.incomingTransfer
                 ]
             , div [ class "well well-white" ]
-                [ viewAssignedBlock m.incomingTransfer ]
+                [ viewAssignedBlock m m.incomingTransfer ]
             ]
 
 
@@ -233,26 +376,93 @@ init flags =
     let
         initModel : Flagz -> Model
         initModel fs =
-            Model RemoteData.Loading flags.objId (initFlags fs)
+            Model RemoteData.Loading flags.objId (initFlags fs) []
     in
         ( initModel flags
         , fetchIncomingTransfer (Endpoint flags.apiEndpoint) (IncomingTransferId flags.objId) (ApiAuthToken flags.authToken)
         )
 
 
+updateFetchedCustomerOrders : Model -> List CustomerOrder -> Model
+updateFetchedCustomerOrders m orders =
+    { m | customerOrders = List.map (CustomerOrderRow 0.0) orders }
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg m =
-    case msg of
-        RefreshIncomingTransfer ->
-            ( { m | incomingTransfer = RemoteData.Loading }
-            , fetchIncomingTransfer m.flags.apiEndpoint (IncomingTransferId m.incomingTransferId) m.flags.apiAuthToken
-            )
+    let
+        afterIncomingTransferCommands : WebData IncomingTransfer -> Cmd Msg
+        afterIncomingTransferCommands wd =
+            case wd of
+                RemoteData.Success tmpIncomingTransfer ->
+                    fetchCustomerOrders m.flags.apiEndpoint m.flags.apiAuthToken tmpIncomingTransfer.partner.id
 
-        FetchedIncomingTransfer response ->
-            ( { m | incomingTransfer = response }, Cmd.none )
+                _ ->
+                    Cmd.none
+    in
+        case msg of
+            RefreshIncomingTransfer ->
+                ( { m | incomingTransfer = RemoteData.Loading }
+                , fetchIncomingTransfer m.flags.apiEndpoint (IncomingTransferId m.incomingTransferId) m.flags.apiAuthToken
+                )
 
-        _ ->
-            ( m, Cmd.none )
+            FetchedIncomingTransfer response ->
+                ( { m | incomingTransfer = response }, afterIncomingTransferCommands response )
+
+            FetchIncomingTransfer ->
+                ( { m | incomingTransfer = RemoteData.Loading }, Cmd.none )
+
+            FetchedCustomerOrders response ->
+                case response of
+                    RemoteData.Success orders ->
+                        ( updateFetchedCustomerOrders m orders, Cmd.none )
+
+                    _ ->
+                        ( m, Cmd.none )
+
+            FilterKeyPressed customerOrderRow keyCode ->
+                if keyCode == 13 then
+                    ( m, createMoneyAssignment (IncomingTransferId m.incomingTransferId) m.flags.apiAuthToken m.flags.apiEndpoint customerOrderRow )
+                else
+                    ( m, Cmd.none )
+
+            ChangeCustomerOrderAmount customerOrderRow newAmount ->
+                let
+                    getUnassignedAmount : Float
+                    getUnassignedAmount =
+                        case m.incomingTransfer of
+                            RemoteData.Success x ->
+                                unassignedAmount x
+
+                            _ ->
+                                0.0
+
+                    updateCustomerOrderAssigned : List CustomerOrderRow
+                    updateCustomerOrderAssigned =
+                        List.map
+                            (\co ->
+                                if co.obj.id == customerOrderRow.obj.id then
+                                    case String.toFloat newAmount of
+                                        Ok goodFloat ->
+                                            { co
+                                                | amountAssigned =
+                                                    if goodFloat <= getUnassignedAmount then
+                                                        goodFloat
+                                                    else
+                                                        getUnassignedAmount
+                                            }
+
+                                        Err _ ->
+                                            co
+                                else
+                                    co
+                            )
+                            m.customerOrders
+                in
+                    ( { m | customerOrders = updateCustomerOrderAssigned }, Cmd.none )
+
+            CreatedMoneyAssign _ ->
+                ( m, fetchIncomingTransfer m.flags.apiEndpoint (IncomingTransferId m.incomingTransferId) m.flags.apiAuthToken )
 
 
 subscriptions : Model -> Sub Msg

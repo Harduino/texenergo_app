@@ -10,7 +10,7 @@ import Json.Decode.Pipeline exposing (required)
 import Json.Encode
 import Utils.Date
 import Html.Texenergo exposing (pageHeader)
-import Partner.Model exposing (Partner, PartnerConfig, partnerDecoder, initPartnerConf, initPartner)
+import Partner.Model exposing (Partner, PartnerConfig, partnerDecoder, initPartnerConf, initPartner, partnerIdToString)
 import Utils.Currency exposing (toCurrency)
 
 
@@ -126,7 +126,7 @@ encodeCustomerOrder no =
         , ( "description", Json.Encode.string no.description )
         , ( "date", Json.Encode.string no.date )
         , ( "amount", Json.Encode.float no.amount )
-        , ( "partner_id", Json.Encode.string no.partner.id )
+        , ( "partner_id", partnerIdToString no.partner.id |> Json.Encode.string )
         ]
 
 
