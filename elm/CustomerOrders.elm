@@ -107,7 +107,18 @@ update msg m =
                 )
 
             FetchedCustomerOrders xs ->
-                ( { m | customerOrders = xs, lastPage = isLastPage xs }, Cmd.none )
+                case m.customerOrders of
+                    RemoteData.Success oldOrders ->
+                        case xs of
+                            RemoteData.Success newOrders ->
+                                Debug.log "YAOUCH"
+                                    ( { m | customerOrders = RemoteData.succeed (List.append oldOrders newOrders), lastPage = isLastPage xs }, Cmd.none )
+
+                            _ ->
+                                ( { m | customerOrders = xs, lastPage = isLastPage xs }, Cmd.none )
+
+                    _ ->
+                        ( { m | customerOrders = xs, lastPage = isLastPage xs }, Cmd.none )
 
             ChangeFilter str ->
                 ( { m | filter = str }, Cmd.none )
@@ -352,7 +363,7 @@ view m =
             [ Html.table [ class "table table-bordered hidden-xs" ]
                 [ Html.thead []
                     [ tr []
-                        [ th [ class "hidden-xs" ]
+                        [ th []
                             [ Html.i [ class "fa fa-truck" ] []
                             ]
                         , th [] [ text "Номер" ]
@@ -370,7 +381,10 @@ view m =
                             (List.map viewCustomerOrder xs)
 
                         RemoteData.Loading ->
-                            [ text "Загружается" ]
+                            [ tr []
+                                [ td [ Html.Attributes.colspan 9, class "text-center" ] [ text "Загружается" ]
+                                ]
+                            ]
 
                         RemoteData.Failure _ ->
                             [ text "Ошибка при загрузке" ]

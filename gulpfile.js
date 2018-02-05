@@ -67,7 +67,6 @@ gulp.task('libs', function(){
 
         'bower_components/angular-ui-select/dist/select.min.js',
         'bower_components/fastclick/lib/fastclick.js',
-        'assets/plugin/chartjs/chart.min.js',
         'bower_components/dropzone/dist/min/dropzone.min.js',
         'bower_components/lodash/dist/lodash.min.js',
         'app/smartadmin-plugin/notification/SmartNotification.min.js',
