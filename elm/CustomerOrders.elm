@@ -111,8 +111,7 @@ update msg m =
                     RemoteData.Success oldOrders ->
                         case xs of
                             RemoteData.Success newOrders ->
-                                Debug.log "YAOUCH"
-                                    ( { m | customerOrders = RemoteData.succeed (List.append oldOrders newOrders), lastPage = isLastPage xs }, Cmd.none )
+                                ( { m | customerOrders = RemoteData.succeed (List.append oldOrders newOrders), lastPage = isLastPage xs }, Cmd.none )
 
                             _ ->
                                 ( { m | customerOrders = xs, lastPage = isLastPage xs }, Cmd.none )

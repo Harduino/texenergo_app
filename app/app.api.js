@@ -45,12 +45,6 @@
         };
         o.deleteProduct = function(productId, success, fail) {
             $http.delete('/products/' + productId).then(success, fail);
-        }
-        o.getProductPartnerLogs = function(productId, success, fail){
-            $http.get('/products/' + productId + '/partner_logs').then(success, fail);
-        };
-        o.deleteProductPartnerLog = function(productId, log_id, success, fail){
-            $http.delete('/products/' + productId + '/partner_logs/' + log_id).then(success, fail);
         };
 
         //Customer Orders
@@ -228,25 +222,6 @@
         }
 
         // Входящие платежи
-        o.getIncomingTransfers = function(page, query, config, success, fail){
-            var path = '/incoming_transfers?page='+page + (query ? ('&q=' + query) : '');
-            $http.get(path, config).then(success, fail);
-        };
-        o.createIncomingTransfer = function(data, success, fail){
-            $http.post('/incoming_transfers', data).then(success, fail);
-        };
-        o.getIncomingTransferDetails = function(id, success, fail){
-            $http.get('/incoming_transfers/' + id).then(success, fail);
-        };
-        o.appendIncomingTransferOrder = function(incoming_transfer_id, data, success, fail){
-            $http.post('/incoming_transfers/'+incoming_transfer_id+'/money_to_orders', data).then(success, fail);
-        };
-        o.removeIncomingTransferOrder = function(incoming_transfer_id, order_id, success, fail){
-            $http.delete('/incoming_transfers/'+incoming_transfer_id+'/money_to_orders/' + order_id).then(success, fail);
-        };
-        o.deleteIncomingTransfer = function(transfer_id, success, fail){
-            $http.delete('/incoming_transfers/' + transfer_id).then(success, fail);
-        };
         o.getIncomingTransferLogs = function(id, success, fail){
             $http.get('/incoming_transfers/' + id + '/logs').then(success, fail);
         };
