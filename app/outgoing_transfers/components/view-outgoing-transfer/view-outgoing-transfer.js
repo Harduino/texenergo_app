@@ -1,50 +1,9 @@
 class ViewOutgoingTransferCtrl {
-    constructor($state, $stateParams, serverApi) {
-        let self = this;
-        this.outgoingTransfer = {};
-
-        this.visual = {
-            navButtsOptions:[
-                {type: 'back', callback: () => $state.go('app.outgoing_transfers', {})},
-                {
-                    type: 'refresh',
-                    callback: (subData, button, $event) => {
-                        button.disableOnLoad(true, $event);
-                        serverApi.getOutgoingTransferDetails($stateParams.id, res => {
-                          button.disableOnLoad(false, $event);
-                          self.outgoingTransfer = res.data;
-                        }, () => {
-                          button.disableOnLoad(false, $event);
-                        });
-                    }
-                }
-            ],
-            chartOptions: {
-                barColor: 'rgb(103,135,155)',
-                scaleColor: false,
-                lineWidth: 5,
-                lineCap: 'circle',
-                size: 50
-            },
-            showFileModal: angular.noop,
-            titles: 'Исходящий платёж: '
-        };
-
-        serverApi.getOutgoingTransferDetails($stateParams.id, result => {
-            let transfer = self.outgoingTransfer = result.data;
-
-            self.fileModalOptions = {
-                url:'/api/outgoing_transfers/' + transfer.id + '/documents',
-                files: transfer.documents,
-                r_delete: serverApi.deleteFile,
-                view: 'outgoing_transfers',
-                id: transfer.id
-            };
-        });
+    constructor($state, $stateParams) {
     }
 }
 
-ViewOutgoingTransferCtrl.$inject = ['$state', '$stateParams', 'serverApi'];
+ViewOutgoingTransferCtrl.$inject = ['$state', '$stateParams'];
 
 angular.module('app.outgoing_transfers').component('viewOutgoingTransfer', {
     controller: ViewOutgoingTransferCtrl,
