@@ -142,7 +142,7 @@ logDecoder =
 
 logsDecoder : Decode.Decoder (List Log)
 logsDecoder =
-    Decode.field "other_logs" (Decode.list logDecoder)
+    (Decode.list logDecoder)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
