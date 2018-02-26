@@ -1,7 +1,10 @@
 class LoginCtrl {
-    constructor(authService) {
+    constructor(authService, $state) {
         this.authService = authService;
         authService.login();
+        if (authService.token !== null && !authService.isTokenExpired(authService.token)) {
+          $state.go('app.dashboard');
+        }
     }
 
     goToPaswordless() {
@@ -9,7 +12,7 @@ class LoginCtrl {
     }
 }
 
-LoginCtrl.$inject = ['authService'];
+LoginCtrl.$inject = ['authService', '$state'];
 
 angular.module('login').component('login', {
     controller: LoginCtrl,

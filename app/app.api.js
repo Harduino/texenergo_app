@@ -410,11 +410,7 @@
             $http.get('/receive_orders/' + id + '/logs').then(success, fail);
         };
 
-        //Lead time
-        o.getLeadTime = function(id, quantity, success, fail){
-            var path = '/products/'+id+'/lead_time?quantity='+quantity;
-            $http.get(path).then(success, fail);
-        };
+
         //Files
         o.deleteFile = function(view, view_id, file_id, success, fail){
             $http.delete('/'+view+'/'+view_id+'/documents/' + file_id).then(success, fail);

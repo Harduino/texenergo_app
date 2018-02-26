@@ -271,23 +271,23 @@ update msg m =
             CreatedIncomingTransfer (Result.Err err) ->
                 case err of
                     Http.BadPayload y z ->
-                        Debug.log ("Http.BadPayload " ++ y)
-                            ( m, Cmd.none )
+                        ( m, Cmd.none )
 
                     _ ->
                         ( m, Cmd.none )
 
             CreatedIncomingTransfer (Result.Ok x) ->
-                ( { m | incomingTransfers = [], page = 1 }, fetchIncomingTransfers m 1 m.filter )
+                ( { m | incomingTransfers = [], page = 1, newIncomingTransfer = initNewIncomingTransfer }, fetchIncomingTransfers m 1 m.filter )
+
+
+initNewIncomingTransfer : NewIncomingTransfer
+initNewIncomingTransfer =
+    NewIncomingTransfer "" "" "" 0 initPartner
 
 
 init : Flags -> ( Model, Cmd Msg )
 init fs =
     let
-        initNewIncomingTransfer : NewIncomingTransfer
-        initNewIncomingTransfer =
-            NewIncomingTransfer "" "" "" 0 initPartner
-
         initModel : Model
         initModel =
             Model fs [] 1 False "" False initNewIncomingTransfer initPartnerConf

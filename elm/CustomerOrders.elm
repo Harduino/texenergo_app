@@ -150,7 +150,7 @@ update msg m =
                         ( m, Cmd.none )
 
             CreatedCustomerOrder (Result.Ok x) ->
-                ( { m | customerOrders = RemoteData.succeed [], page = 1 }
+                ( { m | customerOrders = RemoteData.succeed [], newCustomerOrder = initNewCustomerOrder, page = 1 }
                 , fetchCustomerOrders m.flags.apiEndpoint m.flags.apiAuthToken 1 m.filter
                 )
 

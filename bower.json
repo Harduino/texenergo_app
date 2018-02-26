@@ -9,16 +9,16 @@
     "angular-couch-potato": "0.1.1",
     "angular-file-upload": "2.2.0",
     "angular-jwt": "latest",
-    "angular-lock": "1.0.5",
+    "angular-lock": "2.0.3",
     "angular-lock-passwordless": "latest",
     "angular-sanitize": "1.5.8",
     "angular-ui-router": "0.2.11",
     "angular-ui-select": "^0.19.6",
     "angular-ui-tinymce": "0.0.11",
     "angular-xeditable": "0.8.0",
-    "auth0.js" : "latest",
-    "auth0-lock": "10.4.0",
-    "auth0-lock-passwordless": "latest",
+    "auth0.js" : "9.2.3",
+    "auth0-lock": "11.2.3",
+    "auth0-lock-passwordless": "2.2.3",
     "bootstrap": "3.3.7",
     "d3": "3.5.17",
     "dropzone": "4.2.0",
@@ -36,7 +36,6 @@
   },
   "analytics": false,
   "resolutions": {
-    "angular": "1.5.8",
-    "auth0-lock": "10.4.0"
+    "angular": "1.5.8"
   }
 }

@@ -2,6 +2,7 @@ class AuthService {
     constructor($rootScope, lock, $localStorage, jwtHelper, lockPasswordless,
       $location, $q) {
         this._token = $localStorage.id_token || null;
+        this._accessToken = $localStorage.accessToken || null;
         this._profile = undefined;
         this.authDomain = 'texenergo.eu.auth0.com';
         this.tokenDefer = $q.defer();
@@ -18,7 +19,7 @@ class AuthService {
 
         if(this._token && !jwtHelper.isTokenExpired(this._token)) {
           self.tokenDefer.resolve(self._token);
-          this._profilePromise = this.getProfile(this._token);
+          this._profilePromise = this.getProfile(this._accessToken);
         }
     }
 
@@ -49,6 +50,7 @@ class AuthService {
 
     logout() {
         this.$localStorage.id_token = null;
+        this.$localStorage.accessToken = null;
         this.$localStorage.profile = null;
         window.location = window.APP_ENV.PROTOCOL + '://' + this.authDomain + '/v2/logout?returnTo=' +
             window.APP_ENV.APP_BASE_URL + '&client_id=' + this._profile.clientID;
@@ -56,12 +58,12 @@ class AuthService {
 
     registerAuthenticationListener() {
         let self = this;
-
         this.lock.on('authenticated', authResult => {
             console.log('auth result', authResult);
             self._token = self.$localStorage.id_token = authResult.idToken;
+            self._accessToken = self.$localStorage.accessToken = authResult.accessToken;
             self.tokenDefer.resolve(self._token); // resolve promises
-            self._profilePromise = self.getProfile(authResult.idToken);
+            self._profilePromise = self.getProfile(authResult.accessToken);
             self.$rootScope.$emit('authenticated');
         });
     }

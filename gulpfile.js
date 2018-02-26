@@ -13,12 +13,12 @@ var gulp = require('gulp'),
 
 gulp.task('styles', function() {
     var files = [
-        'assets/css/*.css',
-
+        'bower_components/bootstrap/dist/css/bootstrap.css',
         'bower_components/angular-ui-select/dist/select.min.css',
         'bower_components/angular-xeditable/dist/css/xeditable.css',
         'bower_components/ion.rangeSlider/css/normalize.css',
-        'bower_components/ion.rangeSlider/css/ion.rangeSlider.css'
+        'bower_components/ion.rangeSlider/css/ion.rangeSlider.css',
+        'assets/css/*.css'
     ];
 
     gulp.src(files)
@@ -55,12 +55,12 @@ gulp.task('libs', function(){
         'bower_components/ngstorage/ngStorage.min.js',
 
         //Auth0
-        'bower_components/auth0.js/build/auth0.min.js',
-        'bower_components/auth0-lock/build/lock.min.js',
-        'bower_components/angular-lock/dist/angular-lock.min.js',
-        'bower_components/auth0-lock-passwordless/build/lock-passwordless.min.js',
-        'bower_components/angular-lock-passwordless/dist/angular-lock-passwordless.min.js',
-        'bower_components/angular-jwt/dist/angular-jwt.min.js',
+        'bower_components/auth0.js/build/auth0.js',
+        'bower_components/auth0-lock/build/lock.js',
+        'bower_components/angular-lock/dist/angular-lock.js',
+        'bower_components/auth0-lock-passwordless/build/lock-passwordless.js',
+        'bower_components/angular-lock-passwordless/dist/angular-lock-passwordless.js',
+        'bower_components/angular-jwt/dist/angular-jwt.js',
 
         'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
         'bower_components/angular-file-upload/dist/angular-file-upload.js',
