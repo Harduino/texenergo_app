@@ -75,8 +75,6 @@ gulp.task('libs', function(){
         'assets/plugin/easy-pie-chart/angular.easypiechart.min.js',
         'bower_components/angular-xeditable/dist/js/xeditable.js',
         'bower_components/ion.rangeSlider/js/ion.rangeSlider.min.js',
-        'bower_components/pubnub/dist/web/pubnub.js',
-        'bower_components/pubnub-angular/dist/pubnub-angular.js',
 
         //TinyMCE
         'bower_components/tinymce/tinymce.min.js',
