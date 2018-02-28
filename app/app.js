@@ -64,9 +64,6 @@ appConfig.sound_on = true;
         'auth0.lockPasswordless',
         'angular-jwt',
 
-        //Pubnub
-        'pubnub.angular.service',
-
         // App
         'app.api',
         'app.layout',

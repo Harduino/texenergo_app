@@ -6,6 +6,7 @@ module CustomerOrder.Model
         , customerOrderBriefDecoder
         , customerOrdersDecoder
         , customerOrderDecoder
+        , customerOrderIdToString
         )
 
 import Date exposing (Date)
@@ -36,6 +37,11 @@ type alias CustomerOrder =
 
 type alias CustomerOrderBrief =
     { id : CustomerOrderId, number : String }
+
+
+customerOrderIdToString : CustomerOrderId -> String
+customerOrderIdToString (CustomerOrderId x) =
+    x
 
 
 customerOrderIdDecoder : Decode.Decoder CustomerOrderId

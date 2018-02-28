@@ -14,13 +14,12 @@
     "angular-sanitize": "1.5.8",
     "angular-ui-router": "0.2.11",
     "angular-ui-select": "^0.19.6",
-    "angular-ui-tinymce": "0.0.11",
+    "angular-ui-tinymce": "latest",
     "angular-xeditable": "0.8.0",
     "auth0.js" : "9.2.3",
     "auth0-lock": "11.2.3",
     "auth0-lock-passwordless": "2.2.3",
     "bootstrap": "3.3.7",
-    "d3": "3.5.17",
     "dropzone": "4.2.0",
     "fastclick": "1.0.3",
     "ion.rangeSlider": "ionrangeslider#2.1.4",
@@ -29,10 +28,7 @@
     "json3": "3.3.2",
     "lodash": "2.4.1",
     "ngstorage": "latest",
-    "tinymce": "4.3.1",
-    "pubnub": "latest",
-    "pubnub-angular": "latest",
-    "pubnub-angular2": "latest"
+    "tinymce": "latest"
   },
   "analytics": false,
   "resolutions": {

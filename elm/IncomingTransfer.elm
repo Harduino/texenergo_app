@@ -11,7 +11,7 @@ import Json.Encode
 import RemoteData exposing (WebData)
 import Utils.Date
 import Utils.Currency exposing (toCurrency)
-import CustomerOrder.Model exposing (CustomerOrderBrief, CustomerOrder, customerOrderBriefDecoder, customerOrdersDecoder)
+import CustomerOrder.Model exposing (CustomerOrderBrief, CustomerOrder, customerOrderBriefDecoder, customerOrdersDecoder, customerOrderIdToString)
 import Html.Texenergo exposing (pageHeader)
 import Partner.Model exposing (Partner, PartnerId(..), PartnerConfig, partnerDecoder, initPartnerConf, initPartner)
 import Texenergo.Flags exposing (..)
@@ -218,7 +218,9 @@ viewMetaBlock wd =
 viewMoneyAssignment : MoneyAssignment -> Html.Html Msg
 viewMoneyAssignment ma =
     tr []
-        [ td [] [ text ma.customerOrder.number ]
+        [ td []
+            [ Html.a [ "/#/customer_orders/" ++ (customerOrderIdToString ma.customerOrder.id) |> Html.Attributes.href ] [ text ma.customerOrder.number ]
+            ]
         , td [] [ toCurrency ma.amount |> text ]
         ]
 
