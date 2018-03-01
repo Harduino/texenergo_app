@@ -10,7 +10,8 @@ import Json.Decode.Pipeline exposing (required)
 import Json.Encode
 import Utils.Date
 import Html.Texenergo exposing (pageHeader)
-import Partner.Model exposing (Partner, PartnerConfig, partnerDecoder, initPartnerConf, initPartner, partnerIdToString)
+import Partner.Model exposing (Partner, PartnerId(..), PartnerConfig, initPartner, initPartnerConf)
+import Partner.Decoder exposing (partnerDecoder, partnerIdToString)
 import Utils.Currency exposing (toCurrency)
 
 

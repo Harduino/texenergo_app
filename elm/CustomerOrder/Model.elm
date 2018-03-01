@@ -1,7 +1,7 @@
 module CustomerOrder.Model
     exposing
         ( CustomerOrder
-        , CustomerOrderId
+        , CustomerOrderId(..)
         , CustomerOrderBrief
         , customerOrderBriefDecoder
         , customerOrdersDecoder
@@ -12,7 +12,8 @@ module CustomerOrder.Model
 import Date exposing (Date)
 import Json.Decode as Decode exposing (field, int, string, float, bool)
 import Json.Decode.Pipeline exposing (required)
-import Partner.Model exposing (Partner, PartnerId(..), PartnerConfig, partnerDecoder, initPartnerConf, initPartner)
+import Partner.Model exposing (Partner, PartnerId(..), PartnerConfig, initPartnerConf, initPartner)
+import Partner.Decoder exposing (partnerDecoder)
 import Utils.Date
 
 

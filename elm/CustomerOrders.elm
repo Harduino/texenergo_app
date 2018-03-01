@@ -1,7 +1,3 @@
--- https://auth0.com/blog/creating-your-first-elm-app-part-1/
--- elm-make CustomerOrders.elm --output ../public/elm.js
-
-
 module CustomerOrders exposing (..)
 
 import Html exposing (div, text, tr, td, th)
@@ -15,7 +11,8 @@ import Utils.Currency exposing (toCurrency)
 import RemoteData exposing (WebData)
 import CustomerOrder.Model exposing (CustomerOrder, customerOrdersDecoder, customerOrderDecoder)
 import Html.Texenergo exposing (pageHeader)
-import Partner.Model exposing (Partner, PartnerId(..), PartnerConfig, partnerDecoder, initPartnerConf, initPartner, partnerIdToString)
+import Partner.Model exposing (Partner, PartnerId(..), PartnerConfig, initPartnerConf, initPartner)
+import Partner.Decoder exposing (partnerDecoder, partnerIdToString)
 import Texenergo.Flags exposing (..)
 
 

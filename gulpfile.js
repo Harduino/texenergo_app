@@ -136,7 +136,7 @@ gulp.task('watch', function() {
     });
 
     gulp.watch([
-        'elm/*.elm', 'elm/*/*.elm'
+        'elm/*.elm', 'elm/*/*.elm', 'elm/*/*/*.elm' 
     ], function() {
         gulp.start('elm');
     });

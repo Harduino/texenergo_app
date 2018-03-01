@@ -3,14 +3,9 @@ module Partner.Model
         ( Partner
         , PartnerId(..)
         , PartnerConfig
-        , partnerDecoder
         , initPartnerConf
         , initPartner
-        , partnerIdToString
         )
-
-import Json.Decode as Decode exposing (field, int, string, float, bool)
-import Json.Decode.Pipeline exposing (required)
 
 
 type PartnerId
@@ -30,11 +25,6 @@ type alias PartnerConfig =
     }
 
 
-partnerIdToString : PartnerId -> String
-partnerIdToString (PartnerId str) =
-    str
-
-
 initPartner : Partner
 initPartner =
     Partner (PartnerId "") ""
@@ -43,10 +33,3 @@ initPartner =
 initPartnerConf : PartnerConfig
 initPartnerConf =
     PartnerConfig "" [] False
-
-
-partnerDecoder : Decode.Decoder Partner
-partnerDecoder =
-    Decode.succeed Partner
-        |> required "id" (string |> Decode.map PartnerId)
-        |> required "name" string

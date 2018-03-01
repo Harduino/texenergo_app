@@ -41,7 +41,11 @@ class AuthService {
     }
 
     get userMetadata() {
-      return this._profile.user_metadata;
+      if (this._profile === undefined) {
+        return {};
+      } else {
+        return this._profile.user_metadata;
+      }
     }
 
     login() {
