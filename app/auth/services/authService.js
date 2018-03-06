@@ -135,7 +135,7 @@ class AuthService {
       let self = this;
 
       return new Promise((resolve) => {
-        this.lock.getProfile(idToken, (error, profile) => {
+        this.lock.getUserInfo(idToken, (error, profile) => {
           if (error) console.log(error);
 
           self.updateProfile(profile);

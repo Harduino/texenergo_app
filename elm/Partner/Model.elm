@@ -5,6 +5,7 @@ module Partner.Model
         , PartnerConfig
         , initPartnerConf
         , initPartner
+        , partnerIdToString
         )
 
 
@@ -33,3 +34,8 @@ initPartner =
 initPartnerConf : PartnerConfig
 initPartnerConf =
     PartnerConfig "" [] False
+
+
+partnerIdToString : PartnerId -> String
+partnerIdToString (PartnerId str) =
+    str

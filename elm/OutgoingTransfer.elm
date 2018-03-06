@@ -9,8 +9,8 @@ import Http
 import Json.Decode as Decode exposing (field, int, string, float, bool)
 import Json.Decode.Pipeline exposing (required)
 import RemoteData exposing (WebData)
-import Partner.Model exposing (Partner, PartnerId(..), PartnerConfig, initPartner, initPartnerConf)
-import Partner.Decoder exposing (partnerDecoder, partnerIdToString)
+import Partner.Model exposing (Partner, PartnerId(..), PartnerConfig, initPartner, initPartnerConf, partnerIdToString)
+import Partner.Decoder exposing (partnerDecoder)
 import Texenergo.Flags exposing (..)
 import Utils.Date
 import Utils.Currency exposing (toCurrency)

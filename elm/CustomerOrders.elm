@@ -11,8 +11,8 @@ import Utils.Currency exposing (toCurrency)
 import RemoteData exposing (WebData)
 import CustomerOrder.Model exposing (CustomerOrder, customerOrdersDecoder, customerOrderDecoder)
 import Html.Texenergo exposing (pageHeader)
-import Partner.Model exposing (Partner, PartnerId(..), PartnerConfig, initPartnerConf, initPartner)
-import Partner.Decoder exposing (partnerDecoder, partnerIdToString)
+import Partner.Model exposing (Partner, PartnerId(..), PartnerConfig, initPartnerConf, initPartner, partnerIdToString)
+import Partner.Decoder exposing (partnerDecoder)
 import Texenergo.Flags exposing (..)
 
 

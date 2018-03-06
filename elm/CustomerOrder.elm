@@ -3,26 +3,34 @@ module CustomerOrder exposing (..)
 import Date exposing (Date)
 import Html exposing (div, text, tr, td, th, p)
 import Html.Attributes exposing (class, style)
+import Html.Events exposing (onClick, onInput)
 import Http
 import Json.Decode as Decode exposing (field, int, string, float, bool)
 import Json.Decode.Pipeline exposing (required)
+import Json.Encode
 import Utils.Date
 import RemoteData exposing (WebData)
 import Contact.Model exposing (Contact, ContactId(..), initContact)
 import Contact.Decoder exposing (contactDecoder)
-import CustomerOrder.Model exposing (CustomerOrderId(..))
+import CustomerOrder.Model exposing (CustomerOrderId(..), customerOrderIdToString)
 import DispatchOrder.Model exposing (DispatchOrder)
 import DispatchOrder.Decoder exposing (dispatchOrderDecoder)
 import Html.Texenergo exposing (pageHeader)
 import Html.Texenergo.Button
 import IncomingTransfer.Model exposing (IncomingTransfer, incomingTransferIdToString)
 import IncomingTransfer.Decoder exposing (incomingTransferDecoder)
-import Partner.Model exposing (Partner, PartnerId(..), initPartner)
-import Partner.Decoder exposing (partnerDecoder, partnerIdToString)
-import Product.Model exposing (Product)
+import Partner.Model exposing (Partner, partnerIdToString)
+import Partner.Decoder exposing (partnerDecoder)
+import Product.Model exposing (Product, productIdToString)
 import Product.Decoder exposing (productDecoder)
 import Texenergo.Flags exposing (..)
 import Utils.Currency
+
+
+type PartnerType
+    = Issuer
+    | Payer
+    | Receiver
 
 
 type CustomerOrderContentId
@@ -45,12 +53,12 @@ type alias CustomerOrderContent =
     , cancellableQuantity : Int
     , comment : String
     , deliveryTerms : String
-    , discount : Int
+    , discount : Maybe Int
     , discountDescription : String
     , id : CustomerOrderContentId
     , price : Float
     , product : Product
-    , quantity : Int
+    , quantity : Maybe Int
     , queryOriginal : String
     , remains : Int
     , stock : Int
@@ -88,28 +96,179 @@ type Msg
     = FetchCustomerOrder CustomerOrderId
     | FetchedCustomerOrder (WebData CustomerOrder)
     | RefreshCustomerOrder CustomerOrderId
+    | FlipPartnerEditability PartnerType
+    | ContentQuantityChanged CustomerOrderContentId String
+    | CustomerOrderContentUpdated CustomerOrderContentId (Result Http.Error CustomerOrderContent)
+    | ContentDiscountChanged CustomerOrderContentId String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg m =
+update msg model =
     let
-        lala : String
-        lala =
-            "lulu"
+        changeQuantity : CustomerOrder -> CustomerOrderContentId -> Maybe Int -> CustomerOrder
+        changeQuantity co cocId newValue =
+            { co
+                | customerOrderContents =
+                    List.map
+                        (\x ->
+                            (if x.id == cocId then
+                                { x | quantity = newValue }
+                             else
+                                x
+                            )
+                        )
+                        co.customerOrderContents
+            }
+
+        changeDiscount : CustomerOrder -> CustomerOrderContentId -> Maybe Int -> CustomerOrder
+        changeDiscount co cocId newValue =
+            { co
+                | customerOrderContents =
+                    List.map
+                        (\x ->
+                            (if x.id == cocId then
+                                { x | discount = newValue }
+                             else
+                                x
+                            )
+                        )
+                        co.customerOrderContents
+            }
+
+        changeContent : CustomerOrder -> CustomerOrderContent -> CustomerOrder
+        changeContent customerOrder newCustomerOrderContent =
+            { customerOrder
+                | customerOrderContents =
+                    List.map
+                        (\x ->
+                            (if x.id == newCustomerOrderContent.id then
+                                newCustomerOrderContent
+                             else
+                                x
+                            )
+                        )
+                        customerOrder.customerOrderContents
+            }
+
+        errorToString : Http.Error -> String
+        errorToString err =
+            case err of
+                Http.BadUrl x ->
+                    x
+
+                Http.Timeout ->
+                    "Timeout"
+
+                Http.NetworkError ->
+                    "NetworkError"
+
+                Http.BadPayload x _ ->
+                    x
+
+                _ ->
+                    "Other"
     in
         case msg of
             FetchCustomerOrder customerOrderId ->
-                ( m
-                , fetchCustomerOrder m.flags.apiEndpoint m.flags.apiAuthToken customerOrderId
+                ( model
+                , fetchCustomerOrder model.flags.apiEndpoint model.flags.apiAuthToken customerOrderId
                 )
 
             FetchedCustomerOrder custOrd ->
-                ( { m | customerOrder = custOrd }, Cmd.none )
+                ( { model | customerOrder = custOrd }, Cmd.none )
 
             RefreshCustomerOrder customerOrderId ->
-                ( m
-                , fetchCustomerOrder m.flags.apiEndpoint m.flags.apiAuthToken customerOrderId
+                ( model
+                , fetchCustomerOrder model.flags.apiEndpoint model.flags.apiAuthToken customerOrderId
                 )
+
+            FlipPartnerEditability _ ->
+                ( model, Cmd.none )
+
+            ContentQuantityChanged contentId newValue ->
+                case ( String.toInt newValue, model.customerOrder ) of
+                    ( Ok x, RemoteData.Success customerOrder ) ->
+                        ( { model
+                            | customerOrder = changeQuantity customerOrder contentId (Just x) |> RemoteData.succeed
+                          }
+                        , updateQuantity model customerOrder.id contentId x
+                        )
+
+                    ( _, RemoteData.Success customerOrder ) ->
+                        if newValue == "" then
+                            ( { model
+                                | customerOrder = changeQuantity customerOrder contentId Nothing |> RemoteData.succeed
+                              }
+                            , Cmd.none
+                            )
+                        else
+                            ( model, Cmd.none )
+
+                    ( _, _ ) ->
+                        ( model, Cmd.none )
+
+            ContentDiscountChanged contentId newValue ->
+                case ( String.toInt newValue, model.customerOrder ) of
+                    ( Ok x, RemoteData.Success customerOrder ) ->
+                        ( { model
+                            | customerOrder = changeDiscount customerOrder contentId (Just x) |> RemoteData.succeed
+                          }
+                        , updateDiscount model customerOrder.id contentId x
+                        )
+
+                    ( _, RemoteData.Success customerOrder ) ->
+                        if newValue == "" then
+                            ( { model
+                                | customerOrder = changeDiscount customerOrder contentId Nothing |> RemoteData.succeed
+                              }
+                            , Cmd.none
+                            )
+                        else
+                            ( model, Cmd.none )
+
+                    ( _, _ ) ->
+                        ( model, Cmd.none )
+
+            CustomerOrderContentUpdated cocId (Result.Ok newCustomerOrderContent) ->
+                case model.customerOrder of
+                    RemoteData.Success customerOrder ->
+                        ( { model
+                            | customerOrder = changeContent customerOrder newCustomerOrderContent |> RemoteData.succeed
+                          }
+                        , Cmd.none
+                        )
+
+                    _ ->
+                        ( model, Cmd.none )
+
+            CustomerOrderContentUpdated cocId (Result.Err err) ->
+                ( model, Cmd.none )
+
+
+updateDiscount : Model -> CustomerOrderId -> CustomerOrderContentId -> Int -> Cmd Msg
+updateDiscount m coId cocId newDiscount =
+    updateGeneric m coId cocId (Json.Encode.object [ ( "discount", Json.Encode.int newDiscount ) ])
+
+
+updateQuantity : Model -> CustomerOrderId -> CustomerOrderContentId -> Int -> Cmd Msg
+updateQuantity m coId cocId newQuantity =
+    updateGeneric m coId cocId (Json.Encode.object [ ( "quantity", Json.Encode.int newQuantity ) ])
+
+
+updateGeneric : Model -> CustomerOrderId -> CustomerOrderContentId -> Json.Encode.Value -> Cmd Msg
+updateGeneric m (CustomerOrderId coId) (CustomerOrderContentId cocId) newValue =
+    Http.request
+        { method = "PUT"
+        , headers =
+            [ Http.header "Authorization" ("Bearer " ++ (apiAuthTokenToString m.flags.apiAuthToken))
+            ]
+        , url = (endpointToString m.flags.apiEndpoint) ++ "/customer_orders/" ++ coId ++ "/customer_order_contents/" ++ cocId
+        , body = Http.jsonBody newValue
+        , expect = Http.expectJson customerOrderContentDecoder
+        , timeout = Nothing
+        , withCredentials = False
+        }
+        |> Http.send (CustomerOrderContentUpdated (CustomerOrderContentId cocId))
 
 
 customerOrderContentDecoder : Decode.Decoder CustomerOrderContent
@@ -120,12 +279,12 @@ customerOrderContentDecoder =
         |> required "cancellable_quantity" int
         |> required "comment" string
         |> required "delivery_terms" string
-        |> required "discount" int
+        |> required "discount" (int |> Decode.map Just)
         |> required "discount_description" string
         |> required "id" (string |> Decode.map CustomerOrderContentId)
         |> required "price" float
         |> required "product" productDecoder
-        |> required "quantity" int
+        |> required "quantity" (int |> Decode.map Just)
         |> required "query_original" string
         |> required "remains" int
         |> required "stock" int
@@ -236,7 +395,7 @@ viewDocumentsBlock co =
                     [ tr []
                         [ td [] []
                         , td [] [ text "Итого, руб:" ]
-                        , td [] [ text "000.00 руб" ]
+                        , td [] [ List.foldl (\disOrd -> (+) disOrd.total) 0 co.dispatchOrders |> Utils.Currency.toCurrency |> text ]
                         ]
                     ]
                 )
@@ -255,7 +414,7 @@ viewDocumentsBlock co =
                     [ tr []
                         [ td [] []
                         , td [] [ text "Итого, руб:" ]
-                        , td [] [ text "000.00 руб" ]
+                        , td [] [ List.foldl (\incTransf -> (+) incTransf.total) 0 co.incomingTransfers |> Utils.Currency.toCurrency |> text ]
                         ]
                     ]
                 )
@@ -263,20 +422,99 @@ viewDocumentsBlock co =
         ]
 
 
-viewContent : Int -> CustomerOrderContent -> Html.Html Msg
-viewContent i coc =
+viewContent : CustomerOrder -> Int -> CustomerOrderContent -> Html.Html Msg
+viewContent co i coc =
     let
         customerOrderContentTotal : CustomerOrderContent -> Float
         customerOrderContentTotal cocTmp =
-            (toFloat cocTmp.quantity) * coc.price * (1.0 - (toFloat coc.discount) / 100)
+            case cocTmp.quantity of
+                Just q ->
+                    (toFloat q) * coc.price * (1.0 - (Maybe.withDefault 0 coc.discount |> toFloat) / 100)
+
+                Nothing ->
+                    0.0
+
+        conditionalColumn : Html.Html Msg -> CustomerOrder -> Html.Html Msg
+        conditionalColumn mes customerOrder =
+            if customerOrder.canEdit then
+                td [ class "text-right" ] [ mes ]
+            else
+                Html.span [] []
+
+        quantityToColor : CustomerOrderContent -> String
+        quantityToColor custOrdCont =
+            case custOrdCont.quantity of
+                Just q ->
+                    if (q <= custOrdCont.stock) then
+                        "success"
+                    else if (custOrdCont.stock == 0) then
+                        "danger"
+                    else if (custOrdCont.stock > 0) then
+                        "warning"
+                    else
+                        ""
+
+                Nothing ->
+                    ""
+
+        quantityColumn : CustomerOrder -> CustomerOrderContent -> Html.Html Msg
+        quantityColumn co coc =
+            td [ class ("text-right " ++ (quantityToColor coc)) ]
+                [ if co.canEdit then
+                    (Html.input
+                        [ (Html.Attributes.value (quantityToString coc.quantity))
+                        , Html.Attributes.style
+                            [ ( "text-align", "right" )
+                            , ( "border", "none" )
+                            , ( "background-color", "transparent" )
+                            , ( "border-bottom", "dashed 1px #08c" )
+                            ]
+                        , onInput (ContentQuantityChanged coc.id)
+                        ]
+                        [ quantityToString coc.quantity |> text ]
+                    )
+                  else
+                    quantityToString coc.quantity |> text
+                ]
+
+        discountColumn : CustomerOrder -> CustomerOrderContent -> Html.Html Msg
+        discountColumn co coc =
+            if co.canEdit then
+                td []
+                    [ (Html.input
+                        [ (Html.Attributes.value (Maybe.withDefault 0 coc.discount |> toString))
+                        , Html.Attributes.style
+                            [ ( "text-align", "right" )
+                            , ( "border", "none" )
+                            , ( "background-color", "transparent" )
+                            , ( "border-bottom", "dashed 1px #08c" )
+                            ]
+                        , onInput (ContentDiscountChanged coc.id)
+                        ]
+                        []
+                      )
+                    ]
+            else
+                Html.span [] []
+
+        quantityToString : Maybe Int -> String
+        quantityToString mI =
+            case mI of
+                Just i ->
+                    toString i
+
+                Nothing ->
+                    ""
     in
         tr []
             [ td [] [ i + 1 |> toString |> text ]
-            , td [] [ text coc.product.name ]
+            , td []
+                [ Html.a [ productIdToString coc.product.id |> (++) "/#/products/" |> Html.Attributes.href ] [ text coc.product.name ]
+                ]
             , td [] [ text coc.product.article ]
-            , td [ class "text-right" ] [ Utils.Currency.toCurrency coc.price |> text ]
-            , td [ class "text-right" ] [ toString coc.quantity |> text ]
-            , td [ class "text-right" ] [ toString coc.discount |> text ]
+            , conditionalColumn (Utils.Currency.toCurrency coc.price |> text) co
+            , quantityColumn co coc
+            , discountColumn co coc
             , td [ class "text-right" ] [ customerOrderContentTotal coc |> Utils.Currency.toCurrency |> text ]
             , td [] [ toString coc.remains |> text ]
             ]
@@ -284,21 +522,29 @@ viewContent i coc =
 
 viewContentsBlock : CustomerOrder -> Html.Html Msg
 viewContentsBlock co =
-    Html.table [ class "table table-hover table-bordered margin-top-10" ]
-        [ Html.thead []
-            [ tr []
-                [ th [] []
-                , th [] [ text "Наименование" ]
-                , th [] [ text "Артикул" ]
-                , th [ class "text-right" ] [ text "Цена" ]
-                , th [ class "text-right" ] [ text "Кол-во" ]
-                , th [ class "text-right" ] [ text "Скидка" ]
-                , th [ class "text-right" ] [ text "Итого" ]
-                , th [] [ text "Осталось отгрузить" ]
+    let
+        conditionalColumn : Html.Html Msg -> CustomerOrder -> Html.Html Msg
+        conditionalColumn mes customerOrder =
+            if customerOrder.canEdit then
+                th [ class "text-right" ] [ mes ]
+            else
+                Html.span [] []
+    in
+        Html.table [ class "table table-hover table-bordered margin-top-10" ]
+            [ Html.thead []
+                [ tr []
+                    [ th [] []
+                    , th [] [ text "Наименование" ]
+                    , th [] [ text "Артикул" ]
+                    , conditionalColumn (text "Цена") co
+                    , th [ class "text-right" ] [ text "Кол-во" ]
+                    , conditionalColumn (text "Скидка") co
+                    , th [ class "text-right" ] [ text "Итого" ]
+                    , conditionalColumn (text "Осталось отгрузить") co
+                    ]
                 ]
+            , Html.tbody [] (List.indexedMap (viewContent co) co.customerOrderContents)
             ]
-        , Html.tbody [] (List.indexedMap viewContent co.customerOrderContents)
-        ]
 
 
 viewMetaBlock : CustomerOrder -> Html.Html Msg
@@ -310,6 +556,16 @@ viewMetaBlock customerOrder =
                 "Нет"
             else
                 str
+
+        displayPartner : Partner -> PartnerType -> Html.Html Msg
+        displayPartner partner partnerType =
+            if customerOrder.canEdit then
+                Html.span [ onClick (FlipPartnerEditability partnerType) ]
+                    [ Html.input [] [ text partner.name ]
+                    , text " (Изменить)"
+                    ]
+            else
+                Html.a [ partnerIdToString partner.id |> (++) "/#/partners/" |> Html.Attributes.href ] [ text partner.name ]
     in
         div [ class "row margin-top-10" ]
             [ p [ class "col-xs-12 col-md-3 font-bold" ] [ text "Свой номер:" ]
@@ -319,11 +575,11 @@ viewMetaBlock customerOrder =
             , p [ class "col-xs-12 col-md-3 font-bold" ] [ text "Дата заказа:" ]
             , p [ class "col-md-9 ng-binding" ] [ Utils.Date.toHumanShort customerOrder.date |> text ]
             , p [ class "col-xs-12 col-md-3 font-bold" ] [ text "Продавец:" ]
-            , p [ class "col-md-9 ng-binding" ] [ text customerOrder.issuedBy.name ]
+            , p [ class "col-md-9 ng-binding" ] [ displayPartner customerOrder.issuedBy Issuer ]
             , p [ class "col-xs-12 col-md-3 font-bold" ] [ text "Покупатель:" ]
-            , p [ class "col-md-9 ng-binding" ] [ text customerOrder.partner.name ]
+            , p [ class "col-md-9 ng-binding" ] [ displayPartner customerOrder.partner Receiver ]
             , p [ class "col-xs-12 col-md-3 font-bold" ] [ text "Плательщик:" ]
-            , p [ class "col-md-9 ng-binding" ] [ text customerOrder.payer.name ]
+            , p [ class "col-md-9 ng-binding" ] [ displayPartner customerOrder.payer Payer ]
             , p [ class "col-xs-12 col-md-3 font-bold" ] [ text "Статус:" ]
             , p [ class "col-md-9 ng-binding" ] [ text customerOrder.status ]
             , p [ class "col-xs-12 col-md-3 font-bold" ] [ text "Менеджер:" ]

@@ -1,4 +1,15 @@
-module Texenergo.Flags exposing (ApiAuthToken(..), Endpoint(..), ApiAccessToken(..), Flags, Flagz, initFlags)
+module Texenergo.Flags
+    exposing
+        ( ApiAuthToken(..)
+        , Endpoint(..)
+        , ApiAccessToken(..)
+        , Flags
+        , Flagz
+        , initFlags
+        , apiAuthTokenToString
+        , endpointToString
+        , apiAccessTokenToString
+        )
 
 
 type ApiAuthToken
@@ -11,6 +22,21 @@ type Endpoint
 
 type ApiAccessToken
     = ApiAccessToken String
+
+
+apiAuthTokenToString : ApiAuthToken -> String
+apiAuthTokenToString (ApiAuthToken x) =
+    x
+
+
+endpointToString : Endpoint -> String
+endpointToString (Endpoint x) =
+    x
+
+
+apiAccessTokenToString : ApiAccessToken -> String
+apiAccessTokenToString (ApiAccessToken x) =
+    x
 
 
 type alias Flags =

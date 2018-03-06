@@ -13,8 +13,8 @@ import Utils.Date
 import Utils.Currency exposing (toCurrency)
 import CustomerOrder.Model exposing (CustomerOrderBrief, CustomerOrder, customerOrderBriefDecoder, customerOrdersDecoder, customerOrderIdToString)
 import Html.Texenergo exposing (pageHeader)
-import Partner.Model exposing (Partner, PartnerId(..), initPartner)
-import Partner.Decoder exposing (partnerDecoder, partnerIdToString)
+import Partner.Model exposing (Partner, PartnerId(..), partnerIdToString)
+import Partner.Decoder exposing (partnerDecoder)
 import Texenergo.Flags exposing (..)
 
 

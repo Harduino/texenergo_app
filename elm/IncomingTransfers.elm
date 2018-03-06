@@ -10,8 +10,9 @@ import Json.Decode.Pipeline exposing (required)
 import Json.Encode
 import Utils.Date
 import Html.Texenergo exposing (pageHeader)
-import Partner.Model exposing (Partner, PartnerId(..), PartnerConfig, initPartner, initPartnerConf)
-import Partner.Decoder exposing (partnerDecoder, partnerIdToString)
+import Partner.Model exposing (Partner, PartnerId(..), PartnerConfig, initPartner, initPartnerConf, partnerIdToString)
+import Partner.Decoder exposing (partnerDecoder)
+import Texenergo.Flags exposing (Flags, Flagz)
 import Utils.Currency exposing (toCurrency)
 
 
@@ -38,12 +39,6 @@ type NewIncomingTransferFields
     | ITDate
     | Description
     | Amount
-
-
-type alias Flags =
-    { authToken : String
-    , apiEndpoint : String
-    }
 
 
 type alias IncomingTransfer =
@@ -84,12 +79,12 @@ fetchIncomingTransfers m p f =
             "?q=" ++ f ++ "&page=" ++ (toString p)
 
         endpoint =
-            m.flags.apiEndpoint ++ "/incoming_transfers" ++ queryString
+            (Texenergo.Flags.endpointToString m.flags.apiEndpoint) ++ "/incoming_transfers" ++ queryString
     in
         Http.request
             { method = "GET"
             , headers =
-                [ Http.header "Authorization" ("Bearer " ++ m.flags.authToken)
+                [ Http.header "Authorization" ("Bearer " ++ (Texenergo.Flags.apiAuthTokenToString m.flags.apiAuthToken))
                 ]
             , url = endpoint
             , body = Http.emptyBody
@@ -104,12 +99,12 @@ fetchPartners : Model -> String -> Cmd Msg
 fetchPartners m f =
     let
         endpoint =
-            (m.flags.apiEndpoint ++ "/partners?q=" ++ f)
+            (Texenergo.Flags.endpointToString m.flags.apiEndpoint) ++ "/partners?q=" ++ f
     in
         Http.request
             { method = "GET"
             , headers =
-                [ Http.header "Authorization" ("Bearer " ++ m.flags.authToken)
+                [ Http.header "Authorization" ("Bearer " ++ (Texenergo.Flags.apiAuthTokenToString m.flags.apiAuthToken))
                 ]
             , url = endpoint
             , body = Http.emptyBody
@@ -286,12 +281,12 @@ initNewIncomingTransfer =
     NewIncomingTransfer "" "" "" 0 initPartner
 
 
-init : Flags -> ( Model, Cmd Msg )
+init : Flagz -> ( Model, Cmd Msg )
 init fs =
     let
         initModel : Model
         initModel =
-            Model fs [] 1 False "" False initNewIncomingTransfer initPartnerConf
+            Model (Texenergo.Flags.initFlags fs) [] 1 False "" False initNewIncomingTransfer initPartnerConf
     in
         ( initModel, fetchIncomingTransfers initModel 1 "" )
 
@@ -310,9 +305,9 @@ createIncomingTransfer m =
         Http.request
             { method = "POST"
             , headers =
-                [ Http.header "Authorization" ("Bearer " ++ m.flags.authToken)
+                [ Http.header "Authorization" ("Bearer " ++ (Texenergo.Flags.apiAuthTokenToString m.flags.apiAuthToken))
                 ]
-            , url = m.flags.apiEndpoint ++ "/incoming_transfers"
+            , url = (Texenergo.Flags.endpointToString m.flags.apiEndpoint) ++ "/incoming_transfers"
             , body = Http.jsonBody (encodeCustomerOrder nco)
             , expect = Http.expectJson incomingTransferDecoder
             , timeout = Nothing
@@ -562,11 +557,10 @@ port setPicker : String -> Cmd msg
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    --Sub.none
     setDat DateChosen
 
 
-main : Program Flags Model Msg
+main : Program Flagz Model Msg
 main =
     Html.programWithFlags
         { init = init

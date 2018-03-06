@@ -1,17 +1,11 @@
 module Partner.Decoder
     exposing
         ( partnerDecoder
-        , partnerIdToString
         )
 
 import Partner.Model exposing (PartnerId(..), Partner)
 import Json.Decode as Decode exposing (field, int, string, float, bool)
 import Json.Decode.Pipeline exposing (required)
-
-
-partnerIdToString : PartnerId -> String
-partnerIdToString (PartnerId str) =
-    str
 
 
 partnerDecoder : Decode.Decoder Partner
