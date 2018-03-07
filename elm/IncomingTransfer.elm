@@ -12,6 +12,7 @@ import RemoteData exposing (WebData)
 import Utils.Date
 import Utils.Currency exposing (toCurrency)
 import CustomerOrder.Model exposing (CustomerOrderBrief, CustomerOrder, customerOrderBriefDecoder, customerOrdersDecoder, customerOrderIdToString)
+import IncomingTransfer.Model exposing (IncomingTransferId(..))
 import Html.Texenergo exposing (pageHeader)
 import Partner.Model exposing (Partner, PartnerId(..), partnerIdToString)
 import Partner.Decoder exposing (partnerDecoder)
@@ -26,14 +27,6 @@ type Msg
     | FilterKeyPressed CustomerOrderRow Int
     | ChangeCustomerOrderAmount CustomerOrderRow String
     | CreatedMoneyAssign (Result Http.Error String)
-
-
-
--- | FetchedOutgoingTransfers (WebData OutgoingTransferBrief)
-
-
-type IncomingTransferId
-    = IncomingTransferId String
 
 
 type IncomingTransferNumber
@@ -57,10 +50,10 @@ type alias MoneyAssignment =
 type alias IncomingTransfer =
     { id : IncomingTransferId
     , number : IncomingTransferNumber
-    , description : String
+    , total : Float
     , partner : Partner
     , date : Date
-    , total : Float
+    , description : String
     , moneyAssignments : List MoneyAssignment
     }
 
@@ -106,10 +99,10 @@ incomingTransferDecoder =
     Decode.succeed IncomingTransfer
         |> required "id" (string |> Decode.map IncomingTransferId)
         |> required "number" (string |> Decode.map IncomingTransferNumber)
-        |> required "description" string
+        |> required "amount" float
         |> required "partner" partnerDecoder
         |> required "date" Utils.Date.decoder
-        |> required "amount" float
+        |> required "description" string
         |> required "money_to_orders" moneyAssignmentsDecoder
 
 

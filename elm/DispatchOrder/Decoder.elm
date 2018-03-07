@@ -1,18 +1,12 @@
 module DispatchOrder.Decoder
     exposing
         ( dispatchOrderDecoder
-        , dispatchOrderIdToString
         )
 
 import DispatchOrder.Model exposing (DispatchOrderId(..), DispatchOrder)
 import Json.Decode as Decode exposing (field, int, string, float, bool)
 import Json.Decode.Pipeline exposing (required)
 import Utils.Date
-
-
-dispatchOrderIdToString : DispatchOrderId -> String
-dispatchOrderIdToString (DispatchOrderId str) =
-    str
 
 
 dispatchOrderDecoder : Decode.Decoder DispatchOrder

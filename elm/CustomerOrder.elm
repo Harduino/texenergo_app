@@ -13,15 +13,15 @@ import RemoteData exposing (WebData)
 import Contact.Model exposing (Contact, ContactId(..), initContact)
 import Contact.Decoder exposing (contactDecoder)
 import CustomerOrder.Model exposing (CustomerOrderId(..), customerOrderIdToString)
-import DispatchOrder.Model exposing (DispatchOrder)
+import DispatchOrder.Model exposing (DispatchOrder, dispatchOrderIdToString)
 import DispatchOrder.Decoder exposing (dispatchOrderDecoder)
 import Html.Texenergo exposing (pageHeader)
-import Html.Texenergo.Button
-import IncomingTransfer.Model exposing (IncomingTransfer, incomingTransferIdToString)
+import Html.Texenergo.Button exposing (button)
+import IncomingTransfer.Model exposing (IncomingTransfer, incomingTransferIdToString, incomingTransferPath)
 import IncomingTransfer.Decoder exposing (incomingTransferDecoder)
 import Partner.Model exposing (Partner, partnerIdToString)
 import Partner.Decoder exposing (partnerDecoder)
-import Product.Model exposing (Product, productIdToString)
+import Product.Model exposing (Product, ProductId(..), productIdToString)
 import Product.Decoder exposing (productDecoder)
 import Texenergo.Flags exposing (..)
 import Utils.Currency
@@ -33,13 +33,27 @@ type PartnerType
     | Receiver
 
 
+type SearchQuery
+    = SearchQuery String
+
+
 type CustomerOrderContentId
     = CustomerOrderContentId String
+
+
+type Quantity
+    = Quantity Int
+
+
+type AddableQuantity
+    = AddableQuantity Int
 
 
 type alias Model =
     { customerOrder : WebData CustomerOrder
     , flags : Flags
+    , searchQuery : SearchQuery
+    , searchResults : WebData (List SearchResult)
     }
 
 
@@ -58,7 +72,7 @@ type alias CustomerOrderContent =
     , id : CustomerOrderContentId
     , price : Float
     , product : Product
-    , quantity : Maybe Int
+    , quantity : Maybe Quantity
     , queryOriginal : String
     , remains : Int
     , stock : Int
@@ -92,14 +106,30 @@ type alias CustomerOrder =
     }
 
 
+type alias SearchResult =
+    { product : Product
+    , imageUrl : String
+    , price : Float
+    , stock : Quantity
+    , addableQuantity : Maybe AddableQuantity
+    }
+
+
 type Msg
     = FetchCustomerOrder CustomerOrderId
     | FetchedCustomerOrder (WebData CustomerOrder)
     | RefreshCustomerOrder CustomerOrderId
     | FlipPartnerEditability PartnerType
     | ContentQuantityChanged CustomerOrderContentId String
-    | CustomerOrderContentUpdated CustomerOrderContentId (Result Http.Error CustomerOrderContent)
     | ContentDiscountChanged CustomerOrderContentId String
+    | CustomerOrderContentUpdated CustomerOrderContentId (Result Http.Error CustomerOrderContent)
+    | DestroyContentClicked CustomerOrderContentId
+    | DestroyedContent CustomerOrderContentId (Result Http.Error ())
+    | SearchQueryChanged String
+    | FetchedSearchResults (WebData (List SearchResult))
+    | SearchResultQuantityChanged Product.Model.ProductId String
+    | ProductAddClicked ProductId (Maybe AddableQuantity)
+    | ProductAdded (Result Http.Error CustomerOrderContent)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -112,13 +142,25 @@ update msg model =
                     List.map
                         (\x ->
                             (if x.id == cocId then
-                                { x | quantity = newValue }
+                                { x | quantity = Maybe.map Quantity newValue }
                              else
                                 x
                             )
                         )
                         co.customerOrderContents
             }
+
+        changeAddableQuantity : List SearchResult -> ProductId -> Maybe AddableQuantity -> List SearchResult
+        changeAddableQuantity searchResults productId newValue =
+            List.map
+                (\result ->
+                    (if result.product.id == productId then
+                        { result | addableQuantity = newValue }
+                     else
+                        result
+                    )
+                )
+                searchResults
 
         changeDiscount : CustomerOrder -> CustomerOrderContentId -> Maybe Int -> CustomerOrder
         changeDiscount co cocId newValue =
@@ -150,23 +192,16 @@ update msg model =
                         customerOrder.customerOrderContents
             }
 
-        errorToString : Http.Error -> String
-        errorToString err =
-            case err of
-                Http.BadUrl x ->
-                    x
-
-                Http.Timeout ->
-                    "Timeout"
-
-                Http.NetworkError ->
-                    "NetworkError"
-
-                Http.BadPayload x _ ->
-                    x
-
-                _ ->
-                    "Other"
+        filterOutContent : CustomerOrder -> CustomerOrderContentId -> CustomerOrder
+        filterOutContent customerOrder customerOrderContentid =
+            { customerOrder
+                | customerOrderContents =
+                    List.filter
+                        (\x ->
+                            x.id /= customerOrderContentid
+                        )
+                        customerOrder.customerOrderContents
+            }
     in
         case msg of
             FetchCustomerOrder customerOrderId ->
@@ -244,6 +279,114 @@ update msg model =
             CustomerOrderContentUpdated cocId (Result.Err err) ->
                 ( model, Cmd.none )
 
+            DestroyContentClicked cocId ->
+                case model.customerOrder of
+                    RemoteData.Success customerOrder ->
+                        ( model, (destroyContent model.flags.apiEndpoint model.flags.apiAuthToken customerOrder.id cocId) )
+
+                    _ ->
+                        ( model, Cmd.none )
+
+            DestroyedContent cocId (Result.Ok x) ->
+                case model.customerOrder of
+                    RemoteData.Success customerOrder ->
+                        ( { model
+                            | customerOrder = filterOutContent customerOrder cocId |> RemoteData.succeed
+                          }
+                        , Cmd.none
+                        )
+
+                    _ ->
+                        ( model, Cmd.none )
+
+            DestroyedContent cocId (Result.Err _) ->
+                ( model, Cmd.none )
+
+            SearchQueryChanged newString ->
+                ( { model | searchQuery = (SearchQuery newString), searchResults = RemoteData.Loading }
+                , fetchProductSearch model.flags.apiEndpoint model.flags.apiAuthToken (SearchQuery newString)
+                )
+
+            FetchedSearchResults searchResults ->
+                ( { model | searchResults = searchResults }
+                , Cmd.none
+                )
+
+            SearchResultQuantityChanged productId newValue ->
+                case ( String.toInt newValue, model.searchResults ) of
+                    ( Ok x, RemoteData.Success searchResults ) ->
+                        ( { model
+                            | searchResults = changeAddableQuantity searchResults productId (Just (AddableQuantity x)) |> RemoteData.succeed
+                          }
+                        , Cmd.none
+                        )
+
+                    ( _, RemoteData.Success searchResults ) ->
+                        if newValue == "" then
+                            ( { model
+                                | searchResults = changeAddableQuantity searchResults productId Nothing |> RemoteData.succeed
+                              }
+                            , Cmd.none
+                            )
+                        else
+                            ( model, Cmd.none )
+
+                    ( _, _ ) ->
+                        ( model, Cmd.none )
+
+            ProductAddClicked productId mAddableQuantity ->
+                case ( mAddableQuantity, model.customerOrder ) of
+                    ( Just (AddableQuantity addableQ), RemoteData.Success customerOrder ) ->
+                        if addableQ > 0 then
+                            ( model
+                            , createCustomerOrderContent
+                                model.flags.apiEndpoint
+                                model.flags.apiAuthToken
+                                customerOrder.id
+                                productId
+                                addableQ
+                                model.searchQuery
+                            )
+                        else
+                            ( model, Cmd.none )
+
+                    ( _, _ ) ->
+                        ( model, Cmd.none )
+
+            ProductAdded (Result.Ok newCustomerOrderContent) ->
+                case ( model.searchResults, model.customerOrder ) of
+                    ( RemoteData.Success searchResults, RemoteData.Success customerOrder ) ->
+                        ( { model
+                            | customerOrder =
+                                ({ customerOrder
+                                    | customerOrderContents = (List.singleton newCustomerOrderContent |> (++) customerOrder.customerOrderContents)
+                                 }
+                                )
+                                    |> RemoteData.succeed
+                            , searchResults =
+                                (List.filter (\sr -> sr.product.id /= newCustomerOrderContent.product.id) searchResults |> RemoteData.succeed)
+                          }
+                        , Cmd.none
+                        )
+
+                    ( _, RemoteData.Success customerOrder ) ->
+                        ( { model
+                            | customerOrder =
+                                ({ customerOrder
+                                    | customerOrderContents = (List.singleton newCustomerOrderContent |> (++) customerOrder.customerOrderContents)
+                                 }
+                                )
+                                    |> RemoteData.succeed
+                          }
+                        , Cmd.none
+                        )
+
+                    ( _, _ ) ->
+                        ( model, Cmd.none )
+
+            ProductAdded (Result.Err err) ->
+                ( model, Cmd.none )
+
 
 updateDiscount : Model -> CustomerOrderId -> CustomerOrderContentId -> Int -> Cmd Msg
 updateDiscount m coId cocId newDiscount =
@@ -271,6 +414,45 @@ updateGeneric m (CustomerOrderId coId) (CustomerOrderContentId cocId) newValue =
         |> Http.send (CustomerOrderContentUpdated (CustomerOrderContentId cocId))
 
 
+destroyContent : Endpoint -> ApiAuthToken -> CustomerOrderId -> CustomerOrderContentId -> Cmd Msg
+destroyContent (Endpoint aep) (ApiAuthToken at) (CustomerOrderId customerOrderId) (CustomerOrderContentId cocId) =
+    Http.request
+        { method = "DELETE"
+        , headers =
+            [ Http.header "Authorization" ("Bearer " ++ at)
+            ]
+        , url = aep ++ "/customer_orders/" ++ customerOrderId ++ "/customer_order_contents/" ++ cocId
+        , body = Http.emptyBody
+        , expect = Http.expectStringResponse (\_ -> Ok ())
+        , timeout = Nothing
+        , withCredentials = False
+        }
+        |> Http.send (DestroyedContent (CustomerOrderContentId cocId))
+
+
+createCustomerOrderContent : Endpoint -> ApiAuthToken -> CustomerOrderId -> ProductId -> Int -> SearchQuery -> Cmd Msg
+createCustomerOrderContent (Endpoint aep) (ApiAuthToken at) (CustomerOrderId customerOrderId) (ProductId productId) quantity (SearchQuery searchQuery) =
+    Http.request
+        { method = "POST"
+        , headers =
+            [ Http.header "Authorization" ("Bearer " ++ at)
+            ]
+        , url = aep ++ "/customer_orders/" ++ customerOrderId ++ "/customer_order_contents/"
+        , body =
+            Http.jsonBody
+                (Json.Encode.object
+                    [ ( "product_id", Json.Encode.string productId )
+                    , ( "quantity", Json.Encode.int quantity )
+                    , ( "query_original", Json.Encode.string searchQuery )
+                    ]
+                )
+        , expect = Http.expectJson customerOrderContentDecoder
+        , timeout = Nothing
+        , withCredentials = False
+        }
+        |> Http.send ProductAdded
+
+
 customerOrderContentDecoder : Decode.Decoder CustomerOrderContent
 customerOrderContentDecoder =
     Decode.succeed CustomerOrderContent
@@ -284,7 +466,7 @@ customerOrderContentDecoder =
         |> required "id" (string |> Decode.map CustomerOrderContentId)
         |> required "price" float
         |> required "product" productDecoder
-        |> required "quantity" (int |> Decode.map Just)
+        |> required "quantity" (int |> Decode.map Quantity |> Decode.map Just)
         |> required "query_original" string
         |> required "remains" int
         |> required "stock" int
@@ -324,6 +506,42 @@ customerOrderFullDecoder =
         |> required "total" float
 
 
+searchResultDecoder : Decode.Decoder SearchResult
+searchResultDecoder =
+    Decode.map5 (SearchResult)
+        productDecoder
+        (Decode.field "image_url" string)
+        (Decode.field "price" float)
+        (Decode.map Quantity (Decode.field "stock" int))
+        (Decode.succeed Nothing)
+
+
+searchResultsDecoder : Decode.Decoder (List SearchResult)
+searchResultsDecoder =
+    Decode.list searchResultDecoder
+
+
+fetchProductSearch : Endpoint -> ApiAuthToken -> SearchQuery -> Cmd Msg
+fetchProductSearch (Endpoint aep) (ApiAuthToken at) (SearchQuery query) =
+    let
+        endpoint =
+            aep ++ "/products/search?term=" ++ query
+    in
+        Http.request
+            { method = "GET"
+            , headers =
+                [ Http.header "Authorization" ("Bearer " ++ at)
+                ]
+            , url = endpoint
+            , body = Http.emptyBody
+            , expect = Http.expectJson searchResultsDecoder
+            , timeout = Nothing
+            , withCredentials = False
+            }
+            |> RemoteData.sendRequest
+            |> Cmd.map FetchedSearchResults
+
+
 fetchCustomerOrder : Endpoint -> ApiAuthToken -> CustomerOrderId -> Cmd Msg
 fetchCustomerOrder (Endpoint aep) (ApiAuthToken at) (CustomerOrderId coid) =
     let
@@ -345,21 +563,25 @@ fetchCustomerOrder (Endpoint aep) (ApiAuthToken at) (CustomerOrderId coid) =
             |> Cmd.map FetchedCustomerOrder
 
 
-init : Flagz -> ( Model, Cmd Msg )
-init flags =
-    let
-        initModel =
-            Model RemoteData.Loading (initFlags flags)
-    in
-        ( initModel
-        , fetchCustomerOrder (Endpoint flags.apiEndpoint) (ApiAuthToken flags.authToken) (CustomerOrderId flags.objId)
-        )
+customerOrderContentTotal : CustomerOrderContent -> Float
+customerOrderContentTotal coc =
+    case coc.quantity of
+        Just (Quantity q) ->
+            (toFloat q) * coc.price * (1.0 - (Maybe.withDefault 0 coc.discount |> toFloat) / 100)
+
+        Nothing ->
+            0.0
+
+
+customerOrderTotal : CustomerOrder -> String
+customerOrderTotal customerOrder =
+    List.foldl (\cont -> (+) (customerOrderContentTotal cont)) 0 customerOrder.customerOrderContents |> Utils.Currency.toCurrency
 
 
 viewDispatchOrder : DispatchOrder -> Html.Html Msg
 viewDispatchOrder dispatchOrder =
     tr []
-        [ td [] [ Html.a [] [ text dispatchOrder.number ] ]
+        [ td [] [ Html.a [ dispatchOrderIdToString dispatchOrder.id |> (++) "/#/dispatch_orders/" |> Html.Attributes.href ] [ text dispatchOrder.number ] ]
         , td [] [ Utils.Date.toHumanShort dispatchOrder.date |> text ]
         , td [] [ Utils.Currency.toCurrency dispatchOrder.total |> text ]
         ]
@@ -369,7 +591,7 @@ viewIncomingTransfer : IncomingTransfer -> Html.Html Msg
 viewIncomingTransfer incomingTransfer =
     tr []
         [ td []
-            [ Html.a [ incomingTransferIdToString incomingTransfer.id |> (++) "/#/incoming_transfers/" |> Html.Attributes.href ]
+            [ Html.a [ incomingTransferPath incomingTransfer.id |> Html.Attributes.href ]
                 [ text incomingTransfer.number
                 ]
             ]
@@ -425,26 +647,17 @@ viewDocumentsBlock co =
 viewContent : CustomerOrder -> Int -> CustomerOrderContent -> Html.Html Msg
 viewContent co i coc =
     let
-        customerOrderContentTotal : CustomerOrderContent -> Float
-        customerOrderContentTotal cocTmp =
-            case cocTmp.quantity of
-                Just q ->
-                    (toFloat q) * coc.price * (1.0 - (Maybe.withDefault 0 coc.discount |> toFloat) / 100)
-
-                Nothing ->
-                    0.0
-
         conditionalColumn : Html.Html Msg -> CustomerOrder -> Html.Html Msg
         conditionalColumn mes customerOrder =
             if customerOrder.canEdit then
                 td [ class "text-right" ] [ mes ]
             else
-                Html.span [] []
+                Html.text ""
 
         quantityToColor : CustomerOrderContent -> String
         quantityToColor custOrdCont =
             case custOrdCont.quantity of
-                Just q ->
+                Just (Quantity q) ->
                     if (q <= custOrdCont.stock) then
                         "success"
                     else if (custOrdCont.stock == 0) then
@@ -495,18 +708,19 @@ viewContent co i coc =
                       )
                     ]
             else
-                Html.span [] []
+                Html.text ""
 
-        quantityToString : Maybe Int -> String
-        quantityToString mI =
-            case mI of
-                Just i ->
-                    toString i
+        quantityToString : Maybe Quantity -> String
+        quantityToString mQ =
+            case mQ of
+                Just (Quantity q) ->
+                    toString q
 
                 Nothing ->
                     ""
     in
-        tr []
+        tr
+            []
             [ td [] [ i + 1 |> toString |> text ]
             , td []
                 [ Html.a [ productIdToString coc.product.id |> (++) "/#/products/" |> Html.Attributes.href ] [ text coc.product.name ]
@@ -516,7 +730,14 @@ viewContent co i coc =
             , quantityColumn co coc
             , discountColumn co coc
             , td [ class "text-right" ] [ customerOrderContentTotal coc |> Utils.Currency.toCurrency |> text ]
-            , td [] [ toString coc.remains |> text ]
+            , td []
+                [ if co.canEdit && coc.canDestroy then
+                    div [ class "btn btn-danger", DestroyContentClicked coc.id |> onClick ]
+                        [ Html.i [ class "fa fa-trash-o" ] []
+                        ]
+                  else
+                    toString coc.remains |> text
+                ]
             ]
 
 
@@ -528,22 +749,42 @@ viewContentsBlock co =
             if customerOrder.canEdit then
                 th [ class "text-right" ] [ mes ]
             else
-                Html.span [] []
+                Html.text ""
     in
-        Html.table [ class "table table-hover table-bordered margin-top-10" ]
-            [ Html.thead []
-                [ tr []
-                    [ th [] []
-                    , th [] [ text "Наименование" ]
-                    , th [] [ text "Артикул" ]
-                    , conditionalColumn (text "Цена") co
-                    , th [ class "text-right" ] [ text "Кол-во" ]
-                    , conditionalColumn (text "Скидка") co
-                    , th [ class "text-right" ] [ text "Итого" ]
-                    , conditionalColumn (text "Осталось отгрузить") co
+        Html.span []
+            [ Html.h1 [] [ text "Состав заказа" ]
+            , Html.table [ class "table table-hover table-bordered margin-top-10" ]
+                [ Html.thead []
+                    [ tr []
+                        [ th [] []
+                        , th [] [ text "Наименование" ]
+                        , th [] [ text "Артикул" ]
+                        , conditionalColumn (text "Цена") co
+                        , th [ class "text-right" ] [ text "Кол-во" ]
+                        , conditionalColumn (text "Скидка") co
+                        , th [ class "text-right" ] [ text "Итого" ]
+                        , conditionalColumn
+                            ((if co.canEdit then
+                                ""
+                              else
+                                "Осталось отгрузить"
+                             )
+                                |> text
+                            )
+                            co
+                        ]
                     ]
+                , Html.tbody []
+                    (List.append
+                        (List.indexedMap (viewContent co) co.customerOrderContents)
+                        [ tr []
+                            [ td [] []
+                            , td [] [ text "Итого, руб:" ]
+                            , td [] [ customerOrderTotal co |> text ]
+                            ]
+                        ]
+                    )
                 ]
-            , Html.tbody [] (List.indexedMap (viewContent co) co.customerOrderContents)
             ]
 
 
@@ -587,8 +828,103 @@ viewMetaBlock customerOrder =
             ]
 
 
-viewCustomerOrder : WebData CustomerOrder -> Html.Html Msg
-viewCustomerOrder wd =
+viewSearchBlock : CustomerOrder -> WebData (List SearchResult) -> Html.Html Msg
+viewSearchBlock customerOrder wdSearchResults =
+    let
+        viewSearchStock : Quantity -> String
+        viewSearchStock (Quantity x) =
+            toString x
+
+        viewSearchResult : SearchResult -> Html.Html Msg
+        viewSearchResult searchResult =
+            tr []
+                [ td [ Html.Attributes.style [ ( "width", "60px" ) ] ]
+                    [ Html.img
+                        [ Html.Attributes.src searchResult.imageUrl
+                        , Html.Attributes.style [ ( "max-width", "40px" ), ( "max-height", "40px" ) ]
+                        ]
+                        []
+                    ]
+                , td []
+                    [ Html.a
+                        [ productIdToString searchResult.product.id |> (++) "/#/products/" |> Html.Attributes.href
+                        ]
+                        [ text searchResult.product.name ]
+                    ]
+                , td [] [ text searchResult.product.article ]
+                , td [ class "text-right" ] [ searchResult.price |> Utils.Currency.toCurrency |> text ]
+                , td [ class "text-right" ] [ ((viewSearchStock searchResult.stock) ++ " ед") |> text ]
+                , td []
+                    [ Html.input
+                        [ onInput (SearchResultQuantityChanged searchResult.product.id)
+                        , Maybe.map toString searchResult.addableQuantity |> Maybe.withDefault "" |> Html.Attributes.value
+                        , Html.Attributes.placeholder "Введите кол-во"
+                        ]
+                        []
+                    , div
+                        [ class "btn btn-xs btn-success"
+                        , onClick (ProductAddClicked searchResult.product.id searchResult.addableQuantity)
+                        ]
+                        [ Html.i [ class "fa fa-plus" ] []
+                        ]
+                    ]
+                ]
+
+        viewEmptyRow : String -> Html.Html Msg
+        viewEmptyRow str =
+            tr []
+                [ td [ Html.Attributes.colspan 6, class "text-center" ] [ text str ]
+                ]
+
+        viewSearchResults : WebData (List SearchResult) -> Html.Html Msg
+        viewSearchResults wd =
+            Html.table [ class "table table-hover table-bordered margin-top-10" ]
+                [ Html.thead []
+                    [ tr []
+                        [ th [ Html.Attributes.style [ ( "width", "60px" ) ] ] []
+                        , th [] [ text "Наименование" ]
+                        , th [] [ text "Артикул" ]
+                        , th [] [ text "Цена" ]
+                        , th [] [ text "Остаток" ]
+                        , th [] []
+                        ]
+                    ]
+                , Html.tbody []
+                    (case wd of
+                        RemoteData.Success results ->
+                            if List.length results > 0 then
+                                (List.map viewSearchResult results)
+                            else
+                                [ viewEmptyRow "Ничего не найдено" ]
+
+                        RemoteData.Loading ->
+                            [ viewEmptyRow "Загружается" ]
+
+                        RemoteData.NotAsked ->
+                            [ viewEmptyRow "Введите поисковый запрос" ]
+
+                        RemoteData.Failure _ ->
+                            [ viewEmptyRow "Ошибка" ]
+                    )
+                ]
+    in
+        if customerOrder.canEdit then
+            div [ class "well well-white" ]
+                [ Html.h1 [] [ text "Добавление товаров" ]
+                , Html.input
+                    [ Html.Attributes.placeholder "Введите товар для добавления..."
+                    , Html.Attributes.style [ ( "width", "100%" ), ( "padding", "5px" ) ]
+                    , onInput SearchQueryChanged
+                    ]
+                    [ text "" ]
+                , viewSearchResults wdSearchResults
+                ]
+        else
+            text ""
+
+
+viewCustomerOrder : WebData CustomerOrder -> WebData (List SearchResult) -> Html.Html Msg
+viewCustomerOrder wd wdSearchResults =
     let
         pageHeaderTitle : CustomerOrder -> String
         pageHeaderTitle co =
@@ -602,10 +938,10 @@ viewCustomerOrder wd =
                         [ Html.node "form-nav-buttons"
                             []
                             [ div [ class "btn-group" ]
-                                [ Html.Texenergo.Button.render "arrow-left" "К списку"
+                                [ button [ "/#/customer_orders/" |> Html.Attributes.href ] [] "arrow-left" "К списку"
                                 , Html.Texenergo.Button.render "repeat" "Пересчитать"
                                 , Html.Texenergo.Button.render "book" "История"
-                                , Html.Texenergo.Button.render "refresh" "Обновить"
+                                , button [ RefreshCustomerOrder customerOrder.id |> onClick ] [] "refresh" "Обновить"
                                 , Html.Texenergo.Button.render "file-pdf-o" "Печатная форма"
                                 ]
                             ]
@@ -613,6 +949,7 @@ viewCustomerOrder wd =
                     , div [ class "well well-white" ]
                         [ viewMetaBlock customerOrder
                         ]
+                    , viewSearchBlock customerOrder wdSearchResults
                     , div [ class "well well-white" ]
                         [ viewContentsBlock customerOrder
                         ]
@@ -633,7 +970,23 @@ viewCustomerOrder wd =
 
 view : Model -> Html.Html Msg
 view m =
-    viewCustomerOrder m.customerOrder
+    viewCustomerOrder m.customerOrder m.searchResults
+
+
+init : Flagz -> ( Model, Cmd Msg )
+init flags =
+    let
+        initModel =
+            Model RemoteData.Loading (initFlags flags) (SearchQuery "") RemoteData.NotAsked
+    in
+        ( initModel
+        , fetchCustomerOrder (Endpoint flags.apiEndpoint) (ApiAuthToken flags.authToken) (CustomerOrderId flags.objId)
+        )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.none
 
 
 main : Program Flagz Model Msg
@@ -642,5 +995,5 @@ main =
         { init = init
         , view = view
         , update = update
-        , subscriptions = (\m -> Sub.none)
+        , subscriptions = subscriptions
         }

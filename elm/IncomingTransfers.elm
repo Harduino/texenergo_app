@@ -10,6 +10,7 @@ import Json.Decode.Pipeline exposing (required)
 import Json.Encode
 import Utils.Date
 import Html.Texenergo exposing (pageHeader)
+import IncomingTransfer.Model exposing (IncomingTransferId(..), incomingTransferIdToString, incomingTransferPath)
 import Partner.Model exposing (Partner, PartnerId(..), PartnerConfig, initPartner, initPartnerConf, partnerIdToString)
 import Partner.Decoder exposing (partnerDecoder)
 import Texenergo.Flags exposing (Flags, Flagz)
@@ -42,7 +43,7 @@ type NewIncomingTransferFields
 
 
 type alias IncomingTransfer =
-    { id : String
+    { id : IncomingTransferId
     , number : String
     , total : Float
     , partner : Partner
@@ -134,7 +135,7 @@ incomingTransfersDecoder =
 incomingTransferDecoder : Decode.Decoder IncomingTransfer
 incomingTransferDecoder =
     Decode.succeed IncomingTransfer
-        |> required "id" string
+        |> required "id" (string |> Decode.map IncomingTransferId)
         |> required "number" string
         |> required "amount" float
         |> required "partner" partnerDecoder
@@ -320,7 +321,7 @@ viewIncomingTransfer : IncomingTransfer -> Html.Html Msg
 viewIncomingTransfer it =
     tr []
         [ td []
-            [ Html.a [ Html.Attributes.href ("/#/incoming_transfers/" ++ it.id) ]
+            [ Html.a [ incomingTransferPath it.id |> Html.Attributes.href ]
                 [ text it.number
                 ]
             ]
@@ -331,7 +332,10 @@ viewIncomingTransfer it =
         , td [ class "center-item-text" ]
             [ Html.node "form-nav-buttons"
                 [ class "btn-group", Html.Attributes.attribute "data-template" "table" ]
-                [ Html.a [ class "btn btn-xs btn-info", Html.Attributes.href ("/#/incoming_transfers/" ++ it.id) ]
+                [ Html.a
+                    [ class "btn btn-xs btn-info"
+                    , incomingTransferPath it.id |> Html.Attributes.href
+                    ]
                     [ Html.i [ class "fa fa-eye" ] []
                     ]
                 ]
@@ -347,7 +351,7 @@ viewIncomingTransferMobile it =
         ]
         [ div []
             [ text "Номер: "
-            , Html.a [ Html.Attributes.href ("/#/incoming_transfers/" ++ it.id) ] [ text it.number ]
+            , Html.a [ incomingTransferPath it.id |> Html.Attributes.href ] [ text it.number ]
             ]
         , div [] [ ("Дата: " ++ Utils.Date.toHuman it.date) |> text ]
         , div [] [ "Сумма: " ++ toCurrency it.total |> text ]

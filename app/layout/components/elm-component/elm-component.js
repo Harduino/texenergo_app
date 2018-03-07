@@ -15,7 +15,7 @@ class ElmComponentCtrl {
                 authToken: authService._token,
                 apiEndpoint: window.APP_ENV.API_HTTP_BASE_URL,
                 objId: objId,
-                accessToken: authService._accessToken
+                accessToken: (authService._accessToken || "")
             });
             if (window.elmApp.ports !== undefined && window.elmApp.ports.setPicker !== undefined) {
                 window.elmApp.ports.setPicker.subscribe(function(smt) {

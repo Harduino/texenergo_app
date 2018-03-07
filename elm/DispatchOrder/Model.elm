@@ -3,6 +3,7 @@ module DispatchOrder.Model
         ( DispatchOrder
         , DispatchOrderId(..)
         , initDispatchOrder
+        , dispatchOrderIdToString
         )
 
 import Date exposing (Date)
@@ -19,6 +20,11 @@ type alias DispatchOrder =
     , total : Float
     , partnerId : String
     }
+
+
+dispatchOrderIdToString : DispatchOrderId -> String
+dispatchOrderIdToString (DispatchOrderId x) =
+    x
 
 
 initDispatchOrder : DispatchOrder
