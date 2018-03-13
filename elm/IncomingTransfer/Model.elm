@@ -4,6 +4,7 @@ module IncomingTransfer.Model
         , IncomingTransferId(..)
         , initIncomingTransfer
         , incomingTransferIdToString
+        , incomingTransferPath
         )
 
 import Date exposing (Date)
@@ -20,6 +21,11 @@ type alias IncomingTransfer =
     , total : Float
     , partnerId : String
     }
+
+
+incomingTransferPath : IncomingTransferId -> String
+incomingTransferPath (IncomingTransferId x) =
+    "/#/incoming_transfers/" ++ x
 
 
 incomingTransferIdToString : IncomingTransferId -> String

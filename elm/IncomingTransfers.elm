@@ -1,6 +1,7 @@
-port module IncomingTransfers exposing (..)
+module IncomingTransfers exposing (..)
 
 import Date exposing (Date)
+import Date.Format
 import Html exposing (div, text, tr, td, th)
 import Html.Attributes exposing (class, style)
 import Html.Events exposing (onClick, onInput)
@@ -13,7 +14,8 @@ import Html.Texenergo exposing (pageHeader)
 import IncomingTransfer.Model exposing (IncomingTransferId(..), incomingTransferIdToString, incomingTransferPath)
 import Partner.Model exposing (Partner, PartnerId(..), PartnerConfig, initPartner, initPartnerConf, partnerIdToString)
 import Partner.Decoder exposing (partnerDecoder)
-import Texenergo.Flags exposing (Flags, Flagz)
+import Texenergo.Flags exposing (Flags, Flagz, ApiAuthToken(..), Endpoint(..))
+import Texenergo.Ports exposing (setDat, setPicker)
 import Utils.Currency exposing (toCurrency)
 
 
@@ -55,7 +57,7 @@ type alias IncomingTransfer =
 type alias NewIncomingTransfer =
     { number : String
     , description : String
-    , date : String --Date
+    , date : Date
     , amount : Float
     , partner : Partner
     }
@@ -121,7 +123,7 @@ encodeCustomerOrder no =
     Json.Encode.object
         [ ( "number", Json.Encode.string no.number )
         , ( "description", Json.Encode.string no.description )
-        , ( "date", Json.Encode.string no.date )
+        , ( "date", Date.Format.formatISO8601 no.date |> Json.Encode.string )
         , ( "amount", Json.Encode.float no.amount )
         , ( "partner_id", partnerIdToString no.partner.id |> Json.Encode.string )
         ]
@@ -166,7 +168,7 @@ update msg m =
         setPartner p nit =
             { nit | partner = p }
 
-        setDate : String -> NewIncomingTransfer -> NewIncomingTransfer
+        setDate : Date -> NewIncomingTransfer -> NewIncomingTransfer
         setDate str nit =
             { nit | date = str }
 
@@ -215,7 +217,7 @@ update msg m =
                 ( { m | newIncomingTransferOpened = not m.newIncomingTransferOpened }, Cmd.none )
 
             CreateIncomingTransfer ->
-                ( m, createIncomingTransfer m )
+                ( m, createIncomingTransfer m.flags.apiAuthToken m.flags.apiEndpoint m.newIncomingTransfer )
 
             NewIncomingTransferField f v ->
                 case f of
@@ -263,7 +265,12 @@ update msg m =
                         ( m, Cmd.none )
 
             DateChosen d ->
-                ( { m | newIncomingTransfer = setDate d m.newIncomingTransfer }, Cmd.none )
+                case Date.fromString d of
+                    Ok x ->
+                        ( { m | newIncomingTransfer = setDate x m.newIncomingTransfer }, Cmd.none )
+
+                    Err _ ->
+                        ( m, Cmd.none )
 
             CreatedIncomingTransfer (Result.Err err) ->
                 case err of
@@ -279,7 +286,7 @@ update msg m =
 
 initNewIncomingTransfer : NewIncomingTransfer
 initNewIncomingTransfer =
-    NewIncomingTransfer "" "" "" 0 initPartner
+    NewIncomingTransfer "" "" (Date.fromTime 0.0) 0 initPartner
 
 
 init : Flagz -> ( Model, Cmd Msg )
@@ -297,24 +304,20 @@ onKeyUp tagger =
     Html.Events.on "keyup" (Decode.map tagger Html.Events.keyCode)
 
 
-createIncomingTransfer : Model -> Cmd Msg
-createIncomingTransfer m =
-    let
-        nco =
-            m.newIncomingTransfer
-    in
-        Http.request
-            { method = "POST"
-            , headers =
-                [ Http.header "Authorization" ("Bearer " ++ (Texenergo.Flags.apiAuthTokenToString m.flags.apiAuthToken))
-                ]
-            , url = (Texenergo.Flags.endpointToString m.flags.apiEndpoint) ++ "/incoming_transfers"
-            , body = Http.jsonBody (encodeCustomerOrder nco)
-            , expect = Http.expectJson incomingTransferDecoder
-            , timeout = Nothing
-            , withCredentials = False
-            }
-            |> Http.send CreatedIncomingTransfer
+createIncomingTransfer : ApiAuthToken -> Endpoint -> NewIncomingTransfer -> Cmd Msg
+createIncomingTransfer (ApiAuthToken aat) (Endpoint ep) nco =
+    Http.request
+        { method = "POST"
+        , headers =
+            [ Http.header "Authorization" ("Bearer " ++ aat)
+            ]
+        , url = ep ++ "/incoming_transfers"
+        , body = Http.jsonBody (encodeCustomerOrder nco)
+        , expect = Http.expectJson incomingTransferDecoder
+        , timeout = Nothing
+        , withCredentials = False
+        }
+        |> Http.send CreatedIncomingTransfer
 
 
 viewIncomingTransfer : IncomingTransfer -> Html.Html Msg
@@ -551,12 +554,6 @@ viewLoadMore m =
                 [ text "Загрузить ещё"
                 ]
             ]
-
-
-port setDat : (String -> msg) -> Sub msg
-
-
-port setPicker : String -> Cmd msg
 
 
 subscriptions : Model -> Sub Msg

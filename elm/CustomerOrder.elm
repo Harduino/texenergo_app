@@ -344,7 +344,7 @@ update msg model =
                                 model.flags.apiAuthToken
                                 customerOrder.id
                                 productId
-                                addableQ
+                                (AddableQuantity addableQ)
                                 model.searchQuery
                             )
                         else
@@ -430,8 +430,8 @@ destroyContent (Endpoint aep) (ApiAuthToken at) (CustomerOrderId customerOrderId
         |> Http.send (DestroyedContent (CustomerOrderContentId cocId))
 
 
-createCustomerOrderContent : Endpoint -> ApiAuthToken -> CustomerOrderId -> ProductId -> Int -> SearchQuery -> Cmd Msg
-createCustomerOrderContent (Endpoint aep) (ApiAuthToken at) (CustomerOrderId customerOrderId) (ProductId productId) quantity (SearchQuery searchQuery) =
+createCustomerOrderContent : Endpoint -> ApiAuthToken -> CustomerOrderId -> ProductId -> AddableQuantity -> SearchQuery -> Cmd Msg
+createCustomerOrderContent (Endpoint aep) (ApiAuthToken at) (CustomerOrderId customerOrderId) (ProductId productId) (AddableQuantity quantity) (SearchQuery searchQuery) =
     Http.request
         { method = "POST"
         , headers =
@@ -645,7 +645,7 @@ viewDocumentsBlock co =
 
 
 viewContent : CustomerOrder -> Int -> CustomerOrderContent -> Html.Html Msg
-viewContent co i coc =
+viewContent co index coc =
     let
         conditionalColumn : Html.Html Msg -> CustomerOrder -> Html.Html Msg
         conditionalColumn mes customerOrder =
@@ -721,7 +721,7 @@ viewContent co i coc =
     in
         tr
             []
-            [ td [] [ i + 1 |> toString |> text ]
+            [ td [] [ index + 1 |> toString |> text ]
             , td []
                 [ Html.a [ productIdToString coc.product.id |> (++) "/#/products/" |> Html.Attributes.href ] [ text coc.product.name ]
                 ]

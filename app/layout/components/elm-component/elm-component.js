@@ -19,7 +19,11 @@ class ElmComponentCtrl {
             });
             if (window.elmApp.ports !== undefined && window.elmApp.ports.setPicker !== undefined) {
                 window.elmApp.ports.setPicker.subscribe(function(smt) {
-                    $("#datepicker").datepicker({onSelect: function (d) {window.elmApp.ports.setDat.send(d)}});
+                    $("#datepicker").datepicker({
+                      onSelect: function (d) {
+                        window.elmApp.ports.setDat.send(d);
+                      }
+                    });
                 });
             }
         }

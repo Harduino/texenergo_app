@@ -110,7 +110,7 @@ encodeMoneyAssignment : CustomerOrderRow -> Json.Encode.Value
 encodeMoneyAssignment cor =
     Json.Encode.object
         [ ( "amount", Json.Encode.float cor.amountAssigned )
-        , ( "customer_order_id", Json.Encode.string cor.obj.id )
+        , ( "customer_order_id", Json.Encode.string (customerOrderIdToString cor.obj.id) )
         ]
 
 

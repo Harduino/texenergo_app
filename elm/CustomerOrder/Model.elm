@@ -22,7 +22,7 @@ type CustomerOrderId
 
 
 type alias CustomerOrder =
-    { id : String
+    { id : CustomerOrderId
     , number : String
     , total : Float
     , status : String
@@ -65,7 +65,7 @@ customerOrdersDecoder =
 customerOrderDecoder : Decode.Decoder CustomerOrder
 customerOrderDecoder =
     Decode.succeed CustomerOrder
-        |> required "id" string
+        |> required "id" (string |> Decode.map CustomerOrderId)
         |> required "number" string
         |> required "total" float
         |> required "status" string

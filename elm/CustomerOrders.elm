@@ -9,7 +9,7 @@ import Json.Encode
 import Utils.Date
 import Utils.Currency exposing (toCurrency)
 import RemoteData exposing (WebData)
-import CustomerOrder.Model exposing (CustomerOrder, customerOrdersDecoder, customerOrderDecoder)
+import CustomerOrder.Model exposing (CustomerOrder, CustomerOrderId(..), customerOrdersDecoder, customerOrderDecoder, customerOrderIdToString)
 import Html.Texenergo exposing (pageHeader)
 import Partner.Model exposing (Partner, PartnerId(..), PartnerConfig, initPartnerConf, initPartner, partnerIdToString)
 import Partner.Decoder exposing (partnerDecoder)
@@ -49,8 +49,8 @@ type Msg
     | CreatedCustomerOrder (Result Http.Error CustomerOrder)
     | LoadMoreCustomerOrders
     | RefreshCustomerOrders
-    | DestroyCustomerOrder String
-    | DestroyedCustomerOrder String (Result Http.Error ())
+    | DestroyCustomerOrder CustomerOrderId
+    | DestroyedCustomerOrder CustomerOrderId (Result Http.Error ())
     | FilterKeyPressed Int
     | ChangePartnerFilter String
     | FetchedPartners (Result Http.Error (List Partner))
@@ -215,8 +215,8 @@ update msg m =
                 ( { m | newCustomerOrder = setPartner partner m.newCustomerOrder, partnerConf = (flipPartnerConf m.partnerConf) }, Cmd.none )
 
 
-destroyCustomerOrder : Endpoint -> ApiAuthToken -> String -> Cmd Msg
-destroyCustomerOrder (Endpoint aep) (ApiAuthToken at) customerOrderId =
+destroyCustomerOrder : Endpoint -> ApiAuthToken -> CustomerOrderId -> Cmd Msg
+destroyCustomerOrder (Endpoint aep) (ApiAuthToken at) (CustomerOrderId customerOrderId) =
     Http.request
         { method = "DELETE"
         , headers =
@@ -228,7 +228,7 @@ destroyCustomerOrder (Endpoint aep) (ApiAuthToken at) customerOrderId =
         , timeout = Nothing
         , withCredentials = False
         }
-        |> Http.send (DestroyedCustomerOrder customerOrderId)
+        |> Http.send (DestroyedCustomerOrder (CustomerOrderId customerOrderId))
 
 
 createCustomerOrder : Endpoint -> ApiAuthToken -> Model -> Cmd Msg
@@ -567,7 +567,7 @@ viewCustomerOrderMobile co =
         ]
         [ div []
             [ text "Номер: "
-            , Html.a [ Html.Attributes.href ("/#/customer_orders/" ++ co.id) ] [ text co.number ]
+            , Html.a [ Html.Attributes.href ("/#/customer_orders/" ++ (customerOrderIdToString co.id)) ] [ text co.number ]
             ]
         , div []
             [ "Статус: " ++ co.status |> text
@@ -611,7 +611,7 @@ viewCustomerOrder co =
             , td [ class "center-item-text" ]
                 [ Html.node "form-nav-buttons"
                     [ class "btn-group", Html.Attributes.attribute "data-template" "table" ]
-                    [ Html.a [ class "btn btn-xs btn-info", Html.Attributes.href ("/#/customer_orders/" ++ co.id) ]
+                    [ Html.a [ class "btn btn-xs btn-info", Html.Attributes.href ("/#/customer_orders/" ++ (customerOrderIdToString co.id)) ]
                         [ Html.i [ class "fa fa-eye" ] []
                         ]
                     , div trashAttrs
