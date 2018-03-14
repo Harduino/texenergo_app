@@ -85,7 +85,8 @@ appConfig.sound_on = true;
         'app.outgoing_transfers',
         'app.receive_orders',
         'app.products',
-        'app.assembly_orders'
+        'app.assembly_orders',
+        'app.texts'
     ]);
 
     app.run(appRun);
