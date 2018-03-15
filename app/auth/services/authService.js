@@ -5,6 +5,7 @@ class AuthService {
         this._accessToken = $localStorage.accessToken || null;
         this._profile = undefined;
         this.authDomain = 'texenergo.eu.auth0.com';
+        this.clientID = 'cO4FFzRFn4JkByDDy2kCWAFKNdC37BcW',
         this.tokenDefer = $q.defer();
         this._profilePromise;
 
@@ -57,7 +58,7 @@ class AuthService {
         this.$localStorage.accessToken = null;
         this.$localStorage.profile = null;
         window.location = window.APP_ENV.PROTOCOL + '://' + this.authDomain + '/v2/logout?returnTo=' +
-            window.APP_ENV.APP_BASE_URL + '&client_id=' + this._profile.clientID;
+            window.APP_ENV.APP_BASE_URL + '&client_id=' + this.clientID;
     }
 
     registerAuthenticationListener() {
@@ -134,12 +135,16 @@ class AuthService {
     getProfile(idToken) {
       let self = this;
 
-      return new Promise((resolve) => {
+      return new Promise((resolve,reject) => {
         this.lock.getUserInfo(idToken, (error, profile) => {
-          if (error) console.log(error);
-
-          self.updateProfile(profile);
-          resolve();
+          if (error) {
+			  console.log(error);
+			  self.$localStorage.authRedirect = self.$location.path();
+			  self.logout();
+		  } else {
+	          self.updateProfile(profile);
+	          resolve();
+		  }
         });
       });
     }
