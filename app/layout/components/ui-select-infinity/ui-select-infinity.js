@@ -62,6 +62,7 @@ class UiSelectInfinityCtrl {
       '</div>');
 
       this.setSearchStatus('before');
+      this.$dropDown = this.$element.find('.ui-select-dropdown');
       this.searchBox = this.$element.find('.ui-select-search')[0];
       this.searchBox.addEventListener('input', (e) => {
         self.triggerSearch(e.target.value);
@@ -93,6 +94,7 @@ class UiSelectInfinityCtrl {
       let self = this;
       this.defer.resolve();
       this.$timeout(() =>  self.searchBox && self.searchBox.focus(), 100);
+	  this.$dropDown.css( 'opacity', '1' );
     }
 
     scroll () {
