@@ -70,6 +70,14 @@ class AuthService {
             self.tokenDefer.resolve(self._token); // resolve promises
             self._profilePromise = self.getProfile(authResult.accessToken);
             self.$rootScope.$emit('authenticated');
+
+			if( self.$localStorage.returnToUrl ) {
+				var redirectTo = self.$localStorage.returnToUrl;
+				self.$localStorage.returnToUrl = null;
+				self.$location.path(redirectTo);
+			} else {
+				self.$location.path('/dashboard');
+			}
         });
     }
 
@@ -139,7 +147,7 @@ class AuthService {
         this.lock.getUserInfo(idToken, (error, profile) => {
           if (error) {
 			  console.log(error);
-			  self.$localStorage.authRedirect = self.$location.path();
+			  self.$localStorage.returnToUrl = self.$location.path();
 			  self.logout();
 		  } else {
 	          self.updateProfile(profile);
